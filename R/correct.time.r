@@ -1,5 +1,5 @@
 #' Corrects concentrations at critical, but deviating time points (e.g, predose, TAU, start and end of user selected AUC interval), and adds missing records at these critical time points.
-#'
+#' @importFrom qpToolkit mutate_cond
 #' @description
 #' \itemize Records with missing NOMINAL time will be removed, this must be corrected before the function is called.
 #' \itemize If a record at the critical time point is missing, add it and set time to nominal time and set dv conc to NA
@@ -61,7 +61,6 @@
 #' group_by(Subject=as.numeric(Subject)) %>%
 #' do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
 #'                  tau=,tstart=,tend=,teval=8,th=th,reg="sd"))
-#' head(tc)
 #' @export
 correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="sd",method=1) {
 

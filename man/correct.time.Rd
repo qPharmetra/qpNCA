@@ -80,5 +80,4 @@ tc = Theoph1 \%>\%
 group_by(Subject=as.numeric(Subject)) \%>\%
 do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
                  tau=,tstart=,tend=,teval=8,th=th,reg="sd"))
-head(tc)
 }

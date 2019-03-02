@@ -1,0 +1,62 @@
+
+#Install libraries
+```{r, echo=FALSE, results='hide'}
+library(qpNCA)
+library(dplyr)
+```
+
+#Check out Theoph data
+```{r, echo=FALSE, results='as-is'}
+head(Theoph)
+print(plot(Theoph$conc~Theoph$Time))
+```
+
+#Calculate Cmax and Tmax
+```{r, echo=FALSE, results='as-is'}
+ctmax <- Theoph %>%
+ group_by(Subject=as.numeric(Subject)) %>% 
+  #Subject in Theoph are ordered factor, but factors are not in ascending order
+ do(calc.ctmax(.,timevar="Time",depvar="conc")) %>%
+ ungroup()
+head(ctmax)
+```
+
+#Calculate half-life
+```{r, echo=FALSE, results='as-is'}
+th = Theoph %>% 
+  group_by(Subject=as.numeric(Subject)) %>%
+  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
+  ungroup()
+head(th)
+```
+
+#Corrections of missing time and concentrations
+```{r, echo=FALSE, results='as-is'}
+## 3. Correct deviations
+#we need nominal time variable for this task.
+ID <- as.numeric(Theoph$Subject)
+NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
+Theoph1 <- Theoph %>% mutate(NTAD=metrumrg::snap(Time, NTAD))
+
+#let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
+tc = Theoph1 %>% 
+  group_by(Subject=as.numeric(Subject)) %>%
+  do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
+                  tau=,tstart=,tend=,teval=8,th=th,reg="sd")) %>%  
+  do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=,
+                  th=th,reg="sd",ss="n")) %>% 
+  ungroup() 
+
+head(tc)
+
+```
+
+#calculate PK parameters NOT based on lambda_z 
+```{r, echo=FALSE, results='as-is'}
+par <- tc %>%
+  group_by(Subject) %>%
+  do(calc.par(.,tau=,tstart=,tend=,teval=8,route="po", method = 1)) %>%  #This wil get us both AUC0-8 and AUC0-24 as sampling ends at 24
+  ungroup()
+```
+
+

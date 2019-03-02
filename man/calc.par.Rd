@@ -8,7 +8,7 @@ calc.par(x, tau = NA, tstart = NA, tend = NA, teval = NA,
   route = "po", method = 1)
 }
 \arguments{
-\item{x}{a dataset (containing all data after time/concentration deviation corrections, i.e. output from correct.time and correct.conc}
+\item{x}{contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc}
 
 \item{tau}{dosing interval (for multiple dosing), if single dose, leave empty}
 
@@ -20,34 +20,64 @@ calc.par(x, tau = NA, tstart = NA, tend = NA, teval = NA,
 
 \item{route}{route of drug administration ("po","iv")}
 
-\item{method}{method of trapezoidal rule
-1: linear up - linear down
-2: linear up - logarithmic down
-3: linear before first Tmax, logarithmic after first Tmax}
+\item{method}{method for trapezoidal rule:\cr
+1: linear up - linear down \cr
+2: linear up - logarithmic down \cr
+3: linear before first Tmax, logarithmic after first Tmax \cr}
 }
 \value{
-a dataset with estimates for the following parameters, one observation per subject:
- t0.ok     = flags if t=0 concentration could be corrected/imputes. If not, no AUCs starting at t=0 are calculated;
- tlast.ok  = flags if there is at least one measurable concentration. If not, no AUClast can be calculated;
- tlast     = time of last sample with measurable concentration;
- clast.obs = observed concentration at tlast;
- aucall    = auc calculated over all observations, including values below LOQ (which are set to 0);
- auclast   = auc calculated using all observations up to and including the last measurable concentration (clast.obs at tlast);
- aumcall   = aumc calculated over all observations, including values below LOQ (which are set to 0);
- aumclast  = aumc calculated using all observations up to and including the last measurable concentration (clast.obs at tlast);
- tau       = the dosing interval (if specified);
- calc.tau  = flags if AUCtau could be calculated;
- auctau    = auc calculated over the dosing interval, only calculated if tau is specified;
- aumctau   = aumc calculated over the dosing interval, only calculated if tau is specified;
- teval     = user selected AUC interval starting at t=0 (if specified);
- calc.teval= flags if AUCteval could be calculated;
- aucxx     = auc calculated from t=0 up to/including teval, only calculated if teval is specified (xx is substituted by teval);
- calc.part = flags if AUCpart could be calculated;
- tstart    = start time of partial AUC (if specified);
- tend      = end time of partial AUC (if specified);
- aucx_y    = partial auc from time=x up to/including time=y, where x>0, only calculated if tstart and tend are specified;
- c0        = back-extrapolated concentration at t=0 for IV bolus administration
+dataset with estimates for the following parameters, one observation per subject:
+\tabular{cc}{
+t0.ok     \tab flags if t=0 concentration could be corrected/imputes. If not, no AUCs starting at t=0 are calculated \cr
+tlast.ok  \tab flags if there is at least one measurable concentration. If not, no AUClast can be calculated\cr
+tlast     \tab time of last sample with measurable concentration\cr
+clast.obs \tab observed concentration at tlast\cr
+aucall    \tab auc calculated over all observations, including values below LOQ (which are set to 0)\cr
+auclast   \tab auc calculated using all observations up to and including the last measurable concentration (clast.obs at tlast)\cr
+aumcall   \tab aumc calculated over all observations, including values below LOQ (which are set to 0)\cr
+aumclast  \tab aumc calculated using all observations up to and including the last measurable concentration (clast.obs at tlast)\cr
+tau       \tab the dosing interval (if specified)\cr
+calc.tau  \tab flags if AUCtau could be calculated\cr
+auctau    \tab auc calculated over the dosing interval, only calculated if tau is specified\cr
+aumctau   \tab aumc calculated over the dosing interval, only calculated if tau is specified\cr
+teval     \tab user selected AUC interval starting at t=0 (if specified)\cr
+calc.teval\tab flags if AUCteval could be calculated\cr
+aucxx     \tab auc calculated from t=0 up to/including teval, only calculated if teval is specified (xx is substituted by teval)\cr
+calc.part \tab flags if AUCpart could be calculated\cr
+tstart    \tab start time of partial AUC (if specified)\cr
+tend      \tab end time of partial AUC (if specified)\cr
+aucx_y    \tab partial auc from time=x up to/including time=y, where x>0, only calculated if tstart and tend are specified\cr
+c0        \tab back-extrapolated concentration at t=0 for IV bolus administration\cr
+}
 }
 \description{
 Calculates AUCs, tlast, clast.obs for each PK curve (define using group_by)
+}
+\examples{
+# We need half-lives for corrections, so first let's get that.
+th = Theoph \%>\%
+ group_by(Subject=as.numeric(Subject)) \%>\%
+ do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) \%>\%
+ ungroup()
+
+# We need nominal time variable as well, so let's generate that.
+ID <- as.numeric(Theoph$Subject)
+NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
+Theoph1 <- Theoph \%>\% mutate(NTAD=metrumrg::snap(Time, NTAD))
+
+#let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
+tc = Theoph1 \%>\%
+group_by(Subject=as.numeric(Subject)) \%>\%
+do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
+                 tau=,tstart=,tend=,teval=8,th=th,reg="sd")) \%>\%
+#above step added timepoints that we will add interpolated concentrations to with this next step
+do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
+th=th,reg="sd",ss="n")) \%>\%
+ungroup()
+#Now get parameters that do not require LAMBDAZ
+par <- tc \%>\%
+     group_by(Subject=as.numeric(Subject)) \%>\%
+     ##tstart by default is 0, so here we will get AUC0-8hr and AUC0-24 as sampling ends at 24 hr
+     do(calc.par(.,tau=NA, tstart=NA, tend=NA, teval=8, route="po", method=1)) \%>\%
+     ungroup()
 }

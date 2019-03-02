@@ -1,11 +1,22 @@
 Package: qpNCA
 Type: Package
-Title: What the Package Does (Title Case)
+Title: qPharmetra's R package for Noncompartmental Analysis
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: qPharmetra, LLC
+Maintainer: Jason Chittenden <jason.chittenden@qpharmetra.com>
+Description: qPharmetra's R package for Noncompartmental Analysis
+License: to be decided
 Encoding: UTF-8
-LazyData: true
+Depends:
+    R (>= 3.3.3)
+Imports:
+    dplyr(>= 0.7.0),  
+    Hmisc (>= 3.17-0),
+    rlang (>= 0.1.1),
+    qpToolkit (>= 0.1.5),
+    tidyr (>= 0.8.2),
+    metrumrg(>= 5.55)
+Suggests:
+    testthat
+RoxygenNote: 6.1.1
+Note: Use of older dplyr is because of need to convert strings to sym in newer versions if used within a function (https://stackoverflow.com/questions/26724124/standard-evaluation-in-dplyr-summarise-on-variable-given-as-a-character-string/26724721#26724721)

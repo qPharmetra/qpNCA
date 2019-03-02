@@ -17,16 +17,22 @@ est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y")
 }
 \value{
 a dataset with estimates for each regression analysis in one observation. The following parameters are available:
-no.points = number of data points used in the regression analysis;
-intercept = estimated intercept;
-lambda_z = -1*estimated slope;
-r.squared = square of the correlation coefficient;
-adj.r.squared = adjusted square of the correlation coefficient;
-thalf = elimination half-life;
-start_th = time of first sample included in the thalf estimation;
-end_th = time of last sample included in the thalf estimation;
-includeCmax = include results of regression including Cmax in selection? (y/n)
+no.points = number of data points used in the regression analysis; \cr
+intercept = estimated intercept;\cr
+lambda_z = -1*estimated slope;\cr
+r.squared = square of the correlation coefficient;\cr
+adj.r.squared = adjusted square of the correlation coefficient;\cr
+thalf = elimination half-life;\cr
+start_th = time of first sample included in the thalf estimation;\cr
+end_th = time of last sample included in the thalf estimation;\cr
+includeCmax = include results of regression including Cmax in selection? (y/n)\cr
 }
 \description{
 The function starts with the last three sample points and performs log-linear regression on it. It then adds one sampling point at a time (including and ending at tmax) and performs the regression again. Internal variable EST checks whether there are at least 3 timepoints for estimation after removal of LOQs and NAs
+}
+\examples{
+th = Theoph \%>\%
+ group_by(Subject=as.numeric(Subject)) \%>\%
+ do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) \%>\%
+ ungroup()
 }

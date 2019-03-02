@@ -1,4 +1,5 @@
 #' Calculates Cmax, Tmax from raw data for each PK curve (define using group_by)
+#' @importFrom dplyr arrange "%>%" mutate summarize filter group_by do
 #' @description Input dataset can contain all uncorrected data, including LOQ; estimate first occurence of maximum concentration for each PK curve; if all concentrations are NA, sets Cmax and Tmax also to NA
 #' @param x a dataset
 #' @param timevar a column name

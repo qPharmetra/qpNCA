@@ -1,4 +1,5 @@
 #' Corrects missing concentration at critical time points (e.g, predose, TAU, start and end of user selected AUC interval)
+#' @importFrom metrumrg snap locf
 #' @description
 #' \itemize If there is a measurable concentration BEFORE and AFTER the missing concentration, use interpolation
 #' \itemize If there is NO measurable concentration AFTER the missing concentration, use extrapolation
@@ -16,7 +17,7 @@
 #' MDC-3   \tab    md    \tab    impute missing concentration by extrapolation   \tab                  t=tau,tend,teval\cr
 #' MDC-4   \tab    md (IV)  \tab  impute missing concentration by back-extrapolation  \tab              t=0\cr
 #' * only if steady state has been reached\cr
-#'}
+#' }
 #' @param x input dataset name input dataset name (contains all data, including LOQ (set conc to zero for these))
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param tau dosing interval (for multiple dosing), if single dose, leave empty
@@ -37,17 +38,18 @@
 #'  crule.txt     \tab   text explaining what was altered \cr
 #'  applies.to.conc  \tab  lists all AUCS to which the concentration correction rule applies \cr
 #' }
+#'
 #' @examples
 #'# We need half-lives for this, so first let's get that.
 #' th = Theoph %>%
-#' group_by(Subject=as.numeric(Subject)) %>%
+#'  group_by(Subject=as.numeric(Subject)) %>%
 #'  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
 #'  ungroup()
 #'
 #'# We need nominal time variable as well, so let's generate that.
 #' ID <- as.numeric(Theoph$Subject)
 #' NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-#' Theoph1 <- Theoph %>% mutate(NTAD=metrumrg::snap(Time, NTAD))
+#' Theoph1 <- Theoph %>% mutate(NTAD=snap(Time, NTAD))
 #'
 #' #let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
 #' tc = Theoph1 %>%
