@@ -1,6 +1,15 @@
+#' Create summary statistics of NCA parameters
+#'
+#' @param x
+#' @param ns
+#' @param na.rm
+#' @param ...
+#'
+#' @return
+#' @export
 nca.sumstat.params = function(x, ns = 3, na.rm=T, ...){
   # Summarize a vector PK Parameters for output to a report
-  # For parameter values that have 0's reported, e.g. AUC when all concentratinos are 0, we 
+  # For parameter values that have 0's reported, e.g. AUC when all concentratinos are 0, we
   #   assign NC
   # function parameters
   #   x     = character vector containing numeric values to be summarized
@@ -9,32 +18,32 @@ nca.sumstat.params = function(x, ns = 3, na.rm=T, ...){
   #   bloqRule  = Rule for treatment of BLOQ values
   #   oddCode   = alphabetical codes for concentrations
   #   bloqCode  = alphabetic code for BLOQ values
-  
+
   # prepopulate the output assuming nothing needs to be summarized (i.e. all(x)=="NA")
   N = 0
   Mean = geoMean = SD = Min = Median = Max = CV = LCI = UCI = "NC"
   cvec = c(N, Mean, geoMean, SD, Min, Median, Max, CV, LCI, UCI)
-  
+
   ## make character entries NA (not "NA") before turning character into numeric
   if(length(whichNumeric(x))>0)
     x[-whichNumeric(x)] = NA
-  
+
   ## check if we have any evaluable numbers
   x[as.numeric(x)==0] = "NC"
   x = x[whichNumeric(x)]
   #x = x[as.numeric(x)>0]
   nn = length(x)
   if(nn==0) nn = -1
-  
+
   # Set proper number of significant figures
   ns2 = ns+1
   myfmt1 = paste("%#.", ns, "g", sep="")
   myfmt2 = paste("%#.", ns2, "g", sep="")
-  
+
   if(nn == -1){
     # all 0's
     cvec = c("0",rep("NC", 9))
-  } else if (nn <= 2){ 
+  } else if (nn <= 2){
     # Few observations
     N = sprintf("%.0f", nn)
     x = as.numeric(x[as.numeric(x)>0])
@@ -50,14 +59,14 @@ nca.sumstat.params = function(x, ns = 3, na.rm=T, ...){
     Max = sprintf(myfmt1, signif(max(x, na.rm=T), ns))
       if(grepl("e", Max)) Max = sprintf("%g", signif(max(x, na.rm=T), ns)) # correct for scientific notation
     CV = "NC"
-    LCI = "NC"    
-    UCI = "NC"    
+    LCI = "NC"
+    UCI = "NC"
     ## Format the summary stats
     cvec = c(N, Mean, geoMean, SD, Min, Median, Max, CV, LCI, UCI)
     invalids = c(grep("NA", cvec),
                  grep("NaN", cvec),
                  grep("Inf", cvec))
-    
+
     cvec[invalids] = "NC"
     ## get rid of trailing decimal dots
     cvec = sub("(.*)\\.$","\\1",cvec)
@@ -81,9 +90,9 @@ nca.sumstat.params = function(x, ns = 3, na.rm=T, ...){
     se = sd(x, na.rm=T)/sqrt(nn)
     uci = mean(x, na.rm = na.rm) + qt(p=.975, df=nn-1)*se
     lci = mean(x, na.rm = na.rm) - qt(p=.975, df=nn-1)*se
-    UCI = sprintf(myfmt2, signif(uci, ns2)) 
+    UCI = sprintf(myfmt2, signif(uci, ns2))
       if(grepl("e", UCI)) UCI = sprintf("%g", signif(uci, ns2)) # correct for scientific notation
-    LCI = sprintf(myfmt2, signif(lci, ns2)) 
+    LCI = sprintf(myfmt2, signif(lci, ns2))
       if(grepl("e", LCI)) LCI = sprintf("%g", signif(lci, ns2)) # correct for scientific notation
 
         ## get rid of trailing decimal dots
@@ -95,12 +104,12 @@ nca.sumstat.params = function(x, ns = 3, na.rm=T, ...){
     invalids = c(grep("NA", cvec),
                  grep("NaN", cvec),
                  grep("Inf", cvec))
-    
+
     cvec[invalids] = "NC"
     ## get rid of trailing decimal dots
     cvec = sub("(.*)\\.$","\\1",cvec)
-  } 
-  
+  }
+
   names(cvec) = c(Cs(N, Mean, "Geometric Mean", SD, Min, Median, Max), "CV(\\%)", "Lower 95\\% CI", "Upper 95\\% CI")
   return(cvec)
 }

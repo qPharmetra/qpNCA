@@ -1,3 +1,15 @@
+#' Tabulate
+#'
+#' @param ds
+#' @param ns
+#' @param loq
+#' @param units
+#' @param omits
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ncaTabulate = function(ds, ns = nsignif, loq=.1, units=parUnits, omits = NULL){
   ncaTab = nca.summary.table(ds, subjVar="subjectc", nsig = ns,
                               LOQ=loq, omits=omits)

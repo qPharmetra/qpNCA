@@ -1,20 +1,31 @@
 
 #Install libraries
-```{r, echo=FALSE, results='hide'}
+```{r, results='hide'}
+rm(list = ls())
 library(qpNCA)
 library(dplyr)
+library(ggplot2)
+qp.blue <- "#144A90"
+qp.green <- "#4CB54F"
 ```
 
-#Check out Theoph data
-```{r, echo=FALSE, results='as-is'}
+#Check out Theoph data and prepare data for NCA
+```{r, results="markup", warnings=F}
 head(Theoph)
 print(plot(Theoph$conc~Theoph$Time))
+
+#we need nominal time variable for some tasks.
+NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
+Theoph1 <- Theoph %>% 
+  mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
+  mutate(Subject=as.numeric(as.character(Subject)))     #converting from factor to numeric
+
 ```
 
 #Calculate Cmax and Tmax
-```{r, echo=FALSE, results='as-is'}
-ctmax <- Theoph %>%
- group_by(Subject=as.numeric(Subject)) %>% 
+```{r, results="markup", warnings=F}
+ctmax <- Theoph1 %>%
+ group_by(Subject) %>% 
   #Subject in Theoph are ordered factor, but factors are not in ascending order
  do(calc.ctmax(.,timevar="Time",depvar="conc")) %>%
  ungroup()
@@ -22,28 +33,24 @@ head(ctmax)
 ```
 
 #Calculate half-life
-```{r, echo=FALSE, results='as-is'}
-th = Theoph %>% 
-  group_by(Subject=as.numeric(Subject)) %>%
+```{r,  results="markup", warnings=F}
+th = Theoph1 %>% 
+  group_by(Subject) %>%
   do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
   ungroup()
 head(th)
 ```
 
 #Corrections of missing time and concentrations
-```{r, echo=FALSE, results='as-is'}
+```{r,  results="markup", warnings=F}
 ## 3. Correct deviations
-#we need nominal time variable for this task.
-ID <- as.numeric(Theoph$Subject)
-NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-Theoph1 <- Theoph %>% mutate(NTAD=metrumrg::snap(Time, NTAD))
 
 #let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
 tc = Theoph1 %>% 
-  group_by(Subject=as.numeric(Subject)) %>%
+  group_by(Subject) %>%
   do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
                   tau=,tstart=,tend=,teval=8,th=th,reg="sd")) %>%  
-  do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=,
+  do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
                   th=th,reg="sd",ss="n")) %>% 
   ungroup() 
 
@@ -52,11 +59,87 @@ head(tc)
 ```
 
 #calculate PK parameters NOT based on lambda_z 
-```{r, echo=FALSE, results='as-is'}
+```{r,  results="markup", warnings=F}
 par <- tc %>%
   group_by(Subject) %>%
-  do(calc.par(.,tau=,tstart=,tend=,teval=8,route="po", method = 1)) %>%  #This wil get us both AUC0-8 and AUC0-24 as sampling ends at 24
+  do(calc.par(.,tau=,tstart=,tend=,teval=8)) %>%  #This wil get us both AUC0-8 and AUC0-24 as sampling ends at 24
   ungroup()
 ```
 
+#calculate PK parameters based on lambda_z 
+```{r,  results="markup", warnings=F}
+cov <- data.frame(Subject=as.numeric(Theoph1$Subject), DOSE=Theoph$Dose) %>% 
+  distinct(.,.keep_all = T)
+
+par = calc.par.th(x=par,th=th ,cov=cov,
+                  dose="DOSE",factor=1,  
+                  reg="sd",ss="n") 
+
+```
+
+#All NCA para in one df
+```{r,  results="markup", warnings=F}
+par_all = left_join(par, ctmax)
+```
+
+#Visualize NCA results
+```{r,  results="markup", warnings=F}
+plot<-left_join(Theoph1, par_all) %>%
+     ungroup() %>%
+     mutate(TAD1=Time,
+            DV=conc,
+            start_conc=exp(intercept-lambda_z*start_th),
+            end_conc=exp(intercept-lambda_z*end_th),
+            thalf_txt=ifelse(!is.na(thalf),
+            paste0("Half-life:",round(thalf,2)," h  "),"Half-life not calculated  "),
+            radj_txt=ifelse(!is.na(thalf),
+                            paste0("Adj. R-squared: ",round(r.squared,4),"  ")," ")) %>%
+     group_by(Subject) %>%
+     mutate(max_conc=10**(ceiling(log10(max(conc,na.rm=T)))),
+            min_conc=10**(floor(log10(min(conc,na.rm=T))))) %>%
+    ungroup() %>%
+    filter(!is.na(DV))
+
+plots = plot %>% group_by(Subject) %>% 
+  
+             do(plots=ggplot(data=.) +
+                                
+             geom_line(data=., mapping=aes(x=TAD1, y=DV), color=qp.blue) +
+
+             geom_point(data=., mapping=aes(x=tmax, y=cmax), color="gold3", size=6) +
+
+             geom_point(data=., mapping=aes(x=TAD1, y=DV), color=qp.blue, size=4) +
+               
+             geom_segment(data=.,x=.$start_th,xend=.$end_th,
+                            y=log10(.$start_conc), yend=log10(.$end_conc),
+                            color=qp.green, linetype="solid", size=1) +
+
+             geom_point(data=.[.$TAD1>=.$start_th&.$TAD1<=.$end_th,], 
+                         mapping=aes(x=TAD1, y=DV), size=4, color=qp.green) +
+
+           annotate(geom="text",label=unique(.$thalf_txt), x=Inf, y=Inf, hjust=1, vjust=2) +
+
+           annotate(geom="text",label=unique(.$radj_txt), x=Inf, y=Inf, hjust=1, vjust=4) +
+
+           scale_y_log10(
+            #limits=c(unique(.$min_conc),unique(.$max_conc)),
+            #breaks=(10**(seq(log10(unique(.$min_conc)),log10(unique(.$max_conc))))),
+            #labels=(10**(seq(log10(unique(.$min_conc)),log10(unique(.$max_conc)))))
+                          ) + 
+          xlab("Time after Dose (h)") +
+          ylab("Concentrations (mg/L)") +
+          theme(legend.direction="horizontal",legend.position="bottom", aspect.ratio=0.4,
+                legend.text = element_text(size=15),
+          plot.title =element_text(hjust = 0, size=15), 
+          panel.background = element_rect(fill = 'white', colour="black"),
+          panel.grid.major = element_line(colour = "grey"), 
+          panel.grid.minor = element_blank(),
+          axis.title.x = element_text(size=15), axis.title.y = element_text(size=15),
+          axis.text.x=element_text(colour="black", size=15),
+          axis.text.y=element_text(colour="black", size=15)) +
+          ggtitle(paste0("Patient: ",.$Subject)))
+
+print(plots$plots)
+
+```
 

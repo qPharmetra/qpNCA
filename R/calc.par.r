@@ -85,44 +85,42 @@ calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="po",method=1){
   if (!is.na(tstart)&!is.na(tend)&is.element(tstart,par$time.part)&is.element(tend,par$time.part))
   {  part.ok=  ifelse(is.na(par$conc.part[par$time.part==tstart]) |
                         is.na(par$conc.part[par$time.part==tend]),0,1) }
-
-  par=par %>% summarise(route=route,
+  #added df1 = par here and at each call of trap function by Krina on 1 march 2019 due to error message without it
+  par=par %>% summarize(route=route,
                             method=method,
                             tlast=ifelse(tlast.ok==1,last(time.lastall[!is.na(conc.lastall)&conc.lastall>0]),NA),
                             clast.obs=ifelse(tlast.ok==1,conc.lastall[time.lastall==tlast],NA),
                             tlast.ok=tlast.ok,
                             t0.ok=t0.ok,
-
                             aucall=ifelse(t0.ok==1,
-                                          trap(df1=par,
+                                          trap(df1 = par,
                                                x=time.lastall[!is.na(conc.lastall)],
                                                y=conc.lastall[!is.na(conc.lastall)], method=method),NA),
 
                             auclast=ifelse(t0.ok==1&tlast.ok==1,
-                                           trap(df1=par,
+                                           trap(df1 = par,
                                                 x=time.lastall[!is.na(conc.lastall)&time.lastall<=tlast],
                                                 y=conc.lastall[!is.na(conc.lastall)&time.lastall<=tlast], method=method),NA),
 
                             aumcall=ifelse(t0.ok==1&tlast.ok==1,
-                                           trap(df1=par,
+                                           trap(df1 = par,
                                                 x=time.lastall[!is.na(conc.lastall)],
                                                 y=time.lastall[!is.na(conc.lastall)] *
                                                   conc.lastall[!is.na(conc.lastall)], method=method),NA),
 
                             aumclast=ifelse(t0.ok==1&tlast.ok==1,
-                                            trap(df1=par,
+                                            trap(df1 = par,
                                                  x=time.lastall[!is.na(conc.lastall)&time.lastall<=tlast],
                                                  y=conc.lastall[!is.na(conc.lastall)&time.lastall<=tlast]*
                                                    time.lastall[!is.na(conc.lastall)&time.lastall<=tlast], method=method),NA),
 
                             calc.tau=tau.ok,
                             auctau=ifelse(t0.ok==1&tau.ok==1,
-                                          trap(df1=par, 
-#added df1=par here and at each call of trap function by Krina on 1 march 2019 due to error message without it
+                                          trap(df1 = par,
                                                x=time.tau[!is.na(conc.tau)&time.tau<=tau],
                                                y=conc.tau[!is.na(conc.tau)&time.tau<=tau], method=method),NA),
                             aumctau=ifelse(t0.ok==1&tau.ok==1,
-                                           trap(df1=par,
+                                           trap(df1 = par,
                                                 x=time.tau[!is.na(conc.tau)&time.tau<=tau],
                                                 y=conc.tau[!is.na(conc.tau)&time.tau<=tau]*
                                                   time.tau[!is.na(conc.tau)&time.tau<=tau], method=method),NA),
@@ -130,14 +128,14 @@ calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="po",method=1){
 
                             calc.teval=teval.ok,
                             aucteval=ifelse(t0.ok==1&teval.ok==1,
-                                            trap(df1=par,
+                                            trap(df1 = par,
                                                  x=time.teval[!is.na(conc.teval)&time.teval<=teval],
                                                  y=conc.teval[!is.na(conc.teval)&time.teval<=teval], method=method),NA),
                             teval=ifelse(!is.na(teval),teval,NA),
 
                             calc.part=part.ok,
                             aucpart=ifelse(part.ok==1,
-                                           trap(df1=par,
+                                           trap(df1 = par,
                                                 x=time.part[!is.na(conc.part)&time.part>=tstart&time.part<=tend],
                                                 y=conc.part[!is.na(conc.part)&time.part>=tstart&time.part<=tend], method=method),NA),
                             tstart=ifelse(!is.na(tstart),tstart,NA),
@@ -146,7 +144,7 @@ calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="po",method=1){
 
 
                             area.back.extr=ifelse(tolower(route)=="iv",
-                                                  trap(df1=par,
+                                                  trap(df1 = par,
                                                        x=time.lastall[time.lastall<=firstmeast&!is.na(conc.lastall)],
                                                        y=conc.lastall[time.lastall<=firstmeast&!is.na(conc.lastall)],
                                                        method=method),NA)
