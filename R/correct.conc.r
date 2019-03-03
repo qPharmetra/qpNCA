@@ -1,3 +1,69 @@
+#' Corrects missing concentration at critical time points (e.g, predose, TAU, start and end of user selected AUC interval)
+#' @importFrom metrumrg snap locf
+#' @description
+#' \itemize If there is a measurable concentration BEFORE and AFTER the missing concentration, use interpolation
+#' \itemize If there is NO measurable concentration AFTER the missing concentration, use extrapolation
+#' \itemize Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)
+#' \itemize Set missing concentration at t=TAU to value at t=0 (steady state only)
+#' \itemize The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:
+#' \tabular{cccc}{
+#' Rule \tab Regimen \tab Description \tab Applied to \cr
+#' SDC-1  \tab   sd   \tab       Set concentration to 0 (only non-endogenous compounds)      \tab      t=0 \cr
+#' SDC-2   \tab    sd  \tab      impute missing concentration by interpolation   \tab                  t=tau,tstart,tend,teval\cr
+#' SDC-3   \tab    sd    \tab    impute missing concentration by extrapolation   \tab                  t=tau,tend,teval\cr
+#' SDC-4   \tab    sd (IV)  \tab impute missing concentration by back-extrapolation   \tab             t=0\cr
+#' MDC-1   \tab    md  \tab      impute missing concentration by existing conc at t=0 or t=tau*  \tab  t=0,tau\cr
+#' MDC-2   \tab    md    \tab    impute missing concentration by interpolation   \tab                   t=tau,tstart,tend,teval\cr
+#' MDC-3   \tab    md    \tab    impute missing concentration by extrapolation   \tab                  t=tau,tend,teval\cr
+#' MDC-4   \tab    md (IV)  \tab  impute missing concentration by back-extrapolation  \tab              t=0\cr
+#' * only if steady state has been reached\cr
+#' }
+#' @param x input dataset name input dataset name (contains all data, including LOQ (set conc to zero for these))
+#' @param nomtimevar variable name containing the nominal sampling time
+#' @param tau dosing interval (for multiple dosing), if single dose, leave empty
+#' @param tstart start time of partial AUC (start>0), if not requested, leave empty
+#' @param tend end time of partial AUC, if not requested, leave empty
+#' @param teval user selected AUC interval, if not requested, leave empty
+#' @param th file name of file with lamdba_z information for each curve (can be derived from est.thalf)
+#' @param reg regimen, "sd" or "md"
+#' @param ss is steady state reached (y/n)
+#' @param route route of drug administration ("po","iv")
+#' @param method of interpolation: \cr
+#'             1: linear up - linear down \cr
+#'             2: linear up - logarithmic down \cr
+#'
+#' @return  a dataset with missing concentrations imputed. The following variables are added:
+#' \tabular{cc}{
+#'  crule.nr     \tab    correction rule number \cr
+#'  crule.txt     \tab   text explaining what was altered \cr
+#'  applies.to.conc  \tab  lists all AUCS to which the concentration correction rule applies \cr
+#' }
+#'
+#' @examples
+#'# We need half-lives for this, so first let's get that.
+#' th = Theoph %>%
+#'  group_by(Subject=as.numeric(Subject)) %>%
+#'  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
+#'  ungroup()
+#'
+#'# We need nominal time variable as well, so let's generate that.
+#' ID <- as.numeric(Theoph$Subject)
+#' NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
+#' Theoph1 <- Theoph %>% mutate(NTAD=snap(Time, NTAD))
+#'
+#' #let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
+#' tc = Theoph1 %>%
+#' group_by(Subject=as.numeric(Subject)) %>%
+#' do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
+#'                  tau=,tstart=,tend=,teval=8,th=th,reg="sd")) %>%
+#' #above step added timepoints that we will add interpolated concentrations to with this next step
+#' do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
+#' th=th,reg="sd",ss="n")) %>%
+#' ungroup()
+#'
+#' head(tc)
+#'
+#' @export
 correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="sd",ss="n",route="po",method=1) {
 
   data_in=x

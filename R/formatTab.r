@@ -1,6 +1,10 @@
-# ds = ncaTab
-# un=c("",un[-1])
-# nams = names(ds)
+#' Format the subject-level NCA results tables and return Latex-ready tables
+#'
+#' @param myLst
+#'
+#' @return
+#' @export
+#'
 formatTab = function(myLst){
   # Format the subject-level tables and return Latex-ready tables
   ds = myLst$ncaTab

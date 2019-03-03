@@ -1,6 +1,16 @@
-trap <- function(x=NA, y=NA, method=1) {
-  cm=max(df1$dv,na.rm=T)
-  tmax=first(df1$tad[df1$dv==cm&!is.na(df1$dv)])
+#' Trapezoid function
+#'
+#' @param x
+#' @param y
+#' @param method
+#'
+#' @return
+#' @export
+#'
+#' @examples
+trap <- function(df1, x=NA, y=NA, method=1) { #added df1 here by Krina on 1 march 2019 due to error message without it
+  cm=max(y,na.rm=T)
+  tmax=first(x[y==cm&!is.na(x)])
   if (method==1)   {
     z=  sum((x-lag(x))*(y+lag(y))/2,na.rm=T)
   }

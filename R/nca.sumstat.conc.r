@@ -1,3 +1,16 @@
+#' Generate summary statistics of concentrations
+#'
+#' @param x
+#' @param LOQ
+#' @param na.rm
+#' @param ns
+#' @param bloqRule
+#' @param oddCode
+#' @param bloqCode
+#' @param ...
+#'
+#' @return
+#' @export
 nca.sumstat.conc = function(x, LOQ, na.rm = T, ns = 3, bloqRule = "BLOQ=0", oddCode = Cs(M,NS), bloqCode="BLOQ", ...){
   # Summarize a vector concentration measurements for output to a report
   #   x     = character vector containing numeric values to be summarized
@@ -7,57 +20,57 @@ nca.sumstat.conc = function(x, LOQ, na.rm = T, ns = 3, bloqRule = "BLOQ=0", oddC
   #   bloqRule  = Rule for treatment of BLOQ values
   #   oddCode   = alphabetical codes for concentrations
   #   bloqCode  = alphabetic code for BLOQ values
-  
+
   # prepopulate the output assuming nothing needs to be summarized (i.e. all(x)=="NA")
   N = 0
   Mean = geoMean = SD = Min = Median = Max = CV = UCI = LCI = "NC"
   cvec = c(N, Mean, geoMean, SD, Min, Median, Max, CV, UCI, LCI)
-  
+
   ## First apply BLOQ rule to the input data
   ## Keep in mind that the function expects character data
   ## One option is to set to 0
   if(bloqRule == "BLOQ=0") x[x == bloqCode] = "0"
-  
+
   # Option2 is BLOQ <- LOQ/2
   if(bloqRule == "BLOQ=LOQ/2") x[x == bloqCode] = as.character(LOQ/2)
-  
+
   ## make character entries NA (not "NA") before turning character into numeric
   if(length(whichNumeric(x))>0)
     x[-whichNumeric(x)] = NA
-  
+
   ## check if we have evaluable numbers
   nn = length(x[whichNumeric(x)])
   if(all(x[!is.na(x)]=="0" & bloqRule=="BLOQ=0")) nn = -1
   if(all(2*as.numeric(x[!is.na(x)])==LOQ & bloqRule=="BLOQ=LOQ/2")) nn = -1
-  
+
   # Set proper number of significant figures
   ns2 = ns+1
   myfmt1 = paste("%#.", ns, "g", sep="")
   myfmt2 = paste("%#.", ns2, "g", sep="")
-  
+
   if(nn == -1){
     # all BLOQ
-    cvec = c(as.character(length(x[whichNumeric(x)])), 
+    cvec = c(as.character(length(x[whichNumeric(x)])),
              c(bloqCode, bloqCode, "NC", rep(bloqCode, 3), "NC", "NC", "NC"))
   } else if(nn == 0) { # No observations or all NA
-    cvec = rep("NC", 10)    
+    cvec = rep("NC", 10)
   } else if(mean(as.numeric(x), na.rm=T) < LOQ){
     # mean BLOQ
     x = as.numeric(x[whichNumeric(x)])
-    cvec = c(N = length(x[whichNumeric(x)]), 
-             Mean = bloqCode, 
-             geoMean = bloqCode, 
-             SD = "NC", 
+    cvec = c(N = length(x[whichNumeric(x)]),
+             Mean = bloqCode,
+             geoMean = bloqCode,
+             SD = "NC",
              Min = bloqCode,
-             Median = bloqCode, 
-             Max = sprintf(myfmt1, signif(max(as.numeric(x[whichNumeric(x)]), na.rm=na.rm),ns)), 
-             CV = "NC", 
+             Median = bloqCode,
+             Max = sprintf(myfmt1, signif(max(as.numeric(x[whichNumeric(x)]), na.rm=na.rm),ns)),
+             CV = "NC",
              UCI = "NC",
              LCI = "NC")
-  } else if(nn == 0) { 
+  } else if(nn == 0) {
     # No observations
-    cvec = rep("NC", 10)    
-  } else if (nn <= 2){ 
+    cvec = rep("NC", 10)
+  } else if (nn <= 2){
     # Few observations
     N = sprintf("%.0f", nn)
     x = as.numeric(x[whichNumeric(x)])
@@ -75,14 +88,14 @@ nca.sumstat.conc = function(x, LOQ, na.rm = T, ns = 3, bloqRule = "BLOQ=0", oddC
     Max = sprintf(myfmt1, signif(max(x, na.rm=na.rm), ns))
       if(grepl("e", Max)) Max = sprintf("%g", signif(max(x, na.rm=T), ns)) # correct for scientific notation
     CV = "NC"
-    UCI = "NC"    
-    LCI = "NC"    
+    UCI = "NC"
+    LCI = "NC"
     ## Format the summary stats
     cvec = c(N, Mean, geoMean, SD, Min, Median, Max, CV, UCI, LCI)
     invalids = c(grep("NA", cvec),
                  grep("NaN", cvec),
                  grep("Inf", cvec))
-    
+
     cvec[invalids] = "NC"
     ## get rid of trailing decimal dots
     cvec = sub("(.*)\\.$","\\1",cvec)
@@ -110,11 +123,11 @@ nca.sumstat.conc = function(x, LOQ, na.rm = T, ns = 3, bloqRule = "BLOQ=0", oddC
     se = sd(x, na.rm=na.rm)/sqrt(nn)
     uci = mean(x, na.rm = na.rm) + qt(p=.975, df=nn-1)*se
     lci = mean(x, na.rm = na.rm) - qt(p=.975, df=nn-1)*se
-    UCI = sprintf(myfmt2, signif(uci, ns2)) 
+    UCI = sprintf(myfmt2, signif(uci, ns2))
       if(grepl("e", UCI)) UCI = sprintf("%g", signif(uci, ns2)) # correct for scientific notation
-    LCI = sprintf(myfmt2, signif(lci, ns2)) 
+    LCI = sprintf(myfmt2, signif(lci, ns2))
       if(grepl("e", LCI)) LCI = sprintf("%g", signif(lci, ns2)) # correct for scientific notation
-    
+
     # correct trailing decimals
     if(substring(LCI, nchar(LCI)) == ".") LCI = paste(LCI, "0", sep="")
     if(substring(UCI, nchar(UCI)) == ".") UCI = paste(UCI, "0", sep="")
@@ -124,12 +137,12 @@ nca.sumstat.conc = function(x, LOQ, na.rm = T, ns = 3, bloqRule = "BLOQ=0", oddC
     invalids = c(grep("NA", cvec),
                  grep("NaN", cvec),
                  grep("Inf", cvec))
-    
+
     cvec[invalids] = "NC"
     ## get rid of trailing decimal dots
     cvec = sub("(.*)\\.$","\\1",cvec)
-  } 
-  
+  }
+
   names(cvec) = c(Cs(N, Mean, "Geometric Mean", SD, Min, Median, Max), "CV(\\%)", "Lower 95\\% CI", "Upper 95\\% CI")
   return(cvec)
 }
