@@ -1,0 +1,86 @@
+---
+title: "nca_analysis_example.rmd"
+output: html_document
+author: "Krina Mehta"
+---
+
+#Install libraries
+```{r, results='hide'}
+rm(list = ls())
+library(qpNCA)
+library(dplyr)
+```
+
+#Check out Theoph data and prepare data for NCA
+```{r, results="markup", warnings=F}
+head(Theoph)
+print(plot(Theoph$conc~Theoph$Time))
+
+#we need nominal time variable for some tasks.
+NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
+Theoph1 <- Theoph %>% 
+  mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
+  mutate(Subject=as.numeric(as.character(Subject)))     #converting from factor to numeric
+
+```
+
+#Calculate Cmax and Tmax
+```{r, results="markup", warnings=F}
+ctmax <- Theoph1 %>%
+ group_by(Subject) %>% 
+  #Subject in Theoph are ordered factor, but factors are not in ascending order
+ do(calc.ctmax(.,timevar="Time",depvar="conc")) %>%
+ ungroup()
+head(ctmax)
+```
+
+#Calculate half-life
+```{r,  results="markup", warnings=F}
+th = Theoph1 %>% 
+  group_by(Subject) %>%
+  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
+  ungroup()
+head(th)
+```
+
+#Corrections of missing time and concentrations
+```{r,  results="markup", warnings=F}
+## 3. Correct deviations
+
+#let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
+tc = Theoph1 %>% 
+  group_by(Subject) %>%
+  do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
+                  tau=,tstart=,tend=,teval=8,th=th,reg="sd")) %>%  
+  do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
+                  th=th,reg="sd",ss="n")) %>% 
+  ungroup() 
+
+head(tc)
+
+```
+
+#calculate PK parameters NOT based on lambda_z 
+```{r,  results="markup", warnings=F}
+par <- tc %>%
+  group_by(Subject) %>%
+  do(calc.par(.,tau=,tstart=,tend=,teval=8)) %>%  #This wil get us both AUC0-8 and AUC0-24 as sampling ends at 24
+  ungroup()
+```
+
+#calculate PK parameters based on lambda_z 
+```{r,  results="markup", warnings=F}
+cov <- data.frame(Subject=as.numeric(Theoph1$Subject), DOSE=Theoph$Dose) %>% 
+  distinct(.,.keep_all = T)
+
+par = calc.par.th(x=par,th=th ,cov=cov,
+                  dose="DOSE",factor=1,  
+                  reg="sd",ss="n") 
+
+```
+
+#All NCA para in one df
+```{r,  results="markup", warnings=F}
+par_all = left_join(par, ctmax)
+write.csv(par_all, "nca_analysis_results.csv", row.names = F)
+```
