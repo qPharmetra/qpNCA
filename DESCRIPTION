@@ -23,5 +23,6 @@ Imports:
     metrumrg(>= 5.55)
 RoxygenNote: 6.1.1
 Note: Use of older dplyr is because of need to convert strings to sym in newer versions if used within a function (https://stackoverflow.com/questions/26724124/standard-evaluation-in-dplyr-summarise-on-variable-given-as-a-character-string/26724721#26724721)
-Remotes: github::metrumresearchgroup/metrumrg
-Remotes: github::qPharmetra/qpToolkit
+Remotes: 
+    github::metrumresearchgroup/metrumrg,
+    github::qPharmetra/qpToolkit
