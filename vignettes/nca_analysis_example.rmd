@@ -66,6 +66,7 @@ par <- tc %>%
   group_by(Subject) %>%
   do(calc.par(.,tau=,tstart=,tend=,teval=8)) %>%  #This wil get us both AUC0-8 and AUC0-24 as sampling ends at 24
   ungroup()
+head(par)
 ```
 
 #calculate PK parameters based on lambda_z 
@@ -76,11 +77,12 @@ cov <- data.frame(Subject=as.numeric(Theoph1$Subject), DOSE=Theoph$Dose) %>%
 par = calc.par.th(x=par,th=th ,cov=cov,
                   dose="DOSE",factor=1,  
                   reg="sd",ss="n") 
-
+head(par)
 ```
 
 #All NCA para in one df
 ```{r,  results="markup", warnings=F}
 par_all = left_join(par, ctmax)
+head(par_all)
 write.csv(par_all, "nca_analysis_results.csv", row.names = F)
 ```
