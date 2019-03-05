@@ -40,6 +40,7 @@
 #' }
 #'
 #' @examples
+#' library(dplyr)
 #'# We need half-lives for this, so first let's get that.
 #' th = Theoph %>%
 #'  group_by(Subject=as.numeric(Subject)) %>%

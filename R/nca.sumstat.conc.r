@@ -9,6 +9,7 @@
 #'
 #' @return summary statistics of concentrations vs. time
 #' @example
+#' library(dplyr)
 #' NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
 #' Theoph1 <- Theoph %>%
 #'  mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%

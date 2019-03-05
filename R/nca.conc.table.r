@@ -13,6 +13,7 @@
 #'
 #' @return report ready individual concentrations table with summary statistics
 #' @example
+#' library(dplyr)
 #' get dataset ready
 #'NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
 #'Theoph1 <- Theoph %>%

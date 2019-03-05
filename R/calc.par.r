@@ -35,6 +35,7 @@
 #' c0        \tab back-extrapolated concentration at t=0 for IV bolus administration\cr
 #' }
 #' @examples
+#' library(dplyr)
 #'# We need half-lives for corrections, so first let's get that.
 #' th = Theoph %>%
 #'  group_by(Subject=as.numeric(Subject)) %>%

@@ -16,6 +16,7 @@
 #' end_th = time of last sample included in the thalf estimation;\cr
 #' includeCmax = include results of regression including Cmax in selection? (y/n)\cr
 #' @examples
+#' library(dplyr)
 #' th = Theoph %>%
 #'  group_by(Subject=as.numeric(Subject)) %>%
 #'  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
