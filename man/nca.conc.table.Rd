@@ -2,15 +2,36 @@
 % Please edit documentation in R/nca.conc.table.r
 \name{nca.conc.table}
 \alias{nca.conc.table}
-\title{Format concentrations summary tables for report ready}
+\title{Format raw individual concentrations table for report}
 \usage{
 nca.conc.table(obs, LOQ = 1e-04, sumVar = "conc", subjVar = "subjid",
   timeVar = "nom.time", omits = NULL, times = NULL,
   carryAlong = NULL, nsig = 3, bloqCode = "BLOQ")
 }
 \arguments{
-\item{bloqCode}{}
+\item{obs}{dataset}
+
+\item{LOQ}{value of LOQ}
+
+\item{sumVar}{concentration/DV variable}
+
+\item{subjVar}{subject or id variable}
+
+\item{timeVar}{time or visit variable}
+
+\item{omits}{any subjects to be ommitted}
+
+\item{times}{nominal time}
+
+\item{carryAlong}{any variables to be carried in the table}
+
+\item{nsig}{number of significant digits}
+
+\item{bloqCode}{variable name for BLQs are flagged}
+}
+\value{
+report ready individual concentrations table with summary statistics
 }
 \description{
-Format concentrations summary tables for report ready
+Format raw individual concentrations table for report
 }

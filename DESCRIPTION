@@ -9,7 +9,7 @@ License: to be decided
 Encoding: UTF-8
 LazyData: true
 Suggests: 
-    covr
+    covr,
     testthat
 Depends:
     R (>= 3.3.3)
@@ -19,7 +19,10 @@ Imports:
     rlang (>= 0.1.1),
     qpToolkit (>= 0.1.5),
     tidyr (>= 0.8.2),
+    gdata (>= 2.7.0),
     metrumrg(>= 5.55)
 RoxygenNote: 6.1.1
 Note: Use of older dplyr is because of need to convert strings to sym in newer versions if used within a function (https://stackoverflow.com/questions/26724124/standard-evaluation-in-dplyr-summarise-on-variable-given-as-a-character-string/26724721#26724721)
-Remotes: github::metrumresearchgroup/metrumrg
+Remotes: 
+    github::metrumresearchgroup/metrumrg,
+    github::qPharmetra/qpToolkit

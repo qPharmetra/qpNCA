@@ -2,13 +2,25 @@
 % Please edit documentation in R/nca.sumstat.params.r
 \name{nca.sumstat.params}
 \alias{nca.sumstat.params}
-\title{Create summary statistics of NCA parameters}
+\title{Summarizes a vector of PK Parameters for output to a report
+For parameter values that have 0's reported, e.g. AUC when all concentratinos are 0, assign NC}
 \usage{
 nca.sumstat.params(x, ns = 3, na.rm = T, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{character vector containing numeric values to be summarized}
+
+\item{ns}{number of significant figures for summary values}
+
+\item{na.rm}{flag for removal of NA values}
+
+\item{bloqRule}{= Rule for treatment of BLOQ values}
+
+\item{oddCode}{= alphabetical codes for concentrations}
+
+\item{bloqCode}{= alphabetic code for BLOQ values}
 }
 \description{
-Create summary statistics of NCA parameters
+Summarizes a vector of PK Parameters for output to a report
+For parameter values that have 0's reported, e.g. AUC when all concentratinos are 0, assign NC
 }

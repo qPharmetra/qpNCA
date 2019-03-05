@@ -2,14 +2,27 @@
 % Please edit documentation in R/nca.sumstat.conc.r
 \name{nca.sumstat.conc}
 \alias{nca.sumstat.conc}
-\title{Generate summary statistics of concentrations}
+\title{Summarizes a vector concentration measurements for output to a report}
 \usage{
-nca.sumstat.conc(x, LOQ, na.rm = T, ns = 3, bloqRule = "BLOQ=0",
-  oddCode = Cs(M, NS), bloqCode = "BLOQ", ...)
+nca.sumstat.conc(x, LOQ, ns = 3, bloqRule = "BLOQ=0", oddCode = Cs(M,
+  NS), bloqCode = "BLOQ", ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{character vector containing numeric values to be summarized}
+
+\item{LOQ}{limit of quantitation for x}
+
+\item{ns}{number of significant figures for summary values}
+
+\item{bloqRule}{Rule for treatment of BLOQ values "BLOQ=0" or "BLOQ=LOQ/2"}
+
+\item{oddCode}{alphabetical codes for concentrations}
+
+\item{bloqCode}{alphabetic code for BLOQ values}
+}
+\value{
+summary statistics of concentrations vs. time
 }
 \description{
-Generate summary statistics of concentrations
+Summarizes a vector concentration measurements for output to a report
 }

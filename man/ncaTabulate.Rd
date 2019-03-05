@@ -2,14 +2,15 @@
 % Please edit documentation in R/ncaTabulate.r
 \name{ncaTabulate}
 \alias{ncaTabulate}
-\title{Tabulate}
+\title{Format the table NCA parameters table}
 \usage{
-ncaTabulate(ds, ns = nsignif, loq = 0.1, units = parUnits,
-  omits = NULL)
+ncaTabulate(ds, units = parUnits)
 }
 \arguments{
-\item{omits}{}
+\item{ds}{a resulting data frame from nca.summary.table}
+
+\item{units}{a data frame containing units}
 }
 \description{
-Tabulate
+Format the table NCA parameters table
 }

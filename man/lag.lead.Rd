@@ -2,7 +2,7 @@
 % Please edit documentation in R/lag.lead.r
 \name{lag.lead}
 \alias{lag.lead}
-\title{Calculate lag and lead times}
+\title{Estimate lagging and leading time points and concentrations for each time point}
 \usage{
 lag.lead(x, nomtimevar1 = NA, depvar1 = NA, timevar1 = NA,
   lagc = NA, lagt = NA, leadc = NA, leadt = NA)
@@ -11,5 +11,5 @@ lag.lead(x, nomtimevar1 = NA, depvar1 = NA, timevar1 = NA,
 \item{leadt}{}
 }
 \description{
-Calculate lag and lead times
+Estimate lagging and leading time points and concentrations for each time point
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/nca.format.table.r
 \name{nca.format.table}
 \alias{nca.format.table}
-\title{Forat NCA parameters table}
+\title{Format NCA parameters table}
 \usage{
 nca.format.table(nca, carryAlong = NULL, parms = Cs(Cmax, Tmax, AUCall,
   AUCINF.pred, Cl.F.pred, HL.Lambda.z), ns = rep(3, length(parms)),
@@ -12,5 +12,5 @@ nca.format.table(nca, carryAlong = NULL, parms = Cs(Cmax, Tmax, AUCall,
 \item{uAdjust}{}
 }
 \description{
-Forat NCA parameters table
+Format NCA parameters table
 }

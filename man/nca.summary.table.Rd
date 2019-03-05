@@ -9,7 +9,17 @@ nca.summary.table(ds, subjVar = "subjid", carryAlong = NULL,
   LOQ = 1e-04)
 }
 \arguments{
-\item{LOQ}{}
+\item{ds}{formatted nca parameter table (output from nca.format.table)}
+
+\item{subjVar}{variable name of subject identifier}
+
+\item{carryAlong}{character vector of variable names to be included in output table}
+
+\item{omits}{vector of subject identifiers (subjid) to be omitted from calculation of summary statistics}
+
+\item{nsig}{vector of default number of significant figures to report parameter values}
+
+\item{LOQ}{limit of quantitation for concentration variables}
 }
 \description{
 Summarize NCA parameters table

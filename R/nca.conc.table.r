@@ -1,17 +1,36 @@
-#' Format concentrations summary tables for report ready
+#' Format raw individual concentrations table for report
 #'
-#' @param obs
-#' @param LOQ
-#' @param sumVar
-#' @param subjVar
-#' @param timeVar
-#' @param omits
-#' @param times
-#' @param carryAlong
-#' @param nsig
-#' @param bloqCode
+#' @param obs dataset
+#' @param LOQ value of LOQ
+#' @param sumVar concentration/DV variable
+#' @param subjVar subject or id variable
+#' @param timeVar time or visit variable
+#' @param omits any subjects to be ommitted
+#' @param times nominal time
+#' @param carryAlong any variables to be carried in the table
+#' @param nsig number of significant digits
+#' @param bloqCode variable name for BLQs are flagged
 #'
-#' @return
+#' @return report ready individual concentrations table with summary statistics
+#' @example
+#' library(dplyr)
+#' get dataset ready
+#'NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
+#'Theoph1 <- Theoph %>%
+#'  mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
+#'  mutate(Subject=as.numeric(as.character(Subject)), #converting from factor to numeric
+#'         BQL = ifelse(conc<=0.25, 1, 0),                #just adding few BLQs to demonstrate functionality
+#'        conc= ifelse(conc<=0.25, NA, conc))            #just adding few BLQs to demonstrate functionality
+#'
+#' #Tabulate concentrations vs time for each subject and calculate summary stats of concentrations per timepoint (can use visit instead of time)
+#'ConcTab = nca.conc.table(Theoph1,
+#'                         sumVar = "conc",
+#'                         subjVar = "Subject",
+#'                         timeVar = "NTAD",
+#'                         LOQ = 0.250,               #just adding to demonstrate functionality
+#'                         bloqCode = "BQL",
+#'                         nsig=3)
+#'
 #' @export
 nca.conc.table = function(obs,                      # source dataframe
                         LOQ = .0001,              # LOQ set to a small value by default
@@ -34,7 +53,7 @@ nca.conc.table = function(obs,                      # source dataframe
 
   ind = whichNumeric(obs[, sumVar])
 #  obs[, sumVar][ind] = sprintf("%g", signifString(as.numeric(obs[, sumVar][ind]),nsig))
-  obs[, sumVar][ind] = signifString(as.numeric(obs[, sumVar][ind]),nsig)
+  obs[, sumVar][ind] = formatted.signif(as.numeric(obs[, sumVar][ind]),nsig)
   if(is.null(times)) times = obs[, timeVar]
 #  obs[, timeVar] = ordered(obs[, timeVar], levels=sunique(obs[,timeVar]))
   #names(obs)[grep(subjVar, names(obs))] = "subjid"  # rename subjVar to subjid for convenience
@@ -51,8 +70,8 @@ nca.conc.table = function(obs,                      # source dataframe
     obsNms = names(obs)[names(obs) %nin% carryAlong]
     obs = merge(obs[, obsNms], allTimes, by=intersect(obsNms, names(allTimes)), all=T)
   }
-
   obs[, sumVar][isMissing(obs[,sumVar])] = "M"
+  obs[, sumVar][obs[,bloqCode]==1] = bloqCode
 
   ## form the table
   obs = obs[order(obs[, subjVar], obs[,timeVar]),]

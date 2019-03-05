@@ -1,5 +1,5 @@
-#' Forat NCA parameters table
-#'
+#' Format NCA parameters table
+#' @importFrom gdata trim
 #' @param nca
 #' @param carryAlong
 #' @param parms
@@ -8,8 +8,8 @@
 #'
 #' @return
 #' @export
-nca.format.table = function(nca, carryAlong = NULL,
-                        parms = Cs(  Cmax,  Tmax, AUCall, AUCINF.pred, Cl.F.pred, HL.Lambda.z),
+nca.format.table <- function(nca, carryAlong = NULL,
+                        parms = Cs(Cmax,  Tmax, AUCall, AUCINF.pred, Cl.F.pred, HL.Lambda.z),
                         ns =    rep(3, length(parms)),
                         uAdjust = rep(1, length(parms)) )
 {
@@ -44,7 +44,7 @@ nca.format.table = function(nca, carryAlong = NULL,
   # get rid of trailing .'s
   nca = data.frame(apply(nca, 2,
                          function(x) {
-                           x = trim(as.character(x))
+                           x = gdata::trim(as.character(x))
                            x = sub("(.*)\\.$","\\1",x)
                          }))
   return(nca)

@@ -1,4 +1,4 @@
-#' Calculate lag and lead times
+#' Estimate lagging and leading time points and concentrations for each time point
 #'
 #' @param x
 #' @param nomtimevar1

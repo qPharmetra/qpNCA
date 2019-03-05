@@ -45,6 +45,7 @@
 #'   t0.flag, tau.flag, tstart.flag, tend.flag, teval.flag \tab flags for what timepoint the correction was needed \cr
 #' }
 #' @examples
+#' library(dplyr)
 #'# We need half-lives for this, so first let's get that.
 #' th = Theoph %>%
 #' group_by(Subject=as.numeric(Subject)) %>%

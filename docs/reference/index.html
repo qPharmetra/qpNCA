@@ -6,7 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title> • qpNCA</title>
+
+<title>Function reference • qpNCA</title>
+
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +32,9 @@
 
 
 
-<meta property="og:title" content="" />
+
+<meta property="og:title" content="Function reference" />
+
 
 
 
@@ -75,6 +79,23 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/nca_analysis_example.html">nca_analysis_example.rmd</a>
+    </li>
+    <li>
+      <a href="../articles/nca_reporting_example.html">nca_reporting_example.rmd</a>
+    </li>
+  </ul>
+</li>
+
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -102,20 +123,132 @@
       <col class="title" />
     </colgroup>
 
-    
+
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="calc.ctmax.html">calc.ctmax()</a></code> </p>
+        </td>
+        <td><p>Calculates Cmax, Tmax from raw data for each PK curve (define using group_by)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="calc.par.html">calc.par()</a></code> </p>
+        </td>
+        <td><p>Calculates AUCs, tlast, clast.obs for each PK curve (define using group_by)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="calc.par.th.html">calc.par.th()</a></code> </p>
+        </td>
+        <td><p>Calculates PK parameters that need lambda_z</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="correct.conc.html">correct.conc()</a></code> </p>
+        </td>
+        <td><p>Corrects missing concentration at critical time points (e.g, predose, TAU, start and end of user selected AUC interval)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="correct.time.html">correct.time()</a></code> </p>
+        </td>
+        <td><p>Corrects concentrations at critical, but deviating time points (e.g, predose, TAU, start and end of user selected AUC interval), and adds missing records at these critical time points.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="est.thalf.html">est.thalf()</a></code> </p>
+        </td>
+        <td><p>Calculates lambda_z and thalf for each PK curve (defined using group_by)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="interpol.html">interpol()</a></code> </p>
+        </td>
+        <td><p>Interpolate concentrations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="lag.lead.html">lag.lead()</a></code> </p>
+        </td>
+        <td><p>Estimate lagging and leading time points and concentrations for each time point</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="nca.conc.table.html">nca.conc.table()</a></code> </p>
+        </td>
+        <td><p>Format raw individual concentrations table for report</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="nca.format.table.html">nca.format.table()</a></code> </p>
+        </td>
+        <td><p>Format NCA parameters table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="nca.summary.table.html">nca.summary.table()</a></code> </p>
+        </td>
+        <td><p>Summarize NCA parameters table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="nca.sumstat.conc.html">nca.sumstat.conc()</a></code> </p>
+        </td>
+        <td><p>Summarizes a vector concentration measurements for output to a report</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="nca.sumstat.params.html">nca.sumstat.params()</a></code> </p>
+        </td>
+        <td><p>Summarizes a vector of PK Parameters for output to a report
+For parameter values that have 0's reported, e.g. AUC when all concentratinos are 0, assign NC</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ncaTabulate.html">ncaTabulate()</a></code> </p>
+        </td>
+        <td><p>Format the table NCA parameters table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tab.corr.html">tab.corr()</a></code> </p>
+        </td>
+        <td><p>Tabulates what records were added, time deviations and concentration imputations were applied, for each subject</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="trap.html">trap()</a></code> </p>
+        </td>
+        <td><p>Trapezoid function</p></td>
+      </tr>
+    </tbody>
+
     </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+
+      <li><a href="#section-all-functions">All functions</a></li>
+
     </ul>
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by The package maintainer.</p>
+
+  <p>Developed by Jason Chittenden.</p>
+
 </div>
 
 <div class="pkgdown">
