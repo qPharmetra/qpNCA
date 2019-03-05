@@ -1,2 +1,6 @@
+^docs$
+^_pkgdown\.yml$
+^codecov\.yml$
+^\.travis\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
