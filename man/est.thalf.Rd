@@ -31,6 +31,7 @@ includeCmax = include results of regression including Cmax in selection? (y/n)\c
 The function starts with the last three sample points and performs log-linear regression on it. It then adds one sampling point at a time (including and ending at tmax) and performs the regression again. Internal variable EST checks whether there are at least 3 timepoints for estimation after removal of LOQs and NAs
 }
 \examples{
+library(dplyr)
 th = Theoph \%>\%
  group_by(Subject=as.numeric(Subject)) \%>\%
  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) \%>\%

@@ -15,6 +15,7 @@ Imports:
     rlang (>= 0.1.1),
     qpToolkit (>= 0.1.5),
     tidyr (>= 0.8.2),
+    gdata (>= 2.7.0),
     metrumrg(>= 5.55)
 Suggests:
     testthat

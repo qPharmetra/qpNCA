@@ -50,7 +50,7 @@
 #'# We need nominal time variable as well, so let's generate that.
 #' ID <- as.numeric(Theoph$Subject)
 #' NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-#' Theoph1 <- Theoph %>% mutate(NTAD=snap(Time, NTAD))
+#' Theoph1 <- Theoph %>% mutate(NTAD=metrumrg::snap(Time, NTAD))
 #'
 #' #let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
 #' tc = Theoph1 %>%

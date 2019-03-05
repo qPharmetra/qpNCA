@@ -20,6 +20,7 @@ a dataset with estimates for the Cmax (maximum concentration) and Tmax (time of 
 Input dataset can contain all uncorrected data, including LOQ; estimate first occurence of maximum concentration for each PK curve; if all concentrations are NA, sets Cmax and Tmax also to NA
 }
 \examples{
+library(dplyr)
 Theoph \%>\%
  group_by(as.numeric(Subject)) \%>\% #Subject in Theoph are ordered factor, but factors are not in ascending order
  do(calc.ctmax(.,timevar="Time",depvar="conc")) \%>\%
