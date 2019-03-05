@@ -1,11 +1,9 @@
-### Project: Utils
-### Program: convertNCA.names.r
-### Author: Kevin Dykstra
-### Date: 2011-09
-### Purpose:  format NCA parameter names for output in latex nca table 
-###           
-##___________________________________________________________________________________
-
+#' Format NCA parameter names for output in latex nca table
+#'
+#' @param ds
+#'
+#' @return
+#' @export
 convertNCAnames = function(ds){
   NCAParams = Cs(C0, Tlag, Tmax, Cmax, Cmax.D, Tlast, CmaxSS
                  , Cend, AUClast, AUC24, AUCtau, AUCtauSS, AUMClast, MRTlast

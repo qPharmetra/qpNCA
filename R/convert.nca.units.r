@@ -30,5 +30,4 @@ convert.units = function(nca =  ncaSumTab, units = NCA.units)
 }
 
 
-#cbind(casefold(names(ncaSumTab), F), convert.nca(nca=casefold(names(ncaSumTab), F)))
 

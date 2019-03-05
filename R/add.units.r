@@ -1,4 +1,12 @@
-#tablst=adcC1ATab[[1]]; rawtab = adcC1ASumall
+#' Formatting for parameter tables
+#'
+#' @param tablst
+#' @param rawtab
+#'
+#' @return
+#' @export
+#'
+#' @examples
 add.units = function(tablst, rawtab){
   # Some formatting for parameter tables
   un = c(rep("",2), tablst$units[-1])
