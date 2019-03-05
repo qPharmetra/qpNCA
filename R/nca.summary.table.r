@@ -1,30 +1,19 @@
 #' Summarize NCA parameters table
 #'
-#' @param ds
-#' @param subjVar
-#' @param carryAlong
-#' @param omits
-#' @param nsig
-#' @param LOQ
+#' @param ds formatted nca parameter table (output from nca.format.table)
+#' @param subjVar variable name of subject identifier
+#' @param carryAlong character vector of variable names to be included in output table
+#' @param omits vector of subject identifiers (subjid) to be omitted from calculation of summary statistics
+#' @param nsig vector of default number of significant figures to report parameter values
+#' @param LOQ limit of quantitation for concentration variables
 #'
 #' @return
 #' @export
-#'
-#' @examples
 nca.summary.table = function(ds, subjVar = "subjid", carryAlong=NULL, omits=NULL
                        , nsig=rep(3,ncol(ds)-1-length(carryAlong)), LOQ=.0001){
-  ## Summarize  nca parameter table
-  ##   ds = formatted nca parameter table (output from formatNCAtab)
-  ##   subjVar = variable name of subject identifier
-  ##   carryAlong = character vector of variable names to be included in output table; it expected that these
-  ##                will be placed before teh parameter portion of the table.
-  ##   omits = vector of subject identifiers (subjid) to be omitted from calculation of summary statistics
-  ##   nsig = vector of default number of significant figures to report parameter values
-  ##   LOQ = limit of quantitation for concentration variables
-  ##
+
   names(ds)[grep(subjVar, names(ds))] = "subjid"  # rename subjVar to subjid for convenience
 
-  #
   ds$subjid = ordered(ds$subjid, levels = unique(ds$subjid))
 
   stats = data.frame(sapply(names(ds)[names(ds) %nin% c("subjid", carryAlong)],

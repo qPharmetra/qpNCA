@@ -1,24 +1,16 @@
-#' Create summary statistics of NCA parameters
+#' Summarizes a vector of PK Parameters for output to a report
+#' For parameter values that have 0's reported, e.g. AUC when all concentratinos are 0, assign NC
 #'
-#' @param x
-#' @param ns
-#' @param na.rm
-#' @param ...
+#' @param x character vector containing numeric values to be summarized
+#' @param ns number of significant figures for summary values
+#' @param na.rm flag for removal of NA values
+#' @param bloqRule  = Rule for treatment of BLOQ values
+#' @param oddCode   = alphabetical codes for concentrations
+#' @param bloqCode  = alphabetic code for BLOQ values
 #'
 #' @return
 #' @export
 nca.sumstat.params = function(x, ns = 3, na.rm=T, ...){
-  # Summarize a vector PK Parameters for output to a report
-  # For parameter values that have 0's reported, e.g. AUC when all concentratinos are 0, we
-  #   assign NC
-  # function parameters
-  #   x     = character vector containing numeric values to be summarized
-  #   na.rm = flag for removal of NA values
-  #   ns    = number of significant figures for summary values
-  #   bloqRule  = Rule for treatment of BLOQ values
-  #   oddCode   = alphabetical codes for concentrations
-  #   bloqCode  = alphabetic code for BLOQ values
-
   # prepopulate the output assuming nothing needs to be summarized (i.e. all(x)=="NA")
   N = 0
   Mean = geoMean = SD = Min = Median = Max = CV = LCI = UCI = "NC"
