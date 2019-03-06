@@ -7,7 +7,7 @@ warnings_are_errors: false
 
 after_success:
   - Rscript -e 'covr::codecov()'
-  - Rscript -e 'pkgdown::buildsite()'
+  - Rscript -e 'pkgdown::build_site()'
 deploy:
   provider: pages
   skip-cleanup: true
