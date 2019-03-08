@@ -1,9 +1,5 @@
-pandoc: 2.3.1
-pkgdown: 1.3.0
-pkgdown_sha: ~
-
-articles:
-  nca_analysis_example: nca_analysis_example.html
-  nca_reporting_example: nca_reporting_example.html
-
+pandoc: '2.2'
+pkgdown: 1.3.0.9000
+pkgdown_sha: 59cc923c953d483091aae2b6b626b195674efb5f
+articles: []
 

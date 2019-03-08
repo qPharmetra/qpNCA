@@ -37,18 +37,15 @@
  Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)
  Set missing concentration at t=TAU to value at t=0 (steady state only)
  The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:
-RuleRegimenDescription
-Applied toSDC-1sd
-Set concentration to 0 (only non-endogenous compounds)t=0SDC-2
-sdimpute missing concentration by interpolationt=tau,tstart,tend,teval
+RuleRegimenDescriptionApplied to
+SDC-1sdSet concentration to 0 (only non-endogenous compounds)t=0
+SDC-2sdimpute missing concentration by interpolationt=tau,tstart,tend,teval
 SDC-3sdimpute missing concentration by extrapolationt=tau,tend,teval
-SDC-4sd (IV)impute missing concentration by back-extrapolation
-t=0MDC-1md
-impute missing concentration by existing conc at t=0 or t=tau*t=0,tauMDC-2
-mdimpute missing concentration by interpolationt=tau,tstart,tend,teval
+SDC-4sd (IV)impute missing concentration by back-extrapolationt=0
+MDC-1mdimpute missing concentration by existing conc at t=0 or t=tau*t=0,tau
+MDC-2mdimpute missing concentration by interpolationt=tau,tstart,tend,teval
 MDC-3mdimpute missing concentration by extrapolationt=tau,tend,teval
-MDC-4md (IV)impute missing concentration by back-extrapolation
-t=0* only if steady state has been reached
+MDC-4md (IV)impute missing concentration by back-extrapolationt=0
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -80,7 +77,7 @@ t=0* only if steady state has been reached
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qpNCA</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0</span>
       </span>
     </div>
 
@@ -138,18 +135,15 @@ t=0* only if steady state has been reached
  Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)
  Set missing concentration at t=TAU to value at t=0 (steady state only)
  The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:</p><table class='table'>
-<tr><td></td><td>Rule</td><td>Regimen</td><td>Description</td></tr>
-<tr><td>Applied to</td><td></td><td>SDC-1</td><td>sd</td></tr>
-<tr><td>Set concentration to 0 (only non-endogenous compounds)</td><td>t=0</td><td></td><td>SDC-2</td></tr>
-<tr><td>sd</td><td>impute missing concentration by interpolation</td><td>t=tau,tstart,tend,teval</td><td></td></tr>
+<tr><td>Rule</td><td>Regimen</td><td>Description</td><td>Applied to</td></tr>
+<tr><td>SDC-1</td><td>sd</td><td>Set concentration to 0 (only non-endogenous compounds)</td><td>t=0</td></tr>
+<tr><td>SDC-2</td><td>sd</td><td>impute missing concentration by interpolation</td><td>t=tau,tstart,tend,teval</td></tr>
 <tr><td>SDC-3</td><td>sd</td><td>impute missing concentration by extrapolation</td><td>t=tau,tend,teval</td></tr>
-<tr><td></td><td>SDC-4</td><td>sd (IV)</td><td>impute missing concentration by back-extrapolation</td></tr>
-<tr><td>t=0</td><td></td><td>MDC-1</td><td>md</td></tr>
-<tr><td>impute missing concentration by existing conc at t=0 or t=tau*</td><td>t=0,tau</td><td></td><td>MDC-2</td></tr>
-<tr><td>md</td><td>impute missing concentration by interpolation</td><td>t=tau,tstart,tend,teval</td><td></td></tr>
+<tr><td>SDC-4</td><td>sd (IV)</td><td>impute missing concentration by back-extrapolation</td><td>t=0</td></tr>
+<tr><td>MDC-1</td><td>md</td><td>impute missing concentration by existing conc at t=0 or t=tau*</td><td>t=0,tau</td></tr>
+<tr><td>MDC-2</td><td>md</td><td>impute missing concentration by interpolation</td><td>t=tau,tstart,tend,teval</td></tr>
 <tr><td>MDC-3</td><td>md</td><td>impute missing concentration by extrapolation</td><td>t=tau,tend,teval</td></tr>
-<tr><td></td><td>MDC-4</td><td>md (IV)</td><td>impute missing concentration by back-extrapolation</td></tr>
-<tr><td>t=0</td><td></td><td>* only if steady state has been reached</td><td></td></tr>
+<tr><td>MDC-4</td><td>md (IV)</td><td>impute missing concentration by back-extrapolation</td><td>t=0</td></tr>
 </table>
     
     </div>
@@ -212,11 +206,9 @@ t=0* only if steady state has been reached
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a dataset with missing concentrations imputed. The following variables are added:</p><table class='table'>
-<tr><td></td><td>crule.nr</td></tr>
-<tr><td>correction rule number</td><td></td></tr>
+<tr><td>crule.nr</td><td>correction rule number</td></tr>
 <tr><td>crule.txt</td><td>text explaining what was altered</td></tr>
-<tr><td></td><td>applies.to.conc</td></tr>
-<tr><td>lists all AUCS to which the concentration correction rule applies</td><td></td></tr>
+<tr><td>applies.to.conc</td><td>lists all AUCS to which the concentration correction rule applies</td></tr>
 </table>
 
 
@@ -227,7 +219,7 @@ t=0* only if steady state has been reached
 <span class='co'># We need half-lives for this, so first let's get that.</span>
 <span class='no'>th</span> <span class='kw'>=</span> <span class='no'>Theoph</span> <span class='kw'>%&gt;%</span>
  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='kw'>Subject</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>as.numeric</a></span>(<span class='no'>Subject</span>)) <span class='kw'>%&gt;%</span>
- <span class='fu'><a href='https://dplyr.tidyverse.org/reference/do.html'>do</a></span>(<span class='fu'><a href='est.thalf.html'>est.thalf</a></span>(<span class='no'>.</span>,<span class='kw'>timevar</span><span class='kw'>=</span><span class='st'>"Time"</span>,<span class='kw'>depvar</span><span class='kw'>=</span><span class='st'>"conc"</span>,<span class='kw'>includeCmax</span><span class='kw'>=</span><span class='st'>"Y"</span>)) <span class='kw'>%&gt;%</span>
+ <span class='fu'><a href='https://dplyr.tidyverse.org/reference/do.html'>do</a></span>(<span class='fu'>est.thalf</span>(<span class='no'>.</span>,<span class='kw'>timevar</span><span class='kw'>=</span><span class='st'>"Time"</span>,<span class='kw'>depvar</span><span class='kw'>=</span><span class='st'>"conc"</span>,<span class='kw'>includeCmax</span><span class='kw'>=</span><span class='st'>"Y"</span>)) <span class='kw'>%&gt;%</span>
  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>ungroup</a></span>()
 
 <span class='co'># We need nominal time variable as well, so let's generate that.</span>
@@ -238,33 +230,33 @@ t=0* only if steady state has been reached
 <span class='co'>#let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.</span>
 <span class='no'>tc</span> <span class='kw'>=</span> <span class='no'>Theoph1</span> <span class='kw'>%&gt;%</span>
 <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='kw'>Subject</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>as.numeric</a></span>(<span class='no'>Subject</span>)) <span class='kw'>%&gt;%</span>
-<span class='fu'><a href='https://dplyr.tidyverse.org/reference/do.html'>do</a></span>(<span class='fu'><a href='correct.time.html'>correct.time</a></span>(<span class='no'>.</span>,<span class='kw'>nomtimevar</span><span class='kw'>=</span><span class='st'>"NTAD"</span>,<span class='kw'>timevar</span><span class='kw'>=</span><span class='st'>"Time"</span>,<span class='kw'>depvar</span><span class='kw'>=</span><span class='st'>"conc"</span>,
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/do.html'>do</a></span>(<span class='fu'>correct.time</span>(<span class='no'>.</span>,<span class='kw'>nomtimevar</span><span class='kw'>=</span><span class='st'>"NTAD"</span>,<span class='kw'>timevar</span><span class='kw'>=</span><span class='st'>"Time"</span>,<span class='kw'>depvar</span><span class='kw'>=</span><span class='st'>"conc"</span>,
                  <span class='kw'>tau</span><span class='kw'>=</span>,<span class='kw'>tstart</span><span class='kw'>=</span>,<span class='kw'>tend</span><span class='kw'>=</span>,<span class='kw'>teval</span><span class='kw'>=</span><span class='fl'>8</span>,<span class='kw'>th</span><span class='kw'>=</span><span class='no'>th</span>,<span class='kw'>reg</span><span class='kw'>=</span><span class='st'>"sd"</span>)) <span class='kw'>%&gt;%</span>
 <span class='co'>#above step added timepoints that we will add interpolated concentrations to with this next step</span>
 <span class='fu'><a href='https://dplyr.tidyverse.org/reference/do.html'>do</a></span>(<span class='fu'>correct.conc</span>(<span class='no'>.</span>,<span class='kw'>nomtimevar</span><span class='kw'>=</span><span class='st'>"NTAD"</span>,<span class='kw'>tau</span><span class='kw'>=</span>,<span class='kw'>tstart</span><span class='kw'>=</span>,<span class='kw'>tend</span><span class='kw'>=</span>,<span class='kw'>teval</span><span class='kw'>=</span><span class='fl'>8</span>,
 <span class='kw'>th</span><span class='kw'>=</span><span class='no'>th</span>,<span class='kw'>reg</span><span class='kw'>=</span><span class='st'>"sd"</span>,<span class='kw'>ss</span><span class='kw'>=</span><span class='st'>"n"</span>)) <span class='kw'>%&gt;%</span>
 <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>ungroup</a></span>()</div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "Subject"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Subject", "lambda_z", "start_th", "end_th", "includeCmax")</span></div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>tc</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 56</span><span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>tc</span>)</div><div class='output co'>#&gt; # A tibble: 6 x 56
 #&gt;   Subject    Wt  Dose  Time  conc  NTAD lambda_z start_th end_th includeCmax
-#&gt;     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      
-#&gt; </span><span style='color: #555555;'>1</span><span>       1    80     4 0      0      0     0.091</span><span style='text-decoration: underline;'>6</span><span>     9.22   23.8 Y          
-#&gt; </span><span style='color: #555555;'>2</span><span>       1    80     4 0.27   1.29   0.3   0.091</span><span style='text-decoration: underline;'>6</span><span>     9.22   23.8 Y          
-#&gt; </span><span style='color: #555555;'>3</span><span>       1    80     4 0.580  3.08   0.5   0.091</span><span style='text-decoration: underline;'>6</span><span>     9.22   23.8 Y          
-#&gt; </span><span style='color: #555555;'>4</span><span>       1    80     4 1.15   6.44   1     0.091</span><span style='text-decoration: underline;'>6</span><span>     9.22   23.8 Y          
-#&gt; </span><span style='color: #555555;'>5</span><span>       1    80     4 2.03   6.32   2     0.091</span><span style='text-decoration: underline;'>6</span><span>     9.22   23.8 Y          
-#&gt; </span><span style='color: #555555;'>6</span><span>       1    80     4 3.57   5.53   4     0.091</span><span style='text-decoration: underline;'>6</span><span>     9.22   23.8 Y          
-#&gt; </span><span style='color: #555555;'># ... with 46 more variables: create.nr </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, create.txt </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,
-#&gt; #   trule.nr </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, trule.txt </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, applies.to.time </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, t0.flag </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   tau.flag </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, tstart.flag </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, tend.flag </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, teval.flag </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   missflag </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, misstime </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, diff </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, flag </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, leaddv </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   lagdv </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, leadtime </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, lagtime </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, conc.tau </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, time.tau </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   conc.teval </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, time.teval </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, conc.part </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, time.part </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   conc.lastall </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, time.lastall </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, newdepvar </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, ptime </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   crule.nr </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, crule.txt </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, applies.to.conc </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, depvar </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   timevar </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, lead.cteval </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, lag.cteval </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, lead.tteval </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   lag.tteval </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, t0val </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, tauval </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span style='color: #555555;'>, back_extrap </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, lc1 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
-#&gt; #   lc2 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, lt1 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, lt2 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, firstmeasc </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, firstmeast </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
-</div></span></pre>
+#&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;      
+#&gt; 1       1    80     4 0      0      0     0.0916     9.22   23.8 Y          
+#&gt; 2       1    80     4 0.27   1.29   0.3   0.0916     9.22   23.8 Y          
+#&gt; 3       1    80     4 0.580  3.08   0.5   0.0916     9.22   23.8 Y          
+#&gt; 4       1    80     4 1.15   6.44   1     0.0916     9.22   23.8 Y          
+#&gt; 5       1    80     4 2.03   6.32   2     0.0916     9.22   23.8 Y          
+#&gt; 6       1    80     4 3.57   5.53   4     0.0916     9.22   23.8 Y          
+#&gt; # … with 46 more variables: create.nr &lt;chr&gt;, create.txt &lt;chr&gt;, trule.nr &lt;chr&gt;,
+#&gt; #   trule.txt &lt;chr&gt;, applies.to.time &lt;chr&gt;, t0.flag &lt;dbl&gt;, tau.flag &lt;dbl&gt;,
+#&gt; #   tstart.flag &lt;dbl&gt;, tend.flag &lt;dbl&gt;, teval.flag &lt;dbl&gt;, missflag &lt;dbl&gt;,
+#&gt; #   misstime &lt;dbl&gt;, diff &lt;dbl&gt;, flag &lt;dbl&gt;, leaddv &lt;dbl&gt;, lagdv &lt;dbl&gt;,
+#&gt; #   leadtime &lt;dbl&gt;, lagtime &lt;dbl&gt;, conc.tau &lt;dbl&gt;, time.tau &lt;dbl&gt;,
+#&gt; #   conc.teval &lt;dbl&gt;, time.teval &lt;dbl&gt;, conc.part &lt;dbl&gt;, time.part &lt;dbl&gt;,
+#&gt; #   conc.lastall &lt;dbl&gt;, time.lastall &lt;dbl&gt;, newdepvar &lt;dbl&gt;, ptime &lt;dbl&gt;,
+#&gt; #   crule.nr &lt;chr&gt;, crule.txt &lt;chr&gt;, applies.to.conc &lt;chr&gt;, depvar &lt;dbl&gt;,
+#&gt; #   timevar &lt;dbl&gt;, lead.cteval &lt;dbl&gt;, lag.cteval &lt;dbl&gt;, lead.tteval &lt;dbl&gt;,
+#&gt; #   lag.tteval &lt;dbl&gt;, t0val &lt;dbl&gt;, tauval &lt;lgl&gt;, back_extrap &lt;dbl&gt;, lc1 &lt;dbl&gt;,
+#&gt; #   lc2 &lt;dbl&gt;, lt1 &lt;dbl&gt;, lt2 &lt;dbl&gt;, firstmeasc &lt;dbl&gt;, firstmeast &lt;dbl&gt;</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -285,7 +277,7 @@ t=0* only if steady state has been reached
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>
