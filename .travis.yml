@@ -6,6 +6,7 @@ cache: packages
 warnings_are_errors: false
 r_github_packages:
   - r-lib/pkgdown
+  - r-lib/remotes#340
 after_success:
   - Rscript -e 'covr::codecov()'
   - Rscript -e 'pkgdown::build_site()'
