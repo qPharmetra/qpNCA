@@ -6,12 +6,6 @@
 #' @param depvar a column name
 #' @return a dataset with estimates for the Cmax (maximum concentration) and Tmax (time of first occurence of cmax) parameters, one observation per subject
 #' @import dplyr
-#' @examples
-#' library(dplyr)
-#' Theoph %>%
-#'  group_by(as.numeric(Subject)) %>% #Subject in Theoph are ordered factor, but factors are not in ascending order
-#'  do(calc.ctmax(.,timevar="Time",depvar="conc")) %>%
-#'  ungroup()
 #' @export
 calc.ctmax <- function(x,timevar="time",depvar="dv") {
               result=x %>% mutate(depvar=x[[depvar]],        # calculated dependent variable           (internal)

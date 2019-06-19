@@ -44,24 +44,6 @@
 #'   time.lastall, conc.lastall \tab time and conc, corrected for AUClast and AUCall calculation \cr
 #'   t0.flag, tau.flag, tstart.flag, tend.flag, teval.flag \tab flags for what timepoint the correction was needed \cr
 #' }
-#' @examples
-#' library(dplyr)
-#'# We need half-lives for this, so first let's get that.
-#' th = Theoph %>%
-#' group_by(Subject=as.numeric(Subject)) %>%
-#'  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
-#'  ungroup()
-#'
-#'# We need nominal time variable as well, so let's generate that.
-#' ID <- as.numeric(Theoph$Subject)
-#' NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-#' Theoph1 <- Theoph %>% mutate(NTAD=metrumrg::snap(Time, NTAD))
-#'
-#' #let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
-#' tc = Theoph1 %>%
-#' group_by(Subject=as.numeric(Subject)) %>%
-#' do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-#'                  tau=,tstart=,tend=,teval=8,th=th,reg="sd"))
 #' @export
 correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="sd",method=1) {
 

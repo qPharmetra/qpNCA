@@ -5,6 +5,8 @@
 #' @param timevar variable name containing the sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param includeCmax include results of regression including Cmax in selection? (y/n)
+#' @param excl a variable name containing information about points to be excluded (these should have <excl>=1)
+
 #' @return a dataset with estimates for each regression analysis in one observation. The following parameters are available:
 #' no.points = number of data points used in the regression analysis; \cr
 #' intercept = estimated intercept;\cr
@@ -15,16 +17,25 @@
 #' start_th = time of first sample included in the thalf estimation;\cr
 #' end_th = time of last sample included in the thalf estimation;\cr
 #' includeCmax = include results of regression including Cmax in selection? (y/n)\cr
-#' @examples
-#' library(dplyr)
-#' th = Theoph %>%
-#'  group_by(Subject=as.numeric(Subject)) %>%
-#'  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
-#'  ungroup()
+#' points_excluded = are time points excluded from the half-life estimation? (y/n) \cr
 #' @export
-est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y"){
+est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",excl=NA){
+
   data_in = x %>% mutate(timevar=x[[timevar]],
-                         depvar=x[[depvar]]) %>%
+                         depvar=x[[depvar]])
+
+  if (!is.na(excl)) {
+
+    data_in = data_in %>% mutate(excl=x[[excl]])
+    anyexcl=0
+    if (any(data_in$excl==1)) {anyexcl=1}
+
+    data_in = data_in %>%
+      filter(excl!=1|is.na(excl))  # remove samples to be excluded from the regression
+
+  }
+
+  data_in = data_in %>%
     filter(!is.na(depvar)&depvar>0) %>%
     filter(timevar>=first(timevar[depvar==max(depvar,na.rm=T)]))      # include Cmax
 
@@ -35,6 +46,7 @@ est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y"){
   est=0
   i=length(data_in$timevar)-2
   result = data.frame(matrix(ncol=7,nrow = 1))
+
   if (i>=1) {
     est=1
     result = data.frame(matrix(ncol=7,nrow = i))
@@ -56,7 +68,6 @@ est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y"){
     result[i,7]=last(data_in$timevar)
     i=i-1
   }
-
   names(result) = Cs(no.points,intercept,lambda_z,r.squared,adj.r.squared,start_th,end_th)
   if (est==1) {
     result=result %>% mutate(sel=no.points[adj.r.squared==max(adj.r.squared)],
@@ -70,5 +81,22 @@ est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y"){
     result=result %>% mutate(no.points=NA,intercept=NA,lambda_z=NA,r.squared=NA,adj.r.squared=NA,thalf=NA,
                              start_th=NA,end_th=NA)
   }
+
+  if (!is.na(excl)) {
+
+    if (anyexcl==1) {
+      result = result %>%
+        mutate(points_excluded="Y")
+    }
+    else {
+      result = result %>%
+        mutate(points_excluded="N")
+    }
+  }
+  else {
+    result = result %>%
+      mutate(points_excluded="N")
+  }
+
   return(result)
 }
