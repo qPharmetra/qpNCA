@@ -4,7 +4,7 @@
 \alias{trap}
 \title{Trapezoid function}
 \usage{
-trap(df1, x = NA, y = NA, method = 1)
+trap(x = NA, y = NA, method = 1)
 }
 \arguments{
 \item{method}{}

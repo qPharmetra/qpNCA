@@ -1,8 +1,8 @@
 Package: qpNCA
 Type: Package
 Title: qPharmetra's R package for Noncompartmental Analysis
-Version: 1.0.12
-Author: qPharmetra, LLC
+Version: 1.0.17
+Author: Jan Huinsman, Krina mehta, Jason Chittenden
 Maintainer: Jason Chittenden <jason.chittenden@qpharmetra.com>
 Description: qPharmetra's R package for Noncompartmental Analysis
 License: to be decided

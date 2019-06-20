@@ -1,3 +1,0 @@
-image: docker.qpharmetra.io/qp_renv:3.5.1
-container: qP_Documents_qpNCA
-Rversion: 3.5.1

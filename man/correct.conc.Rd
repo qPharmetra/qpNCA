@@ -42,11 +42,11 @@ a dataset with missing concentrations imputed. The following variables are added
 }
 }
 \description{
-\itemize If there is a measurable concentration BEFORE and AFTER the missing concentration, use interpolation
-\itemize If there is NO measurable concentration AFTER the missing concentration, use extrapolation
-\itemize Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)
-\itemize Set missing concentration at t=TAU to value at t=0 (steady state only)
-\itemize The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:
+\itemize Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration\cr
+\itemize Use extrapolation if there is NO measurable concentration AFTER the missing concentration\cr
+\itemize Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)\cr
+\itemize Set missing concentration at t=TAU to value at t=0 (steady state only)\cr
+\itemize The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:\cr
 \tabular{cccc}{
 Rule \tab Regimen \tab Description \tab Applied to \cr
 SDC-1  \tab   sd   \tab       Set concentration to 0 (only non-endogenous compounds)      \tab      t=0 \cr
@@ -59,30 +59,4 @@ MDC-3   \tab    md    \tab    impute missing concentration by extrapolation   \t
 MDC-4   \tab    md (IV)  \tab  impute missing concentration by back-extrapolation  \tab              t=0\cr
 * only if steady state has been reached\cr
 }
-}
-\examples{
-library(dplyr)
-# We need half-lives for this, so first let's get that.
-th = Theoph \%>\%
- group_by(Subject=as.numeric(Subject)) \%>\%
- do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) \%>\%
- ungroup()
-
-# We need nominal time variable as well, so let's generate that.
-ID <- as.numeric(Theoph$Subject)
-NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-Theoph1 <- Theoph \%>\% mutate(NTAD=metrumrg::snap(Time, NTAD))
-
-#let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
-tc = Theoph1 \%>\%
-group_by(Subject=as.numeric(Subject)) \%>\%
-do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-                 tau=,tstart=,tend=,teval=8,th=th,reg="sd")) \%>\%
-#above step added timepoints that we will add interpolated concentrations to with this next step
-do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
-th=th,reg="sd",ss="n")) \%>\%
-ungroup()
-
-head(tc)
-
 }

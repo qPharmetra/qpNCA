@@ -48,37 +48,9 @@ tstart    \tab start time of partial AUC (if specified)\cr
 tend      \tab end time of partial AUC (if specified)\cr
 aucx_y    \tab partial auc from time=x up to/including time=y, where x>0, only calculated if tstart and tend are specified\cr
 c0        \tab back-extrapolated concentration at t=0 for IV bolus administration\cr
+area.back.extr \tab area back-extrapolated to 0\cr
 }
 }
 \description{
 Calculates AUCs, tlast, clast.obs for each PK curve (define using group_by)
-}
-\examples{
-library(dplyr)
-# We need half-lives for corrections, so first let's get that.
-th = Theoph \%>\%
- group_by(Subject=as.numeric(Subject)) \%>\%
- do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) \%>\%
- ungroup()
-
-# We need nominal time variable as well, so let's generate that.
-ID <- as.numeric(Theoph$Subject)
-NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-Theoph1 <- Theoph \%>\% mutate(NTAD=metrumrg::snap(Time, NTAD))
-
-#let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
-tc = Theoph1 \%>\%
-group_by(Subject=as.numeric(Subject)) \%>\%
-do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-                 tau=,tstart=,tend=,teval=8,th=th,reg="sd")) \%>\%
-#above step added timepoints that we will add interpolated concentrations to with this next step
-do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
-th=th,reg="sd",ss="n")) \%>\%
-ungroup()
-#Now get parameters that do not require LAMBDAZ
-par <- tc \%>\%
-     group_by(Subject=as.numeric(Subject)) \%>\%
-     ##tstart by default is 0, so here we will get AUC0-8hr and AUC0-24 as sampling ends at 24 hr
-     do(calc.par(.,tau=NA, tstart=NA, tend=NA, teval=8, route="po", method=1)) \%>\%
-     ungroup()
 }

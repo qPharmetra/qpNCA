@@ -6,11 +6,9 @@
 #'
 #' @return
 #' @export
-#'
-#' @examples
-trap <- function(df1, x=NA, y=NA, method=1) { #added df1 here by Krina on 1 march 2019 due to error message without it
+trap=function(x=NA, y=NA, method=1) {
   cm=max(y,na.rm=T)
-  tmax=first(x[y==cm&!is.na(x)])
+  tmax=first(x[y==cm&!is.na(y)])
   if (method==1)   {
     z=  sum((x-lag(x))*(y+lag(y))/2,na.rm=T)
   }

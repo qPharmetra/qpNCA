@@ -45,12 +45,12 @@ a dataset with time deviation corrections applied (timevar and depvar adapted). 
 }
 }
 \description{
-\itemize Records with missing NOMINAL time will be removed, this must be corrected before the function is called.
-\itemize If a record at the critical time point is missing, add it and set time to nominal time and set dv conc to NA
-\itemize If there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late), use interpolation
-\itemize If there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early), use extrapolation
-\itemize Set deviating time at predose to 0
-\itemize Original time and conc will be kept in original variables.
+\itemize Records with missing NOMINAL time will be removed and this must be corrected before the function is called.\cr
+\itemize If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA\cr
+\itemize Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)\cr
+\itemize Use extrapilation if there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early)\cr
+\itemize Set deviating time at predose to 0\cr
+\itemize Original time and conc will be kept in original variables.\cr
 \itemize The following Time Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:\cr
 \tabular{cccc}{
   Rule \tab Regimen \tab Description \tab Applied to \cr
@@ -62,23 +62,4 @@ a dataset with time deviation corrections applied (timevar and depvar adapted). 
   MDT-3 \tab md \tab Correct concentration at deviating time by extrapolation (too early) \tab t=0,tau,tend,teval \cr
   MDT-3a \tab md \tab Set actual time to zero if concentration is BLOQ (too early) \tab t=0 \cr
 }
-}
-\examples{
-library(dplyr)
-# We need half-lives for this, so first let's get that.
-th = Theoph \%>\%
-group_by(Subject=as.numeric(Subject)) \%>\%
- do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) \%>\%
- ungroup()
-
-# We need nominal time variable as well, so let's generate that.
-ID <- as.numeric(Theoph$Subject)
-NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-Theoph1 <- Theoph \%>\% mutate(NTAD=metrumrg::snap(Time, NTAD))
-
-#let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
-tc = Theoph1 \%>\%
-group_by(Subject=as.numeric(Subject)) \%>\%
-do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-                 tau=,tstart=,tend=,teval=8,th=th,reg="sd"))
 }
