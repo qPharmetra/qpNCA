@@ -242,7 +242,11 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
            lt1=lead(time.lastall,1),lt2=lead(time.lastall,2),
            firstmeasc=conc.lastall[which(conc.lastall>0)][1],
            firstmeast=ptime[which(conc.lastall>0)][1]) %>%
+<<<<<<< HEAD
     #' # if there are NAs or LOQs between t=0 and first measurable conc, set these equal to first measurable conc
+=======
+    # if there are NAs or LOQs between t=0 and first measurable conc, set these equal to first measurable conc
+>>>>>>> 47472accb45bd4ad979ed47755fdd5909e57d8be
     mutate_cond(condition=tolower(route)=="iv"&ptime>0&ptime<firstmeast&(is.na(conc.lastall)|conc.lastall==0),
                 conc.lastall=firstmeasc,conc.tau=firstmeasc,conc.teval=firstmeasc) %>%
     mutate_cond(condition=tolower(route)=="iv"&ptime==0,

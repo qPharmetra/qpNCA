@@ -4,6 +4,10 @@ S3method(plot,reg)
 export(calc.ctmax)
 export(calc.par)
 export(calc.par.th)
+<<<<<<< HEAD
+=======
+export(correct.conc)
+>>>>>>> 47472accb45bd4ad979ed47755fdd5909e57d8be
 export(correct.loq)
 export(correct.time)
 export(est.thalf)

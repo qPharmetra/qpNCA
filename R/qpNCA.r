@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #' A wrapper for the individual qpNCA functions
 #' This wrapper function consecutively executes the following qpNCA functions:
 #' 1. correct.loq
@@ -9,6 +10,21 @@
 #' 6. tab.corr
 #' 7. calc.par
 #' 8. calc.par.th
+=======
+#' Title wrapper for the individual qpNCA functions
+#' #This wrapper function consecutively executes the following qpNCA functions:
+#' #1. correct.loq
+#' #2. est.thalf
+#' #2a. plot.reg
+#' #3. calc.ctmax
+#' #4. correct.time
+#' #5. correct.conc
+#' #6. tab.corr
+#' #7. calc.par
+#' #8. calc.par.th
+#'
+#' #USAGE:
+>>>>>>> 47472accb45bd4ad979ed47755fdd5909e57d8be
 #'
 #' qpNCA(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="dv",
 #'       includeCmax="Y",excl="excl",savedir=NA,
