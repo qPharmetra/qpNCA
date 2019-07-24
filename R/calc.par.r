@@ -33,38 +33,15 @@
 #' tend      \tab end time of partial AUC (if specified)\cr
 #' aucx_y    \tab partial auc from time=x up to/including time=y, where x>0, only calculated if tstart and tend are specified\cr
 #' c0        \tab back-extrapolated concentration at t=0 for IV bolus administration\cr
+#' area.back.extr \tab area back-extrapolated to 0\cr
 #' }
-#' @examples
-#' library(dplyr)
-#'# We need half-lives for corrections, so first let's get that.
-#' th = Theoph %>%
-#'  group_by(Subject=as.numeric(Subject)) %>%
-#'  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
-#'  ungroup()
-#'
-#'# We need nominal time variable as well, so let's generate that.
-#' ID <- as.numeric(Theoph$Subject)
-#' NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-#' Theoph1 <- Theoph %>% mutate(NTAD=metrumrg::snap(Time, NTAD))
-#'
-#' #let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
-#' tc = Theoph1 %>%
-#' group_by(Subject=as.numeric(Subject)) %>%
-#' do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-#'                  tau=,tstart=,tend=,teval=8,th=th,reg="sd")) %>%
-#' #above step added timepoints that we will add interpolated concentrations to with this next step
-#' do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
-#' th=th,reg="sd",ss="n")) %>%
-#' ungroup()
-#' #Now get parameters that do not require LAMBDAZ
-#' par <- tc %>%
-#'      group_by(Subject=as.numeric(Subject)) %>%
-#'      ##tstart by default is 0, so here we will get AUC0-8hr and AUC0-24 as sampling ends at 24 hr
-#'      do(calc.par(.,tau=NA, tstart=NA, tend=NA, teval=8, route="po", method=1)) %>%
-#'      ungroup()
 #' @export
 calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="po",method=1){
+
+  # Calculate parameters
+
   # check for each AUC if start and end time/conc are available
+
   tlast.ok=0         # internal variable
   t0.ok=0            # internal variable
   tau.ok=0           # internal variable
@@ -86,58 +63,52 @@ calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="po",method=1){
   if (!is.na(tstart)&!is.na(tend)&is.element(tstart,par$time.part)&is.element(tend,par$time.part))
   {  part.ok=  ifelse(is.na(par$conc.part[par$time.part==tstart]) |
                         is.na(par$conc.part[par$time.part==tend]),0,1) }
-  #added df1 = par here and at each call of trap function by Krina on 1 march 2019 due to error message without it
-  par=par %>% summarize(route=route,
+
+  par=par %>%    summarise( route=route,
                             method=method,
-                            tlast=ifelse(tlast.ok==1,last(time.lastall[!is.na(conc.lastall)&conc.lastall>0]),NA),
+                            tlast=ifelse(tlast.ok==1,last(time.lastall[!is.na(conc.lastall)&conc.lastall>0&bloqvar1==0]),NA),
                             clast.obs=ifelse(tlast.ok==1,conc.lastall[time.lastall==tlast],NA),
                             tlast.ok=tlast.ok,
                             t0.ok=t0.ok,
+
                             aucall=ifelse(t0.ok==1,
-                                          trap(df1 = par,
-                                               x=time.lastall[!is.na(conc.lastall)],
+                                          trap(x=time.lastall[!is.na(conc.lastall)],
                                                y=conc.lastall[!is.na(conc.lastall)], method=method),NA),
 
                             auclast=ifelse(t0.ok==1&tlast.ok==1,
-                                           trap(df1 = par,
-                                                x=time.lastall[!is.na(conc.lastall)&time.lastall<=tlast],
+                                           trap(x=time.lastall[!is.na(conc.lastall)&time.lastall<=tlast],
                                                 y=conc.lastall[!is.na(conc.lastall)&time.lastall<=tlast], method=method),NA),
 
                             aumcall=ifelse(t0.ok==1&tlast.ok==1,
-                                           trap(df1 = par,
-                                                x=time.lastall[!is.na(conc.lastall)],
-                                                y=time.lastall[!is.na(conc.lastall)] *
-                                                  conc.lastall[!is.na(conc.lastall)], method=method),NA),
+                                           trapm(x=time.lastall[!is.na(conc.lastall)],
+                                                 y=conc.lastall[!is.na(conc.lastall)], method=method),NA),
 
                             aumclast=ifelse(t0.ok==1&tlast.ok==1,
-                                            trap(df1 = par,
-                                                 x=time.lastall[!is.na(conc.lastall)&time.lastall<=tlast],
-                                                 y=conc.lastall[!is.na(conc.lastall)&time.lastall<=tlast]*
-                                                   time.lastall[!is.na(conc.lastall)&time.lastall<=tlast], method=method),NA),
+                                            trapm(x=time.lastall[!is.na(conc.lastall)&time.lastall<=tlast],
+                                                  y=conc.lastall[!is.na(conc.lastall)&time.lastall<=tlast], method=method),NA),
+
+                            mrtall= ifelse(t0.ok==1&tlast.ok==1,aumcall/aucall,NA),
+                            mrtlast=ifelse(t0.ok==1&tlast.ok==1,aumclast/auclast,NA),
 
                             calc.tau=tau.ok,
+
                             auctau=ifelse(t0.ok==1&tau.ok==1,
-                                          trap(df1 = par,
-                                               x=time.tau[!is.na(conc.tau)&time.tau<=tau],
+                                          trap(x=time.tau[!is.na(conc.tau)&time.tau<=tau],
                                                y=conc.tau[!is.na(conc.tau)&time.tau<=tau], method=method),NA),
                             aumctau=ifelse(t0.ok==1&tau.ok==1,
-                                           trap(df1 = par,
-                                                x=time.tau[!is.na(conc.tau)&time.tau<=tau],
-                                                y=conc.tau[!is.na(conc.tau)&time.tau<=tau]*
-                                                  time.tau[!is.na(conc.tau)&time.tau<=tau], method=method),NA),
+                                           trapm(x=time.tau[!is.na(conc.tau)&time.tau<=tau],
+                                                 y=conc.tau[!is.na(conc.tau)&time.tau<=tau], method=method),NA),
                             tau=ifelse(!is.na(tau),tau,NA),
 
                             calc.teval=teval.ok,
                             aucteval=ifelse(t0.ok==1&teval.ok==1,
-                                            trap(df1 = par,
-                                                 x=time.teval[!is.na(conc.teval)&time.teval<=teval],
+                                            trap(x=time.teval[!is.na(conc.teval)&time.teval<=teval],
                                                  y=conc.teval[!is.na(conc.teval)&time.teval<=teval], method=method),NA),
                             teval=ifelse(!is.na(teval),teval,NA),
 
                             calc.part=part.ok,
                             aucpart=ifelse(part.ok==1,
-                                           trap(df1 = par,
-                                                x=time.part[!is.na(conc.part)&time.part>=tstart&time.part<=tend],
+                                           trap(x=time.part[!is.na(conc.part)&time.part>=tstart&time.part<=tend],
                                                 y=conc.part[!is.na(conc.part)&time.part>=tstart&time.part<=tend], method=method),NA),
                             tstart=ifelse(!is.na(tstart),tstart,NA),
                             tend=ifelse(!is.na(tend),tend,NA),
@@ -145,8 +116,7 @@ calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="po",method=1){
 
 
                             area.back.extr=ifelse(tolower(route)=="iv",
-                                                  trap(df1 = par,
-                                                       x=time.lastall[time.lastall<=firstmeast&!is.na(conc.lastall)],
+                                                  trap(x=time.lastall[time.lastall<=firstmeast&!is.na(conc.lastall)],
                                                        y=conc.lastall[time.lastall<=firstmeast&!is.na(conc.lastall)],
                                                        method=method),NA)
   )
