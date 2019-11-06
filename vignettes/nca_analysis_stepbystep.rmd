@@ -1,5 +1,5 @@
 ---
-title: "nca_analysis_example.rmd"
+title: "nca_analysis_stepbystep.rmd"
 output: html_document
 author: "Krina Mehta"
 ---
@@ -7,8 +7,8 @@ author: "Krina Mehta"
 #Install libraries
 ```{r, results='hide'}
 rm(list = ls())
-library(qpNCA)
 library(dplyr)
+library(qpNCA)
 ```
 
 #Check out Theoph data and prepare data for NCA
@@ -17,11 +17,17 @@ head(Theoph)
 print(plot(Theoph$conc~Theoph$Time))
 
 #we need nominal time variable for some tasks.
-NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
+NTAD <- c(0,0.25,0.5,1,2,4,5,7,9,12,24)
+
 Theoph1 <- Theoph %>% 
   mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
-  mutate(Subject=as.numeric(as.character(Subject)))     #converting from factor to numeric
-
+  mutate(Subject=as.numeric(Subject)) %>%
+  mutate(BLQ = ifelse(conc<0.20, 1, 0),
+         LOQ = 0.20) %>%
+  mutate(conc = ifelse(BLQ==1, 0, conc)) %>%
+  as.data.frame() %>%
+  arrange(Subject, Time)
+              
 ```
 
 #Calculate Cmax and Tmax
@@ -45,16 +51,17 @@ head(th)
 
 #Corrections of missing time and concentrations
 ```{r,  results="markup", warnings=F}
-## 3. Correct deviations
 
-#let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
-tc = Theoph1 %>% 
+## 3. Correct deviations
+tc = Theoph1 %>%
   group_by(Subject) %>%
+  do(correct.loq(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
+                   bloqvar="BLQ",loqvar="LOQ",loqrule=1)) %>%
   do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-                  tau=,tstart=,tend=,teval=8,th=th,reg="sd")) %>%  
-  do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
-                  th=th,reg="sd",ss="n")) %>% 
-  ungroup() 
+                 tau=,tstart=,tend=,teval=,th=th,reg="sd")) %>%  
+  do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=12,
+                   th=th,reg="sd",ss="n")) %>%
+  ungroup()
 
 head(tc)
 
@@ -64,7 +71,8 @@ head(tc)
 ```{r,  results="markup", warnings=F}
 par <- tc %>%
   group_by(Subject) %>%
-  do(calc.par(.,tau=,tstart=,tend=,teval=8)) %>%  #This wil get us both AUC0-8 and AUC0-24 as sampling ends at 24
+  do(calc.par(.,tau=,tstart=,tend=,teval=12, route="EV")) %>%  
+  #This wil get us both AUC0-12 and AUC0-24 as sampling ends at 24
   ungroup()
 head(par)
 ```
@@ -84,5 +92,5 @@ head(par)
 ```{r,  results="markup", warnings=F}
 par_all = left_join(par, ctmax)
 head(par_all)
-write.csv(par_all, "nca_analysis_results.csv", row.names = F)
+write.csv(par_all, "nca_analysis_stepbystep_results.csv", row.names = F)
 ```

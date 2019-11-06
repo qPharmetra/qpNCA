@@ -5,7 +5,7 @@
 \title{Calculates lambda_z and thalf for each PK curve (defined using group_by)}
 \usage{
 est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y",
-  excl = NA)
+  exclvar = NA)
 }
 \arguments{
 \item{x}{a dataset (not needed to be corrected time and conc)}

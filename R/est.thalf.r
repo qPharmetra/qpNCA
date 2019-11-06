@@ -19,19 +19,21 @@
 #' includeCmax = include results of regression including Cmax in selection? (y/n)\cr
 #' points_excluded = are time points excluded from the half-life estimation? (y/n) \cr
 #' @export
-est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",excl=NA){
+est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",exclvar=NA){
 
   data_in = x %>% mutate(timevar=x[[timevar]],
-                         depvar=x[[depvar]])
+                         depvar=x[[depvar]],
+                         exclvar=x[[exclvar]])
 
-  if (!is.na(excl)) {
+  if (!is.na(exclvar) & !(exclvar %in% names(x))) stop(paste("Exclusion variable",exclvar,"does not exist"), call.=F)
 
-    data_in = data_in %>% mutate(excl=x[[excl]])
+  if (!is.na(exclvar)) {
+
     anyexcl=0
-    if (any(data_in$excl==1)) {anyexcl=1}
+    if (any(data_in$exclvar==1)) {anyexcl=1}
 
     data_in = data_in %>%
-      filter(excl!=1|is.na(excl))  # remove samples to be excluded from the regression
+      filter(exclvar!=1|is.na(exclvar))  # remove samples to be excluded from the regression
 
   }
 
@@ -71,7 +73,7 @@ est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",excl=NA){
   names(result) = Cs(no.points,intercept,lambda_z,r.squared,adj.r.squared,start_th,end_th)
   if (est==1) {
     result=result %>% mutate(sel=no.points[adj.r.squared==max(adj.r.squared)],
-                             thalf=ifelse(lambda_z>0, log(2)/lambda_z, NA),
+                             thalf=log(2)/lambda_z,
                              includeCmax=includeCmax
     ) %>%
       filter(sel==no.points) %>%
@@ -82,7 +84,7 @@ est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",excl=NA){
                              start_th=NA,end_th=NA)
   }
 
-  if (!is.na(excl)) {
+  if (!is.na(exclvar)) {
 
     if (anyexcl==1) {
       result = result %>%

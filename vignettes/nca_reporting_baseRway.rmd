@@ -1,5 +1,5 @@
 ---
-title: "nca_reporting_example.rmd"
+title: "nca_reporting_with_baseRbasedoldfunctions.rmd"
 output: html_document
 author: "Krina Mehta"
 ---
@@ -21,10 +21,10 @@ Theoph1 <- Theoph %>%
   mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
   mutate(Subject=as.numeric(as.character(Subject)), #converting from factor to numeric
          BQL = ifelse(conc<=0.25, 1, 0),          #just adding few BLQs to demonstrate functionality
-         conc= ifelse(conc<=0.25, NA, conc))      #just adding few BLQs to demonstrate functionality
+         conc= ifelse(conc<=0.25, 0, conc))      #just adding few BLQs to demonstrate functionality
 
 #this is the nca analysis results file
-dat <- read.csv("nca_analysis_results.csv", stringsAsFactors = F, na.strings = "NA")
+dat <- read.csv("nca_analysis_stepbystep_results.csv", stringsAsFactors = F, na.strings = "NA")
 
 #Units 
 parUnits <- read.csv("Units_Template.csv", stringsAsFactors = F, na.strings = "")

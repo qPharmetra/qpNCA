@@ -5,9 +5,9 @@
 \title{A log-linear plot will be made for each curve. If elimination half-life was estimated for that curve,
 the following will be indicated in the plot:}
 \usage{
-\method{plot}{reg}(x, by = c("id"), th = th, bloqvar = "bloq",
+\method{plot}{reg}(x, by = c("id"), th = NA, bloqvar = "bloq",
   timevar = "tad", depvar = "dv", timelab = "timevar",
-  deplab = "depvar", excl = NA, savedir = NA)
+  deplab = "depvar", excl = NA, plotdir = NA)
 }
 \arguments{
 \item{x}{input dataset name (if called within dplyr: .)}

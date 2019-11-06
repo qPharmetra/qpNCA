@@ -29,11 +29,12 @@
 #' NOTE: ctmax must be merged separately as those were calculated from uncorrected data \cr
 #'
 #' @export
-calc.par.th <- function(x=par,th=th,cov=cov,dosevar="dose",factor=1, reg="sd", ss="n") {
+calc.par.th <- function(x=par,th=th,cov=cov,dosevar="dose",factor=1, reg="SD", ss="N", route="EV") {
 
   result=left_join(x,th) %>%
     left_join(cov) %>%
     mutate(dosevar=.[[dosevar]],
+           factor=factor,
            reg=tolower(reg),
            ss=tolower(ss),
            clast.pred=exp(intercept-lambda_z*tlast),
@@ -43,21 +44,35 @@ calc.par.th <- function(x=par,th=th,cov=cov,dosevar="dose",factor=1, reg="sd", s
            aumcinf.pred=aumclast+tlast*clast.pred/lambda_z + clast.pred/lambda_z^2,
            cl.f.obs=  ifelse(tolower(ss)=="n",dosevar*factor/aucinf.obs, dosevar*factor/auctau),
            cl.f.pred= ifelse(tolower(ss)=="n",dosevar*factor/aucinf.pred, dosevar*factor/auctau),
-           mrt.obs= ifelse(tolower(ss)=="n", aumcinf.obs/aucinf.obs,
-                           (aumctau + tau*(aucinf.obs-auctau))/auctau),
-           mrt.pred= ifelse(tolower(ss)=="n", aumcinf.pred/aucinf.pred,
-                            (aumctau + tau*(aucinf.pred-auctau))/auctau),
+           mrtinf.obs= ifelse(tolower(ss)=="n", aumcinf.obs/aucinf.obs,
+                              (aumctau + tau*(aucinf.obs-auctau))/auctau),
+           mrtinf.pred= ifelse(tolower(ss)=="n", aumcinf.pred/aucinf.pred,
+                               (aumctau + tau*(aucinf.pred-auctau))/auctau),
            vz.f.obs=  ifelse(tolower(ss)=="n",dosevar*factor/(lambda_z*aucinf.obs),
                              dosevar*factor/(lambda_z*auctau)),
            vz.f.pred= ifelse(tolower(ss)=="n",dosevar*factor/(lambda_z*aucinf.pred),NA),
-           vss.obs= mrt.obs*cl.f.obs,
-           vss.pred= mrt.pred*cl.f.pred,
+           vss.obs= mrtinf.obs*cl.f.obs,
+           vss.pred= mrtinf.pred*cl.f.pred,
            pctextr.obs=(clast.obs/lambda_z)/aucinf.obs*100,
            pctextr.pred=(clast.pred/lambda_z)/aucinf.pred*100,
            pctback.obs=area.back.extr/aucinf.obs*100,
            pctback.pred=area.back.extr/aucinf.pred*100
     ) %>%
     select(-dosevar)
+
+  if (route=="IVB"|route=="IVI") {
+
+    result = result %>% mutate(cl.obs=cl.f.obs, cl.pred=cl.f.pred, cl.f.obs=NA, cl.f.pred=NA,
+                               vz.obs=vz.f.obs, vz.pred=vz.f.pred, vz.f.obs=NA, vz.f.pred=NA)
+
+  }
+
+  else {
+
+    result = result %>% mutate(cl.obs=NA, cl.pred=NA,
+                               vz.obs=NA, vz.pred=NA)
+
+  }
 
   return(result)
 

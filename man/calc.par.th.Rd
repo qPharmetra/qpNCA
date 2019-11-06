@@ -5,7 +5,7 @@
 \title{Calculates PK parameters that need lambda_z}
 \usage{
 calc.par.th(x = par, th = th, cov = cov, dosevar = "dose",
-  factor = 1, reg = "sd", ss = "n")
+  factor = 1, reg = "SD", ss = "N", route = "EV")
 }
 \arguments{
 \item{x}{result parameter dataset from calc.par}

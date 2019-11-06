@@ -35,27 +35,33 @@ correct.loq <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",bloqvar="
 
   data_in = data_in %>%
     mutate(firstmeast=timevar1[which(depvar1>0)][1],
-           consecutive=ifelse(bloqvar1==1&lag(bloqvar1)==1,1,0)
-    )
+           consecutive=ifelse(bloqvar1==1,
+                                ifelse(lag(bloqvar1)==1, 1, 0), 0))
 
   if (loqrule==1) {
-
     data_in = data_in %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1<firstmeast), depvar1=0, loqrule.nr="LOQ1",
-                  loqrule.txt="BLOQ values before first measurable concentration set to 0") %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast), depvar1=NA, loqrule.nr="LOQ1",
-                  loqrule.txt="BLOQ values after first measurable concentration set to missing")
-
+      mutate(depvar1 = ifelse(bloqvar1==1, ifelse(timevar1 < firstmeast, 0, depvar1), depvar1),
+             loqrule.nr = ifelse(bloqvar1==1, ifelse(timevar1 < firstmeast, "LOQ1", ""), ""),
+             loqrule.txt = ifelse(bloqvar1==1, ifelse(timevar1 < firstmeast,
+                                  "BLOQ values after before measurable concentration set to 0",
+                                  ""), "")) %>%
+      mutate(depvar1 = ifelse(bloqvar1==1, ifelse(timevar1 > firstmeast, NA, depvar1), depvar1),
+          loqrule.nr = ifelse(bloqvar1==1, ifelse(timevar1 > firstmeast, "LOQ1", ""), ""),
+          loqrule.txt = ifelse(bloqvar1==1, ifelse(timevar1 > firstmeast, "BLOQ values after first measurable concentration set to missing",
+                     ""), ""))
   }
 
   if (loqrule==2) {
-
     data_in = data_in %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1<firstmeast),depvar1=0,loqrule.nr="LOQ2",
-                  loqrule.txt="BLOQ values before first measurable concentration set to 0") %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast),depvar1=0,loqrule.nr="LOQ2",
-                  loqrule.txt="BLOQ values after first measurable concentration set to 0")
-
+      mutate(depvar1 = ifelse(bloqvar1==1, ifelse(timevar1 < firstmeast, 0, depvar1), depvar1),
+             loqrule.nr = ifelse(bloqvar1==1, ifelse(timevar1 < firstmeast, "LOQ2", ""), ""),
+             loqrule.txt = ifelse(bloqvar1==1, ifelse(timevar1 < firstmeast,
+                                                      "BLOQ values before first measurable concentration set to 0",
+                                                      ""), "")) %>%
+      mutate(depvar1 = ifelse(bloqvar1==1, ifelse(timevar1 > firstmeast, 0, depvar1), depvar1),
+             loqrule.nr = ifelse(bloqvar1==1, ifelse(timevar1 > firstmeast, "LOQ1", ""), ""),
+             loqrule.txt = ifelse(bloqvar1==1, ifelse(timevar1 > firstmeast, "BLOQ values before first measurable concentration set to 0",
+                                                      ""), ""))
   }
 
   if (loqrule==3) {

@@ -6,7 +6,7 @@
 \usage{
 correct.time(x, nomtimevar = "ntad", timevar = "time", depvar = "dv",
   tau = NA, tstart = NA, tend = NA, teval = NA, th = NA,
-  reg = "sd", method = 1)
+  reg = "SD", method = 1)
 }
 \arguments{
 \item{x}{input dataset name (contains all data, including LOQ (set conc to zero for these))}

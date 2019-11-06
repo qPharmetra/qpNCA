@@ -2,24 +2,14 @@
 % Please edit documentation in R/qpNCA.r
 \name{qpNCA}
 \alias{qpNCA}
-\title{A wrapper for the individual qpNCA functions
-This wrapper function consecutively executes the following qpNCA functions:
-1. correct.loq \cr
-2. est.thalf\cr
-2a. plot.reg\cr
-3. calc.ctmax\cr
-4. correct.time\cr
-5. correct.conc\cr
-6. tab.corr\cr
-7. calc.par\cr
-8. calc.par.th\cr}
+\title{A wrapper for the individual qpNCA functions}
 \usage{
 qpNCA(x, by = c("subject"), nomtimevar = "ntad", timevar = "time",
   depvar = "dv", bloqvar = "bloq", loqvar = "loq", loqrule = 1,
-  includeCmax = "Y", excl = "excl", savedir = NA,
+  includeCmax = "Y", excl = NA, plotdir = NA, pdfdir = NA,
   timelab = "timevar", deplab = "depvar", tau = NA, tstart = NA,
   tend = NA, teval = NA, cov = NA, dose = NA, factor = NA,
-  reg = "SD", ss = "N", route = "PO", method = 1)
+  reg = "SD", ss = "N", route = "EV", method = 1)
 }
 \arguments{
 \item{x}{input dataset name (if called within dplyr: .)}
@@ -42,7 +32,7 @@ qpNCA(x, by = c("subject"), nomtimevar = "ntad", timevar = "time",
 
 \item{excl}{variable name containing information about points to be excluded (these should have <excl>=1)}
 
-\item{savedir}{folder where regression plots (.PNG) will be saved; leave empty for standard output}
+\item{plotdir}{folder where regression plots (.PNG) will be saved; leave empty for standard output}
 
 \item{tau}{dosing interval (for multiple dosing), if single dose, leave empty}
 
@@ -62,7 +52,7 @@ qpNCA(x, by = c("subject"), nomtimevar = "ntad", timevar = "time",
 
 \item{ss}{is steady state reached (y/n)}
 
-\item{route}{route of drug administration ("po","iv")}
+\item{route}{route of drug administration ("EV","IVB", "IVI")}
 
 \item{method}{method for trapezoidal rule:
 1: linear up - linear down
@@ -82,5 +72,14 @@ corrections: contains descriptions of the corrections applied
 pkpar      : contains all estimated PK parameters
 }
 \description{
-USAGE:
+This wrapper function consecutively executes the following qpNCA functions:
+1. correct.loq \cr
+2. est.thalf\cr
+2a. plot.reg\cr
+3. calc.ctmax\cr
+4. correct.time\cr
+5. correct.conc\cr
+6. tab.corr\cr
+7. calc.par\cr
+8. calc.par.th\cr
 }

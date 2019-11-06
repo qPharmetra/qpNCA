@@ -5,7 +5,7 @@
 \title{Calculates AUCs, tlast, clast.obs for each PK curve (define using group_by)}
 \usage{
 calc.par(x, tau = NA, tstart = NA, tend = NA, teval = NA,
-  route = "po", method = 1)
+  route = "EV", method = 1)
 }
 \arguments{
 \item{x}{contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc}
@@ -18,7 +18,7 @@ calc.par(x, tau = NA, tstart = NA, tend = NA, teval = NA,
 
 \item{teval}{user selected AUC interval, if not requested, leave empty}
 
-\item{route}{route of drug administration ("po","iv")}
+\item{route}{route of drug administration ("EV","IVB","IVI")}
 
 \item{method}{method for trapezoidal rule:\cr
 1: linear up - linear down \cr

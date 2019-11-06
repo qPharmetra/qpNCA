@@ -44,7 +44,7 @@
 #'   t0.flag, tau.flag, tstart.flag, tend.flag, teval.flag \tab flags for what timepoint the correction was needed \cr
 #' }
 #' @export
-correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="sd",method=1) {
+correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",method=1) {
 
   data_in=x
 
@@ -184,7 +184,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
     # PARTIAL
     #   TSTART
     mutate(conc.part=depvar,time.part=timevar) %>%
-    mutate_cond(condition = !is.na(tstart)&ptime==tstart&timevar<ptime&!is.na(leaddv),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tstart&timevar<ptime&!is.na(leaddv),
 
                 conc.part=interpol(c1=depvar, c2=leaddv, t1=tstart, t2=timevar, t3=leadtime, method=method), #interpolate
                 #c1+((c2-c1)*(t1-t2)/(t3-t2))
@@ -197,7 +197,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                                 " by interpolation (sample taken too early)",sep=""),
                 applies.to.time=paste(applies.to.time,"TSTART ")
     ) %>%
-    mutate_cond(condition = !is.na(tstart)&ptime==tstart&timevar>ptime&!is.na(lagdv),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tstart&timevar>ptime&!is.na(lagdv),
 
                 conc.part=interpol(c1=lagdv, c2=depvar, t1=tstart, t2=lagtime, t3=timevar, method=method), #interpolate
                 #c1+((c2-c1)*(t1-t2)/(t3-t2))
@@ -210,7 +210,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                                 " by interpolation (sample taken too late)",sep=""),
                 applies.to.time=paste(applies.to.time,"TSTART ")
     ) %>%
-    mutate_cond(condition = !is.na(tstart)&ptime==tstart&timevar<ptime&is.na(leaddv)&!is.na(lambda_z),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tstart&timevar<ptime&is.na(leaddv)&!is.na(lambda_z),
                 conc.part=depvar*exp(-1*lambda_z*(tstart-timevar)),                       # extrapolate
                 time.part=tstart,
                 tstart.flag=1,
@@ -221,7 +221,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                 applies.to.time=paste(applies.to.time,"TSTART ")
     ) %>%
     #   TEND
-    mutate_cond(condition = !is.na(tend)&ptime==tend&timevar<ptime&!is.na(leaddv),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tend&timevar<ptime&!is.na(leaddv),
 
                 conc.part=interpol(c1=depvar, c2=leaddv, t1=tend, t2=timevar, t3=leadtime, method=method), #interpolate
                 #c1+((c2-c1)*(t1-t2)/(t3-t2))
@@ -234,7 +234,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                                 " by interpolation (sample taken too early)",sep=""),
                 applies.to.time=paste(applies.to.time,"TEND ")
     ) %>%
-    mutate_cond(condition = !is.na(tend)&ptime==tend&timevar>ptime&!is.na(lagdv),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tend&timevar>ptime&!is.na(lagdv),
 
                 conc.part=interpol(c1=lagdv, c2=depvar, t1=tend, t2=lagtime, t3=timevar, method=method),   #interpolate
                 #c1+((c2-c1)*(t1-t2)/(t3-t2))
@@ -247,7 +247,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                                 " by interpolation (sample taken too late)",sep=""),
                 applies.to.time=paste(applies.to.time,"TEND ")
     ) %>%
-    mutate_cond(condition = !is.na(tend)&ptime==tend&timevar<ptime&is.na(leaddv)&!is.na(lambda_z),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tend&timevar<ptime&is.na(leaddv)&!is.na(lambda_z),
                 conc.part=depvar*exp(-1*lambda_z*(tend-timevar)),                         # extrapolate
                 time.part=tend,
                 tend.flag=1,

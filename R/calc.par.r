@@ -6,7 +6,7 @@
 #' @param tstart starting time of user defined interval, if not requested, leave empty
 #' @param tend end time of user defined interval, if not requested, leave empty
 #' @param teval user selected AUC interval, if not requested, leave empty
-#' @param route route of drug administration ("po","iv")
+#' @param route route of drug administration ("EV","IVB","IVI")
 #' @param method method for trapezoidal rule:\cr
 #'          1: linear up - linear down \cr
 #'          2: linear up - logarithmic down \cr
@@ -36,7 +36,7 @@
 #' area.back.extr \tab area back-extrapolated to 0\cr
 #' }
 #' @export
-calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="po",method=1){
+calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="EV",method=1){
 
   # Calculate parameters
 
@@ -112,10 +112,10 @@ calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="po",method=1){
                                                 y=conc.part[!is.na(conc.part)&time.part>=tstart&time.part<=tend], method=method),NA),
                             tstart=ifelse(!is.na(tstart),tstart,NA),
                             tend=ifelse(!is.na(tend),tend,NA),
-                            c0=ifelse(tolower(route)=="iv",conc.lastall[ptime==0],NA),
+                            c0=ifelse(tolower(route)=="ivb",conc.lastall[ptime==0],NA),
 
 
-                            area.back.extr=ifelse(tolower(route)=="iv",
+                            area.back.extr=ifelse(tolower(route)=="ivb",
                                                   trap(x=time.lastall[time.lastall<=firstmeast&!is.na(conc.lastall)],
                                                        y=conc.lastall[time.lastall<=firstmeast&!is.na(conc.lastall)],
                                                        method=method),NA)
@@ -125,9 +125,9 @@ calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="po",method=1){
 
   names(result)[names(result)=="aucteval"]=ifelse(!is.na(teval),paste("auc",teval,sep=""),"aucteval") # rename aucteval to aucXX
   names(result)[names(result)=="aucpart"]=ifelse(!is.na(tend),paste("auc",tstart,"_",tend,sep=""),"aucpart") # rename aucpart to aucXX_XX
-  if(is.na(tau))   result = subset(result, select = -c(tau,calc.tau,auctau,aumctau) )    # drop au(m)ctau and tau if not requested
-  if(is.na(teval)) result = subset(result, select = -c(teval,calc.teval,aucteval) )      # drop aucteval and teval if not requested
-  if(is.na(tend))  result = subset(result, select = -c(tstart,tend,calc.part,aucpart) )  # drop aucpart, tstart and tend if not requested
+  #  if(is.na(tau))   result = subset(result, select = -c(tau,calc.tau,auctau,aumctau) )    # drop au(m)ctau and tau if not requested
+  #  if(is.na(teval)) result = subset(result, select = -c(teval,calc.teval,aucteval) )      # drop aucteval and teval if not requested
+  #  if(is.na(tend))  result = subset(result, select = -c(tstart,tend,calc.part,aucpart) )  # drop aucpart, tstart and tend if not requested
 
   return(result)
 }
