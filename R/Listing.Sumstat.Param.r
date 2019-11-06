@@ -25,13 +25,9 @@ Listing.Sumstat.Param = function(ds, subjVar, by, nsig, vars_ignore="", keep="",
     dplyr::select(!!subjVar, Statistics, everything()) %>%
     mutate(Subject = paste(as.character(!!subjVar), Statistics, sep=""),
            Subject = gsub("NA", "", Subject)) %>%
-    mutate_all(funs(make.true.NA)) %>%
-    dplyr::select(Subject, everything(), -Statistics,-!!subjVar)
+    dplyr::select(Subject, everything()) %>%
+    select(-Statistics)
 
   return(out)
 }
-
-#Listing.Sumstat.Param(subset(data_parent,formulation=="A"), subjVar="ID", by=NULL, nsig=3, vars_ignore=ignore_var,keep=c("adj.r.squared"),adj.r.squared>=0.7)
-#out1=Listing.Param(ds, subjVar='ID', nsig=3)
-#out2 = Sumstat.Param(ds, subjVar='ID', by=NULL, nsig=3, vars_ignore=ignore_var, keep=c("adj.r.squared"),adj.r.squared>=0.7)
 

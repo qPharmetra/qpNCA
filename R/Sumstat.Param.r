@@ -21,11 +21,6 @@ Sumstat.Param = function(ds, subjVar, by=NULL, nsig=3, vars_ignore="", keep="" ,
     ifelse(as.character(x)!="", x, NA)
   }
 
-  # Function to make true NAs recognized by is.na()
-
-  make.true.NA <- function(x) if(is.character(x)||is.factor(x)){
-    is.na(x) <- x=="NA"; x} else {x}
-
   # Function to calculate coefficient of variation (CV) percentage
 
   CV = function(x) (sd(x,na.rm=T)/mean(x,na.rm=T))*100
@@ -35,7 +30,6 @@ Sumstat.Param = function(ds, subjVar, by=NULL, nsig=3, vars_ignore="", keep="" ,
   dsa = ds %>%
     dplyr::select(-one_of(vars_ignore)) %>%
     mutate_all(funs(empty_as_na)) %>%
-    mutate_all(funs(make.true.NA)) %>%
     mutate_all(funs(as.numeric))
 
   #Create dataset with the variables to ignore (vars_ignore) and with the filtering
@@ -44,7 +38,6 @@ Sumstat.Param = function(ds, subjVar, by=NULL, nsig=3, vars_ignore="", keep="" ,
     dplyr::select(vars_ignore,keep) %>%
     dplyr::filter(!!!arg) %>%
     mutate_all(funs(empty_as_na)) %>%
-    mutate_all(funs(make.true.NA)) %>%
     mutate_all(funs(as.numeric))
 
   # Create summary statistics
@@ -193,13 +186,9 @@ Sumstat.Param = function(ds, subjVar, by=NULL, nsig=3, vars_ignore="", keep="" ,
 
   # Make true NAs recognized by is.na()
 
-  out = out %>% mutate_all(funs(make.true.NA))
+  out = out
 
 
   return(out)
 
 }
-
-
-#a=Sumstat.Param(subset(data_metabolite,formulation=="A"), subjVar="ID", by=NULL, nsig=3, vars_ignore=ignore_var,keep=c("adj.r.squared"),adj.r.squared>=0.7)
-

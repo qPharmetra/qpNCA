@@ -15,7 +15,7 @@ Listing.Param = function(ds, subjVar, nsig=3){
   paramlist = ds %>%
     mutate_if(is.numeric, qpToolkit::formatted.signif, digits=nsig) %>% #Set significant digits for the numeric columns
     dplyr::select(order(colnames(.))) %>%
-    dplyr::select(ID,everything())
+    dplyr::select(!!subjVar,everything())
 
   return(paramlist)
 }

@@ -67,6 +67,20 @@ print(kable(Tab1))
 
 # Now, let's tabulate parameters in simuilar way
 ```{r}
+datain = NCAResults$pkpar %>% distinct(., .keep_all = T)
 
+# Select parmaters to be reported
+keepers = Cs(Subject,tmax,cmax,tlast,auclast,aucinf.pred,cl.f.pred,
+             vz.f.pred,thalf,no.points)
+
+tabdat = datain %>% dplyr::select(keepers)
+
+Tab2 <- Listing.Sumstat.Param(tabdat, subjVar="Subject", nsig=3, by=NULL,
+                      vars_ignore=c("no.points"), 
+                      keep=c("Subject","tmax","cmax","tlast","auclast",
+                             "aucinf.pred","cl.f.pred",
+                             "vz.f.pred","thalf"))
+
+print(kable(Tab2))
 ```
 
