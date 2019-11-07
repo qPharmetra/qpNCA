@@ -1,14 +1,14 @@
 #' Corrects concentrations at critical, but deviating time points (e.g, predose, TAU, start and end of user selected AUC interval), and adds missing records at these critical time points.
 #' @importFrom qpToolkit mutate_cond
 #' @description
-#' \itemize Records with missing NOMINAL time will be removed and this must be corrected before the function is called.\cr
-#' \itemize If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA\cr
-#' \itemize Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)\cr
-#' \itemize Use extrapilation if there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early)\cr
-#' \itemize Set deviating time at predose to 0\cr
-#' \itemize Original time and conc will be kept in original variables.\cr
-#' \itemize The following Time Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:\cr
-#' \tabular{cccc}{
+#' \itemize{Records with missing NOMINAL time will be removed and this must be corrected before the function is called.}\cr
+#' \itemize{If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA}\cr
+#' \itemize{Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)}\cr
+#' \itemize{Use extrapilation if there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early)}\cr
+#' \itemize{Set deviating time at predose to 0}\cr
+#' \itemize{Original time and conc will be kept in original variables.}\cr
+#' \itemize{The following Time Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:}\cr
+#' \tabular{llll}{
 #'   Rule \tab Regimen \tab Description \tab Applied to \cr
 #'   SDT-1 \tab sd \tab Set actual time to 0 \tab t=0 \cr
 #'   SDT-2 \tab sd \tab Correct concentration at deviating time by interpolation \tab t=tau,tstart,tend,teval \cr

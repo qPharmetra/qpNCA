@@ -76,7 +76,7 @@ keepers = Cs(Subject,tmax,cmax,tlast,auclast,aucinf.pred,cl.f.pred,
 tabdat = datain %>% dplyr::select(keepers)
 
 Tab2 <- Listing.Sumstat.Param(tabdat, subjVar="Subject", nsig=3, by=NULL,
-                      vars_ignore=c("no.points"), 
+                      vars_ignore=c("no.points"), #something is needed here and for keep 
                       keep=c("Subject","tmax","cmax","tlast","auclast",
                              "aucinf.pred","cl.f.pred",
                              "vz.f.pred","thalf"))

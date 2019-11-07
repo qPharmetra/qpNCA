@@ -1,12 +1,12 @@
 #' Corrects missing concentration at critical time points (e.g, predose, TAU, start and end of user selected AUC interval)
 #' @importFrom metrumrg snap locf
 #' @description
-#' \itemize Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration\cr
-#' \itemize Use extrapolation if there is NO measurable concentration AFTER the missing concentration\cr
-#' \itemize Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)\cr
-#' \itemize Set missing concentration at t=TAU to value at t=0 (steady state only)\cr
-#' \itemize The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:\cr
-#' \tabular{cccc}{
+#' \itemize{Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration}\cr
+#' \itemize{Use extrapolation if there is NO measurable concentration AFTER the missing concentration}\cr
+#' \itemize{Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)}\cr
+#' \itemize{Set missing concentration at t=TAU to value at t=0 (steady state only)}\cr
+#' \itemize{The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:}
+#' \tabular{llll}{
 #' Rule \tab Regimen \tab Description \tab Applied to \cr
 #' SDC-1  \tab   sd   \tab       Set concentration to 0 (only non-endogenous compounds)      \tab      t=0 \cr
 #' SDC-2   \tab    sd  \tab      impute missing concentration by interpolation   \tab                  t=tau,tstart,tend,teval\cr

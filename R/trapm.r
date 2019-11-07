@@ -1,7 +1,6 @@
 #' Trapezoidal rules used in AUMC calculations
 #' trapm(x=, y=, method=)
 #' remark: if c1 or c2 is 0, always linear interpolation will be performed
-#'
 #' @param x variable names of x coordinates
 #' @param y variable names of y coordinates
 #' @param method

@@ -1,15 +1,6 @@
-#' Title
-#' CORRECT.LOQ: Imputes LOQ values according to the chosen LOQ substitution rule
-#' Input dataset:
-#'   contains all uncorrected data, including LOQ
-#'
-#' USAGE:
-#'
-#' correct.loq(x,nomtimevar="ntad",timevar="time",depvar="dv",bloqvar="bloq",loqvar="loq",loqrule=1)
-#'
-#' METHOD:
+#' Imputes LOQ values according to the chosen LOQ substitution rule
 #' Imputations will be applied to the original depvar(no new concentration variable will be created)
-#' @param x input dataset name (if called within dplyr: .)
+#' @param x input dataset name (if called within dplyr: .) contains all uncorrected data, including LOQ
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param timevar variable name containing the sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
@@ -17,7 +8,7 @@
 #' @param loqvar variable name containing the LOQ value
 #' @param loqrule rule number to be applied to the LOQ values in the curve:
 #'
-#' @return dataset with imputed BLOQ concentrations using the chosen imputation rule
+#' @return A dataset with imputed BLOQ concentrations using the chosen imputation rule
 #' @export
 correct.loq <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",bloqvar="bloq",loqvar="loq",loqrule=1) {
 

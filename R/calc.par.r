@@ -11,8 +11,8 @@
 #'          1: linear up - linear down \cr
 #'          2: linear up - logarithmic down \cr
 #'          3: linear before first Tmax, logarithmic after first Tmax \cr
-#' @return dataset with estimates for the following parameters, one observation per subject:
-#'\tabular{cc}{
+#' @return A dataset with estimates for the following parameters, one observation per subject:
+#'\tabular{ll}{
 #' t0.ok     \tab flags if t=0 concentration could be corrected/imputes. If not, no AUCs starting at t=0 are calculated \cr
 #' tlast.ok  \tab flags if there is at least one measurable concentration. If not, no AUClast can be calculated\cr
 #' tlast     \tab time of last sample with measurable concentration\cr

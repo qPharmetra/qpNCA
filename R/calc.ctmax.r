@@ -4,7 +4,7 @@
 #' @param x a dataset
 #' @param timevar a column name
 #' @param depvar a column name
-#' @return a dataset with estimates for the Cmax (maximum concentration) and Tmax (time of first occurence of cmax) parameters, one observation per subject
+#' @return A dataset with estimates for the Cmax (maximum concentration) and Tmax (time of first occurence of cmax) parameters, one observation per subject
 #' @import dplyr
 #' @export
 calc.ctmax <- function(x,timevar="time",depvar="dv") {

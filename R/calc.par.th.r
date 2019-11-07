@@ -8,7 +8,7 @@
 #' @param reg regimen, "sd" or "md"
 #' @param ss is steady state reached (y/n)
 #'
-#' @return dataset with estimates for the following parameters, one observation per subject: \cr
+#' @return A dataset with estimates for the following parameters, one observation per subject: \cr
 #'   all parameters calculated in th \cr
 #'   all parameters calculated in par \cr
 #'   clast.pred: predicted concentration at tlast \cr

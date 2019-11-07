@@ -2,16 +2,14 @@
 % Please edit documentation in R/correct.loq.r
 \name{correct.loq}
 \alias{correct.loq}
-\title{Title
-CORRECT.LOQ: Imputes LOQ values according to the chosen LOQ substitution rule
-Input dataset:
-  contains all uncorrected data, including LOQ}
+\title{Imputes LOQ values according to the chosen LOQ substitution rule
+Imputations will be applied to the original depvar(no new concentration variable will be created)}
 \usage{
 correct.loq(x, nomtimevar = "ntad", timevar = "time", depvar = "dv",
   bloqvar = "bloq", loqvar = "loq", loqrule = 1)
 }
 \arguments{
-\item{x}{input dataset name (if called within dplyr: .)}
+\item{x}{input dataset name (if called within dplyr: .) contains all uncorrected data, including LOQ}
 
 \item{nomtimevar}{variable name containing the nominal sampling time}
 
@@ -26,14 +24,9 @@ correct.loq(x, nomtimevar = "ntad", timevar = "time", depvar = "dv",
 \item{loqrule}{rule number to be applied to the LOQ values in the curve:}
 }
 \value{
-dataset with imputed BLOQ concentrations using the chosen imputation rule
+A dataset with imputed BLOQ concentrations using the chosen imputation rule
 }
 \description{
-USAGE:
-}
-\details{
-correct.loq(x,nomtimevar="ntad",timevar="time",depvar="dv",bloqvar="bloq",loqvar="loq",loqrule=1)
-
-METHOD:
+Imputes LOQ values according to the chosen LOQ substitution rule
 Imputations will be applied to the original depvar(no new concentration variable will be created)
 }

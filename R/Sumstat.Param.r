@@ -6,7 +6,6 @@
 #' @param nsig
 #' @param vars_ignore
 #' @param keep
-#' @examples
 #' @export
 Sumstat.Param = function(ds, subjVar, by=NULL, nsig=3, vars_ignore="", keep="" ,...){
 
@@ -26,14 +25,12 @@ Sumstat.Param = function(ds, subjVar, by=NULL, nsig=3, vars_ignore="", keep="" ,
   CV = function(x) (sd(x,na.rm=T)/mean(x,na.rm=T))*100
 
   #Create dataset without the variables to ignore (vars_ignore)
-
   dsa = ds %>%
-    dplyr::select(-one_of(vars_ignore)) %>%
+    dplyr::select(-vars_ignore) %>%
     mutate_all(funs(empty_as_na)) %>%
     mutate_all(funs(as.numeric))
 
   #Create dataset with the variables to ignore (vars_ignore) and with the filtering
-
   dsb = ds %>%
     dplyr::select(vars_ignore,keep) %>%
     dplyr::filter(!!!arg) %>%

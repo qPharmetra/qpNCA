@@ -23,7 +23,7 @@ calc.par.th(x = par, th = th, cov = cov, dosevar = "dose",
 \item{ss}{is steady state reached (y/n)}
 }
 \value{
-dataset with estimates for the following parameters, one observation per subject: \cr
+A dataset with estimates for the following parameters, one observation per subject: \cr
   all parameters calculated in th \cr
   all parameters calculated in par \cr
   clast.pred: predicted concentration at tlast \cr
