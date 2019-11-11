@@ -2,14 +2,13 @@
 % Please edit documentation in R/interpol.r
 \name{interpol}
 \alias{interpol}
-\title{Interpolate concentrations}
+\title{Interpolate concentrations
+This function is used by correct.xx functions.}
 \usage{
 interpol(c1 = NA, c2 = NA, t1 = NA, t2 = NA, t3 = NA,
   method = 1)
 }
-\arguments{
-\item{method}{}
-}
 \description{
 Interpolate concentrations
+This function is used by correct.xx functions.
 }

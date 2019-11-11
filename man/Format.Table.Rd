@@ -2,7 +2,8 @@
 % Please edit documentation in R/Format.Table.r
 \name{Format.Table}
 \alias{Format.Table}
-\title{Format the table NCA parameters table}
+\title{Format the table NCA parameters table
+Base R way of NCA tabulation functions (see vignettes for more help)}
 \usage{
 Format.Table(ds, units = parUnits)
 }
@@ -13,4 +14,5 @@ Format.Table(ds, units = parUnits)
 }
 \description{
 Format the table NCA parameters table
+Base R way of NCA tabulation functions (see vignettes for more help)
 }

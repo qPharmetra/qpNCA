@@ -5,7 +5,7 @@ Version: 1.0.20
 Author: Jan Huinsman, Krina mehta, and Koen Jolling
 Maintainer: Jason Chittenden <jason.chittenden@qpharmetra.com>
 Description: qPharmetra's R package for Noncompartmental Analysis
-License: 
+License: TBD
 Encoding: UTF-8
 LazyData: true
 Suggests: 

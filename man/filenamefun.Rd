@@ -2,13 +2,17 @@
 % Please edit documentation in R/filenamefun.r
 \name{filenamefun}
 \alias{filenamefun}
-\title{Create file name for regression plots (*.png) from by-variables (in plot.reg function)}
+\title{Create file name for regression plots (*.png) from by-variables (in plot.reg function)
+This function is used by qpNCA wrapper function.}
 \usage{
 filenamefun(df, by)
 }
 \arguments{
-\item{by}{}
+\item{df}{A dataframe}
+
+\item{by}{A grouping variable}
 }
 \description{
 Create file name for regression plots (*.png) from by-variables (in plot.reg function)
+This function is used by qpNCA wrapper function.
 }

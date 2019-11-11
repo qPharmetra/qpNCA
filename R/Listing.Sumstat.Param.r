@@ -1,13 +1,11 @@
 #' Creates a table of individual parameterss table with summary statistics
 #'
-#' @param ds
-#' @param subjVar
-#' @param by
-#' @param nsig
-#' @param vars_ignore
-#' @param keep
-#'
-#' @examples
+#' @param ds Dataframe of NCA results
+#' @param subjVar Name of individual identifier variable
+#' @param by Grouping variable
+#' @param nsig Number of significant digits
+#' @param vars_ignore List of variables that need to be ignored for summary statistics based on a filtering condition
+#' @param keep List of variables that you want to keep in addition throughout the summary (such as the filtering and grouping variables.
 #' @export
 Listing.Sumstat.Param = function(ds, subjVar, by, nsig, vars_ignore="", keep="",...){
 

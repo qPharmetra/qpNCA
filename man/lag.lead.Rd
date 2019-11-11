@@ -2,14 +2,13 @@
 % Please edit documentation in R/lag.lead.r
 \name{lag.lead}
 \alias{lag.lead}
-\title{Estimate lagging and leading time points and concentrations for each time point}
+\title{Estimate lagging and leading time points and concentrations for each time point
+This function is used by correct.xx functions}
 \usage{
 lag.lead(x, nomtimevar1 = NA, depvar1 = NA, timevar1 = NA,
   lagc = NA, lagt = NA, leadc = NA, leadt = NA)
 }
-\arguments{
-\item{leadt}{}
-}
 \description{
 Estimate lagging and leading time points and concentrations for each time point
+This function is used by correct.xx functions
 }
