@@ -1,14 +1,14 @@
 #' Corrects concentrations at critical, but deviating time points (e.g, predose, TAU, start and end of user selected AUC interval), and adds missing records at these critical time points.
 #' @importFrom qpToolkit mutate_cond
 #' @description
-#' \itemize Records with missing NOMINAL time will be removed, this must be corrected before the function is called.
-#' \itemize If a record at the critical time point is missing, add it and set time to nominal time and set dv conc to NA
-#' \itemize If there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late), use interpolation
-#' \itemize If there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early), use extrapolation
-#' \itemize Set deviating time at predose to 0
-#' \itemize Original time and conc will be kept in original variables.
-#' \itemize The following Time Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:\cr
-#' \tabular{cccc}{
+#' \itemize{Records with missing NOMINAL time will be removed and this must be corrected before the function is called.}\cr
+#' \itemize{If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA}\cr
+#' \itemize{Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)}\cr
+#' \itemize{Use extrapilation if there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early)}\cr
+#' \itemize{Set deviating time at predose to 0}\cr
+#' \itemize{Original time and conc will be kept in original variables.}\cr
+#' \itemize{The following Time Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:}\cr
+#' \tabular{llll}{
 #'   Rule \tab Regimen \tab Description \tab Applied to \cr
 #'   SDT-1 \tab sd \tab Set actual time to 0 \tab t=0 \cr
 #'   SDT-2 \tab sd \tab Correct concentration at deviating time by interpolation \tab t=tau,tstart,tend,teval \cr
@@ -18,7 +18,6 @@
 #'   MDT-3 \tab md \tab Correct concentration at deviating time by extrapolation (too early) \tab t=0,tau,tend,teval \cr
 #'   MDT-3a \tab md \tab Set actual time to zero if concentration is BLOQ (too early) \tab t=0 \cr
 #' }
-#'
 #' @param x input dataset name (contains all data, including LOQ (set conc to zero for these))
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param timevar variable name containing the actual sampling time
@@ -44,26 +43,8 @@
 #'   time.lastall, conc.lastall \tab time and conc, corrected for AUClast and AUCall calculation \cr
 #'   t0.flag, tau.flag, tstart.flag, tend.flag, teval.flag \tab flags for what timepoint the correction was needed \cr
 #' }
-#' @examples
-#' library(dplyr)
-#'# We need half-lives for this, so first let's get that.
-#' th = Theoph %>%
-#' group_by(Subject=as.numeric(Subject)) %>%
-#'  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
-#'  ungroup()
-#'
-#'# We need nominal time variable as well, so let's generate that.
-#' ID <- as.numeric(Theoph$Subject)
-#' NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-#' Theoph1 <- Theoph %>% mutate(NTAD=metrumrg::snap(Time, NTAD))
-#'
-#' #let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
-#' tc = Theoph1 %>%
-#' group_by(Subject=as.numeric(Subject)) %>%
-#' do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-#'                  tau=,tstart=,tend=,teval=8,th=th,reg="sd"))
 #' @export
-correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="sd",method=1) {
+correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",method=1) {
 
   data_in=x
 
@@ -203,7 +184,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
     # PARTIAL
     #   TSTART
     mutate(conc.part=depvar,time.part=timevar) %>%
-    mutate_cond(condition = !is.na(tstart)&ptime==tstart&timevar<ptime&!is.na(leaddv),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tstart&timevar<ptime&!is.na(leaddv),
 
                 conc.part=interpol(c1=depvar, c2=leaddv, t1=tstart, t2=timevar, t3=leadtime, method=method), #interpolate
                 #c1+((c2-c1)*(t1-t2)/(t3-t2))
@@ -216,7 +197,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                                 " by interpolation (sample taken too early)",sep=""),
                 applies.to.time=paste(applies.to.time,"TSTART ")
     ) %>%
-    mutate_cond(condition = !is.na(tstart)&ptime==tstart&timevar>ptime&!is.na(lagdv),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tstart&timevar>ptime&!is.na(lagdv),
 
                 conc.part=interpol(c1=lagdv, c2=depvar, t1=tstart, t2=lagtime, t3=timevar, method=method), #interpolate
                 #c1+((c2-c1)*(t1-t2)/(t3-t2))
@@ -229,7 +210,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                                 " by interpolation (sample taken too late)",sep=""),
                 applies.to.time=paste(applies.to.time,"TSTART ")
     ) %>%
-    mutate_cond(condition = !is.na(tstart)&ptime==tstart&timevar<ptime&is.na(leaddv)&!is.na(lambda_z),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tstart&timevar<ptime&is.na(leaddv)&!is.na(lambda_z),
                 conc.part=depvar*exp(-1*lambda_z*(tstart-timevar)),                       # extrapolate
                 time.part=tstart,
                 tstart.flag=1,
@@ -240,7 +221,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                 applies.to.time=paste(applies.to.time,"TSTART ")
     ) %>%
     #   TEND
-    mutate_cond(condition = !is.na(tend)&ptime==tend&timevar<ptime&!is.na(leaddv),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tend&timevar<ptime&!is.na(leaddv),
 
                 conc.part=interpol(c1=depvar, c2=leaddv, t1=tend, t2=timevar, t3=leadtime, method=method), #interpolate
                 #c1+((c2-c1)*(t1-t2)/(t3-t2))
@@ -253,7 +234,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                                 " by interpolation (sample taken too early)",sep=""),
                 applies.to.time=paste(applies.to.time,"TEND ")
     ) %>%
-    mutate_cond(condition = !is.na(tend)&ptime==tend&timevar>ptime&!is.na(lagdv),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tend&timevar>ptime&!is.na(lagdv),
 
                 conc.part=interpol(c1=lagdv, c2=depvar, t1=tend, t2=lagtime, t3=timevar, method=method),   #interpolate
                 #c1+((c2-c1)*(t1-t2)/(t3-t2))
@@ -266,7 +247,7 @@ correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,t
                                 " by interpolation (sample taken too late)",sep=""),
                 applies.to.time=paste(applies.to.time,"TEND ")
     ) %>%
-    mutate_cond(condition = !is.na(tend)&ptime==tend&timevar<ptime&is.na(leaddv)&!is.na(lambda_z),
+    mutate_cond(condition = !is.na(tstart)&!is.na(tend)&ptime==tend&timevar<ptime&is.na(leaddv)&!is.na(lambda_z),
                 conc.part=depvar*exp(-1*lambda_z*(tend-timevar)),                         # extrapolate
                 time.part=tend,
                 tend.flag=1,

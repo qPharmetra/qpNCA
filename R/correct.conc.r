@@ -1,12 +1,12 @@
 #' Corrects missing concentration at critical time points (e.g, predose, TAU, start and end of user selected AUC interval)
 #' @importFrom metrumrg snap locf
 #' @description
-#' \itemize If there is a measurable concentration BEFORE and AFTER the missing concentration, use interpolation
-#' \itemize If there is NO measurable concentration AFTER the missing concentration, use extrapolation
-#' \itemize Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)
-#' \itemize Set missing concentration at t=TAU to value at t=0 (steady state only)
-#' \itemize The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:
-#' \tabular{cccc}{
+#' \itemize{Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration}\cr
+#' \itemize{Use extrapolation if there is NO measurable concentration AFTER the missing concentration}\cr
+#' \itemize{Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)}\cr
+#' \itemize{Set missing concentration at t=TAU to value at t=0 (steady state only)}\cr
+#' \itemize{The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:}
+#' \tabular{llll}{
 #' Rule \tab Regimen \tab Description \tab Applied to \cr
 #' SDC-1  \tab   sd   \tab       Set concentration to 0 (only non-endogenous compounds)      \tab      t=0 \cr
 #' SDC-2   \tab    sd  \tab      impute missing concentration by interpolation   \tab                  t=tau,tstart,tend,teval\cr
@@ -39,33 +39,8 @@
 #'  applies.to.conc  \tab  lists all AUCS to which the concentration correction rule applies \cr
 #' }
 #'
-#' @examples
-#' library(dplyr)
-#'# We need half-lives for this, so first let's get that.
-#' th = Theoph %>%
-#'  group_by(Subject=as.numeric(Subject)) %>%
-#'  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
-#'  ungroup()
-#'
-#'# We need nominal time variable as well, so let's generate that.
-#' ID <- as.numeric(Theoph$Subject)
-#' NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-#' Theoph1 <- Theoph %>% mutate(NTAD=metrumrg::snap(Time, NTAD))
-#'
-#' #let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
-#' tc = Theoph1 %>%
-#' group_by(Subject=as.numeric(Subject)) %>%
-#' do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-#'                  tau=,tstart=,tend=,teval=8,th=th,reg="sd")) %>%
-#' #above step added timepoints that we will add interpolated concentrations to with this next step
-#' do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
-#' th=th,reg="sd",ss="n")) %>%
-#' ungroup()
-#'
-#' head(tc)
-#'
 #' @export
-correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="sd",ss="n",route="po",method=1) {
+correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",ss="N",route="EV",method=1) {
 
   data_in=x
 
@@ -109,7 +84,7 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
   #TAU
   if (!is.na(tau)) {
     data_in=data_in %>% mutate_cond(condition = ptime==tau&is.na(conc.tau)&!is.na(t0val)
-                                    &tolower(reg)=="md"&tolower(ss)=="y",
+                                    &tolower(reg)=="md"&tolower(ss)=="y"&tolower(route)!="ivb",
                                     conc.tau=t0val,                                        # take value at t=0
                                     time.tau=tau,
                                     tau.flag=1,
@@ -132,7 +107,7 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
                   applies.to.conc=paste(applies.to.conc,"TAU ")
       ) %>%
       mutate_cond(condition = ptime==tau&is.na(conc.tau)&!is.na(lag.ctau)
-                  &is.na(lead.ctau)&!is.na(lambda_z),                                                                         conc.tau=lag.ctau*exp(-1*lambda_z*(tau-lag.ttau)),                  # extrapolate
+                  &is.na(lead.ctau)&!is.na(lambda_z),
                   conc.tau=lag.ctau*exp(-1*lambda_z*(tau-lag.ttau)),  # extrapolate
                   time.tau=tau,
                   tau.flag=1,
@@ -145,9 +120,9 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
   }
   #TSTART and TEND
   #TSTART
-  if (!is.na(tstart)) {
+  if (!is.na(tstart)&!is.na(tend)) {
     data_in=data_in %>%  mutate_cond(condition = ptime==tstart&!is.na(tau)&tstart==tau&is.na(conc.part)
-                                     &!is.na(t0val)&tolower(reg)=="md"&tolower(ss)=="y",
+                                     &!is.na(t0val)&tolower(reg)=="md"&tolower(ss)=="y"&tolower(route)!="ivb",
                                      conc.part=t0val,                              # take value at t=0 if TSTART=TAU
                                      time.part=tstart,
                                      tstart.flag=1,
@@ -183,8 +158,9 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
       )
   }
   #TEND
-  if (!is.na(tend)) {
-    data_in=data_in %>%  mutate_cond(condition = ptime==tend&!is.na(tau)&tend==tau&is.na(conc.part)&!is.na(t0val)&tolower(reg)=="md"&tolower(ss)=="y",
+  if (!is.na(tstart)&!is.na(tend)) {
+    data_in=data_in %>%  mutate_cond(condition = ptime==tend&!is.na(tau)&tend==tau&is.na(conc.part)
+                                     &!is.na(t0val)&tolower(reg)=="md"&tolower(ss)=="y"&tolower(route)!="ivb",
                                      conc.part=t0val,                              # take value at t=0 if TEND=TAU
                                      time.part=tend,
                                      tend.flag=1,
@@ -221,7 +197,8 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
   }
   #TEVAL
   if (!is.na(teval)) {
-    data_in=data_in %>%  mutate_cond(condition = ptime==teval&!is.na(tau)&teval==tau&is.na(conc.teval)&!is.na(t0val)&tolower(reg)=="md"&tolower(ss)=="y",
+    data_in=data_in %>%  mutate_cond(condition = ptime==teval&!is.na(tau)&teval==tau&is.na(conc.teval)
+                                     &!is.na(t0val)&tolower(reg)=="md"&tolower(ss)=="y"&tolower(route)!="ivb",
                                      conc.teval=t0val,                         # take value at t=0 if TEVAL=TAU
                                      time.teval=teval,
                                      teval.flag=1,
@@ -261,16 +238,16 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
 
   data_in=data_in %>%
 
-    # back-extrapolate t=0 concentration for all AUCs if route is IV
+    # back-extrapolate t=0 concentration for all AUCs if route is IVB
     mutate(back_extrap=0,
            lc1=lead(conc.lastall,1),lc2=lead(conc.lastall,2),
            lt1=lead(time.lastall,1),lt2=lead(time.lastall,2),
            firstmeasc=conc.lastall[which(conc.lastall>0)][1],
            firstmeast=ptime[which(conc.lastall>0)][1]) %>%
     # if there are NAs or LOQs between t=0 and first measurable conc, set these equal to first measurable conc
-    mutate_cond(condition=ptime>0&ptime<firstmeast&(is.na(conc.lastall)|conc.lastall==0),
+    mutate_cond(condition=tolower(route)=="ivb"&ptime>0&ptime<firstmeast&(is.na(conc.lastall)|conc.lastall==0),
                 conc.lastall=firstmeasc,conc.tau=firstmeasc,conc.teval=firstmeasc) %>%
-    mutate_cond(condition=tolower(route)=="iv"&ptime==0,
+    mutate_cond(condition=tolower(route)=="ivb"&ptime==0,
                 back_extrap=ifelse(!is.na(lc1)&!is.na(lc2)&lc1>0&lc2>0&
                                      lc1>lc2,1,0),
                 conc.lastall=ifelse(back_extrap==1,exp(log(lc1)+
@@ -285,14 +262,15 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
     ) %>%
 
     # ALL and LAST
-    mutate_cond(condition = ptime==0&(is.na(conc.lastall)|conc.lastall>0)&tolower(reg)=="sd"&tolower(route)!="iv",
+    mutate_cond(condition = ptime==0&(is.na(conc.lastall)|conc.lastall>0)&tolower(reg)=="sd"&tolower(route)!="ivb",
                 conc.lastall=0,                                   # set conc to 0
                 time.lastall=0,
                 t0.flag=1,
                 crule.nr="SDC-1",
                 crule.txt=paste("Missing or measurable concentration at (SD) PREDOSE set to 0",sep="")
     ) %>%
-    mutate_cond(condition = ptime==0&is.na(conc.lastall)&!is.na(tauval)&tolower(reg)=="md"&tolower(ss)=="y"&tolower(route)!="iv",
+    mutate_cond(condition = ptime==0&is.na(conc.lastall)&!is.na(tauval)
+                &tolower(reg)=="md"&tolower(ss)=="y"&tolower(route)!="ivb",
                 conc.lastall=tauval,                              # take value at t=tau
                 time.lastall=0,
                 t0.flag=1,
@@ -302,7 +280,7 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
                 applies.to.conc=paste("PREDOSE")
     ) %>%
     #TAU
-    mutate_cond(condition = ptime==0&(is.na(conc.tau)|conc.tau>0)&tolower(reg)=="sd"&tolower(route)!="iv",
+    mutate_cond(condition = ptime==0&(is.na(conc.tau)|conc.tau>0)&tolower(reg)=="sd"&tolower(route)!="ivb",
                 conc.tau=0,                                       # set conc to 0
                 time.tau=0,
                 t0.flag=1,
@@ -310,7 +288,8 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
                 crule.txt=paste("Missing or measurable concentration at (SD) PREDOSE set to 0",sep=""),
                 applies.to.conc=paste("PREDOSE")
     ) %>%
-    mutate_cond(condition = ptime==0&is.na(conc.tau)&!is.na(tauval)&tolower(reg)=="md"&tolower(ss)=="y"&tolower(route)!="iv",
+    mutate_cond(condition = ptime==0&is.na(conc.tau)&!is.na(tauval)&tolower(reg)=="md"
+                &tolower(ss)=="y"&tolower(route)!="ivb",
                 conc.tau=tauval,                                  # take value at t=tau
                 time.tau=0,
                 t0.flag=1,
@@ -320,7 +299,7 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
                 applies.to.conc=paste("PREDOSE")
     ) %>%
     #TEVAL
-    mutate_cond(condition = ptime==0&(is.na(conc.teval)|conc.teval>0)&tolower(reg)=="sd"&tolower(route)!="iv",
+    mutate_cond(condition = ptime==0&(is.na(conc.teval)|conc.teval>0)&tolower(reg)=="sd"&tolower(route)!="ivb",
                 conc.teval=0,                                      # set conc to 0
                 time.teval=0,
                 t0.flag=1,
@@ -328,7 +307,8 @@ correct.conc <- function(x,nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,t
                 crule.txt=paste("Missing or measurable concentration at (SD) PREDOSE set to 0",sep=""),
                 applies.to.conc=paste("PREDOSE")
     ) %>%
-    mutate_cond(condition = ptime==0&is.na(conc.teval)&!is.na(tauval)&tolower(reg)=="md"&tolower(ss)=="y"&tolower(route)!="iv",
+    mutate_cond(condition = ptime==0&is.na(conc.teval)&!is.na(tauval)&tolower(reg)=="md"
+                &tolower(ss)=="y"&tolower(route)!="ivb",
                 conc.teval=tauval,                                 # take value at t=tau
                 time.teval=0,
                 t0.flag=1,

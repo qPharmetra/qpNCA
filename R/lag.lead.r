@@ -1,5 +1,5 @@
 #' Estimate lagging and leading time points and concentrations for each time point
-#'
+#' This function is used by correct.xx functions
 #' @param x
 #' @param nomtimevar1
 #' @param depvar1
@@ -8,11 +8,7 @@
 #' @param lagt
 #' @param leadc
 #' @param leadt
-#'
-#' @return
 #' @export
-#'
-#' @examples
 lag.lead <- function(x,nomtimevar1=NA,depvar1=NA,timevar1=NA,lagc=NA,lagt=NA,leadc=NA,leadt=NA) {
 
   original=x %>% mutate(depvar=x[[depvar1]],                    # dependent variable                      (internal)

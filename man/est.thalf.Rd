@@ -4,7 +4,8 @@
 \alias{est.thalf}
 \title{Calculates lambda_z and thalf for each PK curve (defined using group_by)}
 \usage{
-est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y")
+est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y",
+  exclvar = NA)
 }
 \arguments{
 \item{x}{a dataset (not needed to be corrected time and conc)}
@@ -14,6 +15,8 @@ est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y")
 \item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 
 \item{includeCmax}{include results of regression including Cmax in selection? (y/n)}
+
+\item{excl}{a variable name containing information about points to be excluded (these should have <excl>=1)}
 }
 \value{
 a dataset with estimates for each regression analysis in one observation. The following parameters are available:
@@ -26,14 +29,8 @@ thalf = elimination half-life;\cr
 start_th = time of first sample included in the thalf estimation;\cr
 end_th = time of last sample included in the thalf estimation;\cr
 includeCmax = include results of regression including Cmax in selection? (y/n)\cr
+points_excluded = are time points excluded from the half-life estimation? (y/n) \cr
 }
 \description{
 The function starts with the last three sample points and performs log-linear regression on it. It then adds one sampling point at a time (including and ending at tmax) and performs the regression again. Internal variable EST checks whether there are at least 3 timepoints for estimation after removal of LOQs and NAs
-}
-\examples{
-library(dplyr)
-th = Theoph \%>\%
- group_by(Subject=as.numeric(Subject)) \%>\%
- do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) \%>\%
- ungroup()
 }

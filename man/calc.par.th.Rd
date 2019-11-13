@@ -5,7 +5,7 @@
 \title{Calculates PK parameters that need lambda_z}
 \usage{
 calc.par.th(x = par, th = th, cov = cov, dosevar = "dose",
-  factor = 1, reg = "sd", ss = "n")
+  factor = 1, reg = "SD", ss = "N", route = "EV")
 }
 \arguments{
 \item{x}{result parameter dataset from calc.par}
@@ -23,7 +23,7 @@ calc.par.th(x = par, th = th, cov = cov, dosevar = "dose",
 \item{ss}{is steady state reached (y/n)}
 }
 \value{
-dataset with estimates for the following parameters, one observation per subject: \cr
+A dataset with estimates for the following parameters, one observation per subject: \cr
   all parameters calculated in th \cr
   all parameters calculated in par \cr
   clast.pred: predicted concentration at tlast \cr
@@ -45,38 +45,4 @@ NOTE: ctmax must be merged separately as those were calculated from uncorrected 
 }
 \description{
 Calculates PK parameters that need lambda_z
-}
-\examples{
-library(dplyr)
-#'# We need half-lives for corrections, so first let's get that.
-th = Theoph \%>\%
- group_by(Subject=as.numeric(Subject)) \%>\%
- do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) \%>\%
- ungroup()
-
-# We need nominal time variable as well, so let's generate that.
-ID <- as.numeric(Theoph$Subject)
-NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
-Theoph1 <- Theoph \%>\% mutate(NTAD=metrumrg::snap(Time, NTAD))
-
-#let's say we want AUC0-8. We only have 7 and 9 hr concentrations, so we need to interpolate conc for 8 hr.
-tc = Theoph1 \%>\%
-group_by(Subject=as.numeric(Subject)) \%>\%
-do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-                 tau=,tstart=,tend=,teval=8,th=th,reg="sd")) \%>\%
-#above step added timepoints that we will add interpolated concentrations to with this next step
-do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=8,
-th=th,reg="sd",ss="n")) \%>\%
-ungroup()
-#Now get parameters that do not require LAMBDAZ
-par <- tc \%>\%
-     group_by(Subject=as.numeric(Subject)) \%>\%
-     ##tstart by default is 0, so here we will get AUC0-8hr and AUC0-24 as sampling ends at 24 hr
-     do(calc.par(.,tau=NA, tstart=NA, tend=NA, teval=8, route="po", method=1)) \%>\%
-     ungroup()
-cov <- data.frame(Subject=as.numeric(Theoph1$Subject), DOSE=Theoph$Dose) \%>\%
-       distinct(.,.keep_all = T)
-par <- calc.par.th(x=par,th=th ,cov=cov,
-                 dose="DOSE",factor=1,
-                 reg="sd",ss="n")
 }
