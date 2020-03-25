@@ -11,9 +11,9 @@ tab.corr <- function(x,nomtimevar="time",by="subject") {
   crules=x%>%dplyr::rename(rule.nr=crule.nr,rule.txt=crule.txt,applies.to=applies.to.conc)
 
   result=bind_rows(loqrules,create,trules,crules) %>%
-    filter(rule.nr!="") %>%
-    select(one_of(by,nomtimevar),applies.to,rule.nr,rule.txt) %>%
-    arrange_(by,nomtimevar)
+         filter(rule.nr!="") %>%
+         select(one_of(by,nomtimevar),applies.to,rule.nr,rule.txt) %>%
+         arrange_at(c(by,nomtimevar))
 
   return(result)
 }

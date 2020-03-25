@@ -44,26 +44,26 @@
 #'   t0.flag, tau.flag, tstart.flag, tend.flag, teval.flag \tab flags for what timepoint the correction was needed \cr
 #' }
 #' @export
-correct.time <- function(x,nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",method=1) {
+correct.time <- function(x,by="subject",nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",method=1) {
 
   data_in=x
-
-  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf)) }
-
+  
+  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) } 
+  
   data_in = data_in %>%
-    mutate(depvar=x[[depvar]],                    # dependent variable                      (internal)
-           timevar=x[[timevar]],                  # actual time variable                    (internal)
-           ptime=x[[nomtimevar]],                 # nominal time                            (internal)
-           create.nr="",                          # is missing record created?
-           create.txt="",                         # explanation of what is created
-           trule.nr="",                           # correction rule number
-           trule.txt="",                          # explanation of time correction
-           applies.to.time="",                    # lists all AUCS to which the rule applies
-           t0.flag=0,tau.flag=0,tstart.flag=0,tend.flag=0,teval.flag=0, # flags for what timepoint the correction was needed
-           missflag=0,                            # flag for missing records
-           misstime=NA,                           # time of missing record
-           lambda_z=ifelse("lambda_z"%in%names(.),lambda_z,NA)) %>%
-    filter(!is.na(x[[nomtimevar]]))               # remove records with no nominal time (must be corrected before)
+          mutate(depvar=x[[depvar]],                    # dependent variable                      (internal)
+                 timevar=x[[timevar]],                  # actual time variable                    (internal)
+                 ptime=x[[nomtimevar]],                 # nominal time                            (internal)
+                 create.nr="",                          # is missing record created?      
+                 create.txt="",                         # explanation of what is created
+                 trule.nr="",                           # correction rule number
+                 trule.txt="",                          # explanation of time correction
+                 applies.to.time="",                    # lists all AUCS to which the rule applies
+                 t0.flag=0,tau.flag=0,tstart.flag=0,tend.flag=0,teval.flag=0, # flags for what timepoint the correction was needed
+                 missflag=0,                            # flag for missing records
+                 misstime=NA,                           # time of missing record
+                 lambda_z=ifelse("lambda_z"%in%names(.),lambda_z,NA)) %>%
+          filter(!is.na(x[[nomtimevar]]))               # remove records with no nominal time (must be corrected before)
 
   data_in=data_in %>% mutate_cond(condition=is.na(timevar),timevar=ptime,
                                   trule.nr="-",

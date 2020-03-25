@@ -34,17 +34,18 @@ plot.reg <- function(x,by=c("id"),th=NA,bloqvar="bloq",timevar="tad",depvar="dv"
   data_in = x %>% mutate(timevar=x[[timevar]],
                          depvar=x[[depvar]],
                          bloqvar=x[[bloqvar]],
-                         exclvar=x[[excl]])
-
-  if (!is.na(excl) & !(excl %in% names(x))) stop(paste("Exclusion variable",excl,"does not exist"), call.=F)
-
+                         exclvar=x[[exclvar]]) 
+  
+ 
+  if (!is.na(exclvar) & !(exclvar %in% names(x))) stop(paste("Exclusion variable",exclvar,"does not exist"), call.=F)
+  
   data_in = data_in %>% mutate(excl=0)
-  if(!is.na(excl)) { data_in = data_in %>% mutate(excl=exclvar) }  # if exclvar exists, set excl to exclvar, else set to 0
-
-  plot = left_join(data_in,th) %>%
+  if(!is.na(exclvar)) { data_in = data_in %>% mutate(excl=exclvar) }  # if exclvar exists, set excl to exclvar, else set to 0
+  
+  plot = left_join(data_in,th,by=by) %>%
     filter(bloqvar==0) %>%
-    mutate(start_conc=exp(intercept-lambda_z*start_th),
-           end_conc=exp(intercept-lambda_z*end_th),
+    mutate(start_conc=exp(log(intercept)-lambda_z*start_th), # intercept was already exponentiated in calc_thalf
+           end_conc=exp(log(intercept)-lambda_z*end_th),     # intercept was already exponentiated in calc_thalf
            thalf_txt=ifelse(!is.na(thalf),
                             paste0("Half-life: ",round(thalf,2),"  "),"Half-life not calculated  "),
            radj_txt=ifelse(!is.na(thalf),

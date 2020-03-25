@@ -4,7 +4,7 @@
 #' @param y
 #' @param method
 #' @export
-trap=function(x=NA, y=NA, method=1) {
+trap <- function(x=NA, y=NA, method=1) {
   cm=max(y,na.rm=T)
   tmax=first(x[y==cm&!is.na(y)])
   if (method==1)   {

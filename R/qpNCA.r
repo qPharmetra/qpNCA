@@ -56,71 +56,113 @@
 #' @export
 qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="dv",
                   bloqvar="bloq",loqvar="loq",loqrule=1,
-                  includeCmax="Y",excl=NA,plotdir=NA,pdfdir=NA,timelab="timevar",deplab="depvar",
-                  tau=NA,tstart=NA,tend=NA,teval=NA,cov=NA,dose=NA,factor=NA,reg="SD",ss="N",route="EV",method=1) {
-
+                  includeCmax="Y",exclvar=NA,plotdir=NA,pdfdir=NA,timelab="timevar",deplab="depvar",
+                  tau=NA,tstart=NA,tend=NA,teval=NA,covfile=NA,dose=NA,factor=NA,reg="SD",ss="N",route="EV",method=1) {
+  
+  # 0. Check input
+  
+  cat("\n")
+  cat("Checking function arguments...")
+  
+  check.input(x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,bloqvar=bloqvar, loqvar=loqvar, loqrule=loqrule,
+             includeCmax=includeCmax, exclvar=exclvar, plotdir=plotdir, pdfdir=pdfdir, timelab=timelab, deplab=deplab,
+             tau=tau, tstart=tstart, tend=tend, teval=teval, covfile=covfile, dose=dose, factor=factor, reg=reg, ss=ss,
+             route=route, method=method)
+  
   # 1. Apply LOQ rules
-
+  
+  cat("Applying LOQ rules...\n")
+  
   loqed = x %>%
     group_by_at(by) %>%
     do(correct.loq(.,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,bloqvar=bloqvar,loqvar=loqvar,loqrule=loqrule)) %>%
     ungroup
-
-  # 2. estimate thalf ON UNCORRECTED DATA
-
-  th = loqed %>%
+  
+    # 2. estimate thalf ON UNCORRECTED DATA
+  
+  cat("Performing Thalf estimation...\n")
+  
+  th = loqed %>% 
     group_by_at(by) %>%
     do(est.thalf(.,timevar=timevar,depvar=depvar,includeCmax=includeCmax,excl=excl)) %>%
     ungroup
 
   # 2a.
-
-  plot.reg(loqed,by=by,th=th,bloqvar=bloqvar,timevar=timevar,depvar=depvar,excl=excl,plotdir=plotdir,timelab=timelab,deplab=deplab)
-
+  
+  if (is.na(plotdir)) cat("Creating regression plots in standard output...\n")
+  else cat(paste("Writing regression plots to folder",plotdir,"...\n"))
+  
+  plot.reg(loqed,by=by,th=th,bloqvar=bloqvar,timevar=timevar,depvar=depvar,exclvar=exclvar,plotdir=plotdir,timelab=timelab,deplab=deplab)
+  
+  cat("\n")
+  
   # 3. find Cmax and tmax ON UNCORRECTED DATA
-
-  ctmax = loqed %>%
+  
+  cat("Calculating Cmax/Tmax...\n")
+  
+  ctmax = loqed %>% 
     group_by_at(by) %>%
     do(calc.ctmax(.,timevar=timevar,depvar=depvar)) %>%
     ungroup
 
   # 4. and 5. create dataset with corrected time deviations
-
+  
+  cat("Applying time deviation corrections and missing concentration imputations...\n")
+  
   tc = loqed %>%
     group_by_at(by) %>%
-    do(correct.time(.,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,
+    do(correct.time(.,by=by,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,
                     tau=tau,tstart=tstart,tend=tend,teval=teval,th=th,reg=reg,method=method)) %>%
-    do(correct.conc(.,nomtimevar=nomtimevar,
-                    tau=tau,tstart=tstart,tend=tend,teval=teval,th=th,reg=reg,ss=ss,route=route,method=method)) %>%
+    do(correct.conc(.,by=by,nomtimevar=nomtimevar,
+                    tau=tau,tstart=tstart,tend=tend,teval=teval,th=,reg=reg,ss=ss,route=route,method=method)) %>%
     ungroup
-
+  
+  cat("\n")
+  
   # 6. create table with corrections
-
-  corrtab = tc %>% tab.corr(.,nomtimevar=nomtimevar,by=by)
-
+  
+  cat("Creating correction tables...\n")
+  
+  corrtab = tc %>% tab.corr(.,nomtimevar=nomtimevar,by=by) 
+  
   # 7. Calculate PK parameters NOT based on lambda_z ON CORRECTED DATA
-
-  par = tc %>%
+  
+  cat("Calculating parameters that do not need lambda_z...\n")
+  
+  par = tc %>% 
     group_by_at(by) %>%
     do(calc.par(.,tau=tau,tstart=tstart,tend=tend,teval=teval,route=route,method=method)) %>%
     ungroup
 
   # 8. Calculate PK parameters that need lambda_z
-
-  par_all = calc.par.th(x=par,th=th,cov=cov,dose=dose,reg=reg,ss=ss,factor=factor,route=route)
-
-  par_all = left_join(ctmax,par_all)
-
+  
+  cat("Calculating parameters that DO need lambda_z...\n")
+  
+  par_all = calc.par.th(x=par,by=by,th=th,covfile=covfile,dose=dose,reg=reg,ss=ss,factor=factor,route=route)
+  
+  cat("Combining all parameters...\n")
+  
+  par_all = left_join(ctmax,par_all,by=by)
+  
   # 9. create summary PDFs
-
+  
+  if (is.na(pdfdir)) cat("No PDF summaries created\n")
+  else cat(paste("Writing summary PDF documents to folder",pdfdir,"...\n"))
+  
   nca.sum(par_all,corrfile=corrtab,by=by,plotdir=plotdir,pdfdir=pdfdir)
-
-  result=list(covariates=cov,
+  
+  cat("\nWriting results...\n")
+  
+  covfile=get(covfile) # to convert the cov string to the real data frame
+  
+  result=list(covariates=covfile,
               half_life=th,
               ct_corr=tc,
               corrections=corrtab,
               pkpar=par_all)
 
+  cat("\nDone!\n")
+  
   return(result)
 
 }

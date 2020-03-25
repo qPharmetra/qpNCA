@@ -62,7 +62,7 @@ est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",exclvar=NA){
     lmcall.estimates = as.numeric(summary(lmcall)$coef[,"Estimate"])
     ## save results of loglin lm fit
     result[i,1]=length(data_in$timevar)-i+1
-    result[i,2]=lmcall.estimates[1]
+    result[i,2]=exp(lmcall.estimates[1])  # exponentiate to see the actual intercept
     result[i,3]=lmcall.estimates[2]*-1
     result[i,4]=summary(lmcall)$r.squared
     result[i,5]=summary(lmcall)$adj.r.squared
