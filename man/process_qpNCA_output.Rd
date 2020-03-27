@@ -4,12 +4,18 @@
 \alias{process_qpNCA_output}
 \title{Processes list output from qpNCA function and provides an output with selected varibles in a data frame.}
 \usage{
-process_qpNCA_output(data = ncaresults, covs = c(DOSE, FORM),
-  by = ID, keepers = c(cmax, tmax, thalf, clast.pred, aucinf.pred,
-  cl.f.pred, vz.f.pred))
+process_qpNCA_output(
+  data = ncaresults,
+  covs = c(DOSE, FORM),
+  by = ID,
+  keepers = c(cmax, tmax, thalf, clast.pred, aucinf.pred, cl.f.pred, vz.f.pred)
+)
 }
 \arguments{
 \item{keepers}{}
+}
+\value{
+
 }
 \description{
 Processes list output from qpNCA function and provides an output with selected varibles in a data frame.

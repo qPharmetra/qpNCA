@@ -5,8 +5,15 @@
 \title{Imputes LOQ values according to the chosen LOQ substitution rule
 Imputations will be applied to the original depvar(no new concentration variable will be created)}
 \usage{
-correct.loq(x, nomtimevar = "ntad", timevar = "time", depvar = "dv",
-  bloqvar = "bloq", loqvar = "loq", loqrule = 1)
+correct.loq(
+  x,
+  nomtimevar = "ntad",
+  timevar = "time",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 1
+)
 }
 \arguments{
 \item{x}{input dataset name (if called within dplyr: .) contains all uncorrected data, including LOQ}

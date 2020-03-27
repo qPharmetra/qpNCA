@@ -11,6 +11,9 @@ ncaTabulate(ds, units = parUnits)
 
 \item{units}{a data frame containing units}
 }
+\value{
+
+}
 \description{
 Format the table NCA parameters table
 }

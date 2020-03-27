@@ -1,0 +1,41 @@
+---
+title: "Project: qpNCA"
+subtitle: "Purpose: executes complete validation by running the individual scripts"
+author: "Jan Huisman"
+date: "March, 2020"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r preamble, include=F, eval=T}
+
+options(stringsAsFactors = FALSE)
+options(scipen=999)
+
+library("qpToolkit") # must be run before any other package is installed (here: tidyr)
+library("tidyverse")
+library("foreign")
+library("reshape2")
+library("haven")
+library("readxl")
+
+```
+
+# Load PK validation curves (load_curves_1.0.22.Rmd)
+
+```{r Load Curves, child = 'load_curves_1.0.22.Rmd'}
+```
+
+# Run qpNCA on validation curves (run_qPNCA_1.0.22.Rmd)
+
+```{r Run qPNCA, child = 'run_qPNCA_1.0.22.Rmd'}
+```
+
+# Compare the results (compare_results_1.0.22.Rmd)
+
+```{r Compare results, child = 'compare_results_1.0.22.Rmd'}
+```
+
+###### END OF CODE (validate_qpNCA)

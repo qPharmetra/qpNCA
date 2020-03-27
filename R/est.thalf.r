@@ -5,7 +5,7 @@
 #' @param timevar variable name containing the sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param includeCmax include results of regression including Cmax in selection? (y/n)
-#' @param excl a variable name containing information about points to be excluded (these should have <excl>=1)
+#' @param exclvar a variable name containing information about points to be excluded (these should have <exclvar>=1)
 
 #' @return a dataset with estimates for each regression analysis in one observation. The following parameters are available:
 #' no.points = number of data points used in the regression analysis; \cr

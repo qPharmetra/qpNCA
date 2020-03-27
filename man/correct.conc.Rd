@@ -4,9 +4,20 @@
 \alias{correct.conc}
 \title{Corrects missing concentration at critical time points (e.g, predose, TAU, start and end of user selected AUC interval)}
 \usage{
-correct.conc(x, nomtimevar = "ntad", tau = NA, tstart = NA,
-  tend = NA, teval = NA, th = NA, reg = "SD", ss = "N",
-  route = "EV", method = 1)
+correct.conc(
+  x,
+  by = "subject",
+  nomtimevar = "ntad",
+  tau = NA,
+  tstart = NA,
+  tend = NA,
+  teval = NA,
+  th = NA,
+  reg = "SD",
+  ss = "N",
+  route = "EV",
+  method = 1
+)
 }
 \arguments{
 \item{x}{input dataset name input dataset name (contains all data, including LOQ (set conc to zero for these))}

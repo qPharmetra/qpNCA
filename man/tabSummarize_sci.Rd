@@ -4,11 +4,19 @@
 \alias{tabSummarize_sci}
 \title{Similar to tabSummarize from qpToolkit, but prints very small (<0.0001) or very large (>9999) numbers in scientific notation.}
 \usage{
-tabSummarize_sci(formula, data, nSignif = 3, extra.blank.line = TRUE,
-  ndigits.categorical = 1)
+tabSummarize_sci(
+  formula,
+  data,
+  nSignif = 3,
+  extra.blank.line = TRUE,
+  ndigits.categorical = 1
+)
 }
 \arguments{
 \item{na.rm}{}
+}
+\value{
+
 }
 \description{
 Similar to tabSummarize from qpToolkit, but prints very small (<0.0001) or very large (>9999) numbers in scientific notation.

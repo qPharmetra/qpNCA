@@ -5,8 +5,16 @@
 \title{Estimate lagging and leading time points and concentrations for each time point
 This function is used by correct.xx functions}
 \usage{
-lag.lead(x, nomtimevar1 = NA, depvar1 = NA, timevar1 = NA,
-  lagc = NA, lagt = NA, leadc = NA, leadt = NA)
+lag.lead(
+  x,
+  nomtimevar1 = NA,
+  depvar1 = NA,
+  timevar1 = NA,
+  lagc = NA,
+  lagt = NA,
+  leadc = NA,
+  leadt = NA
+)
 }
 \description{
 Estimate lagging and leading time points and concentrations for each time point

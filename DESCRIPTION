@@ -10,7 +10,7 @@ Encoding: UTF-8
 LazyData: true
 Suggests: 
     covr,
-    testthat
+    testthat (>= 2.1.0)
 Depends:
     R (>= 3.3.3)
 Imports:
@@ -21,7 +21,7 @@ Imports:
     tidyr (>= 0.8.2),
     gdata (>= 2.7.0),
     metrumrg(>= 5.55)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Remotes: 
     github::metrumresearchgroup/metrumrg,
     github::qPharmetra/qpToolkit

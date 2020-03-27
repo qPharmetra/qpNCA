@@ -4,8 +4,17 @@
 \alias{Listing.Sumstat.Conc}
 \title{Creates a table of individual concentrations table with summary statistics by time variable}
 \usage{
-Listing.Sumstat.Conc(ds, subjVar, timeVar, dvVar, blqVar, by, carryAlong,
-  nsig = 3, na.rm)
+Listing.Sumstat.Conc(
+  ds,
+  subjVar,
+  timeVar,
+  dvVar,
+  blqVar,
+  by,
+  carryAlong,
+  nsig = 3,
+  na.rm
+)
 }
 \arguments{
 \item{na.rm}{}

@@ -4,8 +4,15 @@
 \alias{nca.sumstat.conc}
 \title{Summarizes a vector concentration measurements for output to a report}
 \usage{
-nca.sumstat.conc(x, LOQ, ns = 3, bloqRule = "BLOQ=0", oddCode = Cs(M,
-  NS), bloqCode = "BLOQ", ...)
+nca.sumstat.conc(
+  x,
+  LOQ,
+  ns = 3,
+  bloqRule = "BLOQ=0",
+  oddCode = Cs(M, NS),
+  bloqCode = "BLOQ",
+  ...
+)
 }
 \arguments{
 \item{x}{character vector containing numeric values to be summarized}

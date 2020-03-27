@@ -4,8 +4,15 @@
 \alias{Sumstat.Param}
 \title{Creates summary statistics of concenctrations by time variable and grouping variable}
 \usage{
-Sumstat.Param(ds, subjVar, by = NULL, nsig = 3, vars_ignore = "",
-  vars_keep = "", ...)
+Sumstat.Param(
+  ds,
+  subjVar,
+  by = NULL,
+  nsig = 3,
+  vars_ignore = "",
+  vars_keep = "",
+  ...
+)
 }
 \arguments{
 \item{ds}{Dataframe of NCA results}

@@ -4,8 +4,7 @@
 \alias{est.thalf}
 \title{Calculates lambda_z and thalf for each PK curve (defined using group_by)}
 \usage{
-est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y",
-  exclvar = NA)
+est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y", exclvar = NA)
 }
 \arguments{
 \item{x}{a dataset (not needed to be corrected time and conc)}
@@ -16,7 +15,7 @@ est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y",
 
 \item{includeCmax}{include results of regression including Cmax in selection? (y/n)}
 
-\item{excl}{a variable name containing information about points to be excluded (these should have <excl>=1)}
+\item{exclvar}{a variable name containing information about points to be excluded (these should have <exclvar>=1)}
 }
 \value{
 a dataset with estimates for each regression analysis in one observation. The following parameters are available:

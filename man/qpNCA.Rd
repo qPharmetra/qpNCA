@@ -4,12 +4,33 @@
 \alias{qpNCA}
 \title{A wrapper for the individual qpNCA functions}
 \usage{
-qpNCA(x, by = c("subject"), nomtimevar = "ntad", timevar = "time",
-  depvar = "dv", bloqvar = "bloq", loqvar = "loq", loqrule = 1,
-  includeCmax = "Y", excl = NA, plotdir = NA, pdfdir = NA,
-  timelab = "timevar", deplab = "depvar", tau = NA, tstart = NA,
-  tend = NA, teval = NA, cov = NA, dose = NA, factor = NA,
-  reg = "SD", ss = "N", route = "EV", method = 1)
+qpNCA(
+  x,
+  by = c("subject"),
+  nomtimevar = "ntad",
+  timevar = "time",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 1,
+  includeCmax = "Y",
+  exclvar = NA,
+  plotdir = NA,
+  pdfdir = NA,
+  timelab = "timevar",
+  deplab = "depvar",
+  tau = NA,
+  tstart = NA,
+  tend = NA,
+  teval = NA,
+  covfile = NA,
+  dose = NA,
+  factor = NA,
+  reg = "SD",
+  ss = "N",
+  route = "EV",
+  method = 1
+)
 }
 \arguments{
 \item{x}{input dataset name (if called within dplyr: .)}
@@ -30,7 +51,7 @@ qpNCA(x, by = c("subject"), nomtimevar = "ntad", timevar = "time",
 
 \item{includeCmax}{include results of regression including Cmax in selection? (y/n)}
 
-\item{excl}{variable name containing information about points to be excluded (these should have <excl>=1)}
+\item{exclvar}{variable name containing information about points to be excluded (these should have <exclvar>=1)}
 
 \item{plotdir}{folder where regression plots (.PNG) will be saved; leave empty for standard output}
 
@@ -41,8 +62,6 @@ qpNCA(x, by = c("subject"), nomtimevar = "ntad", timevar = "time",
 \item{tend}{end time of partial AUC, if not requested, leave empty}
 
 \item{teval}{user selected AUC interval, if not requested, leave empty}
-
-\item{cov}{covariates dataset}
 
 \item{dose}{variable containing the dose amount}
 
@@ -62,6 +81,8 @@ qpNCA(x, by = c("subject"), nomtimevar = "ntad", timevar = "time",
 \item{X-axis}{label (default: "timevar") in plots}
 
 \item{Y-axis}{label (default: "depvar") in plots}
+
+\item{cov}{covariates dataset}
 }
 \value{
 covariates : contains covariates selected with the 'cov' argument
@@ -82,4 +103,7 @@ This wrapper function consecutively executes the following qpNCA functions:
 6. tab.corr\cr
 7. calc.par\cr
 8. calc.par.th\cr
+}
+\details{
+
 }

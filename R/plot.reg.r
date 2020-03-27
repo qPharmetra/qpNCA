@@ -11,7 +11,7 @@
 #' - dataset containing results of the half-life estimation
 #'
 #' USAGE:
-#' plot.reg(x,by=c("id","period"),th=th,bloqvar="bloq",timevar="tad",depvar="dv",excl="excl_th",savedir=)
+#' plot.reg(x,by=c("id","period"),th=th,bloqvar="bloq",timevar="tad",depvar="dv",exclvar="excl_th",savedir=)
 #'
 #' @param x input dataset name (if called within dplyr: .)
 #' @param by by-variable(s), e.g. c("subject","day")
@@ -21,7 +21,7 @@
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param timelab X-axis label (default: "timevar")
 #' @param deplab Y-axis label (default: "depvar")
-#' @param excl variable name containing information about points to be excluded (these should have <excl>=1)
+#' @param exclvar variable name containing information about points to be excluded (these should have <exclvar>=1)
 #' @param savedir folder where individual plot files will be saved
 #'
 #' @return If the attribute 'savedir'is empty, plots will be generated in standard output, otherwise plots will be saved as
@@ -29,19 +29,19 @@
 #' PLOT.REG: Plot regression curves
 #'
 #' @export
-plot.reg <- function(x,by=c("id"),th=NA,bloqvar="bloq",timevar="tad",depvar="dv",timelab="timevar",deplab="depvar",excl=NA,plotdir=NA) {
+plot.reg <- function(x,by=c("id"),th=NA,bloqvar="bloq",timevar="tad",depvar="dv",timelab="timevar",deplab="depvar",exclvar=NA,plotdir=NA) {
 
   data_in = x %>% mutate(timevar=x[[timevar]],
                          depvar=x[[depvar]],
                          bloqvar=x[[bloqvar]],
-                         exclvar=x[[exclvar]]) 
-  
- 
+                         exclvar=x[[exclvar]])
+
+
   if (!is.na(exclvar) & !(exclvar %in% names(x))) stop(paste("Exclusion variable",exclvar,"does not exist"), call.=F)
-  
+
   data_in = data_in %>% mutate(excl=0)
   if(!is.na(exclvar)) { data_in = data_in %>% mutate(excl=exclvar) }  # if exclvar exists, set excl to exclvar, else set to 0
-  
+
   plot = left_join(data_in,th,by=by) %>%
     filter(bloqvar==0) %>%
     mutate(start_conc=exp(log(intercept)-lambda_z*start_th), # intercept was already exponentiated in calc_thalf

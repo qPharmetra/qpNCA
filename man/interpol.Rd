@@ -5,8 +5,7 @@
 \title{Interpolate concentrations
 This function is used by correct.xx functions.}
 \usage{
-interpol(c1 = NA, c2 = NA, t1 = NA, t2 = NA, t3 = NA,
-  method = 1)
+interpol(c1 = NA, c2 = NA, t1 = NA, t2 = NA, t3 = NA, method = 1)
 }
 \description{
 Interpolate concentrations

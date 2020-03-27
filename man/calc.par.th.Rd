@@ -4,23 +4,32 @@
 \alias{calc.par.th}
 \title{Calculates PK parameters that need lambda_z}
 \usage{
-calc.par.th(x = par, th = th, cov = cov, dosevar = "dose",
-  factor = 1, reg = "SD", ss = "N", route = "EV")
+calc.par.th(
+  x = par,
+  by = "subject",
+  th = th,
+  covfile = covfile,
+  dose = "dose",
+  factor = 1,
+  reg = "SD",
+  ss = "N",
+  route = "EV"
+)
 }
 \arguments{
 \item{x}{result parameter dataset from calc.par}
 
 \item{th}{result dataset from est.thalf}
 
-\item{cov}{covariates dataset (containing at least dose for CL calculation)}
-
-\item{dosevar}{variable containing the dose amount}
-
 \item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)}
 
 \item{reg}{regimen, "sd" or "md"}
 
 \item{ss}{is steady state reached (y/n)}
+
+\item{cov}{covariates dataset (containing at least dose for CL calculation)}
+
+\item{dosevar}{variable containing the dose amount}
 }
 \value{
 A dataset with estimates for the following parameters, one observation per subject: \cr
@@ -41,7 +50,7 @@ A dataset with estimates for the following parameters, one observation per subje
   vss.pred: Steady-state volume based on cl.pred and mrt.pred \cr
   regimen (reg) \cr
   steady state reached Y/N? (ss) \cr
-NOTE: ctmax must be merged separately as those were calculated from uncorrected data \cr
+NOTE: ctmax must be merged separately as those were calculated from uncorrected data.
 }
 \description{
 Calculates PK parameters that need lambda_z

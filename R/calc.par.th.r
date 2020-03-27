@@ -31,10 +31,17 @@
 #' @export
 calc.par.th <- function(x=par,by="subject",th=th,covfile=covfile,dose="dose",factor=1, reg="SD", ss="N", route="EV") {
 
-    covfile=get(covfile) # to convert the covfile string to the real data frame
-  
+    if(!missing(covfile)){
+      if(is.character(covfile)){
+        if(file.exists(covfile)){
+          covfile <- read.csv(covfile)
+        }else{
+          covfile=get(covfile) # to convert the covfile string to the real data frame
+        }
+      }
+    }
                    result=left_join(x,th,by=by) %>%
-                      left_join(covfile,by=by) %>%  
+                      left_join(covfile,by=by) %>%
                       mutate(dosevar=dose,
                              factor=ifelse(is.na(factor),1,factor),
                              reg=tolower(reg),
@@ -65,41 +72,41 @@ calc.par.th <- function(x=par,by="subject",th=th,covfile=covfile,dose="dose",fac
                              pctback.pred=area.back.extr/aucinf.pred*100
                       ) %>%
                       select(-dosevar)
-             
+
                if (tolower(route)=="ivb"|tolower(route)=="ivi") {    # rename CL and V after IVB/IVI
-                 
-                 result = result %>% mutate(cl.obs=cl.f.obs, cl.pred=cl.f.pred, 
+
+                 result = result %>% mutate(cl.obs=cl.f.obs, cl.pred=cl.f.pred,
                                             vz.obs=vz.f.obs, vz.pred=vz.f.pred) %>%
                                      mutate(cl.f.obs=NA, cl.f.pred=NA,
-                                            vz.f.obs=NA, vz.f.pred=NA) 
-                 
+                                            vz.f.obs=NA, vz.f.pred=NA)
+
                }
-               
+
                else {
-                 
-                 result = result %>% mutate(cl.obs=NA, cl.pred=NA, 
+
+                 result = result %>% mutate(cl.obs=NA, cl.pred=NA,
                                             vz.obs=NA, vz.pred=NA)
-                
-               } 
+
+               }
 
                if (tolower(ss)=="y") {          #rename CL at steady state
-                 
+
                  if (tolower(route)=="ivb"|tolower(route)=="ivi") {
                  result = result %>% mutate(cl.ss=cl.obs , cl.obs=NA, cl.pred=NA,cl.f.ss=NA)
 
                  }
-                 
+
                  else {
-                 
-                 result = result %>% mutate(cl.f.ss=cl.f.obs, cl.f.obs=NA,cl.f.pred=NA,cl.ss=NA) 
- 
+
+                 result = result %>% mutate(cl.f.ss=cl.f.obs, cl.f.obs=NA,cl.f.pred=NA,cl.ss=NA)
+
                  }
                }
-               
+
                else {
-                 
+
               result = result %>% mutate(cl.f.ss=NA, cl.ss=NA)
-                 
+
                }
                return(result)
 

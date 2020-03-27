@@ -4,9 +4,14 @@
 \alias{nca.summary.table}
 \title{Summarize NCA parameters table}
 \usage{
-nca.summary.table(ds, subjVar = "subjid", carryAlong = NULL,
-  omits = NULL, nsig = rep(3, ncol(ds) - 1 - length(carryAlong)),
-  LOQ = 1e-04)
+nca.summary.table(
+  ds,
+  subjVar = "subjid",
+  carryAlong = NULL,
+  omits = NULL,
+  nsig = rep(3, ncol(ds) - 1 - length(carryAlong)),
+  LOQ = 1e-04
+)
 }
 \arguments{
 \item{ds}{formatted nca parameter table (output from nca.format.table)}
@@ -20,6 +25,9 @@ nca.summary.table(ds, subjVar = "subjid", carryAlong = NULL,
 \item{nsig}{vector of default number of significant figures to report parameter values}
 
 \item{LOQ}{limit of quantitation for concentration variables}
+}
+\value{
+
 }
 \description{
 Summarize NCA parameters table

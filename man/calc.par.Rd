@@ -4,8 +4,15 @@
 \alias{calc.par}
 \title{Calculates AUCs, tlast, clast.obs for each PK curve (define using group_by)}
 \usage{
-calc.par(x, tau = NA, tstart = NA, tend = NA, teval = NA,
-  route = "EV", method = 1)
+calc.par(
+  x,
+  tau = NA,
+  tstart = NA,
+  tend = NA,
+  teval = NA,
+  route = "EV",
+  method = 1
+)
 }
 \arguments{
 \item{x}{contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc}

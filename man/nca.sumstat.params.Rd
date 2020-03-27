@@ -20,6 +20,9 @@ nca.sumstat.params(x, ns = 3, na.rm = T, ...)
 
 \item{bloqCode}{= alphabetic code for BLOQ values}
 }
+\value{
+
+}
 \description{
 Summarizes a vector of PK Parameters for output to a report
 For parameter values that have 0's reported, e.g. AUC when all concentratinos are 0, assign NC

@@ -4,8 +4,7 @@
 \alias{Listing.Sumstat.Param}
 \title{Creates a table of individual parameterss table with summary statistics}
 \usage{
-Listing.Sumstat.Param(ds, subjVar, by, nsig, vars_ignore = "",
-  keep = "", ...)
+Listing.Sumstat.Param(ds, subjVar, by, nsig, vars_ignore = "", keep = "", ...)
 }
 \arguments{
 \item{ds}{Dataframe of NCA results}

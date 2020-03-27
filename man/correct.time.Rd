@@ -4,9 +4,20 @@
 \alias{correct.time}
 \title{Corrects concentrations at critical, but deviating time points (e.g, predose, TAU, start and end of user selected AUC interval), and adds missing records at these critical time points.}
 \usage{
-correct.time(x, nomtimevar = "ntad", timevar = "time", depvar = "dv",
-  tau = NA, tstart = NA, tend = NA, teval = NA, th = NA,
-  reg = "SD", method = 1)
+correct.time(
+  x,
+  by = "subject",
+  nomtimevar = "ntad",
+  timevar = "time",
+  depvar = "dv",
+  tau = NA,
+  tstart = NA,
+  tend = NA,
+  teval = NA,
+  th = NA,
+  reg = "SD",
+  method = 1
+)
 }
 \arguments{
 \item{x}{input dataset name (contains all data, including LOQ (set conc to zero for these))}

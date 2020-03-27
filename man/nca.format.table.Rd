@@ -4,12 +4,19 @@
 \alias{nca.format.table}
 \title{Format NCA parameters table}
 \usage{
-nca.format.table(nca, carryAlong = NULL, parms = Cs(Cmax, Tmax, AUCall,
-  AUCINF.pred, Cl.F.pred, HL.Lambda.z), ns = rep(3, length(parms)),
-  uAdjust = rep(1, length(parms)))
+nca.format.table(
+  nca,
+  carryAlong = NULL,
+  parms = Cs(Cmax, Tmax, AUCall, AUCINF.pred, Cl.F.pred, HL.Lambda.z),
+  ns = rep(3, length(parms)),
+  uAdjust = rep(1, length(parms))
+)
 }
 \arguments{
 \item{uAdjust}{}
+}
+\value{
+
 }
 \description{
 Format NCA parameters table

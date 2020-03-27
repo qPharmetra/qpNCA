@@ -1,0 +1,133 @@
+---
+title: "Project: qpNCA"
+subtitle: "Purpose: run qpNCA on test curves"
+author: "Jan Huisman"
+date: "March, 2020"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+---
+
+# Load the qpNCA version to be validated (1.0.12)
+
+```{r}
+
+source("./qPNCA_1.0.22.r")
+
+```
+
+## Prepare the data
+
+```{r}
+
+curves_POSD = bind_rows(`START_POSD`,`SDT_1`,`SDT_2`,`SDT_3`,`SDC_1`,`SDC_2`,`SDC_3`) %>% mutate(dv=as.numeric(dv))
+cov_POSD    = curves_POSD %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose)
+
+curves_IVSD = bind_rows(`START_IVSD`,`SDC_4a`,`SDC_4b`,`SDC_4c`,`SDC_4d`) %>% mutate(dv=as.numeric(dv))
+cov_IVSD    = curves_IVSD %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose)
+
+curves_POMDnoss = bind_rows(`START_POMD`,`MDT_1`,`MDT_2`,`MDT_3`,`MDT_3a`,`MDC_1_noss`,`MDC_2_noss`,`MDC_3_noss`) %>% mutate(dv=as.numeric(dv))
+cov_POMDnoss    = curves_POMDnoss %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose)
+
+curves_POMDss = bind_rows(`MDC_1_ss`,`MDC_2_ss`,`MDC_3_ss`) %>% mutate(dv=as.numeric(dv))
+cov_POMDss    = curves_POMDss %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose)
+
+curves_IVMD = bind_rows(`MDC_4a`,`MDC_4b`,`MDC_4c`,`MDC_4d`) %>% mutate(dv=as.numeric(dv))
+cov_IVMD    = curves_IVMD %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose)
+
+
+```
+
+
+
+## perform NCA on PO, SD curves
+```{r, eval=T}
+
+curves_POSD = curves_POSD %>%
+              mutate(loq=as.numeric(loq),
+                     bloq=ifelse(is.na(loq),0,1),
+                     excl_th=0
+                     )
+
+POSD= qPNCA(curves_POSD, by=c("id"), nomtimevar="ntad", timevar="tad",depvar="dv",
+                  bloqvar="bloq",loqvar="loq",loqrule=2,
+                  includeCmax="Y",exclvar="excl_th",
+                  plotdir="plotjes",pdfdir=,timelab="Time (h)", deplab="Concentration (ng/mL)",
+                  tau=24,tstart=4,tend=12,teval=18,covfile="cov_POSD",dose="dose",factor=1000,reg="SD",ss="N",route="EV",method=1)
+
+
+```
+
+## perform NCA on IV, SD curves
+```{r, eval=T}
+
+curves_IVSD = curves_IVSD %>%
+              mutate(loq=as.numeric(loq),
+                     bloq=ifelse(is.na(loq),0,1),
+                     excl_th=0
+                     )
+
+IVSD= qPNCA(curves_IVSD, by=c("id"), nomtimevar="ntad", timevar="tad",depvar="dv",
+                  bloqvar="bloq",loqvar="loq",loqrule=2,
+                  includeCmax="Y",excl="excl_th",
+                  plotdir="plotjes",pdfdir=,timelab="Time (h)", deplab="Concentration (ng/mL)",
+                  tau=24,tstart=4,tend=12,teval=18,covfile="cov_IVSD",dose="dose",factor=1000,reg="SD",ss="N",route="IVB",method=1)
+
+```
+
+## perform NCA on PO, MD, no steady state curves
+```{r, eval=T}
+
+curves_POMDnoss = curves_POMDnoss %>%
+              mutate(loq=as.numeric(loq),
+                     bloq=ifelse(is.na(loq),0,1),
+                     excl_th=0
+                     )
+
+POMDnoss= qPNCA(curves_POMDnoss, by=c("id"), nomtimevar="ntad", timevar="tad",depvar="dv",
+                  bloqvar="bloq",loqvar="loq",loqrule=2,
+                  includeCmax="Y",excl="excl_th",
+                  plotdir="plotjes",pdfdir=,timelab="Time (h)", deplab="Concentration (ng/mL)",
+                  tau=24,tstart=4,tend=12,teval=18,covfile="cov_POMDnoss",dose="dose",factor=1000,reg="MD",ss="N",route="EV",method=1)
+
+```
+
+## perform NCA on PO, MD, steady state curves
+```{r, eval=T}
+
+curves_POMDss = curves_POMDss %>%
+              mutate(loq=as.numeric(loq),
+                     bloq=ifelse(is.na(loq),0,1),
+                     excl_th=0
+                     )
+
+POMDss= qPNCA(curves_POMDss, by=c("id"), nomtimevar="ntad", timevar="tad",depvar="dv",
+                  bloqvar="bloq",loqvar="loq",loqrule=2,
+                  includeCmax="Y",excl="excl_th",
+                  plotdir="plotjes",pdfdir=,timelab="Time (h)", deplab="Concentration (ng/mL)",
+                  tau=24,tstart=4,tend=12,teval=18,covfile="cov_POMDss",dose="dose",factor=1000,reg="MD",ss="Y",route="EV",method=1)
+
+```
+
+## perform NCA on IV, MD curves
+
+```{r, eval=T}
+
+curves_IVMD = curves_IVMD %>%
+              mutate(loq=as.numeric(loq),
+                     bloq=ifelse(is.na(loq),0,1),
+                     excl_th=0
+                     )
+
+IVMD= qPNCA(curves_IVMD, by=c("id"), nomtimevar="ntad", timevar="tad",depvar="dv",
+                  bloqvar="bloq",loqvar="loq",loqrule=2,
+                  includeCmax="Y",excl="excl_th",
+                  plotdir="plotjes",pdfdir=,timelab="Time (h)", deplab="Concentration (ng/mL)",
+                  tau=24,tstart=4,tend=12,teval=18,covfile="cov_POMDnoss",dose="dose",factor=1000,reg="MD",ss="N",route="IVB",method=1)
+
+```
+
+
+
+###### END OF CODE (run_qpNCA)

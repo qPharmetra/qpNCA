@@ -4,8 +4,7 @@
 \alias{Listing.Conc}
 \title{Wide Concentrations vs. Nominal Time Tables for NCA Report}
 \usage{
-Listing.Conc(ds, subjVar, timeVar, dvVar, blqVar, carryAlong = NULL,
-  nsig = 3)
+Listing.Conc(ds, subjVar, timeVar, dvVar, blqVar, carryAlong = NULL, nsig = 3)
 }
 \description{
 Wide Concentrations vs. Nominal Time Tables for NCA Report

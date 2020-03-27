@@ -14,7 +14,7 @@
 #' USAGE:
 #'
 #' qpNCA(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="dv",
-#'       includeCmax="Y",excl="excl",savedir=NA,
+#'       includeCmax="Y",exclvar="exclvar",savedir=NA,
 #'       bloqvar="bloq",loqvar="loq",loqrule=1,
 #'       tau=NA,tstart=NA,tend=NA,teval=NA,cov=NA,dose=NA,factor=NA,reg="SD",ss="N",route="PO",method=1) {
 #'
@@ -29,7 +29,7 @@
 #' @param loqvar variable name containing the LOQ value
 #' @param loqrule rule number to be applied to the LOQ values in the curve
 #' @param includeCmax include results of regression including Cmax in selection? (y/n)
-#' @param excl variable name containing information about points to be excluded (these should have <excl>=1)
+#' @param exclvar variable name containing information about points to be excluded (these should have <exclvar>=1)
 #' @param plotdir folder where regression plots (.PNG) will be saved; leave empty for standard output
 #' @param tau dosing interval (for multiple dosing), if single dose, leave empty
 #' @param tstart start time of partial AUC (start>0), if not requested, leave empty
@@ -58,57 +58,62 @@ qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="
                   bloqvar="bloq",loqvar="loq",loqrule=1,
                   includeCmax="Y",exclvar=NA,plotdir=NA,pdfdir=NA,timelab="timevar",deplab="depvar",
                   tau=NA,tstart=NA,tend=NA,teval=NA,covfile=NA,dose=NA,factor=NA,reg="SD",ss="N",route="EV",method=1) {
-  
+
   # 0. Check input
-  
+
   cat("\n")
   cat("Checking function arguments...")
-  
+
   check.input(x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,bloqvar=bloqvar, loqvar=loqvar, loqrule=loqrule,
              includeCmax=includeCmax, exclvar=exclvar, plotdir=plotdir, pdfdir=pdfdir, timelab=timelab, deplab=deplab,
              tau=tau, tstart=tstart, tend=tend, teval=teval, covfile=covfile, dose=dose, factor=factor, reg=reg, ss=ss,
              route=route, method=method)
-  
+
   # 1. Apply LOQ rules
-  
+
   cat("Applying LOQ rules...\n")
-  
+
   loqed = x %>%
     group_by_at(by) %>%
     do(correct.loq(.,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,bloqvar=bloqvar,loqvar=loqvar,loqrule=loqrule)) %>%
     ungroup
-  
+
     # 2. estimate thalf ON UNCORRECTED DATA
-  
+
   cat("Performing Thalf estimation...\n")
-  
-  th = loqed %>% 
+
+  th = loqed %>%
     group_by_at(by) %>%
-    do(est.thalf(.,timevar=timevar,depvar=depvar,includeCmax=includeCmax,excl=excl)) %>%
+    do(est.thalf(.,timevar=timevar,depvar=depvar,includeCmax=includeCmax,exclvar=exclvar)) %>%
     ungroup
 
   # 2a.
-  
-  if (is.na(plotdir)) cat("Creating regression plots in standard output...\n")
-  else cat(paste("Writing regression plots to folder",plotdir,"...\n"))
-  
-  plot.reg(loqed,by=by,th=th,bloqvar=bloqvar,timevar=timevar,depvar=depvar,exclvar=exclvar,plotdir=plotdir,timelab=timelab,deplab=deplab)
-  
+
+  if(is.null(plotdir)){
+    cat('Skipping regression plots')
+  }else{
+    if (is.na(plotdir)){
+      cat("Creating regression plots in standard output...\n")
+    }else{
+      cat(paste("Writing regression plots to folder",plotdir,"...\n"))
+    }
+    plot.reg(loqed,by=by,th=th,bloqvar=bloqvar,timevar=timevar,depvar=depvar,exclvar=exclvar,plotdir=plotdir,timelab=timelab,deplab=deplab)
+  }
   cat("\n")
-  
+
   # 3. find Cmax and tmax ON UNCORRECTED DATA
-  
+
   cat("Calculating Cmax/Tmax...\n")
-  
-  ctmax = loqed %>% 
+
+  ctmax = loqed %>%
     group_by_at(by) %>%
     do(calc.ctmax(.,timevar=timevar,depvar=depvar)) %>%
     ungroup
 
   # 4. and 5. create dataset with corrected time deviations
-  
+
   cat("Applying time deviation corrections and missing concentration imputations...\n")
-  
+
   tc = loqed %>%
     group_by_at(by) %>%
     do(correct.time(.,by=by,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,
@@ -116,45 +121,53 @@ qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="
     do(correct.conc(.,by=by,nomtimevar=nomtimevar,
                     tau=tau,tstart=tstart,tend=tend,teval=teval,th=,reg=reg,ss=ss,route=route,method=method)) %>%
     ungroup
-  
+
   cat("\n")
-  
+
   # 6. create table with corrections
-  
+
   cat("Creating correction tables...\n")
-  
-  corrtab = tc %>% tab.corr(.,nomtimevar=nomtimevar,by=by) 
-  
+
+  corrtab = tc %>% tab.corr(.,nomtimevar=nomtimevar,by=by)
+
   # 7. Calculate PK parameters NOT based on lambda_z ON CORRECTED DATA
-  
+
   cat("Calculating parameters that do not need lambda_z...\n")
-  
-  par = tc %>% 
+
+  par = tc %>%
     group_by_at(by) %>%
     do(calc.par(.,tau=tau,tstart=tstart,tend=tend,teval=teval,route=route,method=method)) %>%
     ungroup
 
   # 8. Calculate PK parameters that need lambda_z
-  
+
   cat("Calculating parameters that DO need lambda_z...\n")
-  
+
   par_all = calc.par.th(x=par,by=by,th=th,covfile=covfile,dose=dose,reg=reg,ss=ss,factor=factor,route=route)
-  
+
   cat("Combining all parameters...\n")
-  
+
   par_all = left_join(ctmax,par_all,by=by)
-  
+
   # 9. create summary PDFs
-  
+
   if (is.na(pdfdir)) cat("No PDF summaries created\n")
   else cat(paste("Writing summary PDF documents to folder",pdfdir,"...\n"))
-  
+
   nca.sum(par_all,corrfile=corrtab,by=by,plotdir=plotdir,pdfdir=pdfdir)
-  
+
   cat("\nWriting results...\n")
-  
-  covfile=get(covfile) # to convert the cov string to the real data frame
-  
+
+  if(!missing(covfile)){
+    if(is.character(covfile)){
+      if(file.exists(covfile)){
+        covfile <- read.csv(covfile)
+      }else{
+        covfile=get(covfile) # to convert the covfile string to the real data frame
+      }
+    }
+  }
+
   result=list(covariates=covfile,
               half_life=th,
               ct_corr=tc,
@@ -162,7 +175,146 @@ qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="
               pkpar=par_all)
 
   cat("\nDone!\n")
-  
+
   return(result)
 
 }
+
+# CHECK.INPUT: check arguments of QPNCA package
+#
+# Input dataset:
+#
+# none
+#
+# USAGE:
+#
+# not used stand alone, only used within qPNCA function
+#
+# check.input(x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,bloqvar=bloqvar, loqvar=loqvar, loqrule=loqrule,
+#             includeCmax=includeCmax, exclvar=exclvar, plotdir=plotdir, pdfdir=pdfdir, timelab=timelab, deplab=deplab,
+#             tau=tau, tstart=tstart, tend=tend, teval=teval, covfile=covfile, dose=dose, factor=factor, reg=reg, ss=ss,
+#             route=route, method=method)
+#
+# ARGUMENTS:
+#
+# see qPNCA function description
+#
+# METHOD:
+#
+# The function checks all relevant qPNCA function arguments on validity and/or presence in the input dataset
+# It will abort execution if invalid argument values are entered or unknown objects are requested
+#
+# OUTPUT:
+#
+# The function will list the results of the check in standard output
+#
+
+check.input <- function(x, by=NA, nomtimevar=NA, timevar=NA, depvar=NA,
+                        bloqvar=NA, loqvar=NA, loqrule=NA,
+                        includeCmax=NA, exclvar=NA, plotdir=NA, pdfdir=NA, timelab=NA, deplab=NA,
+                        tau=NA, tstart=NA, tend=NA, teval=NA, covfile=NA, dose=NA, factor=NA, reg=NA, ss=NA,
+                        route=NA, method=NA) {
+
+  chkfile <- data.frame(Errors_Warnings="delete",
+                        stringsAsFactors = F
+  )
+
+  # 1 by variables
+
+  if ( is.na(by[1]) )
+    chkfile=rbind(chkfile,"Error: By variable cannot be empty")
+  if ( !is.na(by[1]) & length(setdiff(by,names(x)))>0 )
+    chkfile=rbind(chkfile,paste("Error: By variable(s) not in input data:",paste(setdiff(by,names(x)), collapse=' ')))
+
+  # 2 other mandatory input dataset columns (nomtimevar,timevar,depvar,bloqvar,loqvar)
+
+  checknames=c("nomtimevar","timevar","depvar","bloqvar","loqvar")
+  checkvalues=c(nomtimevar,timevar,depvar,bloqvar,loqvar)
+
+  misstext=paste(checknames[is.na(checkvalues)],collapse=", ")
+
+  if (length(checknames[is.na(checkvalues)])==1)
+    chkfile=rbind(chkfile,paste("Error: Argument",misstext,"is mandatory"))
+  if (length(checknames[is.na(checkvalues)])>1)
+    chkfile=rbind(chkfile,paste("Error: Arguments",misstext,"are mandatory"))
+
+  if ( !(all(checkvalues[!is.na(checkvalues)]%in%names(x))) )
+    chkfile=rbind(chkfile,paste("Error: These column(s) are not in input data:",paste(setdiff(checkvalues[!is.na(checkvalues)],names(x)), collapse=' ')))
+
+  # 3 check optional exclusion variable
+
+  if ( !is.na(exclvar) & !(exclvar%in%names(x)))
+    chkfile=rbind(chkfile,paste("Error: Exclusion variable (", exclvar, ") not in input data"))
+
+  # 4 valid LOQ rule number?
+
+  if ( !(loqrule%in%c(1,2,3,4)) )
+    chkfile=rbind(chkfile,"Error: Loqrule argument should be 1, 2, 3 or 4")
+
+  # 5 check optional includeCmax argument
+
+  if ( !is.na(includeCmax) & !(includeCmax%in%c("Y","y","N","n")))
+    chkfile=rbind(chkfile,"Error: IncludeCmax argument can only be Y (default) or N")
+
+  # 6 check covariate variable
+
+  if (!(missing(covfile))) {
+    if(is.character(covfile)){
+      if (!exists(covfile)) {
+        chkfile=rbind(chkfile,paste("Error: Covariate dataframe",covfile,"does not exist"))
+      } else {
+        covfile=get(covfile)  # to convert the cov string to the real data frame
+      }
+    }
+    if (!(dose %in% names(covfile))){
+      chkfile=rbind(chkfile,paste("Error: Dose variable (",dose,") not in covariate dataframe"))
+    }
+  } else {
+    chkfile=rbind(chkfile,paste("Error: Argument cov is mandatory"))
+  }
+
+  # 7 check factor argument
+
+  if (is.na(factor))
+    chkfile=rbind(chkfile,"Warning: Factor argument is empty, assuming a value of 1")
+
+  # 8 check regimen argument
+
+  if ( !(reg%in%c("sd","SD","md","MD")) )
+    chkfile=rbind(chkfile,"Error: Regimen argument should be SD or MD")
+
+  # 9 check steady state argument
+
+  if ( !(ss%in%c("y","Y","n","N")) )
+    chkfile=rbind(chkfile,"Error: Steady state argument should be Y or N")
+
+  # 9a check if tau is defined when at steady state (ss="Y"). Warn user for this.
+
+  if ( ss%in%c("y","Y") & is.na(tau) )
+    chkfile=rbind(chkfile,"Warning: Tau not defined while at steady state, no clearances or volumes will be calculated")
+
+  # 10 check route argument
+
+  if ( !(route%in%c("ev","EV","ivb","IVB","ivi","IVI")) )
+    chkfile=rbind(chkfile,"Error: Route argument should be EV, IVB or IVI")
+
+  # 11 check method argument
+
+  if ( !(method%in%c(1,2,3)) )
+    chkfile=rbind(chkfile,"Error: Method argument should be 1, 2 or 3")
+
+  chkfile = chkfile %>% filter(Errors_Warnings!="delete")
+
+  if (nrow(chkfile)>0) {
+
+    print(kable(chkfile))
+    cat("\n")
+    if (any(grepl("Error",chkfile$Errors_Warnings))) stop("Execution of qPNCA aborted due to errors", call.= F)
+
+  }
+
+  else cat("all OK!\n")
+
+}
+
+

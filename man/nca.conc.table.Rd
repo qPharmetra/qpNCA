@@ -4,9 +4,18 @@
 \alias{nca.conc.table}
 \title{Format raw individual concentrations table for report}
 \usage{
-nca.conc.table(obs, LOQ = 1e-04, sumVar = "conc", subjVar = "subjid",
-  timeVar = "nom.time", omits = NULL, times = NULL,
-  carryAlong = NULL, nsig = 3, bloqCode = "BLOQ")
+nca.conc.table(
+  obs,
+  LOQ = 1e-04,
+  sumVar = "conc",
+  subjVar = "subjid",
+  timeVar = "nom.time",
+  omits = NULL,
+  times = NULL,
+  carryAlong = NULL,
+  nsig = 3,
+  bloqCode = "BLOQ"
+)
 }
 \arguments{
 \item{obs}{dataset}

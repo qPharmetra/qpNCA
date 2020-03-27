@@ -5,9 +5,18 @@
 \title{A log-linear plot will be made for each curve. If elimination half-life was estimated for that curve,
 the following will be indicated in the plot:}
 \usage{
-\method{plot}{reg}(x, by = c("id"), th = NA, bloqvar = "bloq",
-  timevar = "tad", depvar = "dv", timelab = "timevar",
-  deplab = "depvar", excl = NA, plotdir = NA)
+\method{plot}{reg}(
+  x,
+  by = c("id"),
+  th = NA,
+  bloqvar = "bloq",
+  timevar = "tad",
+  depvar = "dv",
+  timelab = "timevar",
+  deplab = "depvar",
+  exclvar = NA,
+  plotdir = NA
+)
 }
 \arguments{
 \item{x}{input dataset name (if called within dplyr: .)}
@@ -26,7 +35,7 @@ the following will be indicated in the plot:}
 
 \item{deplab}{Y-axis label (default: "depvar")}
 
-\item{excl}{variable name containing information about points to be excluded (these should have <excl>=1)}
+\item{exclvar}{variable name containing information about points to be excluded (these should have <exclvar>=1)}
 
 \item{savedir}{folder where individual plot files will be saved}
 }
@@ -47,5 +56,5 @@ Input dataset:
 - dataset containing results of the half-life estimation
 
 USAGE:
-plot.reg(x,by=c("id","period"),th=th,bloqvar="bloq",timevar="tad",depvar="dv",excl="excl_th",savedir=)
+plot.reg(x,by=c("id","period"),th=th,bloqvar="bloq",timevar="tad",depvar="dv",exclvar="excl_th",savedir=)
 }

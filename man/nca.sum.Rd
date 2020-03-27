@@ -4,11 +4,13 @@
 \alias{nca.sum}
 \title{Create summarising PDF for each curve}
 \usage{
-nca.sum(x, corrfile = corrtab, by = c("subject"), plotdir = NA,
-  pdfdir = NA)
+nca.sum(x, corrfile = corrtab, by = c("subject"), plotdir = NA, pdfdir = NA)
 }
 \arguments{
 \item{pdfdir}{}
+}
+\value{
+
 }
 \description{
 Create summarising PDF for each curve
