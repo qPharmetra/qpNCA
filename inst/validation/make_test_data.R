@@ -3,8 +3,11 @@ library(dplyr)
 library(magrittr)
 library(csv)
 library(tidyr)
-sheets=excel_sheets('input_rules_1.0.12.xlsx')
-sheet_list_org=lapply(sheets, function(x) {read_excel('input_rules_1.0.12.xlsx',sheet=x)})
+library(wrangle)
+prev_sheets=excel_sheets('input_rules_1.0.12.xlsx')
+sheets=excel_sheets('input_rules_1.0.22.xlsx')
+stopifnot(setequal(sheets, prev_sheets))
+sheet_list_org=lapply(sheets, function(x) {read_excel('input_rules_1.0.22.xlsx',sheet=x)})
 names(sheet_list_org)=sheets
 list2env(sheet_list_org, envir=.GlobalEnv)
 render <- function(..., path)bind_rows(...) %>%
@@ -19,11 +22,45 @@ render(path = '../../tests/testthat/pomdss.csv',`MDC_1_ss`,`MDC_2_ss`,`MDC_3_ss`
 render(path = '../../tests/testthat/ivmd.csv',`MDC_4a`,`MDC_4b`,`MDC_4c`,`MDC_4d`)
 
 
-sum_excel <-read_excel(
+used <- c(
+  'START_POSD','SDT_1','SDT_2','SDT_3','SDC_1','SDC_2','SDC_3',
+  'START_IVSD','SDC_4a','SDC_4b','SDC_4c','SDC_4d',
+  'START_POMD','MDT_1','MDT_2','MDT_3','MDT_3a','MDC_1_noss','MDC_2_noss','MDC_3_noss',
+  'MDC_1_ss','MDC_2_ss','MDC_3_ss','MDC_4a','MDC_4b','MDC_4c','MDC_4d'
+)
+
+setdiff(sheets, used)
+
+START_INFSD$dv %<>% as.numeric
+START_INFMD$dv %<>% as.numeric
+
+render(
+  path = '../../tests/testthat/other.csv',
+  `START_INFSD`, # problematic
+  `START_IVMD`,  # ok
+  `START_INFMD`, # problematic
+  `POSDLOQ_1`,
+  `POSDLOQ_2`,   `POSDLOQ_3`,   `POSDLOQ_4`,   `IVSDLOQ_1`,
+  `IVSDLOQ_2`,   `IVSDLOQ_3`,   `IVSDLOQ_4`,   `POSDEXCL`,
+  `POSDTRAP_2`,  `POSDTRAP_3`
+)
+
+old_sum_excel <-read_excel(
   'validation_qPNCA_1.0.12.xlsx',
   sheet='summ',
   guess_max = 100
 )
+sum_excel <-read_excel(
+  'validation_qPNCA_1.0.22.xlsx',
+  sheet='summ',
+  guess_max = 100
+)
+
+dim(old_sum_excel)
+dim(sum_excel)
+
+setdiff(names(old_sum_excel), names(sum_excel))
+setdiff(names(sum_excel), names(old_sum_excel))
 
 sum_excel %<>%
   select(-2) %>% # remove empty column
@@ -48,6 +85,8 @@ function(.data, condition, ..., envir = parent.frame()) {
   .data[condition, ] <- .data[condition, ] %>% mutate(...)
   .data
 }
+
+
 sum_excel %<>%
   mutate_cond(parameter=='cl.f.obs'&route=='IV'&ss=='n',parameter='cl.obs') %>%
   mutate_cond(parameter=='cl.f.obs'&route=='IV'&ss=='y',parameter='cl.ss') %>%

@@ -1,7 +1,9 @@
 library(dplyr)
 library(magrittr)
-library(ggplot2)
-library(qpToolkit)
+library(testthat)
+library(qpNCA)
+#library(ggplot2)
+#library(qpToolkit)
 library(tidyr)
 as_csv <- function (
   x, as.is = TRUE,

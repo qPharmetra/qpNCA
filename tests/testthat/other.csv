@@ -1,0 +1,197 @@
+rule,id,ntad,tad,dv,loq,desc,type,excl,bloq,excl_th
+START_INFSD,-3,0,0,0,0.1,"Initial INF, SD curve",.,.,1,0
+START_INFSD,-3,0.5,0.5,.,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,1,1,.,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,2,2,.,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,3,3,.,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,4,4,.,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,6,6,.,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,8,8,4.31,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,10,10,4.09,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,12,12,3.72,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,18,18,2.46,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,24,24,1.45,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,36,36,0.43,.,"Initial INF, SD curve",.,.,0,0
+START_INFSD,-3,48,48,0.11,.,"Initial INF, SD curve",.,.,0,0
+START_IVMD,-5,0,0,.,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,0.5,0.5,4211,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,1,1,1793,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,1.5,1.5,808,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,2,2,405,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,3,3,168,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,4,4,122,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,6,6,101,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,8,8,88,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,12,12,67,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,18,18,51,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,24,24,30,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,36,36,13,.,"Initial IV, MD curve",.,.,0,0
+START_IVMD,-5,48,48,6,.,"Initial IV, MD curve",.,.,0,0
+START_INFMD,-6,0,0,1.1,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,0.5,0.5,.,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,1,1,.,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,2,2,.,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,3,3,.,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,4,4,.,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,6,6,.,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,8,8,4.31,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,10,10,4.09,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,12,12,3.72,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,18,18,2.46,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,24,24,1.45,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,36,36,0.43,.,"Initial INF, MD curve",.,.,0,0
+START_INFMD,-6,48,48,0.11,.,"Initial INF, MD curve",.,.,0,0
+POSDLOQ_1,21,0,0,0,0.1,example rule POSDLOQ_1,.,.,1,0
+POSDLOQ_1,21,0.5,0.5,.,0.1,example rule POSDLOQ_1,.,.,1,0
+POSDLOQ_1,21,1,1,1.42,.,example rule POSDLOQ_1,.,.,0,0
+POSDLOQ_1,21,2,2,2.48,.,example rule POSDLOQ_1,.,.,0,0
+POSDLOQ_1,21,3,3,3.24,.,example rule POSDLOQ_1,.,.,0,0
+POSDLOQ_1,21,4,4,3.75,.,example rule POSDLOQ_1,.,.,0,0
+POSDLOQ_1,21,6,6,4.27,.,example rule POSDLOQ_1,.,.,0,0
+POSDLOQ_1,21,8,8,4.31,.,example rule POSDLOQ_1,.,.,0,0
+POSDLOQ_1,21,10,10,4.09,.,example rule POSDLOQ_1,.,.,0,0
+POSDLOQ_1,21,12,12,.,0.1,example rule POSDLOQ_1,.,.,1,0
+POSDLOQ_1,21,18,18,2.46,.,example rule POSDLOQ_1,.,.,0,0
+POSDLOQ_1,21,24,24,1.45,.,example rule POSDLOQ_1,.,.,0,0
+POSDLOQ_1,21,36,36,.,0.1,example rule POSDLOQ_1,.,.,1,0
+POSDLOQ_1,21,48,48,.,0.1,example rule POSDLOQ_1,.,.,1,0
+POSDLOQ_2,22,0,0,0,0.1,example rule POSDLOQ_2,.,.,1,0
+POSDLOQ_2,22,0.5,0.5,.,0.1,example rule POSDLOQ_2,.,.,1,0
+POSDLOQ_2,22,1,1,1.42,.,example rule POSDLOQ_2,.,.,0,0
+POSDLOQ_2,22,2,2,2.48,.,example rule POSDLOQ_2,.,.,0,0
+POSDLOQ_2,22,3,3,3.24,.,example rule POSDLOQ_2,.,.,0,0
+POSDLOQ_2,22,4,4,3.75,.,example rule POSDLOQ_2,.,.,0,0
+POSDLOQ_2,22,6,6,4.27,.,example rule POSDLOQ_2,.,.,0,0
+POSDLOQ_2,22,8,8,4.31,.,example rule POSDLOQ_2,.,.,0,0
+POSDLOQ_2,22,10,10,4.09,.,example rule POSDLOQ_2,.,.,0,0
+POSDLOQ_2,22,12,12,.,0.1,example rule POSDLOQ_2,.,.,1,0
+POSDLOQ_2,22,18,18,2.46,.,example rule POSDLOQ_2,.,.,0,0
+POSDLOQ_2,22,24,24,1.45,.,example rule POSDLOQ_2,.,.,0,0
+POSDLOQ_2,22,36,36,.,0.1,example rule POSDLOQ_2,.,.,1,0
+POSDLOQ_2,22,48,48,.,0.1,example rule POSDLOQ_2,.,.,1,0
+POSDLOQ_3,23,0,0,0,0.1,example rule POSDLOQ_3,.,.,1,0
+POSDLOQ_3,23,0.5,0.5,.,0.1,example rule POSDLOQ_3,.,.,1,0
+POSDLOQ_3,23,1,1,1.42,.,example rule POSDLOQ_3,.,.,0,0
+POSDLOQ_3,23,2,2,2.48,.,example rule POSDLOQ_3,.,.,0,0
+POSDLOQ_3,23,3,3,3.24,.,example rule POSDLOQ_3,.,.,0,0
+POSDLOQ_3,23,4,4,3.75,.,example rule POSDLOQ_3,.,.,0,0
+POSDLOQ_3,23,6,6,4.27,.,example rule POSDLOQ_3,.,.,0,0
+POSDLOQ_3,23,8,8,4.31,.,example rule POSDLOQ_3,.,.,0,0
+POSDLOQ_3,23,10,10,4.09,.,example rule POSDLOQ_3,.,.,0,0
+POSDLOQ_3,23,12,12,.,0.1,example rule POSDLOQ_3,.,.,1,0
+POSDLOQ_3,23,18,18,2.46,.,example rule POSDLOQ_3,.,.,0,0
+POSDLOQ_3,23,24,24,1.45,.,example rule POSDLOQ_3,.,.,0,0
+POSDLOQ_3,23,36,36,.,0.1,example rule POSDLOQ_3,.,.,1,0
+POSDLOQ_3,23,48,48,.,0.1,example rule POSDLOQ_3,.,.,1,0
+POSDLOQ_4,24,0,0,0,0.1,example rule POSDLOQ_4,.,.,1,0
+POSDLOQ_4,24,0.5,0.5,.,0.1,example rule POSDLOQ_4,.,.,1,0
+POSDLOQ_4,24,1,1,1.42,.,example rule POSDLOQ_4,.,.,0,0
+POSDLOQ_4,24,2,2,2.48,.,example rule POSDLOQ_4,.,.,0,0
+POSDLOQ_4,24,3,3,3.24,.,example rule POSDLOQ_4,.,.,0,0
+POSDLOQ_4,24,4,4,3.75,.,example rule POSDLOQ_4,.,.,0,0
+POSDLOQ_4,24,6,6,4.27,.,example rule POSDLOQ_4,.,.,0,0
+POSDLOQ_4,24,8,8,4.31,.,example rule POSDLOQ_4,.,.,0,0
+POSDLOQ_4,24,10,10,4.09,.,example rule POSDLOQ_4,.,.,0,0
+POSDLOQ_4,24,12,12,.,0.1,example rule POSDLOQ_4,.,.,1,0
+POSDLOQ_4,24,18,18,2.46,.,example rule POSDLOQ_4,.,.,0,0
+POSDLOQ_4,24,24,24,1.45,.,example rule POSDLOQ_4,.,.,0,0
+POSDLOQ_4,24,36,36,.,0.1,example rule POSDLOQ_4,.,.,1,0
+POSDLOQ_4,24,48,48,.,0.1,example rule POSDLOQ_4,.,.,1,0
+IVSDLOQ_1,25,0,0,.,0.1,example rule IVSDLOQ_1,.,.,1,0
+IVSDLOQ_1,25,0.5,0.5,.,0.1,example rule IVSDLOQ_1,.,.,1,0
+IVSDLOQ_1,25,1,1,1793,.,example rule IVSDLOQ_1,.,.,0,0
+IVSDLOQ_1,25,1.5,1.5,808,.,example rule IVSDLOQ_1,.,.,0,0
+IVSDLOQ_1,25,2,2,405,.,example rule IVSDLOQ_1,.,.,0,0
+IVSDLOQ_1,25,3,3,168,.,example rule IVSDLOQ_1,.,.,0,0
+IVSDLOQ_1,25,4,4,122,.,example rule IVSDLOQ_1,.,.,0,0
+IVSDLOQ_1,25,6,6,101,.,example rule IVSDLOQ_1,.,.,0,0
+IVSDLOQ_1,25,8,8,88,.,example rule IVSDLOQ_1,.,.,0,0
+IVSDLOQ_1,25,12,12,.,0.1,example rule IVSDLOQ_1,.,.,1,0
+IVSDLOQ_1,25,18,18,51,.,example rule IVSDLOQ_1,.,.,0,0
+IVSDLOQ_1,25,24,24,30,.,example rule IVSDLOQ_1,.,.,0,0
+IVSDLOQ_1,25,36,36,.,0.1,example rule IVSDLOQ_1,.,.,1,0
+IVSDLOQ_1,25,48,48,.,0.1,example rule IVSDLOQ_1,.,.,1,0
+IVSDLOQ_2,26,0,0,.,0.1,example rule IVSDLOQ_2,.,.,1,0
+IVSDLOQ_2,26,0.5,0.5,.,0.1,example rule IVSDLOQ_2,.,.,1,0
+IVSDLOQ_2,26,1,1,1793,.,example rule IVSDLOQ_2,.,.,0,0
+IVSDLOQ_2,26,1.5,1.5,808,.,example rule IVSDLOQ_2,.,.,0,0
+IVSDLOQ_2,26,2,2,405,.,example rule IVSDLOQ_2,.,.,0,0
+IVSDLOQ_2,26,3,3,168,.,example rule IVSDLOQ_2,.,.,0,0
+IVSDLOQ_2,26,4,4,122,.,example rule IVSDLOQ_2,.,.,0,0
+IVSDLOQ_2,26,6,6,101,.,example rule IVSDLOQ_2,.,.,0,0
+IVSDLOQ_2,26,8,8,88,.,example rule IVSDLOQ_2,.,.,0,0
+IVSDLOQ_2,26,12,12,.,0.1,example rule IVSDLOQ_2,.,.,1,0
+IVSDLOQ_2,26,18,18,51,.,example rule IVSDLOQ_2,.,.,0,0
+IVSDLOQ_2,26,24,24,30,.,example rule IVSDLOQ_2,.,.,0,0
+IVSDLOQ_2,26,36,36,.,0.1,example rule IVSDLOQ_2,.,.,1,0
+IVSDLOQ_2,26,48,48,.,0.1,example rule IVSDLOQ_2,.,.,1,0
+IVSDLOQ_3,27,0,0,.,0.1,example rule IVSDLOQ_3,.,.,1,0
+IVSDLOQ_3,27,0.5,0.5,.,0.1,example rule IVSDLOQ_3,.,.,1,0
+IVSDLOQ_3,27,1,1,1793,.,example rule IVSDLOQ_3,.,.,0,0
+IVSDLOQ_3,27,1.5,1.5,808,.,example rule IVSDLOQ_3,.,.,0,0
+IVSDLOQ_3,27,2,2,405,.,example rule IVSDLOQ_3,.,.,0,0
+IVSDLOQ_3,27,3,3,168,.,example rule IVSDLOQ_3,.,.,0,0
+IVSDLOQ_3,27,4,4,122,.,example rule IVSDLOQ_3,.,.,0,0
+IVSDLOQ_3,27,6,6,101,.,example rule IVSDLOQ_3,.,.,0,0
+IVSDLOQ_3,27,8,8,88,.,example rule IVSDLOQ_3,.,.,0,0
+IVSDLOQ_3,27,12,12,.,0.1,example rule IVSDLOQ_3,.,.,1,0
+IVSDLOQ_3,27,18,18,51,.,example rule IVSDLOQ_3,.,.,0,0
+IVSDLOQ_3,27,24,24,30,.,example rule IVSDLOQ_3,.,.,0,0
+IVSDLOQ_3,27,36,36,.,0.1,example rule IVSDLOQ_3,.,.,1,0
+IVSDLOQ_3,27,48,48,.,0.1,example rule IVSDLOQ_3,.,.,1,0
+IVSDLOQ_4,28,0,0,.,0.1,example rule IVSDLOQ_4,.,.,1,0
+IVSDLOQ_4,28,0.5,0.5,.,0.1,example rule IVSDLOQ_4,.,.,1,0
+IVSDLOQ_4,28,1,1,1793,.,example rule IVSDLOQ_4,.,.,0,0
+IVSDLOQ_4,28,1.5,1.5,808,.,example rule IVSDLOQ_4,.,.,0,0
+IVSDLOQ_4,28,2,2,405,.,example rule IVSDLOQ_4,.,.,0,0
+IVSDLOQ_4,28,3,3,168,.,example rule IVSDLOQ_4,.,.,0,0
+IVSDLOQ_4,28,4,4,122,.,example rule IVSDLOQ_4,.,.,0,0
+IVSDLOQ_4,28,6,6,101,.,example rule IVSDLOQ_4,.,.,0,0
+IVSDLOQ_4,28,8,8,88,.,example rule IVSDLOQ_4,.,.,0,0
+IVSDLOQ_4,28,12,12,.,0.1,example rule IVSDLOQ_4,.,.,1,0
+IVSDLOQ_4,28,18,18,51,.,example rule IVSDLOQ_4,.,.,0,0
+IVSDLOQ_4,28,24,24,30,.,example rule IVSDLOQ_4,.,.,0,0
+IVSDLOQ_4,28,36,36,.,0.1,example rule IVSDLOQ_4,.,.,1,0
+IVSDLOQ_4,28,48,48,.,0.1,example rule IVSDLOQ_4,.,.,1,0
+POSDEXCL,29,0,0,0,0.1,example rule POSDEXCL,.,0,1,0
+POSDEXCL,29,0.5,0.5,0.76,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,1,1,1.42,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,2,2,2.48,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,3,3,3.24,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,4,4,3.75,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,6,6,4.27,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,8,8,4.31,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,10,10,4.09,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,12,12,10.72,.,example rule POSDEXCL,.,1,0,0
+POSDEXCL,29,18,18,2.46,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,24,24,1.45,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,36,36,0.43,.,example rule POSDEXCL,.,0,0,0
+POSDEXCL,29,48,48,0.11,.,example rule POSDEXCL,.,0,0,0
+POSDTRAP_2,30,0,0,0,0.1,example rule POSDTRAP_2,.,.,1,0
+POSDTRAP_2,30,0.5,0.5,0.76,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,1,1,1.42,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,2,2,2.48,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,3,3,1.94,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,4,4,3.75,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,6,6,4.27,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,8,8,4.31,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,10,10,4.09,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,12,12,3.72,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,18,18,2.46,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,24,24,1.45,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,36,36,0.43,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_2,30,48,48,0.11,.,example rule POSDTRAP_2,.,.,0,0
+POSDTRAP_3,31,0,0,0,0.1,example rule POSDTRAP_3,.,.,1,0
+POSDTRAP_3,31,0.5,0.5,0.76,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,1,1,1.42,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,2,2,2.48,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,3,3,3.24,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,4,4,3.75,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,6,6,4.27,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,8,8,4.31,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,10,10,4.09,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,12,12,3.72,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,18,18,2.46,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,24,24,1.45,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,36,36,0.43,.,example rule POSDTRAP_3,.,.,0,0
+POSDTRAP_3,31,48,48,0.11,.,example rule POSDTRAP_3,.,.,0,0
