@@ -28,9 +28,62 @@ as_csv <- function (
   )
   y
 }
+my_qpNCA <- function(
+  x,
+  by = 'id',
+  nomtimevar = 'ntad',
+  timevar = 'tad',
+  depvar = 'dv',
+  bloqvar = 'bloq',
+  loqvar = 'loq',
+  loqrule = 2,
+  includeCmax = 'Y',
+  exclvar = 'excl_th',
+  plotdir = NULL,
+  pdfdir = NA,
+  timelab = 'Time (h)',
+  deplab = 'Concentration (ng/mL)',
+  tau = 24,
+  tstart = 4,
+  tend = 12,
+  teval = 18,
+  covfile = x %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose),
+  dose = 'dose',
+  factor = 1000,
+  reg = reg,
+  ss = ss,
+  route = route,
+  method = 1
+)qpNCA(
+  x,
+  by = by,
+  nomtimevar = nomtimevar,
+  timevar = timevar,
+  depvar = depvar,
+  bloqvar = bloqvar,
+  loqvar = loqvar,
+  loqrule = loqrule,
+  includeCmax = includeCmax,
+  exclvar = exclvar,
+  plotdir = plotdir,
+  pdfdir = pdfdir,
+  timelab = timelab,
+  deplab = deplab,
+  tau = tau,
+  tstart = tstart,
+  tend = tend,
+  teval = teval,
+  covfile = covfile,
+  dose = dose,
+  factor = factor,
+  reg = reg,
+  ss = ss,
+  route = route,
+  method = 1
+)
 test_results <- function(x, reg, ss, route){
   y <- x %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose)
-  z <- qpNCA(
+  z <- my_qpNCA(
     x,
     by = 'id',
     nomtimevar = 'ntad',
@@ -42,7 +95,7 @@ test_results <- function(x, reg, ss, route){
     includeCmax = 'Y',
     exclvar = 'excl_th',
     plotdir = NULL,
-    pdfdir =,
+    pdfdir = NA,
     timelab = 'Time (h)',
     deplab = 'Concentration (ng/mL)',
     tau = 24,
@@ -60,7 +113,8 @@ test_results <- function(x, reg, ss, route){
   z %<>%
     select(
     -area.back.extr,-r.squared,-calc.part,
-    -calc.teval,-calc.tau,-t0.ok,-tlast.ok
+    -calc.teval,-calc.tau,-t0.ok,-tlast.ok,
+    -factor
   ) %>%
   gather(
     "parameter","value_test",-id,-dose,-includeCmax,
@@ -127,3 +181,56 @@ test_that('IV MD results are stable',{
   diff <- comp %>% filter(identical == 0) %>% data.frame
   expect_identical(comp$value_test, comp$value_reference)
 })
+
+test_that('other results are stable',{
+  library(wrangle)
+  test <- as_csv('other.csv')
+  refr <- as_csv('voucher.csv')
+
+  test %>% itemize(rule, id, desc)
+
+  #undebug(qpNCA:::check.input)
+  test %>%
+    filter(id == 25) %>%
+    my_qpNCA(reg = 'sd', ss = 'n', route = 'IVB') %$%
+    pkpar %>% as.list
+
+head(test)
+
+test %<>% mutate(
+  reg = case_when(
+    grepl('SD', rule) ~ 'SD',
+    grepl('MD', rule) ~ 'MD'
+  )
+)
+test %<>% mutate(ss = 'n')
+test %<>% mutate(
+  route = case_when(
+    grepl('INF', rule) ~ 'IVI',
+    grepl('IV', rule) ~ 'IVB',
+    grepl('PO', rule) ~ 'EV'
+  )
+)
+
+test %<>% mutate(
+  loqrule = case_when(
+    grepl('LOQ_1',rule) ~ 1,
+    grepl('LOQ_2',rule) ~ 2,
+    grepl('LOQ_3',rule) ~ 3,
+    grepl('LOQ_4',rule) ~ 4,
+    TRUE ~ 1
+  )
+)
+
+test %>%
+  my_qpNCA
+
+})
+# test_that('other results are stable',{
+#   test <- test_results(as_csv('other.csv'))
+#   refr <- reference_results(as_csv('voucher.csv'))
+#   comp <- merged_results(test,refr)
+#   diff <- comp %>% filter(identical == 0) %>% data.frame
+#   expect_identical(comp$value_test, comp$value_reference)
+# })
+
