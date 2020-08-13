@@ -30,6 +30,18 @@
 #'
 #' @export
 calc.par.th <- function(x=par,by="subject",th=th,covfile=covfile,dose="dose",factor=1, reg="SD", ss="N", route="EV") {
+  for(arg in c('reg','ss','factor','route')){
+    if(arg %in% names(x)){
+      if(!missing(arg)){
+        warning(arg,' supplied as column overrides like-named argument')
+      }
+      assign(arg,x[[arg]])
+    }
+    # if(length(get(arg)) > 1) {
+    #   warning(arg, ' has length > 1; only first value will be used')
+    #   assign(arg, get(arg)[[1]])
+    # }
+  }
 
     if(!missing(covfile)){
       if(is.character(covfile)){

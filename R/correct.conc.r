@@ -40,41 +40,51 @@
 #' }
 #'
 #' @export
+#'
+correct.conc <- function(
+  x,by="subject",nomtimevar="ntad",tau=NA,tstart=NA,
+  tend=NA,teval=NA,th=NA,reg="SD",ss="N",route="EV",method=1) {
 
-
-
-
-
-
-
-correct.conc <- function(x,by="subject",nomtimevar="ntad",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",ss="N",route="EV",method=1) {
+  #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,ss=ss,route=route,method=method
+  for(arg in c('tau','tstart','tend','teval','reg','method','route','ss')){
+    if(arg %in% names(x)){
+      if(!missing(arg)){
+        warning(arg,' supplied as column overrides like-named argument')
+      }
+      assign(arg,unique(x[[arg]]))
+    }
+    if(length(get(arg)) > 1) {
+      warning(arg, ' has length > 1; only first value will be used')
+      assign(arg, get(arg)[[1]])
+    }
+  }
 
   data_in=x
-  
-  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) } 
-  
-  data_in=data_in %>% 
+
+  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) }
+
+  data_in=data_in %>%
           mutate(ptime=x[[nomtimevar]],                 # nominal time                            (internal)
                  crule.nr="",                           # correction rule number
                  crule.txt="",                          # explanation of concentration substitution
                  applies.to.conc="",                     # lists all AUCS to which the concentration correction rule applies
                  lambda_z=ifelse("lambda_z"%in%names(.),lambda_z,NA)
                 )
-  
+
 # create lead and lag variables for each AUC
-   
+
    #TAU
-if (!is.na(tau)) { 
+if (!is.na(tau)) {
   data_in=lag.lead(data_in,nomtimevar1="ptime",depvar1="conc.tau",timevar1="time.tau",
                    lagc="lag.ctau",lagt="lag.ttau",leadc="lead.ctau",leadt="lead.ttau")
 }
    #PARTIAL
-if (!is.na(tstart)&!is.na(tend)) { 
+if (!is.na(tstart)&!is.na(tend)) {
   data_in=lag.lead(data_in,nomtimevar1="ptime",depvar1="conc.part",timevar1="time.part",
                    lagc="lag.cpart",lagt="lag.tpart",leadc="lead.cpart",leadt="lead.tpart")
    }
    #TEVAL
-if (!is.na(teval)) { 
+if (!is.na(teval)) {
   data_in=lag.lead(data_in,nomtimevar1="ptime",depvar1="conc.teval",timevar1="time.teval",
                    lagc="lag.cteval",lagt="lag.tteval",leadc="lead.cteval",leadt="lead.tteval")
    }

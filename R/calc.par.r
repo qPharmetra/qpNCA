@@ -37,6 +37,18 @@
 #' }
 #' @export
 calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="EV",method=1){
+  for(arg in c('tau','tstart','tend','teval','reg','method')){
+    if(arg %in% names(x)){
+      if(!missing(arg)){
+        warning(arg,' supplied as column overrides like-named argument')
+      }
+      assign(arg,unique(x[[arg]]))
+    }
+    if(length(get(arg)) > 1) {
+      warning(arg, ' has length > 1; only first value will be used')
+      assign(arg, get(arg)[[1]])
+    }
+  }
 
   # Calculate parameters
 

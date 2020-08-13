@@ -27,21 +27,21 @@
 #' @param Y-axis label (default: "depvar") in plots
 #' @param bloqvar variable name containing the BLOQ flag (0: no, 1: yes)
 #' @param loqvar variable name containing the LOQ value
-#' @param loqrule rule number to be applied to the LOQ values in the curve
-#' @param includeCmax include results of regression including Cmax in selection? (y/n)
+#' @param loqrule rule number to be applied to the LOQ values in the curve; x$loqrule overrides if provided
+#' @param includeCmax include results of regression including Cmax in selection? (y/n) x$includeCmax overrides if provided
 #' @param exclvar variable name containing information about points to be excluded (these should have <exclvar>=1)
 #' @param plotdir folder where regression plots (.PNG) will be saved; leave empty for standard output
-#' @param tau dosing interval (for multiple dosing), if single dose, leave empty
-#' @param tstart start time of partial AUC (start>0), if not requested, leave empty
-#' @param tend end time of partial AUC, if not requested, leave empty
-#' @param teval user selected AUC interval, if not requested, leave empty
+#' @param tau dosing interval (for multiple dosing), if single dose, leave empty; x$tau overrides if provided
+#' @param tstart start time of partial AUC (start>0), if not requested, leave empty; x$tstart overrides if provided
+#' @param tend end time of partial AUC, if not requested, leave empty; x$tend overrides if provided
+#' @param teval user selected AUC interval, if not requested, leave empty; x$tend overrides if provided
 #' @param cov covariates dataset
 #' @param dose variable containing the dose amount
-#' @param factor onversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)
-#' @param reg regimen, "sd" or "md"
-#' @param ss is steady state reached (y/n)
-#' @param route route of drug administration ("EV","IVB", "IVI")
-#' @param method method for trapezoidal rule:
+#' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided
+#' @param reg regimen, "sd" or "md"; can be character column name in x; x$regimen overrides if provided
+#' @param ss is steady state reached (y/n); x$ss overrides if provided
+#' @param route route of drug administration ("EV","IVB", "IVI"); x$overrides if provided.
+#' @param method method for trapezoidal rule.  x$method overrides if provided.
 #'              1: linear up - linear down
 #'              2: linear up - logarithmic down
 #'              3: linear before first Tmax, logarithmic after first Tmax
@@ -54,20 +54,62 @@
 #' corrections: contains descriptions of the corrections applied
 #' pkpar      : contains all estimated PK parameters
 #' @export
-qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="dv",
-                  bloqvar="bloq",loqvar="loq",loqrule=1,
-                  includeCmax="Y",exclvar=NA,plotdir=NA,pdfdir=NA,timelab="timevar",deplab="depvar",
-                  tau=NA,tstart=NA,tend=NA,teval=NA,covfile=NA,dose=NA,factor=NA,reg="SD",ss="N",route="EV",method=1) {
+qpNCA <- function(
+  x,
+  by=c("subject"),
+  nomtimevar="ntad",
+  timevar="time",
+  depvar="dv",
+  bloqvar="bloq",
+  loqvar="loq",
+  loqrule=1,
+  includeCmax="Y",
+  exclvar=NA,
+  plotdir=NA,
+  pdfdir=NA,
+  timelab="timevar",
+  deplab="depvar",
+  tau=NA,
+  tstart=NA,
+  tend=NA,
+  teval=NA,
+  covfile=NA,
+  dose=NA,
+  factor=NA,
+  reg="SD",
+  ss="N",
+  route="EV",
+  method=1
+)
 
   # 0. Check input
 
   cat("\n")
   cat("Checking function arguments...")
 
-  check.input(x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,bloqvar=bloqvar, loqvar=loqvar, loqrule=loqrule,
-             includeCmax=includeCmax, exclvar=exclvar, plotdir=plotdir, pdfdir=pdfdir, timelab=timelab, deplab=deplab,
-             tau=tau, tstart=tstart, tend=tend, teval=teval, covfile=covfile, dose=dose, factor=factor, reg=reg, ss=ss,
-             route=route, method=method)
+  if(!'ss' %in% names(x)) x$ss <- ss
+  if(!'route' %in% names(x)) x$route <- route
+  if(!'method' %in% names(x)) x$method <- method
+  if(!'loqrule' %in% names(x)) x$loqrule <- loqrule
+  if(!'includeCmax' %in% names(x)) x$includeCmax <- includeCmax
+  if(!'tau' %in% names(x)) x$tau <- tau
+  if(!'tstart' %in% names(x)) x$tstart <- tstart
+  if(!'tend' %in% names(x)) x$tend <- tend
+  if(!'teval' %in% names(x)) x$teval <- teval
+  if(!'factor' %in% names(x)) x$factor <- factor
+
+  rm(list = c('ss','route','method','loqrule','includeCmax','tau','tstart','tend','teval','factor'))
+
+check.input(
+    x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,
+    bloqvar=bloqvar, loqvar=loqvar,
+    #loqrule=loqrule, includeCmax=includeCmax,
+    exclvar=exclvar, plotdir=plotdir, pdfdir=pdfdir, timelab=timelab,
+    deplab=deplab,
+    #tau=tau, tstart=tstart, tend=tend, teval=teval,
+    covfile=covfile, dose=dose#,
+    #factor=factor, reg=reg, ss=ss,route=route, method=method
+  )
 
   # 1. Apply LOQ rules
 
@@ -75,7 +117,17 @@ qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="
 
   loqed = x %>%
     group_by_at(by) %>%
-    do(correct.loq(.,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,bloqvar=bloqvar,loqvar=loqvar,loqrule=loqrule)) %>%
+    do(
+      correct.loq(
+        .,
+        nomtimevar=nomtimevar,
+        timevar=timevar,
+        depvar=depvar,
+        bloqvar=bloqvar,
+        loqvar=loqvar#,
+       # loqrule=loqrule
+      )
+    ) %>%
     ungroup
 
     # 2. estimate thalf ON UNCORRECTED DATA
@@ -84,7 +136,11 @@ qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="
 
   th = loqed %>%
     group_by_at(by) %>%
-    do(est.thalf(.,timevar=timevar,depvar=depvar,includeCmax=includeCmax,exclvar=exclvar)) %>%
+    do(est.thalf(
+      .,timevar=timevar,depvar=depvar,
+      #includeCmax=includeCmax,
+      exclvar=exclvar
+    )) %>%
     ungroup
 
   # 2a.
@@ -116,10 +172,14 @@ qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="
 
   tc = loqed %>%
     group_by_at(by) %>%
-    do(correct.time(.,by=by,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,
-                    tau=tau,tstart=tstart,tend=tend,teval=teval,th=th,reg=reg,method=method)) %>%
-    do(correct.conc(.,by=by,nomtimevar=nomtimevar,
-                    tau=tau,tstart=tstart,tend=tend,teval=teval,th=,reg=reg,ss=ss,route=route,method=method)) %>%
+    do(correct.time(
+      .,by=by,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,th=th#,
+      #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,method=method
+    )) %>%
+    do(correct.conc(
+      .,by=by,nomtimevar=nomtimevar,th=#,
+      #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,ss=ss,route=route,method=method
+    )) %>%
     ungroup
 
   cat("\n")
@@ -136,14 +196,19 @@ qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="
 
   par = tc %>%
     group_by_at(by) %>%
-    do(calc.par(.,tau=tau,tstart=tstart,tend=tend,teval=teval,route=route,method=method)) %>%
+    do(calc.par(
+      .#,tau=tau,tstart=tstart,tend=tend,teval=teval,route=route,method=method
+    )) %>%
     ungroup
 
   # 8. Calculate PK parameters that need lambda_z
 
   cat("Calculating parameters that DO need lambda_z...\n")
 
-  par_all = calc.par.th(x=par,by=by,th=th,covfile=covfile,dose=dose,reg=reg,ss=ss,factor=factor,route=route)
+  par_all = calc.par.th(
+    x=par,by=by,th=th,covfile=covfile,dose=dose#,
+    #reg=reg,ss=ss,factor=factor,route=route
+  )
 
   cat("Combining all parameters...\n")
 
@@ -209,11 +274,25 @@ qpNCA <- function(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="
 # The function will list the results of the check in standard output
 #
 
-check.input <- function(x, by=NA, nomtimevar=NA, timevar=NA, depvar=NA,
-                        bloqvar=NA, loqvar=NA, loqrule=NA,
-                        includeCmax=NA, exclvar=NA, plotdir=NA, pdfdir=NA, timelab=NA, deplab=NA,
-                        tau=NA, tstart=NA, tend=NA, teval=NA, covfile=NA, dose=NA, factor=NA, reg=NA, ss=NA,
-                        route=NA, method=NA) {
+check.input <- function(
+  x, by=NA, nomtimevar=NA, timevar=NA, depvar=NA,
+  bloqvar=NA, loqvar=NA, loqrule=NA,
+  includeCmax=NA, exclvar=NA, plotdir=NA, pdfdir=NA, timelab=NA, deplab=NA,
+  tau=NA, tstart=NA, tend=NA, teval=NA, covfile=NA, dose=NA, factor=NA, reg=NA, ss=NA,
+  route=NA, method=NA
+) {
+
+  if('ss' %in% names(x)) ss <- x$ss
+  if('method' %in% names(x)) method <- x$method
+  if('loqrule' %in% names(x)) loqrule <- x$loqrule
+  if('includeCmax' %in% names(x)) includeCmax <- x$includeCmax
+  if('tau' %in% names(x)) tau <- x$tau
+  if('tstart' %in% names(x)) tstart <- x$tstart
+  if('tend' %in% names(x)) tend <- x$tend
+  if('teval' %in% names(x)) teval <- x$teval
+  if('factor' %in% names(x)) factor <- x$factor
+  #'ss','route','method','loqrule','includeCmax','tau','tstart','tend','teval','factor'
+
 
   chkfile <- data.frame(Errors_Warnings="delete",
                         stringsAsFactors = F
@@ -248,12 +327,12 @@ check.input <- function(x, by=NA, nomtimevar=NA, timevar=NA, depvar=NA,
 
   # 4 valid LOQ rule number?
 
-  if ( !(loqrule%in%c(1,2,3,4)) )
+  if ( !(all(loqrule%in%c(1,2,3,4))))
     chkfile=rbind(chkfile,"Error: Loqrule argument should be 1, 2, 3 or 4")
 
   # 5 check optional includeCmax argument
 
-  if ( !is.na(includeCmax) & !(includeCmax%in%c("Y","y","N","n")))
+  if ( any(!is.na(includeCmax) & !(includeCmax%in%c("Y","y","N","n"))))
     chkfile=rbind(chkfile,"Error: IncludeCmax argument can only be Y (default) or N")
 
   # 6 check covariate variable
@@ -280,27 +359,27 @@ check.input <- function(x, by=NA, nomtimevar=NA, timevar=NA, depvar=NA,
 
   # 8 check regimen argument
 
-  if ( !(reg%in%c("sd","SD","md","MD")) )
+  if ( !(all(reg%in%c("sd","SD","md","MD"))))
     chkfile=rbind(chkfile,"Error: Regimen argument should be SD or MD")
 
   # 9 check steady state argument
 
-  if ( !(ss%in%c("y","Y","n","N")) )
+  if ( !(all(ss%in%c("y","Y","n","N"))))
     chkfile=rbind(chkfile,"Error: Steady state argument should be Y or N")
 
   # 9a check if tau is defined when at steady state (ss="Y"). Warn user for this.
 
-  if ( ss%in%c("y","Y") & is.na(tau) )
+  if ( any(ss %in% c("y","Y") & is.na(tau)))
     chkfile=rbind(chkfile,"Warning: Tau not defined while at steady state, no clearances or volumes will be calculated")
 
   # 10 check route argument
 
-  if ( !(route%in%c("ev","EV","ivb","IVB","ivi","IVI")) )
+  if ( !all((route%in%c("ev","EV","ivb","IVB","ivi","IVI"))))
     chkfile=rbind(chkfile,"Error: Route argument should be EV, IVB or IVI")
 
   # 11 check method argument
 
-  if ( !(method%in%c(1,2,3)) )
+  if ( !all((method%in%c(1,2,3))))
     chkfile=rbind(chkfile,"Error: Method argument should be 1, 2 or 3")
 
   chkfile = chkfile %>% filter(Errors_Warnings!="delete")

@@ -4,7 +4,7 @@
 #' @param x a dataset (not needed to be corrected time and conc)
 #' @param timevar variable name containing the sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
-#' @param includeCmax include results of regression including Cmax in selection? (y/n)
+#' @param includeCmax include results of regression including Cmax in selection? (y/n); x$includeCmax overrides.
 #' @param exclvar a variable name containing information about points to be excluded (these should have <exclvar>=1)
 
 #' @return a dataset with estimates for each regression analysis in one observation. The following parameters are available:
@@ -20,6 +20,18 @@
 #' points_excluded = are time points excluded from the half-life estimation? (y/n) \cr
 #' @export
 est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",exclvar=NA){
+
+  if('includeCmax' %in% names(x)){
+    if(!missing(includeCmax)){
+      warning('includeCmax supplied as column overrides like-named argument')
+    }
+    includeCmax <- unique(x$includeCmax)
+  }
+  if(length(includeCmax) > 1) {
+    warning('includeCmax has length > 1; only first value will be used')
+    includeCmax <- includeCmax[[1]]
+  }
+
 
   data_in = x %>% mutate(timevar=x[[timevar]],
                          depvar=x[[depvar]],

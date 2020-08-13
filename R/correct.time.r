@@ -44,17 +44,34 @@
 #'   t0.flag, tau.flag, tstart.flag, tend.flag, teval.flag \tab flags for what timepoint the correction was needed \cr
 #' }
 #' @export
-correct.time <- function(x,by="subject",nomtimevar="ntad",timevar="time",depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",method=1) {
+correct.time <- function(
+  x,by="subject",nomtimevar="ntad",timevar="time",
+  depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",method=1
+){
+  #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,method=method
+
+  for(arg in c('tau','tstart','tend','teval','reg','method')){
+  if(arg %in% names(x)){
+    if(!missing(arg)){
+      warning(arg,' supplied as column overrides like-named argument')
+    }
+    assign(arg,unique(x[[arg]]))
+  }
+  if(length(get(arg)) > 1) {
+    warning(arg, ' has length > 1; only first value will be used')
+    assign(arg, get(arg)[[1]])
+  }
+}
 
   data_in=x
-  
-  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) } 
-  
+
+  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) }
+
   data_in = data_in %>%
           mutate(depvar=x[[depvar]],                    # dependent variable                      (internal)
                  timevar=x[[timevar]],                  # actual time variable                    (internal)
                  ptime=x[[nomtimevar]],                 # nominal time                            (internal)
-                 create.nr="",                          # is missing record created?      
+                 create.nr="",                          # is missing record created?
                  create.txt="",                         # explanation of what is created
                  trule.nr="",                           # correction rule number
                  trule.txt="",                          # explanation of time correction
