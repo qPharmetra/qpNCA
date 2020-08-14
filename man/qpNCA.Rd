@@ -71,9 +71,9 @@ qpNCA(
 
 \item{ss}{is steady state reached (y/n); x$ss overrides if provided}
 
-\item{route}{route of drug administration ("EV","IVB", "IVI"); x$overrides if provided.}
+\item{route}{route of drug administration ("EV","IVB", "IVI"); x$overrides if provided}
 
-\item{method}{method for trapezoidal rule.  x$method overrides if provided.
+\item{method}{method for trapezoidal rule;  x$method overrides if provided
 1: linear up - linear down
 2: linear up - logarithmic down
 3: linear before first Tmax, logarithmic after first Tmax}

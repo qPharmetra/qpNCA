@@ -28,7 +28,7 @@ correct.loq(
 
 \item{loqvar}{variable name containing the LOQ value}
 
-\item{loqrule}{rule number to be applied to the LOQ values in the curve. x$loqrule overrides.}
+\item{loqrule}{rule number to be applied to the LOQ values in the curve. x$loqrule overrides if provided}
 }
 \value{
 A dataset with imputed BLOQ concentrations using the chosen imputation rule

@@ -13,7 +13,7 @@ est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y", exclvar = NA)
 
 \item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 
-\item{includeCmax}{include results of regression including Cmax in selection? (y/n); x$includeCmax overrides.}
+\item{includeCmax}{include results of regression including Cmax in selection? (y/n); x$includeCmax overrides if provided}
 
 \item{exclvar}{a variable name containing information about points to be excluded (these should have <exclvar>=1)}
 }
