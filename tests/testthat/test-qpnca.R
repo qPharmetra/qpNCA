@@ -1,10 +1,10 @@
 library(dplyr)
 library(magrittr)
 library(testthat)
-library(qpNCA)
 #library(ggplot2)
 #library(qpToolkit)
 library(tidyr)
+library(qpNCA)
 as_csv <- function (
   x, as.is = TRUE,
   na.strings = c("", "\\s",".", "NA"),

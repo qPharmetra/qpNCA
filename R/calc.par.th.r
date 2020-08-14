@@ -32,7 +32,7 @@
 calc.par.th <- function(x=par,by="subject",th=th,covfile=covfile,dose="dose",factor=1, reg="SD", ss="N", route="EV") {
   for(arg in c('reg','ss','factor','route')){
     if(arg %in% names(x)){
-      if(!missing(arg)){
+      if(!eval(substitute(missing(arg)))){
         warning(arg,' supplied as column overrides like-named argument')
       }
       assign(arg,x[[arg]])

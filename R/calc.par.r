@@ -37,9 +37,9 @@
 #' }
 #' @export
 calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="EV",method=1){
-  for(arg in c('tau','tstart','tend','teval','reg','method')){
+  for(arg in c('tau','tstart','tend','teval','route','method')){
     if(arg %in% names(x)){
-      if(!missing(arg)){
+      if(!eval(substitute(missing(arg)))){
         warning(arg,' supplied as column overrides like-named argument')
       }
       assign(arg,unique(x[[arg]]))

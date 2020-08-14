@@ -52,7 +52,7 @@ correct.time <- function(
 
   for(arg in c('tau','tstart','tend','teval','reg','method')){
   if(arg %in% names(x)){
-    if(!missing(arg)){
+    if(!eval(substitute(missing(arg)))){
       warning(arg,' supplied as column overrides like-named argument')
     }
     assign(arg,unique(x[[arg]]))
