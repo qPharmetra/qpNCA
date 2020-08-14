@@ -43,6 +43,7 @@ calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="EV",method=1){
         warning(arg,' supplied as column overrides like-named argument')
       }
       assign(arg,unique(x[[arg]]))
+      x[[arg]] <- NULL
     }
     if(length(get(arg)) > 1) {
       warning(arg, ' has length > 1; only first value will be used')

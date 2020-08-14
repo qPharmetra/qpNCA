@@ -114,7 +114,7 @@ test_results <- function(x, reg, ss, route){
     select(
     -area.back.extr,-r.squared,-calc.part,
     -calc.teval,-calc.tau,-t0.ok,-tlast.ok,
-    -factor
+    -factor, -loqrule
   ) %>%
   gather(
     "parameter","value_test",-id,-dose,-includeCmax,
@@ -143,8 +143,11 @@ merged_results <- function(x, y){
 }
 
 test_that('PO SD results are stable',{
-  test <- test_results(as_csv('posd.csv'),reg="SD",ss="N",route="EV")
-  refr <- reference_results(as_csv('voucher.csv'), id = -1, from = 1, to = 6, route = 'ev')
+  test <- test_results(
+    as_csv('posd.csv'), # %>% filter(id == 5),
+    reg="SD",ss="N",route="EV")
+ refr <- reference_results(as_csv('voucher.csv'), id = -1, from = 1, to = 6, route = 'ev')
+ # refr <- reference_results(as_csv('voucher.csv'), id = 5, from = 5, to = 5, route = 'ev')
   comp <- merged_results(test,refr)
   diff <- comp %>% filter(identical == 0) %>% data.frame
   expect_identical(comp$value_test, comp$value_reference)

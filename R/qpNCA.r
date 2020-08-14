@@ -88,19 +88,18 @@ qpNCA <- function(
   cat("\n")
   cat("Checking function arguments...")
 
-  if(!'ss' %in% names(x)) x$ss <- ss
-  if(!'route' %in% names(x)) x$route <- route
-  if(!'reg' %in% names(x)) x$reg <- reg
-  if(!'method' %in% names(x)) x$method <- method
-  if(!'loqrule' %in% names(x)) x$loqrule <- loqrule
-  if(!'includeCmax' %in% names(x)) x$includeCmax <- includeCmax
-  if(!'tau' %in% names(x)) x$tau <- tau
-  if(!'tstart' %in% names(x)) x$tstart <- tstart
-  if(!'tend' %in% names(x)) x$tend <- tend
-  if(!'teval' %in% names(x)) x$teval <- teval
-  if(!'factor' %in% names(x)) x$factor <- factor
+  enforce <- c(
+    'ss','route','reg','method','loqrule','includeCmax',
+    'tau','tstart','tend','teval','factor'
+  )
 
-  rm(list = c('ss','reg','route','method','loqrule','includeCmax','tau','tstart','tend','teval','factor'))
+  enforced <- setdiff(enforce, names(x))
+
+  for(arg in enforce){
+    if(!arg %in% names(x)) x[[arg]] <- get(arg)
+  }
+
+ rm(list = enforce)
 
 check.input(
     x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,
@@ -131,6 +130,8 @@ check.input(
       )
     ) %>%
     ungroup
+
+   loqed$loqrule <- x$loqrule
 
     # 2. estimate thalf ON UNCORRECTED DATA
 
@@ -177,7 +178,18 @@ check.input(
     do(correct.time(
       .,by=by,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,th=th#,
       #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,method=method
-    )) %>%
+    ))
+
+  for(arg in c(
+    'tau','tstart','tend','teval',
+    'reg','ss','route','method'
+  )){
+    if(arg %in% names(loqed))if(!arg %in% names(tc)){
+      tc[[arg]] <- loqed[[arg]]
+    }
+  }
+
+  tc %<>%
     do(correct.conc(
       .,by=by,nomtimevar=nomtimevar,th=#,
       #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,ss=ss,route=route,method=method
@@ -185,6 +197,11 @@ check.input(
     ungroup
 
   cat("\n")
+
+  for(arg in enforce){
+    if(arg %in% names(loqed))if(!arg %in% names(tc))tc[[arg]] <- loqed[[arg]]
+  }
+
 
   # 6. create table with corrections
 
@@ -203,12 +220,18 @@ check.input(
     )) %>%
     ungroup
 
+
   # 8. Calculate PK parameters that need lambda_z
 
   cat("Calculating parameters that DO need lambda_z...\n")
 
-  par_all = calc.par.th(
-    x=par,by=by,th=th,covfile=covfile,dose=dose#,
+  par_all = par %>%
+    left_join(
+      tc %>% select(!!by, reg, ss, factor, route, loqrule) %>% unique
+    ) %>%
+    calc.par.th(
+    #x=par,
+    by=by,th=th,covfile=covfile,dose=dose#,
     #reg=reg,ss=ss,factor=factor,route=route
   )
 
@@ -238,11 +261,13 @@ check.input(
     }
   }
 
-  result=list(covariates=covfile,
-              half_life=th,
-              ct_corr=tc,
-              corrections=corrtab,
-              pkpar=par_all)
+  result=list(
+    covariates=covfile,
+    half_life=th,
+    ct_corr=tc,
+    corrections=corrtab,
+    pkpar=par_all
+  )
 
   cat("\nDone!\n")
 
@@ -332,7 +357,7 @@ check.input <- function(
 
   # 7 check factor argument
 
-  if (is.na(factor))
+  if (any(is.na(factor)))
     chkfile=rbind(chkfile,"Warning: Factor argument is empty, assuming a value of 1")
 
   # 8 check regimen argument

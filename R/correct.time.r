@@ -56,6 +56,7 @@ correct.time <- function(
       warning(arg,' supplied as column overrides like-named argument')
     }
     assign(arg,unique(x[[arg]]))
+    x[[arg]] <- NULL
   }
   if(length(get(arg)) > 1) {
     warning(arg, ' has length > 1; only first value will be used')
@@ -66,6 +67,8 @@ correct.time <- function(
   data_in=x
 
   if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) }
+  data_in$includeCmax.x <- NULL
+  data_in$includeCmax.y <- NULL
 
   data_in = data_in %>%
           mutate(depvar=x[[depvar]],                    # dependent variable                      (internal)

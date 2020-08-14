@@ -25,6 +25,7 @@ if('loqrule' %in% names(x)){
     warning('loqrule supplied as column overrides like-named argument')
   }
   loqrule <- unique(x$loqrule)
+  x$loqrule <- NULL
 }
 if(length(loqrule) > 1) {
   warning('loqrule has length > 1; only first value will be used')

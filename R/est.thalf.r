@@ -26,6 +26,7 @@ est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",exclvar=NA){
       warning('includeCmax supplied as column overrides like-named argument')
     }
     includeCmax <- unique(x$includeCmax)
+    x$includeCmax <- NULL
   }
   if(length(includeCmax) > 1) {
     warning('includeCmax has length > 1; only first value will be used')
