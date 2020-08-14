@@ -6,7 +6,7 @@
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param bloqvar variable name containing the BLOQ flag (0: no, 1: yes)
 #' @param loqvar variable name containing the LOQ value
-#' @param loqrule rule number to be applied to the LOQ values in the curve. x$loqrule overrides.
+#' @param loqrule rule number to be applied to the LOQ values in the curve. x$loqrule overrides if provided
 #'
 #' @return A dataset with imputed BLOQ concentrations using the chosen imputation rule
 #' @export

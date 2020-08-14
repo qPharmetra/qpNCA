@@ -40,8 +40,8 @@
 #' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided
 #' @param reg regimen, "sd" or "md"; can be character column name in x; x$regimen overrides if provided
 #' @param ss is steady state reached (y/n); x$ss overrides if provided
-#' @param route route of drug administration ("EV","IVB", "IVI"); x$overrides if provided.
-#' @param method method for trapezoidal rule.  x$method overrides if provided.
+#' @param route route of drug administration ("EV","IVB", "IVI"); x$overrides if provided
+#' @param method method for trapezoidal rule;  x$method overrides if provided
 #'              1: linear up - linear down
 #'              2: linear up - logarithmic down
 #'              3: linear before first Tmax, logarithmic after first Tmax
@@ -54,6 +54,7 @@
 #' corrections: contains descriptions of the corrections applied
 #' pkpar      : contains all estimated PK parameters
 #' @export
+
 qpNCA <- function(
   x,
   by=c("subject"),
@@ -80,7 +81,7 @@ qpNCA <- function(
   ss="N",
   route="EV",
   method=1
-)
+){
 
   # 0. Check input
 
@@ -89,6 +90,7 @@ qpNCA <- function(
 
   if(!'ss' %in% names(x)) x$ss <- ss
   if(!'route' %in% names(x)) x$route <- route
+  if(!'reg' %in% names(x)) x$reg <- reg
   if(!'method' %in% names(x)) x$method <- method
   if(!'loqrule' %in% names(x)) x$loqrule <- loqrule
   if(!'includeCmax' %in% names(x)) x$includeCmax <- includeCmax
@@ -98,7 +100,7 @@ qpNCA <- function(
   if(!'teval' %in% names(x)) x$teval <- teval
   if(!'factor' %in% names(x)) x$factor <- factor
 
-  rm(list = c('ss','route','method','loqrule','includeCmax','tau','tstart','tend','teval','factor'))
+  rm(list = c('ss','reg','route','method','loqrule','includeCmax','tau','tstart','tend','teval','factor'))
 
 check.input(
     x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,
@@ -216,8 +218,11 @@ check.input(
 
   # 9. create summary PDFs
 
-  if (is.na(pdfdir)) cat("No PDF summaries created\n")
-  else cat(paste("Writing summary PDF documents to folder",pdfdir,"...\n"))
+  if (is.na(pdfdir)){
+    cat("No PDF summaries created\n")
+  }else{
+    cat(paste("Writing summary PDF documents to folder",pdfdir,"...\n"))
+  }
 
   nca.sum(par_all,corrfile=corrtab,by=by,plotdir=plotdir,pdfdir=pdfdir)
 
@@ -245,35 +250,6 @@ check.input(
 
 }
 
-# CHECK.INPUT: check arguments of QPNCA package
-#
-# Input dataset:
-#
-# none
-#
-# USAGE:
-#
-# not used stand alone, only used within qPNCA function
-#
-# check.input(x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,bloqvar=bloqvar, loqvar=loqvar, loqrule=loqrule,
-#             includeCmax=includeCmax, exclvar=exclvar, plotdir=plotdir, pdfdir=pdfdir, timelab=timelab, deplab=deplab,
-#             tau=tau, tstart=tstart, tend=tend, teval=teval, covfile=covfile, dose=dose, factor=factor, reg=reg, ss=ss,
-#             route=route, method=method)
-#
-# ARGUMENTS:
-#
-# see qPNCA function description
-#
-# METHOD:
-#
-# The function checks all relevant qPNCA function arguments on validity and/or presence in the input dataset
-# It will abort execution if invalid argument values are entered or unknown objects are requested
-#
-# OUTPUT:
-#
-# The function will list the results of the check in standard output
-#
-
 check.input <- function(
   x, by=NA, nomtimevar=NA, timevar=NA, depvar=NA,
   bloqvar=NA, loqvar=NA, loqrule=NA,
@@ -283,6 +259,8 @@ check.input <- function(
 ) {
 
   if('ss' %in% names(x)) ss <- x$ss
+  if('route' %in% names(x)) route <- x$route
+  if('reg' %in% names(x)) reg <- x$reg
   if('method' %in% names(x)) method <- x$method
   if('loqrule' %in% names(x)) loqrule <- x$loqrule
   if('includeCmax' %in% names(x)) includeCmax <- x$includeCmax
@@ -291,7 +269,7 @@ check.input <- function(
   if('tend' %in% names(x)) tend <- x$tend
   if('teval' %in% names(x)) teval <- x$teval
   if('factor' %in% names(x)) factor <- x$factor
-  #'ss','route','method','loqrule','includeCmax','tau','tstart','tend','teval','factor'
+  # 'ss','route','method','loqrule','includeCmax','tau','tstart','tend','teval','factor'
 
 
   chkfile <- data.frame(Errors_Warnings="delete",
@@ -395,5 +373,8 @@ check.input <- function(
   else cat("all OK!\n")
 
 }
+
+
+
 
 

@@ -47,33 +47,33 @@ qpNCA(
 
 \item{loqvar}{variable name containing the LOQ value}
 
-\item{loqrule}{rule number to be applied to the LOQ values in the curve}
+\item{loqrule}{rule number to be applied to the LOQ values in the curve; x$loqrule overrides if provided}
 
-\item{includeCmax}{include results of regression including Cmax in selection? (y/n)}
+\item{includeCmax}{include results of regression including Cmax in selection? (y/n) x$includeCmax overrides if provided}
 
 \item{exclvar}{variable name containing information about points to be excluded (these should have <exclvar>=1)}
 
 \item{plotdir}{folder where regression plots (.PNG) will be saved; leave empty for standard output}
 
-\item{tau}{dosing interval (for multiple dosing), if single dose, leave empty}
+\item{tau}{dosing interval (for multiple dosing), if single dose, leave empty; x$tau overrides if provided}
 
-\item{tstart}{start time of partial AUC (start>0), if not requested, leave empty}
+\item{tstart}{start time of partial AUC (start>0), if not requested, leave empty; x$tstart overrides if provided}
 
-\item{tend}{end time of partial AUC, if not requested, leave empty}
+\item{tend}{end time of partial AUC, if not requested, leave empty; x$tend overrides if provided}
 
-\item{teval}{user selected AUC interval, if not requested, leave empty}
+\item{teval}{user selected AUC interval, if not requested, leave empty; x$tend overrides if provided}
 
 \item{dose}{variable containing the dose amount}
 
-\item{factor}{onversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)}
+\item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided}
 
-\item{reg}{regimen, "sd" or "md"}
+\item{reg}{regimen, "sd" or "md"; can be character column name in x; x$regimen overrides if provided}
 
-\item{ss}{is steady state reached (y/n)}
+\item{ss}{is steady state reached (y/n); x$ss overrides if provided}
 
-\item{route}{route of drug administration ("EV","IVB", "IVI")}
+\item{route}{route of drug administration ("EV","IVB", "IVI"); x$overrides if provided.}
 
-\item{method}{method for trapezoidal rule:
+\item{method}{method for trapezoidal rule.  x$method overrides if provided.
 1: linear up - linear down
 2: linear up - logarithmic down
 3: linear before first Tmax, logarithmic after first Tmax}
