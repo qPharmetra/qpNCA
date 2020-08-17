@@ -16,7 +16,7 @@ sheet_list_org[[3]]['dv']
 sheet_list_org[[3]] %<>% mutate(dv = as.numeric(dv))
 sheet_list_org %>% do.call(bind_rows,.) %>%
   mutate(loq=as.numeric(loq), bloq=ifelse(is.na(loq),0,1),excl_th=0) %>%
-  write.csv('../../tests/testthat/profiles.csv')
+  write.csv(row.names = FALSE, '../../tests/testthat/profiles.csv')
 
 list2env(sheet_list_org, envir=.GlobalEnv)
 render <- function(..., path)bind_rows(...) %>%

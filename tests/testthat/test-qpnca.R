@@ -187,18 +187,18 @@ test_that('IV MD results are stable',{
 })
 
 test_that('all results are stable',{
-  library(wrangle)
-  test <- read.csv('profiles.csv')
+ # library(wrangle)
+  test <- as_csv('profiles.csv')
 
-  test %>% itemize(rule, id, desc) %>% data.frame
+  #test %>% itemize(rule, id, desc) %>% data.frame
 
   #undebug(qpNCA:::check.input)
-  test %>%
-    filter(id == 25) %>%
-    my_qpNCA(reg = 'sd', ss = 'n', route = 'IVB') %$%
-    pkpar %>% as.list
-
-head(test)
+#   test %>%
+#     filter(id == 25) %>%
+#     my_qpNCA(reg = 'sd', ss = 'n', route = 'IVB') %$%
+#     pkpar %>% as.list
+#
+# head(test)
 
 test %<>% mutate(
   reg = case_when(
@@ -232,8 +232,9 @@ test %<>% mutate(
 test %<>% mutate(method = 1)
 
 test %>%
-  itemize(id, rule, desc, reg, route, loqrule, method) %>%
-  data.frame %>% as.csv('scenarios.csv')
+  select(id, rule, desc, reg, route, loqrule, method) %>%
+  unique %>%
+  data.frame %>% write.csv(row.names = FALSE, 'scenarios.csv')
 
 out <- qpNCA(
   test,

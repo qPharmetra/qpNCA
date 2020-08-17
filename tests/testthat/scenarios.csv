@@ -1,42 +1,42 @@
-id,rule,desc,reg,route,loqrule,method
--6,START_INFMD,"Initial INF, MD curve",MD,IVI,1,1
--5,START_IVMD,"Initial IV, MD curve",MD,IVB,1,1
--4,START_POMD,"Initial PO, MD curve",MD,EV,1,1
--3,START_INFSD,"Initial INF, SD curve",SD,IVI,1,1
--2,START_IVSD,"Initial IV, SD curve",SD,IVB,1,1
--1,START_POSD,"Initial PO, SD curve",SD,EV,1,1
-1,SDT-1,example rule SDT-1,SD,EV,1,1
-2,SDT-2,example rule SDT-2,SD,EV,1,1
-3,SDT-3,example rule SDT-3,SD,EV,1,1
-4,SDC-1,example rule SDC-1,SD,EV,1,1
-5,SDC-2,example rule SDC-2,SD,EV,1,1
-6,SDC-3,example rule SDC-3,SD,EV,1,1
-7,SDC-4a,example rule SDC-4a,SD,EV,1,1
-8,SDC-4b,example rule SDC-4b,SD,EV,1,1
-9,SDC-4c,example rule SDC-4c,SD,EV,1,1
-10,SDC-4d,example rule SDC-4d,SD,EV,1,1
-11,MDT-1,example rule MDT-1,MD,EV,1,1
-12,MDT-2,example rule MDT-2,MD,EV,1,1
-13,MDT-3,example rule MDT-3,MD,EV,1,1
-14,MDT-3a,example rule MDT-3a,MD,EV,1,1
-15,MDC-1-noss,example rule MDC-1,MD,EV,1,1
-16,MDC-2-noss,example rule MDC-2,MD,EV,1,1
-17,MDC-3-noss,example rule MDC-3,MD,EV,1,1
-18,MDC-1-ss,example rule MDC-1,MD,EV,1,1
-19,MDC-2-ss,example rule MDC-2,MD,EV,1,1
-20,MDC-3-ss,example rule MDC-3,MD,EV,1,1
-21,POSDLOQ_1,example rule POSDLOQ_1,SD,EV,1,1
-22,POSDLOQ_2,example rule POSDLOQ_2,SD,EV,2,1
-23,POSDLOQ_3,example rule POSDLOQ_3,SD,EV,3,1
-24,POSDLOQ_4,example rule POSDLOQ_4,SD,EV,4,1
-25,IVSDLOQ_1,example rule IVSDLOQ_1,SD,IVB,1,1
-26,IVSDLOQ_2,example rule IVSDLOQ_2,SD,IVB,2,1
-27,IVSDLOQ_3,example rule IVSDLOQ_3,SD,IVB,3,1
-28,IVSDLOQ_4,example rule IVSDLOQ_4,SD,IVB,4,1
-29,POSDEXCL,example rule POSDEXCL,SD,EV,1,1
-30,POSDTRAP_2,example rule POSDTRAP_2,SD,EV,1,1
-31,POSDTRAP_3,example rule POSDTRAP_3,SD,EV,1,1
-32,MDC-4a,example rule MDC-4a,MD,EV,1,1
-33,MDC-4b,example rule MDC-4b,MD,EV,1,1
-34,MDC-4c,example rule MDC-4c,MD,EV,1,1
-35,MDC-4d,example rule MDC-4d,MD,EV,1,1
+"id","rule","desc","reg","route","loqrule","method"
+-1,"START_POSD","Initial PO, SD curve","SD","EV",2,1
+-2,"START_IVSD","Initial IV, SD curve","SD","IVB",2,1
+-3,"START_INFSD","Initial INF, SD curve","SD","IVI",2,1
+-4,"START_POMD","Initial PO, MD curve","MD","EV",2,1
+-5,"START_IVMD","Initial IV, MD curve","MD","IVB",2,1
+-6,"START_INFMD","Initial INF, MD curve","MD","IVI",2,1
+1,"SDT-1","example rule SDT-1","SD","EV",2,1
+2,"SDT-2","example rule SDT-2","SD","EV",2,1
+3,"SDT-3","example rule SDT-3","SD","EV",2,1
+4,"SDC-1","example rule SDC-1","SD","EV",2,1
+5,"SDC-2","example rule SDC-2","SD","EV",2,1
+6,"SDC-3","example rule SDC-3","SD","EV",2,1
+7,"SDC-4a","example rule SDC-4a","SD","EV",2,1
+8,"SDC-4b","example rule SDC-4b","SD","EV",2,1
+9,"SDC-4c","example rule SDC-4c","SD","EV",2,1
+10,"SDC-4d","example rule SDC-4d","SD","EV",2,1
+11,"MDT-1","example rule MDT-1","MD","EV",2,1
+12,"MDT-2","example rule MDT-2","MD","EV",2,1
+13,"MDT-3","example rule MDT-3","MD","EV",2,1
+14,"MDT-3a","example rule MDT-3a","MD","EV",2,1
+15,"MDC-1-noss","example rule MDC-1","MD","EV",2,1
+16,"MDC-2-noss","example rule MDC-2","MD","EV",2,1
+17,"MDC-3-noss","example rule MDC-3","MD","EV",2,1
+18,"MDC-1-ss","example rule MDC-1","MD","EV",2,1
+19,"MDC-2-ss","example rule MDC-2","MD","EV",2,1
+20,"MDC-3-ss","example rule MDC-3","MD","EV",2,1
+21,"POSDLOQ_1","example rule POSDLOQ_1","SD","EV",1,1
+22,"POSDLOQ_2","example rule POSDLOQ_2","SD","EV",2,1
+23,"POSDLOQ_3","example rule POSDLOQ_3","SD","EV",3,1
+24,"POSDLOQ_4","example rule POSDLOQ_4","SD","EV",4,1
+25,"IVSDLOQ_1","example rule IVSDLOQ_1","SD","IVB",1,1
+26,"IVSDLOQ_2","example rule IVSDLOQ_2","SD","IVB",2,1
+27,"IVSDLOQ_3","example rule IVSDLOQ_3","SD","IVB",3,1
+28,"IVSDLOQ_4","example rule IVSDLOQ_4","SD","IVB",4,1
+29,"POSDEXCL","example rule POSDEXCL","SD","EV",2,1
+30,"POSDTRAP_2","example rule POSDTRAP_2","SD","EV",2,1
+31,"POSDTRAP_3","example rule POSDTRAP_3","SD","EV",2,1
+32,"MDC-4a","example rule MDC-4a","MD","EV",2,1
+33,"MDC-4b","example rule MDC-4b","MD","EV",2,1
+34,"MDC-4c","example rule MDC-4c","MD","EV",2,1
+35,"MDC-4d","example rule MDC-4d","MD","EV",2,1
