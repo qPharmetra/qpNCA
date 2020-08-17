@@ -9,6 +9,13 @@ sheets=excel_sheets('input_rules_1.0.22.xlsx')
 stopifnot(setequal(sheets, prev_sheets))
 sheet_list_org=lapply(sheets, function(x) {read_excel('input_rules_1.0.22.xlsx',sheet=x)})
 names(sheet_list_org)=sheets
+
+sheet_list_org[[6]]['dv']
+sheet_list_org[[6]] %<>% mutate(dv = as.numeric(dv))
+sheet_list_org[[3]]['dv']
+sheet_list_org[[3]] %<>% mutate(dv = as.numeric(dv))
+sheet_list_org %>% do.call(bind_rows,.) %>% write.csv('../../tests/testthat/profiles.csv')
+
 list2env(sheet_list_org, envir=.GlobalEnv)
 render <- function(..., path)bind_rows(...) %>%
   mutate(dv = as.numeric(dv)) %>%
