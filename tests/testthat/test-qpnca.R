@@ -5,6 +5,7 @@ library(testthat)
 #library(qpToolkit)
 library(tidyr)
 library(qpNCA)
+library(knitr)
 as_csv <- function (
   x, as.is = TRUE,
   na.strings = c("", "\\s",".", "NA"),
@@ -185,12 +186,11 @@ test_that('IV MD results are stable',{
   expect_identical(comp$value_test, comp$value_reference)
 })
 
-test_that('other results are stable',{
+test_that('all results are stable',{
   library(wrangle)
-  test <- as_csv('other.csv')
-  refr <- as_csv('voucher.csv')
+  test <- read.csv('profiles.csv')
 
-  test %>% itemize(rule, id, desc)
+  test %>% itemize(rule, id, desc) %>% data.frame
 
   #undebug(qpNCA:::check.input)
   test %>%
@@ -206,12 +206,16 @@ test %<>% mutate(
     grepl('MD', rule) ~ 'MD'
   )
 )
+
 test %<>% mutate(ss = 'n')
+
 test %<>% mutate(
   route = case_when(
     grepl('INF', rule) ~ 'IVI',
     grepl('IV', rule) ~ 'IVB',
-    grepl('PO', rule) ~ 'EV'
+    grepl('PO', rule) ~ 'EV',
+    grepl('SD', rule) ~ 'EV',
+    grepl('MD', rule) ~ 'EV'
   )
 )
 
@@ -221,19 +225,44 @@ test %<>% mutate(
     grepl('LOQ_2',rule) ~ 2,
     grepl('LOQ_3',rule) ~ 3,
     grepl('LOQ_4',rule) ~ 4,
-    TRUE ~ 1
+    TRUE ~ 2
   )
 )
 
+test %<>% mutate(method = 1)
+
 test %>%
-  my_qpNCA
+  itemize(id, rule, desc, reg, route, loqrule, method) %>%
+  data.frame %>% as.csv('scenarios.csv')
+
+out <- qpNCA(
+  test,
+  by = 'id',
+  nomtimevar = 'ntad',
+  timevar = 'tad',
+  depvar = 'dv',
+  bloqvar = 'bloq',
+  loqvar = 'loq',
+  #loqrule = 2,
+  includeCmax = 'Y',
+  exclvar = 'excl_th',
+  plotdir = NULL,
+  pdfdir = NA,
+  timelab = 'Time (h)',
+  deplab = 'Concentration (ng/mL)',
+  tau = 24,
+  tstart = 4,
+  tend = 12,
+  teval = 18,
+  covfile = test %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose),
+  factor = 1000,
+  # reg = reg,
+  # ss = ss,
+  # route = route,
+  # method = 1,
+  dose = 'dose'
+)
+
+expect_equal_to_reference(file = '001.rds',out)
 
 })
-# test_that('other results are stable',{
-#   test <- test_results(as_csv('other.csv'))
-#   refr <- reference_results(as_csv('voucher.csv'))
-#   comp <- merged_results(test,refr)
-#   diff <- comp %>% filter(identical == 0) %>% data.frame
-#   expect_identical(comp$value_test, comp$value_reference)
-# })
-

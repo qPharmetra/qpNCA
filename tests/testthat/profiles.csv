@@ -1,565 +1,565 @@
-"","rule","id","ntad","tad","dv","loq","desc","type","excl"
-"1","START_POSD",-1,0,0,0,"0.1","Initial PO, SD curve",2,NA
-"2","START_POSD",-1,0.5,0.5,0.76,".","Initial PO, SD curve",0,NA
-"3","START_POSD",-1,1,1,1.42,".","Initial PO, SD curve",0,NA
-"4","START_POSD",-1,2,2,2.48,".","Initial PO, SD curve",0,NA
-"5","START_POSD",-1,3,3,3.24,".","Initial PO, SD curve",0,NA
-"6","START_POSD",-1,4,4,3.75,".","Initial PO, SD curve",0,NA
-"7","START_POSD",-1,6,6,4.27,".","Initial PO, SD curve",0,NA
-"8","START_POSD",-1,8,8,4.31,".","Initial PO, SD curve",0,NA
-"9","START_POSD",-1,10,10,4.09,".","Initial PO, SD curve",0,NA
-"10","START_POSD",-1,12,12,3.72,".","Initial PO, SD curve",0,NA
-"11","START_POSD",-1,18,18,2.46,".","Initial PO, SD curve",0,NA
-"12","START_POSD",-1,24,24,1.45,".","Initial PO, SD curve",0,NA
-"13","START_POSD",-1,36,36,0.43,".","Initial PO, SD curve",0,NA
-"14","START_POSD",-1,48,48,0.11,".","Initial PO, SD curve",0,NA
-"15","START_IVSD",-2,0,0,NA,"0.1","Initial IV, SD curve",2,NA
-"16","START_IVSD",-2,0.5,0.5,4211,".","Initial IV, SD curve",0,NA
-"17","START_IVSD",-2,1,1,1793,".","Initial IV, SD curve",0,NA
-"18","START_IVSD",-2,1.5,1.5,808,".","Initial IV, SD curve",0,NA
-"19","START_IVSD",-2,2,2,405,".","Initial IV, SD curve",0,NA
-"20","START_IVSD",-2,3,3,168,".","Initial IV, SD curve",0,NA
-"21","START_IVSD",-2,4,4,122,".","Initial IV, SD curve",0,NA
-"22","START_IVSD",-2,6,6,101,".","Initial IV, SD curve",0,NA
-"23","START_IVSD",-2,8,8,88,".","Initial IV, SD curve",0,NA
-"24","START_IVSD",-2,12,12,67,".","Initial IV, SD curve",0,NA
-"25","START_IVSD",-2,18,18,51,".","Initial IV, SD curve",0,NA
-"26","START_IVSD",-2,24,24,30,".","Initial IV, SD curve",0,NA
-"27","START_IVSD",-2,36,36,13,".","Initial IV, SD curve",0,NA
-"28","START_IVSD",-2,48,48,6,".","Initial IV, SD curve",0,NA
-"29","START_INFSD",-3,0,0,0,"0.1","Initial INF, SD curve",NA,NA
-"30","START_INFSD",-3,0.5,0.5,NA,".","Initial INF, SD curve",NA,NA
-"31","START_INFSD",-3,1,1,NA,".","Initial INF, SD curve",NA,NA
-"32","START_INFSD",-3,2,2,NA,".","Initial INF, SD curve",NA,NA
-"33","START_INFSD",-3,3,3,NA,".","Initial INF, SD curve",NA,NA
-"34","START_INFSD",-3,4,4,NA,".","Initial INF, SD curve",NA,NA
-"35","START_INFSD",-3,6,6,NA,".","Initial INF, SD curve",NA,NA
-"36","START_INFSD",-3,8,8,4.31,".","Initial INF, SD curve",NA,NA
-"37","START_INFSD",-3,10,10,4.09,".","Initial INF, SD curve",NA,NA
-"38","START_INFSD",-3,12,12,3.72,".","Initial INF, SD curve",NA,NA
-"39","START_INFSD",-3,18,18,2.46,".","Initial INF, SD curve",NA,NA
-"40","START_INFSD",-3,24,24,1.45,".","Initial INF, SD curve",NA,NA
-"41","START_INFSD",-3,36,36,0.43,".","Initial INF, SD curve",NA,NA
-"42","START_INFSD",-3,48,48,0.11,".","Initial INF, SD curve",NA,NA
-"43","START_POMD",-4,0,0,1.1,"0.1","Initial PO, MD curve",2,NA
-"44","START_POMD",-4,0.5,0.5,0.76,".","Initial PO, MD curve",0,NA
-"45","START_POMD",-4,1,1,1.42,".","Initial PO, MD curve",0,NA
-"46","START_POMD",-4,2,2,2.48,".","Initial PO, MD curve",0,NA
-"47","START_POMD",-4,3,3,3.24,".","Initial PO, MD curve",0,NA
-"48","START_POMD",-4,4,4,3.75,".","Initial PO, MD curve",0,NA
-"49","START_POMD",-4,6,6,4.27,".","Initial PO, MD curve",0,NA
-"50","START_POMD",-4,8,8,4.31,".","Initial PO, MD curve",0,NA
-"51","START_POMD",-4,10,10,4.09,".","Initial PO, MD curve",0,NA
-"52","START_POMD",-4,12,12,3.72,".","Initial PO, MD curve",0,NA
-"53","START_POMD",-4,18,18,2.46,".","Initial PO, MD curve",0,NA
-"54","START_POMD",-4,24,24,1.45,".","Initial PO, MD curve",0,NA
-"55","START_POMD",-4,36,36,0.43,".","Initial PO, MD curve",0,NA
-"56","START_POMD",-4,48,48,0.11,".","Initial PO, MD curve",0,NA
-"57","START_IVMD",-5,0,0,NA,".","Initial IV, MD curve",NA,NA
-"58","START_IVMD",-5,0.5,0.5,4211,".","Initial IV, MD curve",NA,NA
-"59","START_IVMD",-5,1,1,1793,".","Initial IV, MD curve",NA,NA
-"60","START_IVMD",-5,1.5,1.5,808,".","Initial IV, MD curve",NA,NA
-"61","START_IVMD",-5,2,2,405,".","Initial IV, MD curve",NA,NA
-"62","START_IVMD",-5,3,3,168,".","Initial IV, MD curve",NA,NA
-"63","START_IVMD",-5,4,4,122,".","Initial IV, MD curve",NA,NA
-"64","START_IVMD",-5,6,6,101,".","Initial IV, MD curve",NA,NA
-"65","START_IVMD",-5,8,8,88,".","Initial IV, MD curve",NA,NA
-"66","START_IVMD",-5,12,12,67,".","Initial IV, MD curve",NA,NA
-"67","START_IVMD",-5,18,18,51,".","Initial IV, MD curve",NA,NA
-"68","START_IVMD",-5,24,24,30,".","Initial IV, MD curve",NA,NA
-"69","START_IVMD",-5,36,36,13,".","Initial IV, MD curve",NA,NA
-"70","START_IVMD",-5,48,48,6,".","Initial IV, MD curve",NA,NA
-"71","START_INFMD",-6,0,0,1.1,".","Initial INF, MD curve",NA,NA
-"72","START_INFMD",-6,0.5,0.5,NA,".","Initial INF, MD curve",NA,NA
-"73","START_INFMD",-6,1,1,NA,".","Initial INF, MD curve",NA,NA
-"74","START_INFMD",-6,2,2,NA,".","Initial INF, MD curve",NA,NA
-"75","START_INFMD",-6,3,3,NA,".","Initial INF, MD curve",NA,NA
-"76","START_INFMD",-6,4,4,NA,".","Initial INF, MD curve",NA,NA
-"77","START_INFMD",-6,6,6,NA,".","Initial INF, MD curve",NA,NA
-"78","START_INFMD",-6,8,8,4.31,".","Initial INF, MD curve",NA,NA
-"79","START_INFMD",-6,10,10,4.09,".","Initial INF, MD curve",NA,NA
-"80","START_INFMD",-6,12,12,3.72,".","Initial INF, MD curve",NA,NA
-"81","START_INFMD",-6,18,18,2.46,".","Initial INF, MD curve",NA,NA
-"82","START_INFMD",-6,24,24,1.45,".","Initial INF, MD curve",NA,NA
-"83","START_INFMD",-6,36,36,0.43,".","Initial INF, MD curve",NA,NA
-"84","START_INFMD",-6,48,48,0.11,".","Initial INF, MD curve",NA,NA
-"85","SDT-1",1,0,-0.5,0,"0.1","example rule SDT-1",2,NA
-"86","SDT-1",1,0.5,0.5,0.76,".","example rule SDT-1",0,NA
-"87","SDT-1",1,1,1,1.42,".","example rule SDT-1",0,NA
-"88","SDT-1",1,2,2,2.48,".","example rule SDT-1",0,NA
-"89","SDT-1",1,3,3,3.24,".","example rule SDT-1",0,NA
-"90","SDT-1",1,4,4,3.75,".","example rule SDT-1",0,NA
-"91","SDT-1",1,6,6,4.27,".","example rule SDT-1",0,NA
-"92","SDT-1",1,8,8,4.31,".","example rule SDT-1",0,NA
-"93","SDT-1",1,10,10,4.09,".","example rule SDT-1",0,NA
-"94","SDT-1",1,12,12,3.72,".","example rule SDT-1",0,NA
-"95","SDT-1",1,18,18,2.46,".","example rule SDT-1",0,NA
-"96","SDT-1",1,24,24,1.45,".","example rule SDT-1",0,NA
-"97","SDT-1",1,36,36,0.43,".","example rule SDT-1",0,NA
-"98","SDT-1",1,48,48,0.11,".","example rule SDT-1",0,NA
-"99","SDT-2",2,0,0,0,"0.1","example rule SDT-2",1,NA
-"100","SDT-2",2,0.5,0.5,0.76,".","example rule SDT-2",0,NA
-"101","SDT-2",2,1,1,1.42,".","example rule SDT-2",0,NA
-"102","SDT-2",2,2,2,2.48,".","example rule SDT-2",0,NA
-"103","SDT-2",2,3,3,3.24,".","example rule SDT-2",0,NA
-"104","SDT-2",2,4,4,3.75,".","example rule SDT-2",0,NA
-"105","SDT-2",2,6,6,4.27,".","example rule SDT-2",0,NA
-"106","SDT-2",2,8,8,4.31,".","example rule SDT-2",0,NA
-"107","SDT-2",2,10,10,4.09,".","example rule SDT-2",0,NA
-"108","SDT-2",2,12,12.5,3.72,".","example rule SDT-2",2,NA
-"109","SDT-2",2,18,18,2.46,".","example rule SDT-2",0,NA
-"110","SDT-2",2,24,24,1.45,".","example rule SDT-2",0,NA
-"111","SDT-2",2,36,36,0.43,".","example rule SDT-2",0,NA
-"112","SDT-2",2,48,48,0.11,".","example rule SDT-2",0,NA
-"113","SDT-3",3,0,0,0,"0.1","example rule SDT-3",1,NA
-"114","SDT-3",3,0.5,0.5,0.76,".","example rule SDT-3",0,NA
-"115","SDT-3",3,1,1,1.42,".","example rule SDT-3",0,NA
-"116","SDT-3",3,2,2,2.48,".","example rule SDT-3",0,NA
-"117","SDT-3",3,3,3,3.24,".","example rule SDT-3",0,NA
-"118","SDT-3",3,4,4,3.75,".","example rule SDT-3",0,NA
-"119","SDT-3",3,6,6,4.27,".","example rule SDT-3",0,NA
-"120","SDT-3",3,8,8,4.31,".","example rule SDT-3",0,NA
-"121","SDT-3",3,10,10,4.09,".","example rule SDT-3",0,NA
-"122","SDT-3",3,12,12,3.72,".","example rule SDT-3",0,NA
-"123","SDT-3",3,18,18,2.46,".","example rule SDT-3",0,NA
-"124","SDT-3",3,24,23.1,1.45,".","example rule SDT-3",0,NA
-"125","SDC-1",4,0,0,0.34,".","example rule SDC-1",3,NA
-"126","SDC-1",4,0.5,0.5,0.76,".","example rule SDC-1",0,NA
-"127","SDC-1",4,1,1,1.42,".","example rule SDC-1",0,NA
-"128","SDC-1",4,2,2,2.48,".","example rule SDC-1",0,NA
-"129","SDC-1",4,3,3,3.24,".","example rule SDC-1",0,NA
-"130","SDC-1",4,4,4,3.75,".","example rule SDC-1",0,NA
-"131","SDC-1",4,6,6,4.27,".","example rule SDC-1",0,NA
-"132","SDC-1",4,8,8,4.31,".","example rule SDC-1",0,NA
-"133","SDC-1",4,10,10,4.09,".","example rule SDC-1",0,NA
-"134","SDC-1",4,12,12,3.72,".","example rule SDC-1",0,NA
-"135","SDC-1",4,18,18,2.46,".","example rule SDC-1",0,NA
-"136","SDC-1",4,24,24,1.45,".","example rule SDC-1",0,NA
-"137","SDC-1",4,36,36,0.43,".","example rule SDC-1",0,NA
-"138","SDC-1",4,48,48,0.11,".","example rule SDC-1",0,NA
-"139","SDC-2",5,0,0,0,"0.1","example rule SDC-2",1,NA
-"140","SDC-2",5,0.5,0.5,0.76,".","example rule SDC-2",0,NA
-"141","SDC-2",5,1,1,1.42,".","example rule SDC-2",0,NA
-"142","SDC-2",5,2,2,2.48,".","example rule SDC-2",0,NA
-"143","SDC-2",5,3,3,3.24,".","example rule SDC-2",0,NA
-"144","SDC-2",5,4,4,3.75,".","example rule SDC-2",0,NA
-"145","SDC-2",5,6,6,4.27,".","example rule SDC-2",0,NA
-"146","SDC-2",5,8,8,4.31,".","example rule SDC-2",0,NA
-"147","SDC-2",5,10,10,4.09,".","example rule SDC-2",0,NA
-"148","SDC-2",5,12,12,NA,".","example rule SDC-2",3,NA
-"149","SDC-2",5,18,18,2.46,".","example rule SDC-2",0,NA
-"150","SDC-2",5,24,24,1.45,".","example rule SDC-2",0,NA
-"151","SDC-2",5,36,36,0.43,".","example rule SDC-2",0,NA
-"152","SDC-2",5,48,48,0.11,".","example rule SDC-2",0,NA
-"153","SDC-3",6,0,0,0,"0.1","example rule SDC-3",1,NA
-"154","SDC-3",6,0.5,0.5,0.76,".","example rule SDC-3",0,NA
-"155","SDC-3",6,1,1,1.42,".","example rule SDC-3",0,NA
-"156","SDC-3",6,2,2,2.48,".","example rule SDC-3",0,NA
-"157","SDC-3",6,3,3,3.24,".","example rule SDC-3",0,NA
-"158","SDC-3",6,4,4,3.75,".","example rule SDC-3",0,NA
-"159","SDC-3",6,6,6,4.27,".","example rule SDC-3",0,NA
-"160","SDC-3",6,8,8,4.31,".","example rule SDC-3",0,NA
-"161","SDC-3",6,10,10,4.09,".","example rule SDC-3",0,NA
-"162","SDC-3",6,12,12,3.72,".","example rule SDC-3",0,NA
-"163","SDC-3",6,18,18,2.46,".","example rule SDC-3",0,NA
-"164","SDC-3",6,24,24,NA,".","example rule SDC-3",0,NA
-"165","SDC-4a",7,0,0,NA,".","example rule SDC-4a",3,NA
-"166","SDC-4a",7,0.5,0.5,4211,".","example rule SDC-4a",0,NA
-"167","SDC-4a",7,1,1,1793,".","example rule SDC-4a",0,NA
-"168","SDC-4a",7,1.5,1.5,808,".","example rule SDC-4a",0,NA
-"169","SDC-4a",7,2,2,405,".","example rule SDC-4a",0,NA
-"170","SDC-4a",7,3,3,168,".","example rule SDC-4a",0,NA
-"171","SDC-4a",7,4,4,122,".","example rule SDC-4a",0,NA
-"172","SDC-4a",7,6,6,101,".","example rule SDC-4a",0,NA
-"173","SDC-4a",7,8,8,88,".","example rule SDC-4a",0,NA
-"174","SDC-4a",7,12,12,67,".","example rule SDC-4a",0,NA
-"175","SDC-4a",7,18,18,51,".","example rule SDC-4a",0,NA
-"176","SDC-4a",7,24,24,30,".","example rule SDC-4a",0,NA
-"177","SDC-4a",7,36,36,13,".","example rule SDC-4a",0,NA
-"178","SDC-4a",7,48,48,6,".","example rule SDC-4a",0,NA
-"179","SDC-4b",8,0,0,NA,".","example rule SDC-4b",3,NA
-"180","SDC-4b",8,0.5,0.5,4211,".","example rule SDC-4b",0,NA
-"181","SDC-4b",8,1,1,5000,".","example rule SDC-4b",0,NA
-"182","SDC-4b",8,1.5,1.5,808,".","example rule SDC-4b",0,NA
-"183","SDC-4b",8,2,2,405,".","example rule SDC-4b",0,NA
-"184","SDC-4b",8,3,3,168,".","example rule SDC-4b",0,NA
-"185","SDC-4b",8,4,4,122,".","example rule SDC-4b",0,NA
-"186","SDC-4b",8,6,6,101,".","example rule SDC-4b",0,NA
-"187","SDC-4b",8,8,8,88,".","example rule SDC-4b",0,NA
-"188","SDC-4b",8,12,12,67,".","example rule SDC-4b",0,NA
-"189","SDC-4b",8,18,18,51,".","example rule SDC-4b",0,NA
-"190","SDC-4b",8,24,24,30,NA,"example rule SDC-4b",0,NA
-"191","SDC-4b",8,36,36,13,NA,"example rule SDC-4b",0,NA
-"192","SDC-4b",8,48,48,6,NA,"example rule SDC-4b",0,NA
-"193","SDC-4c",9,0,0,NA,".","example rule SDC-4c",3,NA
-"194","SDC-4c",9,0.5,0.5,4211,".","example rule SDC-4c",0,NA
-"195","SDC-4c",9,1,1,NA,".","example rule SDC-4c",3,NA
-"196","SDC-4c",9,1.5,1.5,808,".","example rule SDC-4c",0,NA
-"197","SDC-4c",9,2,2,405,".","example rule SDC-4c",0,NA
-"198","SDC-4c",9,3,3,168,".","example rule SDC-4c",0,NA
-"199","SDC-4c",9,4,4,122,".","example rule SDC-4c",0,NA
-"200","SDC-4c",9,6,6,101,".","example rule SDC-4c",0,NA
-"201","SDC-4c",9,8,8,88,".","example rule SDC-4c",0,NA
-"202","SDC-4c",9,12,12,67,".","example rule SDC-4c",0,NA
-"203","SDC-4c",9,18,18,51,".","example rule SDC-4c",0,NA
-"204","SDC-4c",9,24,24,30,".","example rule SDC-4c",0,NA
-"205","SDC-4c",9,36,36,13,".","example rule SDC-4c",0,NA
-"206","SDC-4c",9,48,48,6,".","example rule SDC-4c",0,NA
-"207","SDC-4d",10,0,0,NA,".","example rule SDC-4d",3,NA
-"208","SDC-4d",10,0.5,0.5,4211,".","example rule SDC-4d",0,NA
-"209","SDC-4d",10,1,1,0,"0.1","example rule SDC-4d",1,NA
-"210","SDC-4d",10,1.5,1.5,808,".","example rule SDC-4d",0,NA
-"211","SDC-4d",10,2,2,405,".","example rule SDC-4d",0,NA
-"212","SDC-4d",10,3,3,168,".","example rule SDC-4d",0,NA
-"213","SDC-4d",10,4,4,122,".","example rule SDC-4d",0,NA
-"214","SDC-4d",10,6,6,101,".","example rule SDC-4d",0,NA
-"215","SDC-4d",10,8,8,88,".","example rule SDC-4d",0,NA
-"216","SDC-4d",10,12,12,67,".","example rule SDC-4d",0,NA
-"217","SDC-4d",10,18,18,51,".","example rule SDC-4d",0,NA
-"218","SDC-4d",10,24,24,30,".","example rule SDC-4d",0,NA
-"219","SDC-4d",10,36,36,13,".","example rule SDC-4d",0,NA
-"220","SDC-4d",10,48,48,6,".","example rule SDC-4d",0,NA
-"221","MDT-1",11,0,0.25,1.1,".","example rule MDT-1",2,NA
-"222","MDT-1",11,0.5,0.5,0.76,".","example rule MDT-1",0,NA
-"223","MDT-1",11,1,1,1.42,".","example rule MDT-1",0,NA
-"224","MDT-1",11,2,2,2.48,".","example rule MDT-1",0,NA
-"225","MDT-1",11,3,3,3.24,".","example rule MDT-1",0,NA
-"226","MDT-1",11,4,4,3.75,".","example rule MDT-1",0,NA
-"227","MDT-1",11,6,6,4.27,".","example rule MDT-1",0,NA
-"228","MDT-1",11,8,8,4.31,".","example rule MDT-1",0,NA
-"229","MDT-1",11,10,10,4.09,".","example rule MDT-1",0,NA
-"230","MDT-1",11,12,12,3.72,".","example rule MDT-1",0,NA
-"231","MDT-1",11,18,18,2.46,".","example rule MDT-1",0,NA
-"232","MDT-1",11,24,24,1.45,".","example rule MDT-1",0,NA
-"233","MDT-1",11,36,36,0.43,".","example rule MDT-1",0,NA
-"234","MDT-1",11,48,48,0.11,".","example rule MDT-1",0,NA
-"235","MDT-2",12,0,0,1.1,".","example rule MDT-2",0,NA
-"236","MDT-2",12,0.5,0.5,0.76,".","example rule MDT-2",0,NA
-"237","MDT-2",12,1,1,1.42,".","example rule MDT-2",0,NA
-"238","MDT-2",12,2,2,2.48,".","example rule MDT-2",0,NA
-"239","MDT-2",12,3,3,3.24,".","example rule MDT-2",0,NA
-"240","MDT-2",12,4,4,3.75,".","example rule MDT-2",0,NA
-"241","MDT-2",12,6,6,4.27,".","example rule MDT-2",0,NA
-"242","MDT-2",12,8,8,4.31,".","example rule MDT-2",0,NA
-"243","MDT-2",12,10,10,4.09,".","example rule MDT-2",0,NA
-"244","MDT-2",12,12,12.5,3.72,".","example rule MDT-2",2,NA
-"245","MDT-2",12,18,18,2.46,".","example rule MDT-2",0,NA
-"246","MDT-2",12,24,24,1.45,".","example rule MDT-2",0,NA
-"247","MDT-2",12,36,36,0.43,".","example rule MDT-2",0,NA
-"248","MDT-2",12,48,48,0.11,".","example rule MDT-2",0,NA
-"249","MDT-3",13,0,0,1.1,".","example rule MDT-3",0,NA
-"250","MDT-3",13,0.5,0.5,0.76,".","example rule MDT-3",0,NA
-"251","MDT-3",13,1,1,1.42,".","example rule MDT-3",0,NA
-"252","MDT-3",13,2,2,2.48,".","example rule MDT-3",0,NA
-"253","MDT-3",13,3,3,3.24,".","example rule MDT-3",0,NA
-"254","MDT-3",13,4,4,3.75,".","example rule MDT-3",0,NA
-"255","MDT-3",13,6,6,4.27,".","example rule MDT-3",0,NA
-"256","MDT-3",13,8,8,4.31,".","example rule MDT-3",0,NA
-"257","MDT-3",13,10,10,4.09,".","example rule MDT-3",0,NA
-"258","MDT-3",13,12,12,3.72,".","example rule MDT-3",0,NA
-"259","MDT-3",13,18,18,2.46,".","example rule MDT-3",0,NA
-"260","MDT-3",13,24,23.1,1.45,".","example rule MDT-3",0,NA
-"261","MDT-3a",14,0,-0.25,0,"1","example rule MDT-3a",2,NA
-"262","MDT-3a",14,0.5,0.5,0.76,".","example rule MDT-3a",0,NA
-"263","MDT-3a",14,1,1,1.42,".","example rule MDT-3a",0,NA
-"264","MDT-3a",14,2,2,2.48,".","example rule MDT-3a",0,NA
-"265","MDT-3a",14,3,3,3.24,".","example rule MDT-3a",0,NA
-"266","MDT-3a",14,4,4,3.75,".","example rule MDT-3a",0,NA
-"267","MDT-3a",14,6,6,4.27,".","example rule MDT-3a",0,NA
-"268","MDT-3a",14,8,8,4.31,".","example rule MDT-3a",0,NA
-"269","MDT-3a",14,10,10,4.09,".","example rule MDT-3a",0,NA
-"270","MDT-3a",14,12,12,3.72,".","example rule MDT-3a",0,NA
-"271","MDT-3a",14,18,18,2.46,".","example rule MDT-3a",0,NA
-"272","MDT-3a",14,24,24,1.45,".","example rule MDT-3a",0,NA
-"273","MDT-3a",14,36,36,0.43,".","example rule MDT-3a",0,NA
-"274","MDT-3a",14,48,48,0.11,".","example rule MDT-3a",0,NA
-"275","MDC-1-noss",15,0,0,NA,".","example rule MDC-1",3,NA
-"276","MDC-1-noss",15,0.5,0.5,0.76,".","example rule MDC-1",0,NA
-"277","MDC-1-noss",15,1,1,1.42,".","example rule MDC-1",0,NA
-"278","MDC-1-noss",15,2,2,2.48,".","example rule MDC-1",0,NA
-"279","MDC-1-noss",15,3,3,3.24,".","example rule MDC-1",0,NA
-"280","MDC-1-noss",15,4,4,3.75,".","example rule MDC-1",0,NA
-"281","MDC-1-noss",15,6,6,4.27,".","example rule MDC-1",0,NA
-"282","MDC-1-noss",15,8,8,4.31,".","example rule MDC-1",0,NA
-"283","MDC-1-noss",15,10,10,4.09,".","example rule MDC-1",0,NA
-"284","MDC-1-noss",15,12,12,3.72,".","example rule MDC-1",0,NA
-"285","MDC-1-noss",15,18,18,2.46,".","example rule MDC-1",0,NA
-"286","MDC-1-noss",15,24,24,1.45,".","example rule MDC-1",0,NA
-"287","MDC-1-noss",15,36,36,0.43,".","example rule MDC-1",0,NA
-"288","MDC-1-noss",15,48,48,0.11,".","example rule MDC-1",0,NA
-"289","MDC-2-noss",16,0,0,1.1,".","example rule MDC-2",0,NA
-"290","MDC-2-noss",16,0.5,0.5,0.76,".","example rule MDC-2",0,NA
-"291","MDC-2-noss",16,1,1,1.42,".","example rule MDC-2",0,NA
-"292","MDC-2-noss",16,2,2,2.48,".","example rule MDC-2",0,NA
-"293","MDC-2-noss",16,3,3,3.24,".","example rule MDC-2",0,NA
-"294","MDC-2-noss",16,4,4,3.75,".","example rule MDC-2",0,NA
-"295","MDC-2-noss",16,6,6,4.27,".","example rule MDC-2",0,NA
-"296","MDC-2-noss",16,8,8,4.31,".","example rule MDC-2",0,NA
-"297","MDC-2-noss",16,10,10,4.09,".","example rule MDC-2",0,NA
-"298","MDC-2-noss",16,12,12,NA,".","example rule MDC-2",3,NA
-"299","MDC-2-noss",16,18,18,2.46,".","example rule MDC-2",0,NA
-"300","MDC-2-noss",16,24,24,1.45,".","example rule MDC-2",0,NA
-"301","MDC-2-noss",16,36,36,0.43,".","example rule MDC-2",0,NA
-"302","MDC-2-noss",16,48,48,0.11,".","example rule MDC-2",0,NA
-"303","MDC-3-noss",17,0,0,1.1,".","example rule MDC-3",0,NA
-"304","MDC-3-noss",17,0.5,0.5,0.76,".","example rule MDC-3",0,NA
-"305","MDC-3-noss",17,1,1,1.42,".","example rule MDC-3",0,NA
-"306","MDC-3-noss",17,2,2,2.48,".","example rule MDC-3",0,NA
-"307","MDC-3-noss",17,3,3,3.24,".","example rule MDC-3",0,NA
-"308","MDC-3-noss",17,4,4,3.75,".","example rule MDC-3",0,NA
-"309","MDC-3-noss",17,6,6,4.27,".","example rule MDC-3",0,NA
-"310","MDC-3-noss",17,8,8,4.31,".","example rule MDC-3",0,NA
-"311","MDC-3-noss",17,10,10,4.09,".","example rule MDC-3",0,NA
-"312","MDC-3-noss",17,12,12,3.72,".","example rule MDC-3",0,NA
-"313","MDC-3-noss",17,18,18,2.46,".","example rule MDC-3",0,NA
-"314","MDC-3-noss",17,24,24,NA,".","example rule MDC-3",0,NA
-"315","MDC-1-ss",18,0,0,NA,".","example rule MDC-1",3,NA
-"316","MDC-1-ss",18,0.5,0.5,0.76,".","example rule MDC-1",0,NA
-"317","MDC-1-ss",18,1,1,1.42,".","example rule MDC-1",0,NA
-"318","MDC-1-ss",18,2,2,2.48,".","example rule MDC-1",0,NA
-"319","MDC-1-ss",18,3,3,3.24,".","example rule MDC-1",0,NA
-"320","MDC-1-ss",18,4,4,3.75,".","example rule MDC-1",0,NA
-"321","MDC-1-ss",18,6,6,4.27,".","example rule MDC-1",0,NA
-"322","MDC-1-ss",18,8,8,4.31,".","example rule MDC-1",0,NA
-"323","MDC-1-ss",18,10,10,4.09,".","example rule MDC-1",0,NA
-"324","MDC-1-ss",18,12,12,3.72,".","example rule MDC-1",0,NA
-"325","MDC-1-ss",18,18,18,2.46,".","example rule MDC-1",0,NA
-"326","MDC-1-ss",18,24,24,1.45,".","example rule MDC-1",0,NA
-"327","MDC-1-ss",18,36,36,0.43,".","example rule MDC-1",0,NA
-"328","MDC-1-ss",18,48,48,0.11,".","example rule MDC-1",0,NA
-"329","MDC-2-ss",19,0,0,1.1,".","example rule MDC-2",0,NA
-"330","MDC-2-ss",19,0.5,0.5,0.76,".","example rule MDC-2",0,NA
-"331","MDC-2-ss",19,1,1,1.42,".","example rule MDC-2",0,NA
-"332","MDC-2-ss",19,2,2,2.48,".","example rule MDC-2",0,NA
-"333","MDC-2-ss",19,3,3,3.24,".","example rule MDC-2",0,NA
-"334","MDC-2-ss",19,4,4,3.75,".","example rule MDC-2",0,NA
-"335","MDC-2-ss",19,6,6,4.27,".","example rule MDC-2",0,NA
-"336","MDC-2-ss",19,8,8,4.31,".","example rule MDC-2",0,NA
-"337","MDC-2-ss",19,10,10,4.09,".","example rule MDC-2",0,NA
-"338","MDC-2-ss",19,12,12,NA,".","example rule MDC-2",3,NA
-"339","MDC-2-ss",19,18,18,2.46,".","example rule MDC-2",0,NA
-"340","MDC-2-ss",19,24,24,1.45,".","example rule MDC-2",0,NA
-"341","MDC-2-ss",19,36,36,0.43,".","example rule MDC-2",0,NA
-"342","MDC-2-ss",19,48,48,0.11,".","example rule MDC-2",0,NA
-"343","MDC-3-ss",20,0,0,1.1,".","example rule MDC-3",0,NA
-"344","MDC-3-ss",20,0.5,0.5,0.76,".","example rule MDC-3",0,NA
-"345","MDC-3-ss",20,1,1,1.42,".","example rule MDC-3",0,NA
-"346","MDC-3-ss",20,2,2,2.48,".","example rule MDC-3",0,NA
-"347","MDC-3-ss",20,3,3,3.24,".","example rule MDC-3",0,NA
-"348","MDC-3-ss",20,4,4,3.75,".","example rule MDC-3",0,NA
-"349","MDC-3-ss",20,6,6,4.27,".","example rule MDC-3",0,NA
-"350","MDC-3-ss",20,8,8,4.31,".","example rule MDC-3",0,NA
-"351","MDC-3-ss",20,10,10,4.09,".","example rule MDC-3",0,NA
-"352","MDC-3-ss",20,12,12,3.72,".","example rule MDC-3",0,NA
-"353","MDC-3-ss",20,18,18,2.46,".","example rule MDC-3",0,NA
-"354","MDC-3-ss",20,24,24,NA,".","example rule MDC-3",0,NA
-"355","POSDLOQ_1",21,0,0,0,"0.1","example rule POSDLOQ_1",NA,NA
-"356","POSDLOQ_1",21,0.5,0.5,NA,"0.1","example rule POSDLOQ_1",NA,NA
-"357","POSDLOQ_1",21,1,1,1.42,".","example rule POSDLOQ_1",NA,NA
-"358","POSDLOQ_1",21,2,2,2.48,".","example rule POSDLOQ_1",NA,NA
-"359","POSDLOQ_1",21,3,3,3.24,".","example rule POSDLOQ_1",NA,NA
-"360","POSDLOQ_1",21,4,4,3.75,".","example rule POSDLOQ_1",NA,NA
-"361","POSDLOQ_1",21,6,6,4.27,".","example rule POSDLOQ_1",NA,NA
-"362","POSDLOQ_1",21,8,8,4.31,".","example rule POSDLOQ_1",NA,NA
-"363","POSDLOQ_1",21,10,10,4.09,".","example rule POSDLOQ_1",NA,NA
-"364","POSDLOQ_1",21,12,12,NA,"0.1","example rule POSDLOQ_1",NA,NA
-"365","POSDLOQ_1",21,18,18,2.46,".","example rule POSDLOQ_1",NA,NA
-"366","POSDLOQ_1",21,24,24,1.45,".","example rule POSDLOQ_1",NA,NA
-"367","POSDLOQ_1",21,36,36,NA,"0.1","example rule POSDLOQ_1",NA,NA
-"368","POSDLOQ_1",21,48,48,NA,"0.1","example rule POSDLOQ_1",NA,NA
-"369","POSDLOQ_2",22,0,0,0,"0.1","example rule POSDLOQ_2",NA,NA
-"370","POSDLOQ_2",22,0.5,0.5,NA,"0.1","example rule POSDLOQ_2",NA,NA
-"371","POSDLOQ_2",22,1,1,1.42,".","example rule POSDLOQ_2",NA,NA
-"372","POSDLOQ_2",22,2,2,2.48,".","example rule POSDLOQ_2",NA,NA
-"373","POSDLOQ_2",22,3,3,3.24,".","example rule POSDLOQ_2",NA,NA
-"374","POSDLOQ_2",22,4,4,3.75,".","example rule POSDLOQ_2",NA,NA
-"375","POSDLOQ_2",22,6,6,4.27,".","example rule POSDLOQ_2",NA,NA
-"376","POSDLOQ_2",22,8,8,4.31,".","example rule POSDLOQ_2",NA,NA
-"377","POSDLOQ_2",22,10,10,4.09,".","example rule POSDLOQ_2",NA,NA
-"378","POSDLOQ_2",22,12,12,NA,"0.1","example rule POSDLOQ_2",NA,NA
-"379","POSDLOQ_2",22,18,18,2.46,".","example rule POSDLOQ_2",NA,NA
-"380","POSDLOQ_2",22,24,24,1.45,".","example rule POSDLOQ_2",NA,NA
-"381","POSDLOQ_2",22,36,36,NA,"0.1","example rule POSDLOQ_2",NA,NA
-"382","POSDLOQ_2",22,48,48,NA,"0.1","example rule POSDLOQ_2",NA,NA
-"383","POSDLOQ_3",23,0,0,0,"0.1","example rule POSDLOQ_3",NA,NA
-"384","POSDLOQ_3",23,0.5,0.5,NA,"0.1","example rule POSDLOQ_3",NA,NA
-"385","POSDLOQ_3",23,1,1,1.42,".","example rule POSDLOQ_3",NA,NA
-"386","POSDLOQ_3",23,2,2,2.48,".","example rule POSDLOQ_3",NA,NA
-"387","POSDLOQ_3",23,3,3,3.24,".","example rule POSDLOQ_3",NA,NA
-"388","POSDLOQ_3",23,4,4,3.75,".","example rule POSDLOQ_3",NA,NA
-"389","POSDLOQ_3",23,6,6,4.27,".","example rule POSDLOQ_3",NA,NA
-"390","POSDLOQ_3",23,8,8,4.31,".","example rule POSDLOQ_3",NA,NA
-"391","POSDLOQ_3",23,10,10,4.09,".","example rule POSDLOQ_3",NA,NA
-"392","POSDLOQ_3",23,12,12,NA,"0.1","example rule POSDLOQ_3",NA,NA
-"393","POSDLOQ_3",23,18,18,2.46,".","example rule POSDLOQ_3",NA,NA
-"394","POSDLOQ_3",23,24,24,1.45,".","example rule POSDLOQ_3",NA,NA
-"395","POSDLOQ_3",23,36,36,NA,"0.1","example rule POSDLOQ_3",NA,NA
-"396","POSDLOQ_3",23,48,48,NA,"0.1","example rule POSDLOQ_3",NA,NA
-"397","POSDLOQ_4",24,0,0,0,"0.1","example rule POSDLOQ_4",NA,NA
-"398","POSDLOQ_4",24,0.5,0.5,NA,"0.1","example rule POSDLOQ_4",NA,NA
-"399","POSDLOQ_4",24,1,1,1.42,".","example rule POSDLOQ_4",NA,NA
-"400","POSDLOQ_4",24,2,2,2.48,".","example rule POSDLOQ_4",NA,NA
-"401","POSDLOQ_4",24,3,3,3.24,".","example rule POSDLOQ_4",NA,NA
-"402","POSDLOQ_4",24,4,4,3.75,".","example rule POSDLOQ_4",NA,NA
-"403","POSDLOQ_4",24,6,6,4.27,".","example rule POSDLOQ_4",NA,NA
-"404","POSDLOQ_4",24,8,8,4.31,".","example rule POSDLOQ_4",NA,NA
-"405","POSDLOQ_4",24,10,10,4.09,".","example rule POSDLOQ_4",NA,NA
-"406","POSDLOQ_4",24,12,12,NA,"0.1","example rule POSDLOQ_4",NA,NA
-"407","POSDLOQ_4",24,18,18,2.46,".","example rule POSDLOQ_4",NA,NA
-"408","POSDLOQ_4",24,24,24,1.45,".","example rule POSDLOQ_4",NA,NA
-"409","POSDLOQ_4",24,36,36,NA,"0.1","example rule POSDLOQ_4",NA,NA
-"410","POSDLOQ_4",24,48,48,NA,"0.1","example rule POSDLOQ_4",NA,NA
-"411","IVSDLOQ_1",25,0,0,NA,"0.1","example rule IVSDLOQ_1",NA,NA
-"412","IVSDLOQ_1",25,0.5,0.5,NA,"0.1","example rule IVSDLOQ_1",NA,NA
-"413","IVSDLOQ_1",25,1,1,1793,".","example rule IVSDLOQ_1",NA,NA
-"414","IVSDLOQ_1",25,1.5,1.5,808,".","example rule IVSDLOQ_1",NA,NA
-"415","IVSDLOQ_1",25,2,2,405,".","example rule IVSDLOQ_1",NA,NA
-"416","IVSDLOQ_1",25,3,3,168,".","example rule IVSDLOQ_1",NA,NA
-"417","IVSDLOQ_1",25,4,4,122,".","example rule IVSDLOQ_1",NA,NA
-"418","IVSDLOQ_1",25,6,6,101,".","example rule IVSDLOQ_1",NA,NA
-"419","IVSDLOQ_1",25,8,8,88,".","example rule IVSDLOQ_1",NA,NA
-"420","IVSDLOQ_1",25,12,12,NA,"0.1","example rule IVSDLOQ_1",NA,NA
-"421","IVSDLOQ_1",25,18,18,51,".","example rule IVSDLOQ_1",NA,NA
-"422","IVSDLOQ_1",25,24,24,30,".","example rule IVSDLOQ_1",NA,NA
-"423","IVSDLOQ_1",25,36,36,NA,"0.1","example rule IVSDLOQ_1",NA,NA
-"424","IVSDLOQ_1",25,48,48,NA,"0.1","example rule IVSDLOQ_1",NA,NA
-"425","IVSDLOQ_2",26,0,0,NA,"0.1","example rule IVSDLOQ_2",NA,NA
-"426","IVSDLOQ_2",26,0.5,0.5,NA,"0.1","example rule IVSDLOQ_2",NA,NA
-"427","IVSDLOQ_2",26,1,1,1793,".","example rule IVSDLOQ_2",NA,NA
-"428","IVSDLOQ_2",26,1.5,1.5,808,".","example rule IVSDLOQ_2",NA,NA
-"429","IVSDLOQ_2",26,2,2,405,".","example rule IVSDLOQ_2",NA,NA
-"430","IVSDLOQ_2",26,3,3,168,".","example rule IVSDLOQ_2",NA,NA
-"431","IVSDLOQ_2",26,4,4,122,".","example rule IVSDLOQ_2",NA,NA
-"432","IVSDLOQ_2",26,6,6,101,".","example rule IVSDLOQ_2",NA,NA
-"433","IVSDLOQ_2",26,8,8,88,".","example rule IVSDLOQ_2",NA,NA
-"434","IVSDLOQ_2",26,12,12,NA,"0.1","example rule IVSDLOQ_2",NA,NA
-"435","IVSDLOQ_2",26,18,18,51,".","example rule IVSDLOQ_2",NA,NA
-"436","IVSDLOQ_2",26,24,24,30,".","example rule IVSDLOQ_2",NA,NA
-"437","IVSDLOQ_2",26,36,36,NA,"0.1","example rule IVSDLOQ_2",NA,NA
-"438","IVSDLOQ_2",26,48,48,NA,"0.1","example rule IVSDLOQ_2",NA,NA
-"439","IVSDLOQ_3",27,0,0,NA,"0.1","example rule IVSDLOQ_3",NA,NA
-"440","IVSDLOQ_3",27,0.5,0.5,NA,"0.1","example rule IVSDLOQ_3",NA,NA
-"441","IVSDLOQ_3",27,1,1,1793,".","example rule IVSDLOQ_3",NA,NA
-"442","IVSDLOQ_3",27,1.5,1.5,808,".","example rule IVSDLOQ_3",NA,NA
-"443","IVSDLOQ_3",27,2,2,405,".","example rule IVSDLOQ_3",NA,NA
-"444","IVSDLOQ_3",27,3,3,168,".","example rule IVSDLOQ_3",NA,NA
-"445","IVSDLOQ_3",27,4,4,122,".","example rule IVSDLOQ_3",NA,NA
-"446","IVSDLOQ_3",27,6,6,101,".","example rule IVSDLOQ_3",NA,NA
-"447","IVSDLOQ_3",27,8,8,88,".","example rule IVSDLOQ_3",NA,NA
-"448","IVSDLOQ_3",27,12,12,NA,"0.1","example rule IVSDLOQ_3",NA,NA
-"449","IVSDLOQ_3",27,18,18,51,".","example rule IVSDLOQ_3",NA,NA
-"450","IVSDLOQ_3",27,24,24,30,".","example rule IVSDLOQ_3",NA,NA
-"451","IVSDLOQ_3",27,36,36,NA,"0.1","example rule IVSDLOQ_3",NA,NA
-"452","IVSDLOQ_3",27,48,48,NA,"0.1","example rule IVSDLOQ_3",NA,NA
-"453","IVSDLOQ_4",28,0,0,NA,"0.1","example rule IVSDLOQ_4",NA,NA
-"454","IVSDLOQ_4",28,0.5,0.5,NA,"0.1","example rule IVSDLOQ_4",NA,NA
-"455","IVSDLOQ_4",28,1,1,1793,".","example rule IVSDLOQ_4",NA,NA
-"456","IVSDLOQ_4",28,1.5,1.5,808,".","example rule IVSDLOQ_4",NA,NA
-"457","IVSDLOQ_4",28,2,2,405,".","example rule IVSDLOQ_4",NA,NA
-"458","IVSDLOQ_4",28,3,3,168,".","example rule IVSDLOQ_4",NA,NA
-"459","IVSDLOQ_4",28,4,4,122,".","example rule IVSDLOQ_4",NA,NA
-"460","IVSDLOQ_4",28,6,6,101,".","example rule IVSDLOQ_4",NA,NA
-"461","IVSDLOQ_4",28,8,8,88,".","example rule IVSDLOQ_4",NA,NA
-"462","IVSDLOQ_4",28,12,12,NA,"0.1","example rule IVSDLOQ_4",NA,NA
-"463","IVSDLOQ_4",28,18,18,51,".","example rule IVSDLOQ_4",NA,NA
-"464","IVSDLOQ_4",28,24,24,30,".","example rule IVSDLOQ_4",NA,NA
-"465","IVSDLOQ_4",28,36,36,NA,"0.1","example rule IVSDLOQ_4",NA,NA
-"466","IVSDLOQ_4",28,48,48,NA,"0.1","example rule IVSDLOQ_4",NA,NA
-"467","POSDEXCL",29,0,0,0,"0.1","example rule POSDEXCL",NA,0
-"468","POSDEXCL",29,0.5,0.5,0.76,".","example rule POSDEXCL",NA,0
-"469","POSDEXCL",29,1,1,1.42,".","example rule POSDEXCL",NA,0
-"470","POSDEXCL",29,2,2,2.48,".","example rule POSDEXCL",NA,0
-"471","POSDEXCL",29,3,3,3.24,".","example rule POSDEXCL",NA,0
-"472","POSDEXCL",29,4,4,3.75,".","example rule POSDEXCL",NA,0
-"473","POSDEXCL",29,6,6,4.27,".","example rule POSDEXCL",NA,0
-"474","POSDEXCL",29,8,8,4.31,".","example rule POSDEXCL",NA,0
-"475","POSDEXCL",29,10,10,4.09,".","example rule POSDEXCL",NA,0
-"476","POSDEXCL",29,12,12,10.72,".","example rule POSDEXCL",NA,1
-"477","POSDEXCL",29,18,18,2.46,".","example rule POSDEXCL",NA,0
-"478","POSDEXCL",29,24,24,1.45,".","example rule POSDEXCL",NA,0
-"479","POSDEXCL",29,36,36,0.43,".","example rule POSDEXCL",NA,0
-"480","POSDEXCL",29,48,48,0.11,".","example rule POSDEXCL",NA,0
-"481","POSDTRAP_2",30,0,0,0,"0.1","example rule POSDTRAP_2",NA,NA
-"482","POSDTRAP_2",30,0.5,0.5,0.76,".","example rule POSDTRAP_2",NA,NA
-"483","POSDTRAP_2",30,1,1,1.42,".","example rule POSDTRAP_2",NA,NA
-"484","POSDTRAP_2",30,2,2,2.48,".","example rule POSDTRAP_2",NA,NA
-"485","POSDTRAP_2",30,3,3,1.94,".","example rule POSDTRAP_2",NA,NA
-"486","POSDTRAP_2",30,4,4,3.75,".","example rule POSDTRAP_2",NA,NA
-"487","POSDTRAP_2",30,6,6,4.27,".","example rule POSDTRAP_2",NA,NA
-"488","POSDTRAP_2",30,8,8,4.31,".","example rule POSDTRAP_2",NA,NA
-"489","POSDTRAP_2",30,10,10,4.09,".","example rule POSDTRAP_2",NA,NA
-"490","POSDTRAP_2",30,12,12,3.72,".","example rule POSDTRAP_2",NA,NA
-"491","POSDTRAP_2",30,18,18,2.46,".","example rule POSDTRAP_2",NA,NA
-"492","POSDTRAP_2",30,24,24,1.45,".","example rule POSDTRAP_2",NA,NA
-"493","POSDTRAP_2",30,36,36,0.43,".","example rule POSDTRAP_2",NA,NA
-"494","POSDTRAP_2",30,48,48,0.11,".","example rule POSDTRAP_2",NA,NA
-"495","POSDTRAP_3",31,0,0,0,"0.1","example rule POSDTRAP_3",NA,NA
-"496","POSDTRAP_3",31,0.5,0.5,0.76,".","example rule POSDTRAP_3",NA,NA
-"497","POSDTRAP_3",31,1,1,1.42,".","example rule POSDTRAP_3",NA,NA
-"498","POSDTRAP_3",31,2,2,2.48,".","example rule POSDTRAP_3",NA,NA
-"499","POSDTRAP_3",31,3,3,3.24,".","example rule POSDTRAP_3",NA,NA
-"500","POSDTRAP_3",31,4,4,3.75,".","example rule POSDTRAP_3",NA,NA
-"501","POSDTRAP_3",31,6,6,4.27,".","example rule POSDTRAP_3",NA,NA
-"502","POSDTRAP_3",31,8,8,4.31,".","example rule POSDTRAP_3",NA,NA
-"503","POSDTRAP_3",31,10,10,4.09,".","example rule POSDTRAP_3",NA,NA
-"504","POSDTRAP_3",31,12,12,3.72,".","example rule POSDTRAP_3",NA,NA
-"505","POSDTRAP_3",31,18,18,2.46,".","example rule POSDTRAP_3",NA,NA
-"506","POSDTRAP_3",31,24,24,1.45,".","example rule POSDTRAP_3",NA,NA
-"507","POSDTRAP_3",31,36,36,0.43,".","example rule POSDTRAP_3",NA,NA
-"508","POSDTRAP_3",31,48,48,0.11,".","example rule POSDTRAP_3",NA,NA
-"509","MDC-4a",32,0,0,NA,".","example rule MDC-4a",3,NA
-"510","MDC-4a",32,0.5,0.5,4211,".","example rule MDC-4a",0,NA
-"511","MDC-4a",32,1,1,1793,".","example rule MDC-4a",0,NA
-"512","MDC-4a",32,1.5,1.5,808,".","example rule MDC-4a",0,NA
-"513","MDC-4a",32,2,2,405,".","example rule MDC-4a",0,NA
-"514","MDC-4a",32,3,3,168,".","example rule MDC-4a",0,NA
-"515","MDC-4a",32,4,4,122,".","example rule MDC-4a",0,NA
-"516","MDC-4a",32,6,6,101,".","example rule MDC-4a",0,NA
-"517","MDC-4a",32,8,8,88,".","example rule MDC-4a",0,NA
-"518","MDC-4a",32,12,12,67,".","example rule MDC-4a",0,NA
-"519","MDC-4a",32,18,18,51,".","example rule MDC-4a",0,NA
-"520","MDC-4a",32,24,24,30,".","example rule MDC-4a",0,NA
-"521","MDC-4a",32,36,36,13,".","example rule MDC-4a",0,NA
-"522","MDC-4a",32,48,48,6,".","example rule MDC-4a",0,NA
-"523","MDC-4b",33,0,0,NA,".","example rule MDC-4b",3,NA
-"524","MDC-4b",33,0.5,0.5,4211,".","example rule MDC-4b",0,NA
-"525","MDC-4b",33,1,1,5000,".","example rule MDC-4b",0,NA
-"526","MDC-4b",33,1.5,1.5,808,".","example rule MDC-4b",0,NA
-"527","MDC-4b",33,2,2,405,".","example rule MDC-4b",0,NA
-"528","MDC-4b",33,3,3,168,".","example rule MDC-4b",0,NA
-"529","MDC-4b",33,4,4,122,".","example rule MDC-4b",0,NA
-"530","MDC-4b",33,6,6,101,".","example rule MDC-4b",0,NA
-"531","MDC-4b",33,8,8,88,".","example rule MDC-4b",0,NA
-"532","MDC-4b",33,12,12,67,".","example rule MDC-4b",0,NA
-"533","MDC-4b",33,18,18,51,".","example rule MDC-4b",0,NA
-"534","MDC-4b",33,24,24,30,".","example rule MDC-4b",0,NA
-"535","MDC-4b",33,36,36,13,".","example rule MDC-4b",0,NA
-"536","MDC-4b",33,48,48,6,".","example rule MDC-4b",0,NA
-"537","MDC-4c",34,0,0,NA,".","example rule MDC-4c",3,NA
-"538","MDC-4c",34,0.5,0.5,4211,".","example rule MDC-4c",0,NA
-"539","MDC-4c",34,1,1,NA,".","example rule MDC-4c",3,NA
-"540","MDC-4c",34,1.5,1.5,808,".","example rule MDC-4c",0,NA
-"541","MDC-4c",34,2,2,405,".","example rule MDC-4c",0,NA
-"542","MDC-4c",34,3,3,168,".","example rule MDC-4c",0,NA
-"543","MDC-4c",34,4,4,122,".","example rule MDC-4c",0,NA
-"544","MDC-4c",34,6,6,101,".","example rule MDC-4c",0,NA
-"545","MDC-4c",34,8,8,88,".","example rule MDC-4c",0,NA
-"546","MDC-4c",34,12,12,67,".","example rule MDC-4c",0,NA
-"547","MDC-4c",34,18,18,51,".","example rule MDC-4c",0,NA
-"548","MDC-4c",34,24,24,30,".","example rule MDC-4c",0,NA
-"549","MDC-4c",34,36,36,13,".","example rule MDC-4c",0,NA
-"550","MDC-4c",34,48,48,6,".","example rule MDC-4c",0,NA
-"551","MDC-4d",35,0,0,NA,".","example rule MDC-4d",3,NA
-"552","MDC-4d",35,0.5,0.5,4211,".","example rule MDC-4d",0,NA
-"553","MDC-4d",35,1,1,0,"0.1","example rule MDC-4d",1,NA
-"554","MDC-4d",35,1.5,1.5,808,".","example rule MDC-4d",0,NA
-"555","MDC-4d",35,2,2,405,".","example rule MDC-4d",0,NA
-"556","MDC-4d",35,3,3,168,".","example rule MDC-4d",0,NA
-"557","MDC-4d",35,4,4,122,".","example rule MDC-4d",0,NA
-"558","MDC-4d",35,6,6,101,".","example rule MDC-4d",0,NA
-"559","MDC-4d",35,8,8,88,".","example rule MDC-4d",0,NA
-"560","MDC-4d",35,12,12,67,".","example rule MDC-4d",0,NA
-"561","MDC-4d",35,18,18,51,".","example rule MDC-4d",0,NA
-"562","MDC-4d",35,24,24,30,".","example rule MDC-4d",0,NA
-"563","MDC-4d",35,36,36,13,".","example rule MDC-4d",0,NA
-"564","MDC-4d",35,48,48,6,".","example rule MDC-4d",0,NA
+"","rule","id","ntad","tad","dv","loq","desc","type","excl","bloq","excl_th"
+"1","START_POSD",-1,0,0,0,0.1,"Initial PO, SD curve",2,NA,1,0
+"2","START_POSD",-1,0.5,0.5,0.76,NA,"Initial PO, SD curve",0,NA,0,0
+"3","START_POSD",-1,1,1,1.42,NA,"Initial PO, SD curve",0,NA,0,0
+"4","START_POSD",-1,2,2,2.48,NA,"Initial PO, SD curve",0,NA,0,0
+"5","START_POSD",-1,3,3,3.24,NA,"Initial PO, SD curve",0,NA,0,0
+"6","START_POSD",-1,4,4,3.75,NA,"Initial PO, SD curve",0,NA,0,0
+"7","START_POSD",-1,6,6,4.27,NA,"Initial PO, SD curve",0,NA,0,0
+"8","START_POSD",-1,8,8,4.31,NA,"Initial PO, SD curve",0,NA,0,0
+"9","START_POSD",-1,10,10,4.09,NA,"Initial PO, SD curve",0,NA,0,0
+"10","START_POSD",-1,12,12,3.72,NA,"Initial PO, SD curve",0,NA,0,0
+"11","START_POSD",-1,18,18,2.46,NA,"Initial PO, SD curve",0,NA,0,0
+"12","START_POSD",-1,24,24,1.45,NA,"Initial PO, SD curve",0,NA,0,0
+"13","START_POSD",-1,36,36,0.43,NA,"Initial PO, SD curve",0,NA,0,0
+"14","START_POSD",-1,48,48,0.11,NA,"Initial PO, SD curve",0,NA,0,0
+"15","START_IVSD",-2,0,0,NA,0.1,"Initial IV, SD curve",2,NA,1,0
+"16","START_IVSD",-2,0.5,0.5,4211,NA,"Initial IV, SD curve",0,NA,0,0
+"17","START_IVSD",-2,1,1,1793,NA,"Initial IV, SD curve",0,NA,0,0
+"18","START_IVSD",-2,1.5,1.5,808,NA,"Initial IV, SD curve",0,NA,0,0
+"19","START_IVSD",-2,2,2,405,NA,"Initial IV, SD curve",0,NA,0,0
+"20","START_IVSD",-2,3,3,168,NA,"Initial IV, SD curve",0,NA,0,0
+"21","START_IVSD",-2,4,4,122,NA,"Initial IV, SD curve",0,NA,0,0
+"22","START_IVSD",-2,6,6,101,NA,"Initial IV, SD curve",0,NA,0,0
+"23","START_IVSD",-2,8,8,88,NA,"Initial IV, SD curve",0,NA,0,0
+"24","START_IVSD",-2,12,12,67,NA,"Initial IV, SD curve",0,NA,0,0
+"25","START_IVSD",-2,18,18,51,NA,"Initial IV, SD curve",0,NA,0,0
+"26","START_IVSD",-2,24,24,30,NA,"Initial IV, SD curve",0,NA,0,0
+"27","START_IVSD",-2,36,36,13,NA,"Initial IV, SD curve",0,NA,0,0
+"28","START_IVSD",-2,48,48,6,NA,"Initial IV, SD curve",0,NA,0,0
+"29","START_INFSD",-3,0,0,0,0.1,"Initial INF, SD curve",NA,NA,1,0
+"30","START_INFSD",-3,0.5,0.5,NA,NA,"Initial INF, SD curve",NA,NA,0,0
+"31","START_INFSD",-3,1,1,NA,NA,"Initial INF, SD curve",NA,NA,0,0
+"32","START_INFSD",-3,2,2,NA,NA,"Initial INF, SD curve",NA,NA,0,0
+"33","START_INFSD",-3,3,3,NA,NA,"Initial INF, SD curve",NA,NA,0,0
+"34","START_INFSD",-3,4,4,NA,NA,"Initial INF, SD curve",NA,NA,0,0
+"35","START_INFSD",-3,6,6,NA,NA,"Initial INF, SD curve",NA,NA,0,0
+"36","START_INFSD",-3,8,8,4.31,NA,"Initial INF, SD curve",NA,NA,0,0
+"37","START_INFSD",-3,10,10,4.09,NA,"Initial INF, SD curve",NA,NA,0,0
+"38","START_INFSD",-3,12,12,3.72,NA,"Initial INF, SD curve",NA,NA,0,0
+"39","START_INFSD",-3,18,18,2.46,NA,"Initial INF, SD curve",NA,NA,0,0
+"40","START_INFSD",-3,24,24,1.45,NA,"Initial INF, SD curve",NA,NA,0,0
+"41","START_INFSD",-3,36,36,0.43,NA,"Initial INF, SD curve",NA,NA,0,0
+"42","START_INFSD",-3,48,48,0.11,NA,"Initial INF, SD curve",NA,NA,0,0
+"43","START_POMD",-4,0,0,1.1,0.1,"Initial PO, MD curve",2,NA,1,0
+"44","START_POMD",-4,0.5,0.5,0.76,NA,"Initial PO, MD curve",0,NA,0,0
+"45","START_POMD",-4,1,1,1.42,NA,"Initial PO, MD curve",0,NA,0,0
+"46","START_POMD",-4,2,2,2.48,NA,"Initial PO, MD curve",0,NA,0,0
+"47","START_POMD",-4,3,3,3.24,NA,"Initial PO, MD curve",0,NA,0,0
+"48","START_POMD",-4,4,4,3.75,NA,"Initial PO, MD curve",0,NA,0,0
+"49","START_POMD",-4,6,6,4.27,NA,"Initial PO, MD curve",0,NA,0,0
+"50","START_POMD",-4,8,8,4.31,NA,"Initial PO, MD curve",0,NA,0,0
+"51","START_POMD",-4,10,10,4.09,NA,"Initial PO, MD curve",0,NA,0,0
+"52","START_POMD",-4,12,12,3.72,NA,"Initial PO, MD curve",0,NA,0,0
+"53","START_POMD",-4,18,18,2.46,NA,"Initial PO, MD curve",0,NA,0,0
+"54","START_POMD",-4,24,24,1.45,NA,"Initial PO, MD curve",0,NA,0,0
+"55","START_POMD",-4,36,36,0.43,NA,"Initial PO, MD curve",0,NA,0,0
+"56","START_POMD",-4,48,48,0.11,NA,"Initial PO, MD curve",0,NA,0,0
+"57","START_IVMD",-5,0,0,NA,NA,"Initial IV, MD curve",NA,NA,0,0
+"58","START_IVMD",-5,0.5,0.5,4211,NA,"Initial IV, MD curve",NA,NA,0,0
+"59","START_IVMD",-5,1,1,1793,NA,"Initial IV, MD curve",NA,NA,0,0
+"60","START_IVMD",-5,1.5,1.5,808,NA,"Initial IV, MD curve",NA,NA,0,0
+"61","START_IVMD",-5,2,2,405,NA,"Initial IV, MD curve",NA,NA,0,0
+"62","START_IVMD",-5,3,3,168,NA,"Initial IV, MD curve",NA,NA,0,0
+"63","START_IVMD",-5,4,4,122,NA,"Initial IV, MD curve",NA,NA,0,0
+"64","START_IVMD",-5,6,6,101,NA,"Initial IV, MD curve",NA,NA,0,0
+"65","START_IVMD",-5,8,8,88,NA,"Initial IV, MD curve",NA,NA,0,0
+"66","START_IVMD",-5,12,12,67,NA,"Initial IV, MD curve",NA,NA,0,0
+"67","START_IVMD",-5,18,18,51,NA,"Initial IV, MD curve",NA,NA,0,0
+"68","START_IVMD",-5,24,24,30,NA,"Initial IV, MD curve",NA,NA,0,0
+"69","START_IVMD",-5,36,36,13,NA,"Initial IV, MD curve",NA,NA,0,0
+"70","START_IVMD",-5,48,48,6,NA,"Initial IV, MD curve",NA,NA,0,0
+"71","START_INFMD",-6,0,0,1.1,NA,"Initial INF, MD curve",NA,NA,0,0
+"72","START_INFMD",-6,0.5,0.5,NA,NA,"Initial INF, MD curve",NA,NA,0,0
+"73","START_INFMD",-6,1,1,NA,NA,"Initial INF, MD curve",NA,NA,0,0
+"74","START_INFMD",-6,2,2,NA,NA,"Initial INF, MD curve",NA,NA,0,0
+"75","START_INFMD",-6,3,3,NA,NA,"Initial INF, MD curve",NA,NA,0,0
+"76","START_INFMD",-6,4,4,NA,NA,"Initial INF, MD curve",NA,NA,0,0
+"77","START_INFMD",-6,6,6,NA,NA,"Initial INF, MD curve",NA,NA,0,0
+"78","START_INFMD",-6,8,8,4.31,NA,"Initial INF, MD curve",NA,NA,0,0
+"79","START_INFMD",-6,10,10,4.09,NA,"Initial INF, MD curve",NA,NA,0,0
+"80","START_INFMD",-6,12,12,3.72,NA,"Initial INF, MD curve",NA,NA,0,0
+"81","START_INFMD",-6,18,18,2.46,NA,"Initial INF, MD curve",NA,NA,0,0
+"82","START_INFMD",-6,24,24,1.45,NA,"Initial INF, MD curve",NA,NA,0,0
+"83","START_INFMD",-6,36,36,0.43,NA,"Initial INF, MD curve",NA,NA,0,0
+"84","START_INFMD",-6,48,48,0.11,NA,"Initial INF, MD curve",NA,NA,0,0
+"85","SDT-1",1,0,-0.5,0,0.1,"example rule SDT-1",2,NA,1,0
+"86","SDT-1",1,0.5,0.5,0.76,NA,"example rule SDT-1",0,NA,0,0
+"87","SDT-1",1,1,1,1.42,NA,"example rule SDT-1",0,NA,0,0
+"88","SDT-1",1,2,2,2.48,NA,"example rule SDT-1",0,NA,0,0
+"89","SDT-1",1,3,3,3.24,NA,"example rule SDT-1",0,NA,0,0
+"90","SDT-1",1,4,4,3.75,NA,"example rule SDT-1",0,NA,0,0
+"91","SDT-1",1,6,6,4.27,NA,"example rule SDT-1",0,NA,0,0
+"92","SDT-1",1,8,8,4.31,NA,"example rule SDT-1",0,NA,0,0
+"93","SDT-1",1,10,10,4.09,NA,"example rule SDT-1",0,NA,0,0
+"94","SDT-1",1,12,12,3.72,NA,"example rule SDT-1",0,NA,0,0
+"95","SDT-1",1,18,18,2.46,NA,"example rule SDT-1",0,NA,0,0
+"96","SDT-1",1,24,24,1.45,NA,"example rule SDT-1",0,NA,0,0
+"97","SDT-1",1,36,36,0.43,NA,"example rule SDT-1",0,NA,0,0
+"98","SDT-1",1,48,48,0.11,NA,"example rule SDT-1",0,NA,0,0
+"99","SDT-2",2,0,0,0,0.1,"example rule SDT-2",1,NA,1,0
+"100","SDT-2",2,0.5,0.5,0.76,NA,"example rule SDT-2",0,NA,0,0
+"101","SDT-2",2,1,1,1.42,NA,"example rule SDT-2",0,NA,0,0
+"102","SDT-2",2,2,2,2.48,NA,"example rule SDT-2",0,NA,0,0
+"103","SDT-2",2,3,3,3.24,NA,"example rule SDT-2",0,NA,0,0
+"104","SDT-2",2,4,4,3.75,NA,"example rule SDT-2",0,NA,0,0
+"105","SDT-2",2,6,6,4.27,NA,"example rule SDT-2",0,NA,0,0
+"106","SDT-2",2,8,8,4.31,NA,"example rule SDT-2",0,NA,0,0
+"107","SDT-2",2,10,10,4.09,NA,"example rule SDT-2",0,NA,0,0
+"108","SDT-2",2,12,12.5,3.72,NA,"example rule SDT-2",2,NA,0,0
+"109","SDT-2",2,18,18,2.46,NA,"example rule SDT-2",0,NA,0,0
+"110","SDT-2",2,24,24,1.45,NA,"example rule SDT-2",0,NA,0,0
+"111","SDT-2",2,36,36,0.43,NA,"example rule SDT-2",0,NA,0,0
+"112","SDT-2",2,48,48,0.11,NA,"example rule SDT-2",0,NA,0,0
+"113","SDT-3",3,0,0,0,0.1,"example rule SDT-3",1,NA,1,0
+"114","SDT-3",3,0.5,0.5,0.76,NA,"example rule SDT-3",0,NA,0,0
+"115","SDT-3",3,1,1,1.42,NA,"example rule SDT-3",0,NA,0,0
+"116","SDT-3",3,2,2,2.48,NA,"example rule SDT-3",0,NA,0,0
+"117","SDT-3",3,3,3,3.24,NA,"example rule SDT-3",0,NA,0,0
+"118","SDT-3",3,4,4,3.75,NA,"example rule SDT-3",0,NA,0,0
+"119","SDT-3",3,6,6,4.27,NA,"example rule SDT-3",0,NA,0,0
+"120","SDT-3",3,8,8,4.31,NA,"example rule SDT-3",0,NA,0,0
+"121","SDT-3",3,10,10,4.09,NA,"example rule SDT-3",0,NA,0,0
+"122","SDT-3",3,12,12,3.72,NA,"example rule SDT-3",0,NA,0,0
+"123","SDT-3",3,18,18,2.46,NA,"example rule SDT-3",0,NA,0,0
+"124","SDT-3",3,24,23.1,1.45,NA,"example rule SDT-3",0,NA,0,0
+"125","SDC-1",4,0,0,0.34,NA,"example rule SDC-1",3,NA,0,0
+"126","SDC-1",4,0.5,0.5,0.76,NA,"example rule SDC-1",0,NA,0,0
+"127","SDC-1",4,1,1,1.42,NA,"example rule SDC-1",0,NA,0,0
+"128","SDC-1",4,2,2,2.48,NA,"example rule SDC-1",0,NA,0,0
+"129","SDC-1",4,3,3,3.24,NA,"example rule SDC-1",0,NA,0,0
+"130","SDC-1",4,4,4,3.75,NA,"example rule SDC-1",0,NA,0,0
+"131","SDC-1",4,6,6,4.27,NA,"example rule SDC-1",0,NA,0,0
+"132","SDC-1",4,8,8,4.31,NA,"example rule SDC-1",0,NA,0,0
+"133","SDC-1",4,10,10,4.09,NA,"example rule SDC-1",0,NA,0,0
+"134","SDC-1",4,12,12,3.72,NA,"example rule SDC-1",0,NA,0,0
+"135","SDC-1",4,18,18,2.46,NA,"example rule SDC-1",0,NA,0,0
+"136","SDC-1",4,24,24,1.45,NA,"example rule SDC-1",0,NA,0,0
+"137","SDC-1",4,36,36,0.43,NA,"example rule SDC-1",0,NA,0,0
+"138","SDC-1",4,48,48,0.11,NA,"example rule SDC-1",0,NA,0,0
+"139","SDC-2",5,0,0,0,0.1,"example rule SDC-2",1,NA,1,0
+"140","SDC-2",5,0.5,0.5,0.76,NA,"example rule SDC-2",0,NA,0,0
+"141","SDC-2",5,1,1,1.42,NA,"example rule SDC-2",0,NA,0,0
+"142","SDC-2",5,2,2,2.48,NA,"example rule SDC-2",0,NA,0,0
+"143","SDC-2",5,3,3,3.24,NA,"example rule SDC-2",0,NA,0,0
+"144","SDC-2",5,4,4,3.75,NA,"example rule SDC-2",0,NA,0,0
+"145","SDC-2",5,6,6,4.27,NA,"example rule SDC-2",0,NA,0,0
+"146","SDC-2",5,8,8,4.31,NA,"example rule SDC-2",0,NA,0,0
+"147","SDC-2",5,10,10,4.09,NA,"example rule SDC-2",0,NA,0,0
+"148","SDC-2",5,12,12,NA,NA,"example rule SDC-2",3,NA,0,0
+"149","SDC-2",5,18,18,2.46,NA,"example rule SDC-2",0,NA,0,0
+"150","SDC-2",5,24,24,1.45,NA,"example rule SDC-2",0,NA,0,0
+"151","SDC-2",5,36,36,0.43,NA,"example rule SDC-2",0,NA,0,0
+"152","SDC-2",5,48,48,0.11,NA,"example rule SDC-2",0,NA,0,0
+"153","SDC-3",6,0,0,0,0.1,"example rule SDC-3",1,NA,1,0
+"154","SDC-3",6,0.5,0.5,0.76,NA,"example rule SDC-3",0,NA,0,0
+"155","SDC-3",6,1,1,1.42,NA,"example rule SDC-3",0,NA,0,0
+"156","SDC-3",6,2,2,2.48,NA,"example rule SDC-3",0,NA,0,0
+"157","SDC-3",6,3,3,3.24,NA,"example rule SDC-3",0,NA,0,0
+"158","SDC-3",6,4,4,3.75,NA,"example rule SDC-3",0,NA,0,0
+"159","SDC-3",6,6,6,4.27,NA,"example rule SDC-3",0,NA,0,0
+"160","SDC-3",6,8,8,4.31,NA,"example rule SDC-3",0,NA,0,0
+"161","SDC-3",6,10,10,4.09,NA,"example rule SDC-3",0,NA,0,0
+"162","SDC-3",6,12,12,3.72,NA,"example rule SDC-3",0,NA,0,0
+"163","SDC-3",6,18,18,2.46,NA,"example rule SDC-3",0,NA,0,0
+"164","SDC-3",6,24,24,NA,NA,"example rule SDC-3",0,NA,0,0
+"165","SDC-4a",7,0,0,NA,NA,"example rule SDC-4a",3,NA,0,0
+"166","SDC-4a",7,0.5,0.5,4211,NA,"example rule SDC-4a",0,NA,0,0
+"167","SDC-4a",7,1,1,1793,NA,"example rule SDC-4a",0,NA,0,0
+"168","SDC-4a",7,1.5,1.5,808,NA,"example rule SDC-4a",0,NA,0,0
+"169","SDC-4a",7,2,2,405,NA,"example rule SDC-4a",0,NA,0,0
+"170","SDC-4a",7,3,3,168,NA,"example rule SDC-4a",0,NA,0,0
+"171","SDC-4a",7,4,4,122,NA,"example rule SDC-4a",0,NA,0,0
+"172","SDC-4a",7,6,6,101,NA,"example rule SDC-4a",0,NA,0,0
+"173","SDC-4a",7,8,8,88,NA,"example rule SDC-4a",0,NA,0,0
+"174","SDC-4a",7,12,12,67,NA,"example rule SDC-4a",0,NA,0,0
+"175","SDC-4a",7,18,18,51,NA,"example rule SDC-4a",0,NA,0,0
+"176","SDC-4a",7,24,24,30,NA,"example rule SDC-4a",0,NA,0,0
+"177","SDC-4a",7,36,36,13,NA,"example rule SDC-4a",0,NA,0,0
+"178","SDC-4a",7,48,48,6,NA,"example rule SDC-4a",0,NA,0,0
+"179","SDC-4b",8,0,0,NA,NA,"example rule SDC-4b",3,NA,0,0
+"180","SDC-4b",8,0.5,0.5,4211,NA,"example rule SDC-4b",0,NA,0,0
+"181","SDC-4b",8,1,1,5000,NA,"example rule SDC-4b",0,NA,0,0
+"182","SDC-4b",8,1.5,1.5,808,NA,"example rule SDC-4b",0,NA,0,0
+"183","SDC-4b",8,2,2,405,NA,"example rule SDC-4b",0,NA,0,0
+"184","SDC-4b",8,3,3,168,NA,"example rule SDC-4b",0,NA,0,0
+"185","SDC-4b",8,4,4,122,NA,"example rule SDC-4b",0,NA,0,0
+"186","SDC-4b",8,6,6,101,NA,"example rule SDC-4b",0,NA,0,0
+"187","SDC-4b",8,8,8,88,NA,"example rule SDC-4b",0,NA,0,0
+"188","SDC-4b",8,12,12,67,NA,"example rule SDC-4b",0,NA,0,0
+"189","SDC-4b",8,18,18,51,NA,"example rule SDC-4b",0,NA,0,0
+"190","SDC-4b",8,24,24,30,NA,"example rule SDC-4b",0,NA,0,0
+"191","SDC-4b",8,36,36,13,NA,"example rule SDC-4b",0,NA,0,0
+"192","SDC-4b",8,48,48,6,NA,"example rule SDC-4b",0,NA,0,0
+"193","SDC-4c",9,0,0,NA,NA,"example rule SDC-4c",3,NA,0,0
+"194","SDC-4c",9,0.5,0.5,4211,NA,"example rule SDC-4c",0,NA,0,0
+"195","SDC-4c",9,1,1,NA,NA,"example rule SDC-4c",3,NA,0,0
+"196","SDC-4c",9,1.5,1.5,808,NA,"example rule SDC-4c",0,NA,0,0
+"197","SDC-4c",9,2,2,405,NA,"example rule SDC-4c",0,NA,0,0
+"198","SDC-4c",9,3,3,168,NA,"example rule SDC-4c",0,NA,0,0
+"199","SDC-4c",9,4,4,122,NA,"example rule SDC-4c",0,NA,0,0
+"200","SDC-4c",9,6,6,101,NA,"example rule SDC-4c",0,NA,0,0
+"201","SDC-4c",9,8,8,88,NA,"example rule SDC-4c",0,NA,0,0
+"202","SDC-4c",9,12,12,67,NA,"example rule SDC-4c",0,NA,0,0
+"203","SDC-4c",9,18,18,51,NA,"example rule SDC-4c",0,NA,0,0
+"204","SDC-4c",9,24,24,30,NA,"example rule SDC-4c",0,NA,0,0
+"205","SDC-4c",9,36,36,13,NA,"example rule SDC-4c",0,NA,0,0
+"206","SDC-4c",9,48,48,6,NA,"example rule SDC-4c",0,NA,0,0
+"207","SDC-4d",10,0,0,NA,NA,"example rule SDC-4d",3,NA,0,0
+"208","SDC-4d",10,0.5,0.5,4211,NA,"example rule SDC-4d",0,NA,0,0
+"209","SDC-4d",10,1,1,0,0.1,"example rule SDC-4d",1,NA,1,0
+"210","SDC-4d",10,1.5,1.5,808,NA,"example rule SDC-4d",0,NA,0,0
+"211","SDC-4d",10,2,2,405,NA,"example rule SDC-4d",0,NA,0,0
+"212","SDC-4d",10,3,3,168,NA,"example rule SDC-4d",0,NA,0,0
+"213","SDC-4d",10,4,4,122,NA,"example rule SDC-4d",0,NA,0,0
+"214","SDC-4d",10,6,6,101,NA,"example rule SDC-4d",0,NA,0,0
+"215","SDC-4d",10,8,8,88,NA,"example rule SDC-4d",0,NA,0,0
+"216","SDC-4d",10,12,12,67,NA,"example rule SDC-4d",0,NA,0,0
+"217","SDC-4d",10,18,18,51,NA,"example rule SDC-4d",0,NA,0,0
+"218","SDC-4d",10,24,24,30,NA,"example rule SDC-4d",0,NA,0,0
+"219","SDC-4d",10,36,36,13,NA,"example rule SDC-4d",0,NA,0,0
+"220","SDC-4d",10,48,48,6,NA,"example rule SDC-4d",0,NA,0,0
+"221","MDT-1",11,0,0.25,1.1,NA,"example rule MDT-1",2,NA,0,0
+"222","MDT-1",11,0.5,0.5,0.76,NA,"example rule MDT-1",0,NA,0,0
+"223","MDT-1",11,1,1,1.42,NA,"example rule MDT-1",0,NA,0,0
+"224","MDT-1",11,2,2,2.48,NA,"example rule MDT-1",0,NA,0,0
+"225","MDT-1",11,3,3,3.24,NA,"example rule MDT-1",0,NA,0,0
+"226","MDT-1",11,4,4,3.75,NA,"example rule MDT-1",0,NA,0,0
+"227","MDT-1",11,6,6,4.27,NA,"example rule MDT-1",0,NA,0,0
+"228","MDT-1",11,8,8,4.31,NA,"example rule MDT-1",0,NA,0,0
+"229","MDT-1",11,10,10,4.09,NA,"example rule MDT-1",0,NA,0,0
+"230","MDT-1",11,12,12,3.72,NA,"example rule MDT-1",0,NA,0,0
+"231","MDT-1",11,18,18,2.46,NA,"example rule MDT-1",0,NA,0,0
+"232","MDT-1",11,24,24,1.45,NA,"example rule MDT-1",0,NA,0,0
+"233","MDT-1",11,36,36,0.43,NA,"example rule MDT-1",0,NA,0,0
+"234","MDT-1",11,48,48,0.11,NA,"example rule MDT-1",0,NA,0,0
+"235","MDT-2",12,0,0,1.1,NA,"example rule MDT-2",0,NA,0,0
+"236","MDT-2",12,0.5,0.5,0.76,NA,"example rule MDT-2",0,NA,0,0
+"237","MDT-2",12,1,1,1.42,NA,"example rule MDT-2",0,NA,0,0
+"238","MDT-2",12,2,2,2.48,NA,"example rule MDT-2",0,NA,0,0
+"239","MDT-2",12,3,3,3.24,NA,"example rule MDT-2",0,NA,0,0
+"240","MDT-2",12,4,4,3.75,NA,"example rule MDT-2",0,NA,0,0
+"241","MDT-2",12,6,6,4.27,NA,"example rule MDT-2",0,NA,0,0
+"242","MDT-2",12,8,8,4.31,NA,"example rule MDT-2",0,NA,0,0
+"243","MDT-2",12,10,10,4.09,NA,"example rule MDT-2",0,NA,0,0
+"244","MDT-2",12,12,12.5,3.72,NA,"example rule MDT-2",2,NA,0,0
+"245","MDT-2",12,18,18,2.46,NA,"example rule MDT-2",0,NA,0,0
+"246","MDT-2",12,24,24,1.45,NA,"example rule MDT-2",0,NA,0,0
+"247","MDT-2",12,36,36,0.43,NA,"example rule MDT-2",0,NA,0,0
+"248","MDT-2",12,48,48,0.11,NA,"example rule MDT-2",0,NA,0,0
+"249","MDT-3",13,0,0,1.1,NA,"example rule MDT-3",0,NA,0,0
+"250","MDT-3",13,0.5,0.5,0.76,NA,"example rule MDT-3",0,NA,0,0
+"251","MDT-3",13,1,1,1.42,NA,"example rule MDT-3",0,NA,0,0
+"252","MDT-3",13,2,2,2.48,NA,"example rule MDT-3",0,NA,0,0
+"253","MDT-3",13,3,3,3.24,NA,"example rule MDT-3",0,NA,0,0
+"254","MDT-3",13,4,4,3.75,NA,"example rule MDT-3",0,NA,0,0
+"255","MDT-3",13,6,6,4.27,NA,"example rule MDT-3",0,NA,0,0
+"256","MDT-3",13,8,8,4.31,NA,"example rule MDT-3",0,NA,0,0
+"257","MDT-3",13,10,10,4.09,NA,"example rule MDT-3",0,NA,0,0
+"258","MDT-3",13,12,12,3.72,NA,"example rule MDT-3",0,NA,0,0
+"259","MDT-3",13,18,18,2.46,NA,"example rule MDT-3",0,NA,0,0
+"260","MDT-3",13,24,23.1,1.45,NA,"example rule MDT-3",0,NA,0,0
+"261","MDT-3a",14,0,-0.25,0,1,"example rule MDT-3a",2,NA,1,0
+"262","MDT-3a",14,0.5,0.5,0.76,NA,"example rule MDT-3a",0,NA,0,0
+"263","MDT-3a",14,1,1,1.42,NA,"example rule MDT-3a",0,NA,0,0
+"264","MDT-3a",14,2,2,2.48,NA,"example rule MDT-3a",0,NA,0,0
+"265","MDT-3a",14,3,3,3.24,NA,"example rule MDT-3a",0,NA,0,0
+"266","MDT-3a",14,4,4,3.75,NA,"example rule MDT-3a",0,NA,0,0
+"267","MDT-3a",14,6,6,4.27,NA,"example rule MDT-3a",0,NA,0,0
+"268","MDT-3a",14,8,8,4.31,NA,"example rule MDT-3a",0,NA,0,0
+"269","MDT-3a",14,10,10,4.09,NA,"example rule MDT-3a",0,NA,0,0
+"270","MDT-3a",14,12,12,3.72,NA,"example rule MDT-3a",0,NA,0,0
+"271","MDT-3a",14,18,18,2.46,NA,"example rule MDT-3a",0,NA,0,0
+"272","MDT-3a",14,24,24,1.45,NA,"example rule MDT-3a",0,NA,0,0
+"273","MDT-3a",14,36,36,0.43,NA,"example rule MDT-3a",0,NA,0,0
+"274","MDT-3a",14,48,48,0.11,NA,"example rule MDT-3a",0,NA,0,0
+"275","MDC-1-noss",15,0,0,NA,NA,"example rule MDC-1",3,NA,0,0
+"276","MDC-1-noss",15,0.5,0.5,0.76,NA,"example rule MDC-1",0,NA,0,0
+"277","MDC-1-noss",15,1,1,1.42,NA,"example rule MDC-1",0,NA,0,0
+"278","MDC-1-noss",15,2,2,2.48,NA,"example rule MDC-1",0,NA,0,0
+"279","MDC-1-noss",15,3,3,3.24,NA,"example rule MDC-1",0,NA,0,0
+"280","MDC-1-noss",15,4,4,3.75,NA,"example rule MDC-1",0,NA,0,0
+"281","MDC-1-noss",15,6,6,4.27,NA,"example rule MDC-1",0,NA,0,0
+"282","MDC-1-noss",15,8,8,4.31,NA,"example rule MDC-1",0,NA,0,0
+"283","MDC-1-noss",15,10,10,4.09,NA,"example rule MDC-1",0,NA,0,0
+"284","MDC-1-noss",15,12,12,3.72,NA,"example rule MDC-1",0,NA,0,0
+"285","MDC-1-noss",15,18,18,2.46,NA,"example rule MDC-1",0,NA,0,0
+"286","MDC-1-noss",15,24,24,1.45,NA,"example rule MDC-1",0,NA,0,0
+"287","MDC-1-noss",15,36,36,0.43,NA,"example rule MDC-1",0,NA,0,0
+"288","MDC-1-noss",15,48,48,0.11,NA,"example rule MDC-1",0,NA,0,0
+"289","MDC-2-noss",16,0,0,1.1,NA,"example rule MDC-2",0,NA,0,0
+"290","MDC-2-noss",16,0.5,0.5,0.76,NA,"example rule MDC-2",0,NA,0,0
+"291","MDC-2-noss",16,1,1,1.42,NA,"example rule MDC-2",0,NA,0,0
+"292","MDC-2-noss",16,2,2,2.48,NA,"example rule MDC-2",0,NA,0,0
+"293","MDC-2-noss",16,3,3,3.24,NA,"example rule MDC-2",0,NA,0,0
+"294","MDC-2-noss",16,4,4,3.75,NA,"example rule MDC-2",0,NA,0,0
+"295","MDC-2-noss",16,6,6,4.27,NA,"example rule MDC-2",0,NA,0,0
+"296","MDC-2-noss",16,8,8,4.31,NA,"example rule MDC-2",0,NA,0,0
+"297","MDC-2-noss",16,10,10,4.09,NA,"example rule MDC-2",0,NA,0,0
+"298","MDC-2-noss",16,12,12,NA,NA,"example rule MDC-2",3,NA,0,0
+"299","MDC-2-noss",16,18,18,2.46,NA,"example rule MDC-2",0,NA,0,0
+"300","MDC-2-noss",16,24,24,1.45,NA,"example rule MDC-2",0,NA,0,0
+"301","MDC-2-noss",16,36,36,0.43,NA,"example rule MDC-2",0,NA,0,0
+"302","MDC-2-noss",16,48,48,0.11,NA,"example rule MDC-2",0,NA,0,0
+"303","MDC-3-noss",17,0,0,1.1,NA,"example rule MDC-3",0,NA,0,0
+"304","MDC-3-noss",17,0.5,0.5,0.76,NA,"example rule MDC-3",0,NA,0,0
+"305","MDC-3-noss",17,1,1,1.42,NA,"example rule MDC-3",0,NA,0,0
+"306","MDC-3-noss",17,2,2,2.48,NA,"example rule MDC-3",0,NA,0,0
+"307","MDC-3-noss",17,3,3,3.24,NA,"example rule MDC-3",0,NA,0,0
+"308","MDC-3-noss",17,4,4,3.75,NA,"example rule MDC-3",0,NA,0,0
+"309","MDC-3-noss",17,6,6,4.27,NA,"example rule MDC-3",0,NA,0,0
+"310","MDC-3-noss",17,8,8,4.31,NA,"example rule MDC-3",0,NA,0,0
+"311","MDC-3-noss",17,10,10,4.09,NA,"example rule MDC-3",0,NA,0,0
+"312","MDC-3-noss",17,12,12,3.72,NA,"example rule MDC-3",0,NA,0,0
+"313","MDC-3-noss",17,18,18,2.46,NA,"example rule MDC-3",0,NA,0,0
+"314","MDC-3-noss",17,24,24,NA,NA,"example rule MDC-3",0,NA,0,0
+"315","MDC-1-ss",18,0,0,NA,NA,"example rule MDC-1",3,NA,0,0
+"316","MDC-1-ss",18,0.5,0.5,0.76,NA,"example rule MDC-1",0,NA,0,0
+"317","MDC-1-ss",18,1,1,1.42,NA,"example rule MDC-1",0,NA,0,0
+"318","MDC-1-ss",18,2,2,2.48,NA,"example rule MDC-1",0,NA,0,0
+"319","MDC-1-ss",18,3,3,3.24,NA,"example rule MDC-1",0,NA,0,0
+"320","MDC-1-ss",18,4,4,3.75,NA,"example rule MDC-1",0,NA,0,0
+"321","MDC-1-ss",18,6,6,4.27,NA,"example rule MDC-1",0,NA,0,0
+"322","MDC-1-ss",18,8,8,4.31,NA,"example rule MDC-1",0,NA,0,0
+"323","MDC-1-ss",18,10,10,4.09,NA,"example rule MDC-1",0,NA,0,0
+"324","MDC-1-ss",18,12,12,3.72,NA,"example rule MDC-1",0,NA,0,0
+"325","MDC-1-ss",18,18,18,2.46,NA,"example rule MDC-1",0,NA,0,0
+"326","MDC-1-ss",18,24,24,1.45,NA,"example rule MDC-1",0,NA,0,0
+"327","MDC-1-ss",18,36,36,0.43,NA,"example rule MDC-1",0,NA,0,0
+"328","MDC-1-ss",18,48,48,0.11,NA,"example rule MDC-1",0,NA,0,0
+"329","MDC-2-ss",19,0,0,1.1,NA,"example rule MDC-2",0,NA,0,0
+"330","MDC-2-ss",19,0.5,0.5,0.76,NA,"example rule MDC-2",0,NA,0,0
+"331","MDC-2-ss",19,1,1,1.42,NA,"example rule MDC-2",0,NA,0,0
+"332","MDC-2-ss",19,2,2,2.48,NA,"example rule MDC-2",0,NA,0,0
+"333","MDC-2-ss",19,3,3,3.24,NA,"example rule MDC-2",0,NA,0,0
+"334","MDC-2-ss",19,4,4,3.75,NA,"example rule MDC-2",0,NA,0,0
+"335","MDC-2-ss",19,6,6,4.27,NA,"example rule MDC-2",0,NA,0,0
+"336","MDC-2-ss",19,8,8,4.31,NA,"example rule MDC-2",0,NA,0,0
+"337","MDC-2-ss",19,10,10,4.09,NA,"example rule MDC-2",0,NA,0,0
+"338","MDC-2-ss",19,12,12,NA,NA,"example rule MDC-2",3,NA,0,0
+"339","MDC-2-ss",19,18,18,2.46,NA,"example rule MDC-2",0,NA,0,0
+"340","MDC-2-ss",19,24,24,1.45,NA,"example rule MDC-2",0,NA,0,0
+"341","MDC-2-ss",19,36,36,0.43,NA,"example rule MDC-2",0,NA,0,0
+"342","MDC-2-ss",19,48,48,0.11,NA,"example rule MDC-2",0,NA,0,0
+"343","MDC-3-ss",20,0,0,1.1,NA,"example rule MDC-3",0,NA,0,0
+"344","MDC-3-ss",20,0.5,0.5,0.76,NA,"example rule MDC-3",0,NA,0,0
+"345","MDC-3-ss",20,1,1,1.42,NA,"example rule MDC-3",0,NA,0,0
+"346","MDC-3-ss",20,2,2,2.48,NA,"example rule MDC-3",0,NA,0,0
+"347","MDC-3-ss",20,3,3,3.24,NA,"example rule MDC-3",0,NA,0,0
+"348","MDC-3-ss",20,4,4,3.75,NA,"example rule MDC-3",0,NA,0,0
+"349","MDC-3-ss",20,6,6,4.27,NA,"example rule MDC-3",0,NA,0,0
+"350","MDC-3-ss",20,8,8,4.31,NA,"example rule MDC-3",0,NA,0,0
+"351","MDC-3-ss",20,10,10,4.09,NA,"example rule MDC-3",0,NA,0,0
+"352","MDC-3-ss",20,12,12,3.72,NA,"example rule MDC-3",0,NA,0,0
+"353","MDC-3-ss",20,18,18,2.46,NA,"example rule MDC-3",0,NA,0,0
+"354","MDC-3-ss",20,24,24,NA,NA,"example rule MDC-3",0,NA,0,0
+"355","POSDLOQ_1",21,0,0,0,0.1,"example rule POSDLOQ_1",NA,NA,1,0
+"356","POSDLOQ_1",21,0.5,0.5,NA,0.1,"example rule POSDLOQ_1",NA,NA,1,0
+"357","POSDLOQ_1",21,1,1,1.42,NA,"example rule POSDLOQ_1",NA,NA,0,0
+"358","POSDLOQ_1",21,2,2,2.48,NA,"example rule POSDLOQ_1",NA,NA,0,0
+"359","POSDLOQ_1",21,3,3,3.24,NA,"example rule POSDLOQ_1",NA,NA,0,0
+"360","POSDLOQ_1",21,4,4,3.75,NA,"example rule POSDLOQ_1",NA,NA,0,0
+"361","POSDLOQ_1",21,6,6,4.27,NA,"example rule POSDLOQ_1",NA,NA,0,0
+"362","POSDLOQ_1",21,8,8,4.31,NA,"example rule POSDLOQ_1",NA,NA,0,0
+"363","POSDLOQ_1",21,10,10,4.09,NA,"example rule POSDLOQ_1",NA,NA,0,0
+"364","POSDLOQ_1",21,12,12,NA,0.1,"example rule POSDLOQ_1",NA,NA,1,0
+"365","POSDLOQ_1",21,18,18,2.46,NA,"example rule POSDLOQ_1",NA,NA,0,0
+"366","POSDLOQ_1",21,24,24,1.45,NA,"example rule POSDLOQ_1",NA,NA,0,0
+"367","POSDLOQ_1",21,36,36,NA,0.1,"example rule POSDLOQ_1",NA,NA,1,0
+"368","POSDLOQ_1",21,48,48,NA,0.1,"example rule POSDLOQ_1",NA,NA,1,0
+"369","POSDLOQ_2",22,0,0,0,0.1,"example rule POSDLOQ_2",NA,NA,1,0
+"370","POSDLOQ_2",22,0.5,0.5,NA,0.1,"example rule POSDLOQ_2",NA,NA,1,0
+"371","POSDLOQ_2",22,1,1,1.42,NA,"example rule POSDLOQ_2",NA,NA,0,0
+"372","POSDLOQ_2",22,2,2,2.48,NA,"example rule POSDLOQ_2",NA,NA,0,0
+"373","POSDLOQ_2",22,3,3,3.24,NA,"example rule POSDLOQ_2",NA,NA,0,0
+"374","POSDLOQ_2",22,4,4,3.75,NA,"example rule POSDLOQ_2",NA,NA,0,0
+"375","POSDLOQ_2",22,6,6,4.27,NA,"example rule POSDLOQ_2",NA,NA,0,0
+"376","POSDLOQ_2",22,8,8,4.31,NA,"example rule POSDLOQ_2",NA,NA,0,0
+"377","POSDLOQ_2",22,10,10,4.09,NA,"example rule POSDLOQ_2",NA,NA,0,0
+"378","POSDLOQ_2",22,12,12,NA,0.1,"example rule POSDLOQ_2",NA,NA,1,0
+"379","POSDLOQ_2",22,18,18,2.46,NA,"example rule POSDLOQ_2",NA,NA,0,0
+"380","POSDLOQ_2",22,24,24,1.45,NA,"example rule POSDLOQ_2",NA,NA,0,0
+"381","POSDLOQ_2",22,36,36,NA,0.1,"example rule POSDLOQ_2",NA,NA,1,0
+"382","POSDLOQ_2",22,48,48,NA,0.1,"example rule POSDLOQ_2",NA,NA,1,0
+"383","POSDLOQ_3",23,0,0,0,0.1,"example rule POSDLOQ_3",NA,NA,1,0
+"384","POSDLOQ_3",23,0.5,0.5,NA,0.1,"example rule POSDLOQ_3",NA,NA,1,0
+"385","POSDLOQ_3",23,1,1,1.42,NA,"example rule POSDLOQ_3",NA,NA,0,0
+"386","POSDLOQ_3",23,2,2,2.48,NA,"example rule POSDLOQ_3",NA,NA,0,0
+"387","POSDLOQ_3",23,3,3,3.24,NA,"example rule POSDLOQ_3",NA,NA,0,0
+"388","POSDLOQ_3",23,4,4,3.75,NA,"example rule POSDLOQ_3",NA,NA,0,0
+"389","POSDLOQ_3",23,6,6,4.27,NA,"example rule POSDLOQ_3",NA,NA,0,0
+"390","POSDLOQ_3",23,8,8,4.31,NA,"example rule POSDLOQ_3",NA,NA,0,0
+"391","POSDLOQ_3",23,10,10,4.09,NA,"example rule POSDLOQ_3",NA,NA,0,0
+"392","POSDLOQ_3",23,12,12,NA,0.1,"example rule POSDLOQ_3",NA,NA,1,0
+"393","POSDLOQ_3",23,18,18,2.46,NA,"example rule POSDLOQ_3",NA,NA,0,0
+"394","POSDLOQ_3",23,24,24,1.45,NA,"example rule POSDLOQ_3",NA,NA,0,0
+"395","POSDLOQ_3",23,36,36,NA,0.1,"example rule POSDLOQ_3",NA,NA,1,0
+"396","POSDLOQ_3",23,48,48,NA,0.1,"example rule POSDLOQ_3",NA,NA,1,0
+"397","POSDLOQ_4",24,0,0,0,0.1,"example rule POSDLOQ_4",NA,NA,1,0
+"398","POSDLOQ_4",24,0.5,0.5,NA,0.1,"example rule POSDLOQ_4",NA,NA,1,0
+"399","POSDLOQ_4",24,1,1,1.42,NA,"example rule POSDLOQ_4",NA,NA,0,0
+"400","POSDLOQ_4",24,2,2,2.48,NA,"example rule POSDLOQ_4",NA,NA,0,0
+"401","POSDLOQ_4",24,3,3,3.24,NA,"example rule POSDLOQ_4",NA,NA,0,0
+"402","POSDLOQ_4",24,4,4,3.75,NA,"example rule POSDLOQ_4",NA,NA,0,0
+"403","POSDLOQ_4",24,6,6,4.27,NA,"example rule POSDLOQ_4",NA,NA,0,0
+"404","POSDLOQ_4",24,8,8,4.31,NA,"example rule POSDLOQ_4",NA,NA,0,0
+"405","POSDLOQ_4",24,10,10,4.09,NA,"example rule POSDLOQ_4",NA,NA,0,0
+"406","POSDLOQ_4",24,12,12,NA,0.1,"example rule POSDLOQ_4",NA,NA,1,0
+"407","POSDLOQ_4",24,18,18,2.46,NA,"example rule POSDLOQ_4",NA,NA,0,0
+"408","POSDLOQ_4",24,24,24,1.45,NA,"example rule POSDLOQ_4",NA,NA,0,0
+"409","POSDLOQ_4",24,36,36,NA,0.1,"example rule POSDLOQ_4",NA,NA,1,0
+"410","POSDLOQ_4",24,48,48,NA,0.1,"example rule POSDLOQ_4",NA,NA,1,0
+"411","IVSDLOQ_1",25,0,0,NA,0.1,"example rule IVSDLOQ_1",NA,NA,1,0
+"412","IVSDLOQ_1",25,0.5,0.5,NA,0.1,"example rule IVSDLOQ_1",NA,NA,1,0
+"413","IVSDLOQ_1",25,1,1,1793,NA,"example rule IVSDLOQ_1",NA,NA,0,0
+"414","IVSDLOQ_1",25,1.5,1.5,808,NA,"example rule IVSDLOQ_1",NA,NA,0,0
+"415","IVSDLOQ_1",25,2,2,405,NA,"example rule IVSDLOQ_1",NA,NA,0,0
+"416","IVSDLOQ_1",25,3,3,168,NA,"example rule IVSDLOQ_1",NA,NA,0,0
+"417","IVSDLOQ_1",25,4,4,122,NA,"example rule IVSDLOQ_1",NA,NA,0,0
+"418","IVSDLOQ_1",25,6,6,101,NA,"example rule IVSDLOQ_1",NA,NA,0,0
+"419","IVSDLOQ_1",25,8,8,88,NA,"example rule IVSDLOQ_1",NA,NA,0,0
+"420","IVSDLOQ_1",25,12,12,NA,0.1,"example rule IVSDLOQ_1",NA,NA,1,0
+"421","IVSDLOQ_1",25,18,18,51,NA,"example rule IVSDLOQ_1",NA,NA,0,0
+"422","IVSDLOQ_1",25,24,24,30,NA,"example rule IVSDLOQ_1",NA,NA,0,0
+"423","IVSDLOQ_1",25,36,36,NA,0.1,"example rule IVSDLOQ_1",NA,NA,1,0
+"424","IVSDLOQ_1",25,48,48,NA,0.1,"example rule IVSDLOQ_1",NA,NA,1,0
+"425","IVSDLOQ_2",26,0,0,NA,0.1,"example rule IVSDLOQ_2",NA,NA,1,0
+"426","IVSDLOQ_2",26,0.5,0.5,NA,0.1,"example rule IVSDLOQ_2",NA,NA,1,0
+"427","IVSDLOQ_2",26,1,1,1793,NA,"example rule IVSDLOQ_2",NA,NA,0,0
+"428","IVSDLOQ_2",26,1.5,1.5,808,NA,"example rule IVSDLOQ_2",NA,NA,0,0
+"429","IVSDLOQ_2",26,2,2,405,NA,"example rule IVSDLOQ_2",NA,NA,0,0
+"430","IVSDLOQ_2",26,3,3,168,NA,"example rule IVSDLOQ_2",NA,NA,0,0
+"431","IVSDLOQ_2",26,4,4,122,NA,"example rule IVSDLOQ_2",NA,NA,0,0
+"432","IVSDLOQ_2",26,6,6,101,NA,"example rule IVSDLOQ_2",NA,NA,0,0
+"433","IVSDLOQ_2",26,8,8,88,NA,"example rule IVSDLOQ_2",NA,NA,0,0
+"434","IVSDLOQ_2",26,12,12,NA,0.1,"example rule IVSDLOQ_2",NA,NA,1,0
+"435","IVSDLOQ_2",26,18,18,51,NA,"example rule IVSDLOQ_2",NA,NA,0,0
+"436","IVSDLOQ_2",26,24,24,30,NA,"example rule IVSDLOQ_2",NA,NA,0,0
+"437","IVSDLOQ_2",26,36,36,NA,0.1,"example rule IVSDLOQ_2",NA,NA,1,0
+"438","IVSDLOQ_2",26,48,48,NA,0.1,"example rule IVSDLOQ_2",NA,NA,1,0
+"439","IVSDLOQ_3",27,0,0,NA,0.1,"example rule IVSDLOQ_3",NA,NA,1,0
+"440","IVSDLOQ_3",27,0.5,0.5,NA,0.1,"example rule IVSDLOQ_3",NA,NA,1,0
+"441","IVSDLOQ_3",27,1,1,1793,NA,"example rule IVSDLOQ_3",NA,NA,0,0
+"442","IVSDLOQ_3",27,1.5,1.5,808,NA,"example rule IVSDLOQ_3",NA,NA,0,0
+"443","IVSDLOQ_3",27,2,2,405,NA,"example rule IVSDLOQ_3",NA,NA,0,0
+"444","IVSDLOQ_3",27,3,3,168,NA,"example rule IVSDLOQ_3",NA,NA,0,0
+"445","IVSDLOQ_3",27,4,4,122,NA,"example rule IVSDLOQ_3",NA,NA,0,0
+"446","IVSDLOQ_3",27,6,6,101,NA,"example rule IVSDLOQ_3",NA,NA,0,0
+"447","IVSDLOQ_3",27,8,8,88,NA,"example rule IVSDLOQ_3",NA,NA,0,0
+"448","IVSDLOQ_3",27,12,12,NA,0.1,"example rule IVSDLOQ_3",NA,NA,1,0
+"449","IVSDLOQ_3",27,18,18,51,NA,"example rule IVSDLOQ_3",NA,NA,0,0
+"450","IVSDLOQ_3",27,24,24,30,NA,"example rule IVSDLOQ_3",NA,NA,0,0
+"451","IVSDLOQ_3",27,36,36,NA,0.1,"example rule IVSDLOQ_3",NA,NA,1,0
+"452","IVSDLOQ_3",27,48,48,NA,0.1,"example rule IVSDLOQ_3",NA,NA,1,0
+"453","IVSDLOQ_4",28,0,0,NA,0.1,"example rule IVSDLOQ_4",NA,NA,1,0
+"454","IVSDLOQ_4",28,0.5,0.5,NA,0.1,"example rule IVSDLOQ_4",NA,NA,1,0
+"455","IVSDLOQ_4",28,1,1,1793,NA,"example rule IVSDLOQ_4",NA,NA,0,0
+"456","IVSDLOQ_4",28,1.5,1.5,808,NA,"example rule IVSDLOQ_4",NA,NA,0,0
+"457","IVSDLOQ_4",28,2,2,405,NA,"example rule IVSDLOQ_4",NA,NA,0,0
+"458","IVSDLOQ_4",28,3,3,168,NA,"example rule IVSDLOQ_4",NA,NA,0,0
+"459","IVSDLOQ_4",28,4,4,122,NA,"example rule IVSDLOQ_4",NA,NA,0,0
+"460","IVSDLOQ_4",28,6,6,101,NA,"example rule IVSDLOQ_4",NA,NA,0,0
+"461","IVSDLOQ_4",28,8,8,88,NA,"example rule IVSDLOQ_4",NA,NA,0,0
+"462","IVSDLOQ_4",28,12,12,NA,0.1,"example rule IVSDLOQ_4",NA,NA,1,0
+"463","IVSDLOQ_4",28,18,18,51,NA,"example rule IVSDLOQ_4",NA,NA,0,0
+"464","IVSDLOQ_4",28,24,24,30,NA,"example rule IVSDLOQ_4",NA,NA,0,0
+"465","IVSDLOQ_4",28,36,36,NA,0.1,"example rule IVSDLOQ_4",NA,NA,1,0
+"466","IVSDLOQ_4",28,48,48,NA,0.1,"example rule IVSDLOQ_4",NA,NA,1,0
+"467","POSDEXCL",29,0,0,0,0.1,"example rule POSDEXCL",NA,0,1,0
+"468","POSDEXCL",29,0.5,0.5,0.76,NA,"example rule POSDEXCL",NA,0,0,0
+"469","POSDEXCL",29,1,1,1.42,NA,"example rule POSDEXCL",NA,0,0,0
+"470","POSDEXCL",29,2,2,2.48,NA,"example rule POSDEXCL",NA,0,0,0
+"471","POSDEXCL",29,3,3,3.24,NA,"example rule POSDEXCL",NA,0,0,0
+"472","POSDEXCL",29,4,4,3.75,NA,"example rule POSDEXCL",NA,0,0,0
+"473","POSDEXCL",29,6,6,4.27,NA,"example rule POSDEXCL",NA,0,0,0
+"474","POSDEXCL",29,8,8,4.31,NA,"example rule POSDEXCL",NA,0,0,0
+"475","POSDEXCL",29,10,10,4.09,NA,"example rule POSDEXCL",NA,0,0,0
+"476","POSDEXCL",29,12,12,10.72,NA,"example rule POSDEXCL",NA,1,0,0
+"477","POSDEXCL",29,18,18,2.46,NA,"example rule POSDEXCL",NA,0,0,0
+"478","POSDEXCL",29,24,24,1.45,NA,"example rule POSDEXCL",NA,0,0,0
+"479","POSDEXCL",29,36,36,0.43,NA,"example rule POSDEXCL",NA,0,0,0
+"480","POSDEXCL",29,48,48,0.11,NA,"example rule POSDEXCL",NA,0,0,0
+"481","POSDTRAP_2",30,0,0,0,0.1,"example rule POSDTRAP_2",NA,NA,1,0
+"482","POSDTRAP_2",30,0.5,0.5,0.76,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"483","POSDTRAP_2",30,1,1,1.42,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"484","POSDTRAP_2",30,2,2,2.48,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"485","POSDTRAP_2",30,3,3,1.94,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"486","POSDTRAP_2",30,4,4,3.75,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"487","POSDTRAP_2",30,6,6,4.27,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"488","POSDTRAP_2",30,8,8,4.31,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"489","POSDTRAP_2",30,10,10,4.09,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"490","POSDTRAP_2",30,12,12,3.72,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"491","POSDTRAP_2",30,18,18,2.46,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"492","POSDTRAP_2",30,24,24,1.45,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"493","POSDTRAP_2",30,36,36,0.43,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"494","POSDTRAP_2",30,48,48,0.11,NA,"example rule POSDTRAP_2",NA,NA,0,0
+"495","POSDTRAP_3",31,0,0,0,0.1,"example rule POSDTRAP_3",NA,NA,1,0
+"496","POSDTRAP_3",31,0.5,0.5,0.76,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"497","POSDTRAP_3",31,1,1,1.42,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"498","POSDTRAP_3",31,2,2,2.48,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"499","POSDTRAP_3",31,3,3,3.24,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"500","POSDTRAP_3",31,4,4,3.75,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"501","POSDTRAP_3",31,6,6,4.27,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"502","POSDTRAP_3",31,8,8,4.31,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"503","POSDTRAP_3",31,10,10,4.09,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"504","POSDTRAP_3",31,12,12,3.72,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"505","POSDTRAP_3",31,18,18,2.46,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"506","POSDTRAP_3",31,24,24,1.45,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"507","POSDTRAP_3",31,36,36,0.43,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"508","POSDTRAP_3",31,48,48,0.11,NA,"example rule POSDTRAP_3",NA,NA,0,0
+"509","MDC-4a",32,0,0,NA,NA,"example rule MDC-4a",3,NA,0,0
+"510","MDC-4a",32,0.5,0.5,4211,NA,"example rule MDC-4a",0,NA,0,0
+"511","MDC-4a",32,1,1,1793,NA,"example rule MDC-4a",0,NA,0,0
+"512","MDC-4a",32,1.5,1.5,808,NA,"example rule MDC-4a",0,NA,0,0
+"513","MDC-4a",32,2,2,405,NA,"example rule MDC-4a",0,NA,0,0
+"514","MDC-4a",32,3,3,168,NA,"example rule MDC-4a",0,NA,0,0
+"515","MDC-4a",32,4,4,122,NA,"example rule MDC-4a",0,NA,0,0
+"516","MDC-4a",32,6,6,101,NA,"example rule MDC-4a",0,NA,0,0
+"517","MDC-4a",32,8,8,88,NA,"example rule MDC-4a",0,NA,0,0
+"518","MDC-4a",32,12,12,67,NA,"example rule MDC-4a",0,NA,0,0
+"519","MDC-4a",32,18,18,51,NA,"example rule MDC-4a",0,NA,0,0
+"520","MDC-4a",32,24,24,30,NA,"example rule MDC-4a",0,NA,0,0
+"521","MDC-4a",32,36,36,13,NA,"example rule MDC-4a",0,NA,0,0
+"522","MDC-4a",32,48,48,6,NA,"example rule MDC-4a",0,NA,0,0
+"523","MDC-4b",33,0,0,NA,NA,"example rule MDC-4b",3,NA,0,0
+"524","MDC-4b",33,0.5,0.5,4211,NA,"example rule MDC-4b",0,NA,0,0
+"525","MDC-4b",33,1,1,5000,NA,"example rule MDC-4b",0,NA,0,0
+"526","MDC-4b",33,1.5,1.5,808,NA,"example rule MDC-4b",0,NA,0,0
+"527","MDC-4b",33,2,2,405,NA,"example rule MDC-4b",0,NA,0,0
+"528","MDC-4b",33,3,3,168,NA,"example rule MDC-4b",0,NA,0,0
+"529","MDC-4b",33,4,4,122,NA,"example rule MDC-4b",0,NA,0,0
+"530","MDC-4b",33,6,6,101,NA,"example rule MDC-4b",0,NA,0,0
+"531","MDC-4b",33,8,8,88,NA,"example rule MDC-4b",0,NA,0,0
+"532","MDC-4b",33,12,12,67,NA,"example rule MDC-4b",0,NA,0,0
+"533","MDC-4b",33,18,18,51,NA,"example rule MDC-4b",0,NA,0,0
+"534","MDC-4b",33,24,24,30,NA,"example rule MDC-4b",0,NA,0,0
+"535","MDC-4b",33,36,36,13,NA,"example rule MDC-4b",0,NA,0,0
+"536","MDC-4b",33,48,48,6,NA,"example rule MDC-4b",0,NA,0,0
+"537","MDC-4c",34,0,0,NA,NA,"example rule MDC-4c",3,NA,0,0
+"538","MDC-4c",34,0.5,0.5,4211,NA,"example rule MDC-4c",0,NA,0,0
+"539","MDC-4c",34,1,1,NA,NA,"example rule MDC-4c",3,NA,0,0
+"540","MDC-4c",34,1.5,1.5,808,NA,"example rule MDC-4c",0,NA,0,0
+"541","MDC-4c",34,2,2,405,NA,"example rule MDC-4c",0,NA,0,0
+"542","MDC-4c",34,3,3,168,NA,"example rule MDC-4c",0,NA,0,0
+"543","MDC-4c",34,4,4,122,NA,"example rule MDC-4c",0,NA,0,0
+"544","MDC-4c",34,6,6,101,NA,"example rule MDC-4c",0,NA,0,0
+"545","MDC-4c",34,8,8,88,NA,"example rule MDC-4c",0,NA,0,0
+"546","MDC-4c",34,12,12,67,NA,"example rule MDC-4c",0,NA,0,0
+"547","MDC-4c",34,18,18,51,NA,"example rule MDC-4c",0,NA,0,0
+"548","MDC-4c",34,24,24,30,NA,"example rule MDC-4c",0,NA,0,0
+"549","MDC-4c",34,36,36,13,NA,"example rule MDC-4c",0,NA,0,0
+"550","MDC-4c",34,48,48,6,NA,"example rule MDC-4c",0,NA,0,0
+"551","MDC-4d",35,0,0,NA,NA,"example rule MDC-4d",3,NA,0,0
+"552","MDC-4d",35,0.5,0.5,4211,NA,"example rule MDC-4d",0,NA,0,0
+"553","MDC-4d",35,1,1,0,0.1,"example rule MDC-4d",1,NA,1,0
+"554","MDC-4d",35,1.5,1.5,808,NA,"example rule MDC-4d",0,NA,0,0
+"555","MDC-4d",35,2,2,405,NA,"example rule MDC-4d",0,NA,0,0
+"556","MDC-4d",35,3,3,168,NA,"example rule MDC-4d",0,NA,0,0
+"557","MDC-4d",35,4,4,122,NA,"example rule MDC-4d",0,NA,0,0
+"558","MDC-4d",35,6,6,101,NA,"example rule MDC-4d",0,NA,0,0
+"559","MDC-4d",35,8,8,88,NA,"example rule MDC-4d",0,NA,0,0
+"560","MDC-4d",35,12,12,67,NA,"example rule MDC-4d",0,NA,0,0
+"561","MDC-4d",35,18,18,51,NA,"example rule MDC-4d",0,NA,0,0
+"562","MDC-4d",35,24,24,30,NA,"example rule MDC-4d",0,NA,0,0
+"563","MDC-4d",35,36,36,13,NA,"example rule MDC-4d",0,NA,0,0
+"564","MDC-4d",35,48,48,6,NA,"example rule MDC-4d",0,NA,0,0
