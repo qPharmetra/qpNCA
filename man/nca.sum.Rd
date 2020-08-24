@@ -2,16 +2,25 @@
 % Please edit documentation in R/nca.sum.r
 \name{nca.sum}
 \alias{nca.sum}
-\title{Create summarising PDF for each curve}
+\title{Create Summary for Each Curve}
 \usage{
-nca.sum(x, corrfile = corrtab, by = c("subject"), plotdir = NA, pdfdir = NA)
+nca.sum(x, corrfile, by = c("subject"), pdfdir = NA)
 }
 \arguments{
-\item{pdfdir}{}
+\item{x}{data.frame}
+
+\item{corrfile}{a correction table like the output of \code{\link{tab.corr}}}
+
+\item{by}{column names in x indicating grouping variables}
+
+\item{pdfdir}{path to directory for pdf ouput}
 }
 \value{
-
+used for side effects
 }
 \description{
-Create summarising PDF for each curve
+Creates a PDF summary for each curve.
+}
+\examples{
+example(qpNCA)
 }

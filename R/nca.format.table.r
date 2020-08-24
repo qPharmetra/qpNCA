@@ -1,10 +1,12 @@
-#' Format NCA parameters table
+#' Format NCA Parameters Table
+#'
+#' Formats an NCA parameters table.
 #' @importFrom gdata trim
-#' @param nca
-#' @param carryAlong
-#' @param parms
-#' @param ns
-#' @param uAdjust
+#' @param nca parameters table
+#' @param carryAlong column names to carry along
+#' @param parms parameter names to format
+#' @param ns number of significant digits
+#' @param uAdjust factor by which to adjust all parameters
 #'
 #' @return
 #' @export

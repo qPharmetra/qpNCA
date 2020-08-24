@@ -2,7 +2,7 @@
 % Please edit documentation in R/nca.format.table.r
 \name{nca.format.table}
 \alias{nca.format.table}
-\title{Format NCA parameters table}
+\title{Format NCA Parameters Table}
 \usage{
 nca.format.table(
   nca,
@@ -13,11 +13,19 @@ nca.format.table(
 )
 }
 \arguments{
-\item{uAdjust}{}
+\item{nca}{parameters table}
+
+\item{carryAlong}{column names to carry along}
+
+\item{parms}{parameter names to format}
+
+\item{ns}{number of significant digits}
+
+\item{uAdjust}{factor by which to adjust all parameters}
 }
 \value{
 
 }
 \description{
-Format NCA parameters table
+Formats an NCA parameters table.
 }

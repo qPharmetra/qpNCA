@@ -1,22 +1,27 @@
-#' Estimate lagging and leading time points and concentrations for each time point
-#' This function is used by correct.xx functions
-#' @param x
-#' @param nomtimevar1
-#' @param depvar1
-#' @param timevar1
-#' @param lagc
-#' @param lagt
-#' @param leadc
-#' @param leadt
+#' Estimate Lagging and Leading Times and Concentrations
+#'
+#' Used by correct.xx functions to estimate lagging and leading timepoints
+#' and concentrations for each timepoint.
+#' @param x data.frame
+#' @param nomtimevar1 column name in x indicating nominal time
+#' @param depvar1 column name in x indicating concentration
+#' @param timevar1 column name in x indicating time
+#' @param lagc concentration at previous sampling time
+#' @param lagt previous sampling time
+#' @param leadc concentration at next sampling time
+#' @param leadt next sampling time
 #' @export
-lag.lead <- function(x,nomtimevar1=NA,depvar1=NA,timevar1=NA,lagc=NA,lagt=NA,leadc=NA,leadt=NA) {
-
-  original=x %>% mutate(depvar=x[[depvar1]],                    # dependent variable                      (internal)
-                        timevar=x[[timevar1]],                  # actual time variable                    (internal)
-                        ptime=x[[nomtimevar1]]                  # nominal time                            (internal)
+lag.lead <- function(
+  x,nomtimevar1=NA,depvar1=NA,timevar1=NA,
+  lagc=NA,lagt=NA,leadc=NA,leadt=NA
+){
+original <- x %>%
+  mutate(depvar=x[[depvar1]],   # dependent variable   (internal)
+  timevar=x[[timevar1]],        # actual time variable (internal)
+  ptime=x[[nomtimevar1]]        # nominal time         (internal)
   ) %>%
-    mutate(flag=ifelse(!is.na(depvar),0,1)) %>%   # flags type of missing value (in between or at the end)
-    mutate(flag=ifelse(is.na(depvar)&timevar>last(timevar[!is.na(depvar)]),2,flag))
+  mutate(flag=ifelse(!is.na(depvar),0,1)) %>%   # flags type of missing value (in between or at the end)
+  mutate(flag=ifelse(is.na(depvar)&timevar>last(timevar[!is.na(depvar)]),2,flag))
 
   #1 delete NA's
 

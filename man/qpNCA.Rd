@@ -2,7 +2,7 @@
 % Please edit documentation in R/qpNCA.r
 \name{qpNCA}
 \alias{qpNCA}
-\title{A wrapper for the individual qpNCA functions}
+\title{Perform Non-compartmental Analysis}
 \usage{
 qpNCA(
   x,
@@ -93,16 +93,18 @@ corrections: contains descriptions of the corrections applied
 pkpar      : contains all estimated PK parameters
 }
 \description{
-This wrapper function consecutively executes the following qpNCA functions:
-1. correct.loq \cr
-2. est.thalf\cr
-2a. plot.reg\cr
-3. calc.ctmax\cr
-4. correct.time\cr
-5. correct.conc\cr
-6. tab.corr\cr
-7. calc.par\cr
-8. calc.par.th\cr
+Consecutively executes the following NCA steps:
+\describe{
+ \item{\code{link{correct.loq}}}{impute LOQ values}
+ \item{\code{link{est.thalf}}}{calculate lambda-z and halflife}
+ \item{\code{link{plot.reg}}}{plot each curve}
+ \item{\code{link{calc.ctmax}}}{calculate Cmax and Tmax}
+ \item{\code{link{correct.time}}}{supply records at critical times with correct concentration}
+ \item{\code{link{correct.conc}}}{supply correct concentrations at critical times}
+ \item{\code{link{tab.corr}}}{tabulate data alterations}
+ \item{\code{link{calc.par}}}{calculates profile-specific summary statistics}
+ \item{\code{link{calc.par.th}}}{calculates parameters depednent on lambda-z}
+ }
 }
 \details{
 

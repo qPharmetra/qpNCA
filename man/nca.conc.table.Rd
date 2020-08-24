@@ -44,3 +44,32 @@ report ready individual concentrations table with summary statistics
 \description{
 Format raw individual concentrations table for report
 }
+\examples{
+library(dplyr)
+# get dataset ready
+NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
+Theoph1 <- Theoph \%>\%
+ mutate(NTAD=metrumrg::snap(Time, NTAD)) \%>\%
+ mutate(
+   Subject=as.numeric(as.character(Subject)),
+   #converting from factor to numeric
+   BQL = ifelse(conc<=0.25, 1, 0),
+   #just adding few BLQs to demonstrate functionality
+   conc= ifelse(conc<=0.25, NA, conc)
+   #just adding few BLQs to demonstrate functionality
+ )
+
+# Tabulate concentrations vs time for each subject and
+# calculate summary stats of concentrations per timepoint
+# (can use visit instead of time)
+ConcTab = nca.conc.table(
+ Theoph1,
+ sumVar = "conc",
+ subjVar = "Subject",
+ timeVar = "NTAD",
+ LOQ = 0.250, #just adding to demonstrate functionality
+ bloqCode = "BQL",
+ nsig=3
+)
+
+}

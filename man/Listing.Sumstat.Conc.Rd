@@ -17,7 +17,23 @@ Listing.Sumstat.Conc(
 )
 }
 \arguments{
-\item{na.rm}{}
+\item{ds}{data.frame}
+
+\item{subjVar}{column names in ds indicating subject}
+
+\item{timeVar}{column name in ds indicating time}
+
+\item{dvVar}{column name in ds indicating concentration}
+
+\item{blqVar}{column name in ds indicating below limit of quantitation}
+
+\item{by}{column names in ds the interaction of which indicate data subsets}
+
+\item{carryAlong}{names of columns in ds to preserve in the result}
+
+\item{nsig}{number of significant digits}
+
+\item{na.rm}{whether to remove NA values when computing statistics}
 }
 \description{
 Creates a table of individual concentrations table with summary statistics by time variable
@@ -27,9 +43,14 @@ library(dplyr)
 NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
 Theoph1 <- Theoph \%>\%
  mutate(NTAD=metrumrg::snap(Time, NTAD)) \%>\%
- mutate(Subject=as.numeric(as.character(Subject)),     #converting from factor to numeric
-        BQL = ifelse(conc<=0.25, 1, 0),                #just adding few BLQs to demonstrate functionality
-        conc= ifelse(conc<=0.25, NA, round(conc, 2)))  #just adding digits to demonstrate nsig functionality
+ mutate(
+ Subject=as.numeric(as.character(Subject)),
+ #converting from factor to numeric
+ BQL = ifelse(conc<=0.25, 1, 0),
+ #just adding few BLQs to demonstrate functionality
+ conc= ifelse(conc<=0.25, NA, round(conc, 2))
+ #just adding digits to demonstrate nsig functionality
+)
 
 test1 <- Listing.Sumstat.Conc(Theoph1, subjVar="Subject", timeVar="NTAD",
                               dvVar="conc", blqVar="BQL", carryAlong="Wt", nsig=3,

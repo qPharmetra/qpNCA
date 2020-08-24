@@ -2,8 +2,7 @@
 % Please edit documentation in R/lag.lead.r
 \name{lag.lead}
 \alias{lag.lead}
-\title{Estimate lagging and leading time points and concentrations for each time point
-This function is used by correct.xx functions}
+\title{Estimate Lagging and Leading Times and Concentrations}
 \usage{
 lag.lead(
   x,
@@ -16,7 +15,24 @@ lag.lead(
   leadt = NA
 )
 }
+\arguments{
+\item{x}{data.frame}
+
+\item{nomtimevar1}{column name in x indicating nominal time}
+
+\item{depvar1}{column name in x indicating concentration}
+
+\item{timevar1}{column name in x indicating time}
+
+\item{lagc}{concentration at previous sampling time}
+
+\item{lagt}{previous sampling time}
+
+\item{leadc}{concentration at next sampling time}
+
+\item{leadt}{next sampling time}
+}
 \description{
-Estimate lagging and leading time points and concentrations for each time point
-This function is used by correct.xx functions
+Used by correct.xx functions to estimate lagging and leading timepoints
+and concentrations for each timepoint.
 }

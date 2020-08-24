@@ -2,10 +2,21 @@
 % Please edit documentation in R/Listing.Param.r
 \name{Listing.Param}
 \alias{Listing.Param}
-\title{Parameters Tables for NCA Report}
+\title{Generate NCA Parameter Table}
 \usage{
 Listing.Param(ds, subjVar, nsig = 3)
 }
+\arguments{
+\item{ds}{data.frame}
+
+\item{subjVar}{column name in ds indicating subject}
+
+\item{nsig}{number of significant digits}
+}
 \description{
-Parameters Tables for NCA Report
+Generates NCA parameter table.
+}
+\examples{
+library(dplyr)
+# Listing_Param_theo = Listing.Param(NCAResults$pkpar, subjVar="ID", nsig=3)
 }

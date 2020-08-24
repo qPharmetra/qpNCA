@@ -12,45 +12,69 @@
 #' @param bloqCode variable name for BLQs are flagged
 #'
 #' @return report ready individual concentrations table with summary statistics
-#' @example
+#' @examples
 #' library(dplyr)
-#' get dataset ready
+#' # get dataset ready
 #'NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
 #'Theoph1 <- Theoph %>%
 #'  mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
-#'  mutate(Subject=as.numeric(as.character(Subject)), #converting from factor to numeric
-#'         BQL = ifelse(conc<=0.25, 1, 0),                #just adding few BLQs to demonstrate functionality
-#'        conc= ifelse(conc<=0.25, NA, conc))            #just adding few BLQs to demonstrate functionality
+#'  mutate(
+#'    Subject=as.numeric(as.character(Subject)),
+#'    #converting from factor to numeric
+#'    BQL = ifelse(conc<=0.25, 1, 0),
+#'    #just adding few BLQs to demonstrate functionality
+#'    conc= ifelse(conc<=0.25, NA, conc)
+#'    #just adding few BLQs to demonstrate functionality
+#'  )
 #'
-#' #Tabulate concentrations vs time for each subject and calculate summary stats of concentrations per timepoint (can use visit instead of time)
-#'ConcTab = nca.conc.table(Theoph1,
-#'                         sumVar = "conc",
-#'                         subjVar = "Subject",
-#'                         timeVar = "NTAD",
-#'                         LOQ = 0.250,               #just adding to demonstrate functionality
-#'                         bloqCode = "BQL",
-#'                         nsig=3)
+#' # Tabulate concentrations vs time for each subject and
+#' # calculate summary stats of concentrations per timepoint
+#' # (can use visit instead of time)
+#'ConcTab = nca.conc.table(
+#'  Theoph1,
+#'  sumVar = "conc",
+#'  subjVar = "Subject",
+#'  timeVar = "NTAD",
+#'  LOQ = 0.250, #just adding to demonstrate functionality
+#'  bloqCode = "BQL",
+#'  nsig=3
+#')
 #'
 #' @export
-nca.conc.table = function(obs,                      # source dataframe
-                        LOQ = .0001,              # LOQ set to a small value by default
-                        sumVar = "conc",          # variable to be summarized
-                        subjVar = "subjid",       # subject identifier
-                        timeVar = "nom.time",     # sort variable
-                        omits = NULL,             # vector of omitted subjects
-                        times = NULL,             # vector of all times to be considered
-                        carryAlong = NULL,        # Vector of variable names to be sorted and included in the table
-                        # must be unique within subject
-                        nsig = 3,                 # number of significant digits for the table
-                        bloqCode="BLOQ"           # Code for BLOQ values
+nca.conc.table = function(
+  obs,                      # source dataframe
+  LOQ = .0001,              # LOQ set to a small value by default
+  sumVar = "conc",          # variable to be summarized
+  subjVar = "subjid",       # subject identifier
+  timeVar = "nom.time",     # sort variable
+  omits = NULL,             # vector of omitted subjects
+  times = NULL,             # vector of all times to be considered
+  carryAlong = NULL,        # Vector of variable names to be sorted and included in the table
+  # must be unique within subject
+  nsig = 3,                 # number of significant digits for the table
+  bloqCode="BLOQ"           # Code for BLOQ values
 )
 { # obs = obs.tems
   # Take a long thin dataset, and reshape to short and wide
   # Round numeric values of sumVar to nsig significant digits
   # Summarize the values in sumVar
   myfmt = paste("%#.", nsig, "g", sep="")
-  nsubj = lunique(obs[,subjVar] )
-
+  nsubj = length(unique(obs[,subjVar] ))
+  whichNumeric <- function(x){
+    numsel = grep("[0-9]", x)
+    charsel = grep("[:alpha:]", x)
+    expsel = grep("[eE]+[+-]+", x)
+    gtltsel = grep("[<>=]", x)
+    return(numsel[! numsel %in% charsel[!(charsel %in% expsel)] &
+                    ! numsel %in% gtltsel])
+  }
+  sunique <- function(x)unique(x)[order(unique(x))]
+  isMissing <- function(x){
+    natest = is.na(x)
+    if (class(x) == "character")
+      natest = natest | sub("^[ ]+$", "", x) == "" | x == "NA"
+    natest
+  }
   ind = whichNumeric(obs[, sumVar])
 #  obs[, sumVar][ind] = sprintf("%g", signifString(as.numeric(obs[, sumVar][ind]),nsig))
   obs[, sumVar][ind] = formatted.signif(as.numeric(obs[, sumVar][ind]),nsig)
@@ -66,8 +90,8 @@ nca.conc.table = function(obs,                      # source dataframe
     obs = merge(obs, allTimes, by=intersect(names(obs), names(allTimes)), all=T)
   } else {
     subj = obs[!duplicated(obs[,subjVar]), c(subjVar, carryAlong)]
-    allTimes = merge(allTimes[, names(allTimes) %nin% carryAlong], subj)
-    obsNms = names(obs)[names(obs) %nin% carryAlong]
+    allTimes = merge(allTimes[, ! names(allTimes) %in% carryAlong], subj)
+    obsNms = names(obs)[! names(obs) %in% carryAlong]
     obs = merge(obs[, obsNms], allTimes, by=intersect(obsNms, names(allTimes)), all=T)
   }
   obs[, sumVar][isMissing(obs[,sumVar])] = "M"
@@ -89,7 +113,7 @@ nca.conc.table = function(obs,                      # source dataframe
   }
 
   stats = data.frame(
-    lapply(tabl[tabl[,subjVar] %nin% omits, (2+length(carryAlong)):length(tabl)],
+    lapply(tabl[! tabl[,subjVar] %in% omits, (2+length(carryAlong)):length(tabl)],
            FUN = nca.sumstat.conc, LOQ=LOQ, ns=nsig, bloqCode=bloqCode))
   if(is.null(carryAlong)){
     stats = cbind(rownames(stats), stats)

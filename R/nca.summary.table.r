@@ -16,10 +16,10 @@ nca.summary.table = function(ds, subjVar = "subjid", carryAlong=NULL, omits=NULL
 
   ds$subjid = ordered(ds$subjid, levels = unique(ds$subjid))
 
-  stats = data.frame(sapply(names(ds)[names(ds) %nin% c("subjid", carryAlong)],
+  stats = data.frame(sapply(names(ds)[! names(ds) %in% c("subjid", carryAlong)],
                             function(nm, dss=ds,oms=omits, nss=nsig, loq=LOQ){
                               ok = names(dss)==nm
-                              xx=dss[dss$subjid %nin% oms, ok]
+                              xx=dss[! dss$subjid %in% oms, ok]
                               ns = nss[ok[(2+length(carryAlong)):ncol(dss)]]
                               # interogate nm to find whether it is a concentration or another parmeter
                               if(tolower(nm) %in% Cs(cmax, cmin, cavg)) {

@@ -2,12 +2,29 @@
 % Please edit documentation in R/interpol.r
 \name{interpol}
 \alias{interpol}
-\title{Interpolate concentrations
-This function is used by correct.xx functions.}
+\title{Interpolate Concentrations.
+Used by correct.xx functions to interpolate concentrations.
+Uses linear interpolation unless method is 2 (log down), c1 > c2,
+and both concentrations are non-zero.}
 \usage{
 interpol(c1 = NA, c2 = NA, t1 = NA, t2 = NA, t3 = NA, method = 1)
 }
+\arguments{
+\item{c1}{concentration 1}
+
+\item{c2}{concentration 2}
+
+\item{t1}{time 1}
+
+\item{t2}{time 2}
+
+\item{t3}{time 3}
+
+\item{method}{calculation method (1, 2, or 3)}
+}
 \description{
-Interpolate concentrations
-This function is used by correct.xx functions.
+Interpolate Concentrations.
+Used by correct.xx functions to interpolate concentrations.
+Uses linear interpolation unless method is 2 (log down), c1 > c2,
+and both concentrations are non-zero.
 }

@@ -1,11 +1,11 @@
 #' Creates summary statistics of concenctrations by time variable and grouping variable
 #'
-#' @param ds
-#' @param dvVar
-#' @param timeVar
-#' @param by
-#' @param nsig
-#' @param na.rm
+#' @param ds data.frame
+#' @param dvVar column name in ds indicating concentration
+#' @param timeVar  column name in ds indicating time
+#' @param by  column names in ds the interaction of which indicate data subsets
+#' @param nsig number of significant digits
+#' @param na.rm whether to remove NA values when computing statistics
 #'
 #' @examples
 #'library(dplyr)
@@ -14,9 +14,14 @@
 #'NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
 #'Theoph1 <- Theoph1 %>%
 #'  mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
-#'  mutate(Subject=as.numeric(as.character(Subject)),     #converting from factor to numeric
-#'         BQL = ifelse(conc<=0.25, 1, 0),                #just adding few BLQs to demonstrate functionality
-#'         conc= ifelse(conc<=0.25, NA, round(conc, 2)))  #just adding digits to demonstrate nsig functionality
+#'  mutate(
+#'    Subject=as.numeric(as.character(Subject)),
+#'    #converting from factor to numeric
+#'    BQL = ifelse(conc<=0.25, 1, 0),
+#'    #just adding few BLQs to demonstrate functionality
+#'    conc= ifelse(conc<=0.25, NA, round(conc, 2))
+#'    #just adding digits to demonstrate nsig functionality
+#'  )
 #'
 #'test <- Sumstat.Conc(Theoph1, timeVar="NTAD", dvVar="conc", nsig=3,  na.rm=TRUE, by=NULL)
 #'

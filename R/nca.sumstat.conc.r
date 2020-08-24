@@ -8,14 +8,19 @@
 #' @param oddCode alphabetical codes for concentrations
 #'
 #' @return summary statistics of concentrations vs. time
-#' @example
+#' @examples
 #' library(dplyr)
 #' NTAD <- c(0,0.3,0.5,1,2,4,5,7,9,12,24)
 #' Theoph1 <- Theoph %>%
 #'  mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
-#'  mutate(Subject=as.numeric(as.character(Subject)), #converting from factor to numeric
-#'         BQL = ifelse(conc<=0.25, 1, 0),                #just adding few BLQs to demonstrate functionality
-#'         conc= ifelse(conc<=0.25, NA, conc))            #just adding few BLQs to demonstrate functionality
+#'  mutate(
+#'    Subject=as.numeric(as.character(Subject)),
+#'    #converting from factor to numeric
+#'    BQL = ifelse(conc<=0.25, 1, 0),
+#'    #just adding few BLQs to demonstrate functionality
+#'    conc= ifelse(conc<=0.25, NA, conc)
+#'    #just adding few BLQs to demonstrate functionality
+#' )
 #' ConcSumTab = tapply(Theoph1$conc, Theoph1$NTAD,
 #'                     nca.sumstat.conc,
 #'                     LOQ = 0.250,
@@ -30,7 +35,19 @@
 #'
 #' @export
 nca.sumstat.conc = function(x, LOQ, ns = 3, bloqRule = "BLOQ=0", oddCode = Cs(M,NS), bloqCode="BLOQ", ...){
-
+  geomean <- function (x, na.rm = FALSE){
+    if (na.rm)
+      x = x[!is.na(x)]
+    exp(mean(log(x)))
+  }
+  whichNumeric <- function(x){
+    numsel = grep("[0-9]", x)
+    charsel = grep("[:alpha:]", x)
+    expsel = grep("[eE]+[+-]+", x)
+    gtltsel = grep("[<>=]", x)
+    return(numsel[! numsel %in% charsel[!(charsel %in% expsel)] &
+                    ! numsel %in% gtltsel])
+  }
   # prepopulate the output assuming nothing needs to be summarized (i.e. all(x)=="NA")
   N = 0
   Mean = geoMean = SD = Min = Median = Max = CV = UCI = LCI = "NC"
