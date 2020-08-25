@@ -56,7 +56,7 @@ calc.par.th <- function(x=par,by="subject",th=th,covfile=covfile,dose="dose",fac
   result=left_join(x,th,by=by) %>%
   left_join(covfile,by=by) %>%
   mutate(
-    dosevar=.[[dose]],
+    dosevar=dose,
     factor=ifelse(is.na(factor),1,factor),
     reg=tolower(reg),
     ss=tolower(ss),
@@ -137,3 +137,53 @@ calc.par.th <- function(x=par,by="subject",th=th,covfile=covfile,dose="dose",fac
 
   return(result)
 }
+
+# sessionInfo()
+# R version 3.6.2 (2019-12-12)
+# Platform: x86_64-pc-linux-gnu (64-bit)
+# Running under: Debian GNU/Linux 10 (buster)
+#
+# Matrix products: default
+# BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/libopenblasp-r0.3.5.so
+#
+# locale:
+#   [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C
+# [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8
+# [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C
+# [7] LC_PAPER=en_US.UTF-8       LC_NAME=C
+# [9] LC_ADDRESS=C               LC_TELEPHONE=C
+# [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C
+#
+# attached base packages:
+#   [1] stats     graphics  grDevices utils     datasets  methods   base
+#
+# other attached packages:
+#   [1] knitr_1.28     qpNCA_1.0.24   tidyr_1.0.2    testthat_2.3.1
+# [5] magrittr_1.5   dplyr_0.8.4
+#
+# loaded via a namespace (and not attached):
+#   [1] metrumrg_5.57       splines_3.6.2       foreach_1.4.8
+# [4] gam_1.16.1          ellipse_0.4.1       gtools_3.8.1
+# [7] Formula_1.2-3       assertthat_0.2.1    latticeExtra_0.6-29
+# [10] pillar_1.4.3        backports_1.1.5     lattice_0.20-38
+# [13] glue_1.3.1          digest_0.6.25       RColorBrewer_1.1-2
+# [16] checkmate_2.0.0     qpToolkit_0.2.7     colorspace_1.4-1
+# [19] htmltools_0.4.0     Matrix_1.2-18       plyr_1.8.5
+# [22] XML_3.99-0.3        pkgconfig_2.0.3     purrr_0.3.3
+# [25] scales_1.1.0        gdata_2.18.0        jpeg_0.1-8.1
+# [28] htmlTable_1.13.3    tibble_2.1.3        ggplot2_3.2.1
+# [31] withr_2.1.2         nnet_7.3-12         lazyeval_0.2.2
+# [34] cli_2.0.1           survival_3.1-8      crayon_1.3.4
+# [37] fansi_0.4.1         nlme_3.1-142        MASS_7.3-51.4
+# [40] foreign_0.8-72      tools_3.6.2         data.table_1.12.8
+# [43] hms_0.5.3           lifecycle_0.1.0     stringr_1.4.0
+# [46] xpose4_4.7.0        munsell_0.5.0       cluster_2.1.0
+# [49] packrat_0.5.0       compiler_3.6.2      snowfall_1.84-6.1
+# [52] rlang_0.4.4         grid_3.6.2          iterators_1.0.12
+# [55] rstudioapi_0.11     htmlwidgets_1.5.1   base64enc_0.1-3
+# [58] gtable_0.3.0        codetools_0.2-16    deSolve_1.27.1
+# [61] reshape_0.8.8       reshape2_1.4.3      R6_2.4.1
+# [64] gridExtra_2.3       utf8_1.1.4          Hmisc_4.3-1
+# [67] readr_1.3.1         stringi_1.4.6       Rcpp_1.0.3
+# [70] vctrs_0.2.3         rpart_4.1-15        acepack_1.4.1
+# [73] png_0.1-7           tidyselect_1.0.0    xfun_0.12
