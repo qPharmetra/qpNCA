@@ -267,3 +267,4 @@ out <- qpNCA(
 expect_equal_to_reference(file = '001.rds',out)
 
 })
+

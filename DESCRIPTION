@@ -1,7 +1,7 @@
 Package: qpNCA
 Type: Package
 Title: qPharmetra's R package for Noncompartmental Analysis
-Version: 1.0.24
+Version: 1.0.25
 Author: Jan Huisman, Krina Mehta, and Koen Jolling
 Maintainer: Jason Chittenden <jason.chittenden@qpharmetra.com>
 Description: qPharmetra's R package for Noncompartmental Analysis
@@ -21,6 +21,3 @@ Imports:
     gdata (>= 2.7.0),
     magrittr
 RoxygenNote: 7.0.2
-Remotes: 
-    github::metrumresearchgroup/metrumrg,
-    github::qPharmetra/qpToolkit
