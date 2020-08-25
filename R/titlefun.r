@@ -6,7 +6,6 @@
 #' @return
 #' @export
 #'
-#' @examples
 titlefun <- function(df,by) {
   plottitle=""
   for (i in 1:length(by)) {

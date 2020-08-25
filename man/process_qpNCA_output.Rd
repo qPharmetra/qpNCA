@@ -12,7 +12,13 @@ process_qpNCA_output(
 )
 }
 \arguments{
-\item{keepers}{}
+\item{data}{data.frame}
+
+\item{covs}{names of covariates (can be unquoted)}
+
+\item{by}{names of grouping variables (can be unquoted)}
+
+\item{keepers}{names of NCA parameters to retain (can be unquoted)}
 }
 \value{
 

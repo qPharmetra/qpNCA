@@ -6,6 +6,13 @@
 \usage{
 trap(x = NA, y = NA, method = 1)
 }
+\arguments{
+\item{x}{x variable, i.e. time}
+
+\item{y}{y variable, i.e. concentration}
+
+\item{method:}{(1) linear up - linear down; (2) linear up - logarithmic down; or (3) linear before Tmax, logarithmic after Tmax}
+}
 \description{
 Trapezoid function
 }

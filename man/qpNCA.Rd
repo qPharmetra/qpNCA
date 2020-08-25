@@ -106,6 +106,3 @@ Consecutively executes the following NCA steps:
  \item{\code{link{calc.par.th}}}{calculates parameters depednent on lambda-z}
  }
 }
-\details{
-
-}

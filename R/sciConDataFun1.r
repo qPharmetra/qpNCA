@@ -1,8 +1,8 @@
 #' Similar to ConDataFun1 from qpToolkit, but prints very small (<0.0001) or very large (>9999) numbers in scientific notation.
 #'
-#' @param y
-#' @param nSignif
-#' @param na.rm
+#' @param y numeric
+#' @param nSignif passed to signif()
+#' @param na.rm passed to mean
 #'
 #' @export
 sciConDataFun1 = function (y, nSignif, na.rm) {

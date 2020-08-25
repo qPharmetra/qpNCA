@@ -13,13 +13,6 @@
 #'  \item{\code{link{calc.par.th}}}{calculates parameters depednent on lambda-z}
 #'  }
 #'
-#' USAGE:
-#'
-#' qpNCA(x, by=c("subject"), nomtimevar="ntad", timevar="time",depvar="dv",
-#'       includeCmax="Y",exclvar="exclvar",savedir=NA,
-#'       bloqvar="bloq",loqvar="loq",loqrule=1,
-#'       tau=NA,tstart=NA,tend=NA,teval=NA,cov=NA,dose=NA,factor=NA,reg="SD",ss="N",route="PO",method=1) {
-#'
 #' @param x input dataset name (if called within dplyr: .)
 #' @param by by-variable(s), e.g. c("subject","day")
 #' @param nomtimevar variable name containing the nominal sampling time
