@@ -56,7 +56,7 @@ calc.par.th <- function(x=par,by="subject",th=th,covfile=covfile,dose="dose",fac
   result=left_join(x,th,by=by) %>%
   left_join(covfile,by=by) %>%
   mutate(
-    dosevar=dose,
+    dosevar=.[[dose]],
     factor=ifelse(is.na(factor),1,factor),
     reg=tolower(reg),
     ss=tolower(ss),

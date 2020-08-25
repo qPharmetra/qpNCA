@@ -2,11 +2,12 @@
 title: "nca_analysis_stepbystep.rmd"
 output: html_document
 author: "Krina Mehta"
+editor_options: 
+  chunk_output_type: console
 ---
 
-#Install libraries
+#Load libraries
 ```{r, results='hide'}
-rm(list = ls())
 library(dplyr)
 library(qpNCA)
 ```
@@ -14,13 +15,22 @@ library(qpNCA)
 #Check out Theoph data and prepare data for NCA
 ```{r, results="markup", warnings=F}
 head(Theoph)
-print(plot(Theoph$conc~Theoph$Time))
 
 #we need nominal time variable for some tasks.
 NTAD <- c(0,0.25,0.5,1,2,4,5,7,9,12,24)
 
+# or use metrumrg::snap
+for(i in 1:nrow(Theoph)){
+  time  <- Theoph$Time[[i]]
+  delta <- abs(NTAD - time)
+  best  <- min(delta)
+  index <- match(best, delta)
+  nom   <- NTAD[[index]]
+  Theoph$NTAD[[i]] <- nom
+}
+
 Theoph1 <- Theoph %>% 
-  mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
+  # mutate(NTAD=metrumrg::snap(Time, NTAD)) %>%
   mutate(Subject=as.numeric(Subject)) %>%
   mutate(BLQ = ifelse(conc<0.20, 1, 0),
          LOQ = 0.20) %>%
@@ -58,9 +68,9 @@ tc = Theoph1 %>%
   do(correct.loq(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
                    bloqvar="BLQ",loqvar="LOQ",loqrule=1)) %>%
   do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-                 tau=,tstart=,tend=,teval=,th=th,reg="sd")) %>%  
+                 tau=,tstart=,tend=,teval=,th=th,reg="sd",by='Subject')) %>%  
   do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=12,
-                   th=th,reg="sd",ss="n")) %>%
+                   th=th,reg="sd",ss="n",by='Subject')) %>%
   ungroup()
 
 head(tc)
@@ -84,7 +94,7 @@ cov <- data.frame(Subject=as.numeric(Theoph1$Subject), DOSE=Theoph$Dose) %>%
 
 par = calc.par.th(x=par,th=th ,cov=cov,
                   dose="DOSE",factor=1,  
-                  reg="sd",ss="n") 
+                  reg="sd",ss="n",by='Subject') 
 head(par)
 ```
 

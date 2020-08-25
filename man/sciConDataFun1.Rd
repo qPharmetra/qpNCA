@@ -7,7 +7,11 @@
 sciConDataFun1(y, nSignif, na.rm)
 }
 \arguments{
-\item{na.rm}{}
+\item{y}{numeric}
+
+\item{nSignif}{passed to signif()}
+
+\item{na.rm}{passed to mean}
 }
 \description{
 Similar to ConDataFun1 from qpToolkit, but prints very small (<0.0001) or very large (>9999) numbers in scientific notation.
