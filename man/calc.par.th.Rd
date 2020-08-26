@@ -19,7 +19,13 @@ calc.par.th(
 \arguments{
 \item{x}{result parameter dataset from calc.par}
 
+\item{by}{column names in x indicating grouping variables}
+
 \item{th}{result dataset from est.thalf}
+
+\item{covfile}{covariates dataset (containing at least dose for CL calculation)}
+
+\item{dose}{variable containing the dose amount}
 
 \item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)}
 
@@ -27,9 +33,7 @@ calc.par.th(
 
 \item{ss}{is steady state reached (y/n)}
 
-\item{cov}{covariates dataset (containing at least dose for CL calculation)}
-
-\item{dosevar}{variable containing the dose amount}
+\item{route}{column name in x indicating route (EV, IVB, IVI)}
 }
 \value{
 A dataset with estimates for the following parameters, one observation per subject: \cr

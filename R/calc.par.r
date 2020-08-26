@@ -36,6 +36,7 @@
 #' area.back.extr \tab area back-extrapolated to 0\cr
 #' }
 #' @export
+#' @importFrom utils read.csv
 calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="EV",method=1){
   for(arg in c('tau','tstart','tend','teval','route','method')){
     if(arg %in% names(x)){

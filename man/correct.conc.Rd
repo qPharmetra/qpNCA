@@ -22,6 +22,8 @@ correct.conc(
 \arguments{
 \item{x}{input dataset name input dataset name (contains all data, including LOQ (set conc to zero for these))}
 
+\item{by}{column names in x indicating grouping variables}
+
 \item{nomtimevar}{variable name containing the nominal sampling time}
 
 \item{tau}{dosing interval (for multiple dosing), if single dose, leave empty}

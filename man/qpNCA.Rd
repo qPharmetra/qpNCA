@@ -33,7 +33,7 @@ qpNCA(
 )
 }
 \arguments{
-\item{x}{input dataset name (if called within dplyr: .)}
+\item{x}{input dataset name}
 
 \item{by}{by-variable(s), e.g. c("subject","day")}
 
@@ -55,6 +55,12 @@ qpNCA(
 
 \item{plotdir}{folder where regression plots (.PNG) will be saved; leave empty for standard output}
 
+\item{pdfdir}{folder where pdf summaries will be saved; leave empty for standard output}
+
+\item{timelab}{label for time axis}
+
+\item{deplab}{label for dependent variable axis}
+
 \item{tau}{dosing interval (for multiple dosing), if single dose, leave empty; x$tau overrides if provided}
 
 \item{tstart}{start time of partial AUC (start>0), if not requested, leave empty; x$tstart overrides if provided}
@@ -62,6 +68,8 @@ qpNCA(
 \item{tend}{end time of partial AUC, if not requested, leave empty; x$tend overrides if provided}
 
 \item{teval}{user selected AUC interval, if not requested, leave empty; x$tend overrides if provided}
+
+\item{covfile}{covariates dataset}
 
 \item{dose}{variable containing the dose amount}
 
@@ -77,12 +85,6 @@ qpNCA(
 1: linear up - linear down
 2: linear up - logarithmic down
 3: linear before first Tmax, logarithmic after first Tmax}
-
-\item{X-axis}{label (default: "timevar") in plots}
-
-\item{Y-axis}{label (default: "depvar") in plots}
-
-\item{cov}{covariates dataset}
 }
 \value{
 covariates : contains covariates selected with the 'cov' argument

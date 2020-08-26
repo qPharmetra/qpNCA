@@ -15,7 +15,8 @@ the following will be indicated in the plot:}
   timelab = "timevar",
   deplab = "depvar",
   exclvar = NA,
-  plotdir = NA
+  plotdir = NA,
+  ...
 )
 }
 \arguments{
@@ -37,10 +38,12 @@ the following will be indicated in the plot:}
 
 \item{exclvar}{variable name containing information about points to be excluded (these should have <exclvar>=1)}
 
-\item{savedir}{folder where individual plot files will be saved}
+\item{plotdir}{folder where individual plot files will be saved}
+
+\item{...}{ignored}
 }
 \value{
-If the attribute 'savedir'is empty, plots will be generated in standard output, otherwise plots will be saved as
+If the attribute 'plotdir'is empty, plots will be generated in standard output, otherwise plots will be saved as
 PNG file in the designated folder
 PLOT.REG: Plot regression curves
 }
@@ -54,7 +57,4 @@ PLOT.REG: Plot regression curves
 Input dataset:
 - uncorrected dataset, used for half-life estimation
 - dataset containing results of the half-life estimation
-
-USAGE:
-plot.reg(x,by=c("id","period"),th=th,bloqvar="bloq",timevar="tad",depvar="dv",exclvar="excl_th",savedir=)
 }

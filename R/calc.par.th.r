@@ -1,12 +1,16 @@
+globalVariables('par')
 #' Calculates PK parameters that need lambda_z
 #'
 #' @param x result parameter dataset from calc.par
 #' @param th result dataset from est.thalf
-#' @param cov covariates dataset (containing at least dose for CL calculation)
-#' @param dosevar variable containing the dose amount
+#' @param covfile covariates dataset (containing at least dose for CL calculation)
+#' @param dose variable containing the dose amount
 #' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)
 #' @param reg regimen, "sd" or "md"
 #' @param ss is steady state reached (y/n)
+#' @param by column names in x indicating grouping variables
+#' @param route column name in x indicating route (EV, IVB, IVI)
+#'
 #'
 #' @return A dataset with estimates for the following parameters, one observation per subject: \cr
 #'   all parameters calculated in th \cr

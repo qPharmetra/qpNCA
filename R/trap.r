@@ -2,7 +2,7 @@
 #'
 #' @param x x variable, i.e. time
 #' @param y y variable, i.e. concentration
-#' @param method: (1) linear up - linear down; (2) linear up - logarithmic down; or (3) linear before Tmax, logarithmic after Tmax
+#' @param method (1) linear up - linear down; (2) linear up - logarithmic down; or (3) linear before Tmax, logarithmic after Tmax
 
 #' @export
 trap <- function(x = NA, y = NA, method = 1){

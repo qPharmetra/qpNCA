@@ -1,12 +1,11 @@
 #' Calculates lambda_z and thalf for each PK curve (defined using group_by)
-#' @importFrom Hmisc Cs
 #' @description The function starts with the last three sample points and performs log-linear regression on it. It then adds one sampling point at a time (including and ending at tmax) and performs the regression again. Internal variable EST checks whether there are at least 3 timepoints for estimation after removal of LOQs and NAs
 #' @param x a dataset (not needed to be corrected time and conc)
 #' @param timevar variable name containing the sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param includeCmax include results of regression including Cmax in selection? (y/n); x$includeCmax overrides if provided
 #' @param exclvar a variable name containing information about points to be excluded (these should have <exclvar>=1)
-
+#' @importFrom stats lm
 #' @return a dataset with estimates for each regression analysis in one observation. The following parameters are available:
 #' no.points = number of data points used in the regression analysis; \cr
 #' intercept = estimated intercept;\cr
@@ -83,7 +82,7 @@ est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",exclvar=NA){
     result[i,7]=last(data_in$timevar)
     i=i-1
   }
-  names(result) = Cs(no.points,intercept,lambda_z,r.squared,adj.r.squared,start_th,end_th)
+  names(result) = c('no.points','intercept','lambda_z','r.squared','adj.r.squared','start_th','end_th')
   if (est==1) {
     result=result %>% mutate(sel=no.points[adj.r.squared==max(adj.r.squared)],
                              thalf=log(2)/lambda_z,

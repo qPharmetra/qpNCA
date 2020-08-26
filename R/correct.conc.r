@@ -1,5 +1,4 @@
 #' Corrects missing concentration at critical time points (e.g, predose, TAU, start and end of user selected AUC interval)
-#' @importFrom metrumrg snap locf
 #' @description
 #' \itemize{Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration}\cr
 #' \itemize{Use extrapolation if there is NO measurable concentration AFTER the missing concentration}\cr
@@ -27,6 +26,7 @@
 #' @param th file name of file with lamdba_z information for each curve (can be derived from est.thalf)
 #' @param reg regimen, "sd" or "md"
 #' @param ss is steady state reached (y/n)
+#' @param by column names in x indicating grouping variables
 #' @param route route of drug administration ("po","iv")
 #' @param method of interpolation: \cr
 #'             1: linear up - linear down \cr
@@ -62,32 +62,32 @@ correct.conc <- function(
   }
 
   data_in=x
-  
-  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) } 
-  
-  data_in=data_in %>% 
+
+  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) }
+
+  data_in=data_in %>%
           mutate(ptime=x[[nomtimevar]],                 # nominal time                            (internal)
                  crule.nr="",                           # correction rule number
                  crule.txt="",                          # explanation of concentration substitution
                  applies.to.conc="",                     # lists all AUCS to which the concentration correction rule applies
                  lambda_z=ifelse("lambda_z"%in%names(.),lambda_z,NA)
                 )
-  
+
 # create lead and lag variables for each AUC
-   
+
    #TAU
-if (!is.na(tau)) { 
-  data_in=lag.lead(data_in,nomtimevar1="ptime",depvar1="conc.tau",timevar1="time.tau",
+if (!is.na(tau)) {
+  data_in=lag_lead(data_in,nomtimevar1="ptime",depvar1="conc.tau",timevar1="time.tau",
                    lagc="lag.ctau",lagt="lag.ttau",leadc="lead.ctau",leadt="lead.ttau")
 }
    #PARTIAL
-if (!is.na(tstart)&!is.na(tend)) { 
-  data_in=lag.lead(data_in,nomtimevar1="ptime",depvar1="conc.part",timevar1="time.part",
+if (!is.na(tstart)&!is.na(tend)) {
+  data_in=lag_lead(data_in,nomtimevar1="ptime",depvar1="conc.part",timevar1="time.part",
                    lagc="lag.cpart",lagt="lag.tpart",leadc="lead.cpart",leadt="lead.tpart")
    }
    #TEVAL
-if (!is.na(teval)) { 
-  data_in=lag.lead(data_in,nomtimevar1="ptime",depvar1="conc.teval",timevar1="time.teval",
+if (!is.na(teval)) {
+  data_in=lag_lead(data_in,nomtimevar1="ptime",depvar1="conc.teval",timevar1="time.teval",
                    lagc="lag.cteval",lagt="lag.tteval",leadc="lead.cteval",leadt="lead.tteval")
    }
 

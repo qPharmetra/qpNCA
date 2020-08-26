@@ -10,8 +10,6 @@
 #' - uncorrected dataset, used for half-life estimation
 #' - dataset containing results of the half-life estimation
 #'
-#' USAGE:
-#' plot.reg(x,by=c("id","period"),th=th,bloqvar="bloq",timevar="tad",depvar="dv",exclvar="excl_th",savedir=)
 #'
 #' @param x input dataset name (if called within dplyr: .)
 #' @param by by-variable(s), e.g. c("subject","day")
@@ -22,14 +20,19 @@
 #' @param timelab X-axis label (default: "timevar")
 #' @param deplab Y-axis label (default: "depvar")
 #' @param exclvar variable name containing information about points to be excluded (these should have <exclvar>=1)
-#' @param savedir folder where individual plot files will be saved
+#' @param plotdir folder where individual plot files will be saved
+#' @param ... ignored
+#' @import ggplot2
 #'
-#' @return If the attribute 'savedir'is empty, plots will be generated in standard output, otherwise plots will be saved as
+#' @return If the attribute 'plotdir'is empty, plots will be generated in standard output, otherwise plots will be saved as
 #' PNG file in the designated folder
 #' PLOT.REG: Plot regression curves
 #'
 #' @export
-plot.reg <- function(x,by=c("id"),th=NA,bloqvar="bloq",timevar="tad",depvar="dv",timelab="timevar",deplab="depvar",exclvar=NA,plotdir=NA) {
+plot.reg <- function(
+  x,by=c("id"),th=NA,bloqvar="bloq",timevar="tad",
+  depvar="dv",timelab="timevar",deplab="depvar",
+  exclvar=NA,plotdir=NA,...) {
 
   data_in = x %>% mutate(timevar=x[[timevar]],
                          depvar=x[[depvar]],
@@ -62,21 +65,21 @@ plot.reg <- function(x,by=c("id"),th=NA,bloqvar="bloq",timevar="tad",depvar="dv"
   plots = plot %>% group_by_at(by) %>%
     do(  plots=ggplot(data=.) +
 
-           geom_line(data=., mapping=aes(x=timevar, y=depvar), color=qp.blue, size=0.5) +
+           geom_line(data=., mapping=aes(x=timevar, y=depvar), color="#144A90", size=0.5) +
 
            geom_point(data=., mapping=aes(x=tmax, y=cmax), color="gold3", size=4) +        # Cmax
 
            geom_point(data=.[.$timevar>=.$start_th&.$timevar<=.$end_th&.$excl!=1,],
-                      mapping=aes(x=timevar, y=depvar), size=4, color=qp.green) +          # points used in regression
+                      mapping=aes(x=timevar, y=depvar), size=4, color="#4CB54F") +          # points used in regression
 
-           geom_point(data=., mapping=aes(x=timevar, y=depvar), color=qp.blue, size=2.5) +   # curve
+           geom_point(data=., mapping=aes(x=timevar, y=depvar), color="#144A90", size=2.5) +   # curve
 
            geom_segment(data=.,x=.$start_th,xend=.$end_th,
                         y=log10(.$start_conc), yend=log10(.$end_conc),                     # regression line
-                        color=qp.green, linetype="solid", size=0.5) +
+                        color="#4CB54F", linetype="solid", size=0.5) +
 
            #           geom_point(data=.[.$excl==1,],
-           #                      mapping=aes(x=timevar, y=depvar), size=4, color=qp.blue) +
+           #                      mapping=aes(x=timevar, y=depvar), size=4, color="#144A90") +
 
            geom_point(data=.[.$excl==1,],
                       mapping=aes(x=timevar, y=depvar), shape=4, size=4, color="red") +    # exclusions

@@ -1,5 +1,4 @@
 #' Corrects concentrations at critical, but deviating time points (e.g, predose, TAU, start and end of user selected AUC interval), and adds missing records at these critical time points.
-#' @importFrom qpToolkit mutate_cond
 #' @description
 #' \itemize{Records with missing NOMINAL time will be removed and this must be corrected before the function is called.}\cr
 #' \itemize{If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA}\cr
@@ -26,6 +25,9 @@
 #' @param teval user selected AUC interval, if not requested, leave empty
 #' @param th file name of file with lamdba_z information for each curve (can be derived from est.thalf)
 #' @param reg regimen, "sd" or "md"
+#' @param by column names in x indicating grouping variables
+#' @param tstart column name in x indicating start time
+#' @param tend column name in x indicating end time
 #' @param method method of interpolation: \cr
 #'             1: linear up - linear down \cr
 #'             2: linear up - logarithmic down
@@ -48,8 +50,6 @@ correct.time <- function(
   x,by="subject",nomtimevar="ntad",timevar="time",
   depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",method=1
 ){
-  #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,method=method
-
   for(arg in c('tau','tstart','tend','teval','reg','method')){
   if(arg %in% names(x)){
     if(!eval(substitute(missing(arg)))){
@@ -119,7 +119,7 @@ correct.time <- function(
 
   # Estimate lagging and leading time points and concentrations for each time point
 
-  data_in=lag.lead(data_in,nomtimevar1="ptime",depvar1="depvar",timevar1="timevar",lagc="lagdv",lagt="lagtime",leadc="leaddv",leadt="leadtime")
+  data_in=lag_lead(data_in,nomtimevar1="ptime",depvar1="depvar",timevar1="timevar",lagc="lagdv",lagt="lagtime",leadc="leaddv",leadt="leadtime")
 
   # Start time corrections
 
@@ -329,4 +329,18 @@ correct.time <- function(
   names(result)[names(result)=="depvar"]=depvar     # to be sure conc value of created time points are copied to original conc variable
   return(result)
 
+}
+
+mutate_cond <- function (.data, condition, ..., envir = parent.frame()){
+  condition <- eval(substitute(condition), .data, envir)
+  .data[condition, ] <- .data[condition, ] %>% mutate(...)
+  .data
+}
+locf <- function(x){
+  good <- !is.na(x)
+  positions <- seq(length(x))
+  good.positions <- good * positions
+  last.good.position <- cummax(good.positions)
+  last.good.position[last.good.position == 0] <- NA
+  x[last.good.position]
 }

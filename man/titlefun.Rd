@@ -12,7 +12,7 @@ titlefun(df, by)
 \item{by}{by-variable(s), e.g. c("subject","day")}
 }
 \value{
-
+character
 }
 \description{
 Create title for regression plots from by-variables (in plot.reg function)

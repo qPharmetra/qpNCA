@@ -1,11 +1,11 @@
 Package: qpNCA
 Type: Package
-Title: qPharmetra's R package for Noncompartmental Analysis
+Title: Noncompartmental Pharmacokinetic Analysis by qPharmetra
 Version: 1.0.25
 Author: Jan Huisman, Krina Mehta, and Koen Jolling
-Maintainer: Jason Chittenden <jason.chittenden@qpharmetra.com>
-Description: qPharmetra's R package for Noncompartmental Analysis
-License: TBD
+Maintainer: Tim Bergsma <tim.bergsma@qpharmetra.com>
+Description: Computes NCA parameters for drug concentration profiles.
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
@@ -15,9 +15,11 @@ Depends:
     R (>= 3.3.3)
 Imports:
     dplyr(>= 0.7.0),  
-    Hmisc (>= 3.17-0),
     rlang (>= 0.1.1),
     tidyr (>= 0.8.2),
-    gdata (>= 2.7.0),
-    magrittr
+    magrittr,
+    rmarkdown,
+    ggplot2,
+    knitr
 RoxygenNote: 7.0.2
+VignetteBuilder: knitr

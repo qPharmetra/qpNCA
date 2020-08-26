@@ -22,6 +22,8 @@ correct.time(
 \arguments{
 \item{x}{input dataset name (contains all data, including LOQ (set conc to zero for these))}
 
+\item{by}{column names in x indicating grouping variables}
+
 \item{nomtimevar}{variable name containing the nominal sampling time}
 
 \item{timevar}{variable name containing the actual sampling time}
@@ -29,6 +31,10 @@ correct.time(
 \item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 
 \item{tau}{dosing interval (for multiple dosing), if single dose, leave empty}
+
+\item{tstart}{column name in x indicating start time}
+
+\item{tend}{column name in x indicating end time}
 
 \item{teval}{user selected AUC interval, if not requested, leave empty}
 

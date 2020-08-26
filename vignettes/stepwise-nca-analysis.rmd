@@ -1,9 +1,11 @@
 ---
-title: "nca_analysis_stepbystep.rmd"
-output: html_document
+title: "stepwise-nca-analysis.rmd"
 author: "Krina Mehta"
-editor_options: 
-  chunk_output_type: console
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Stepwise NCA Analysis}
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteEncoding{UTF-8}
 ---
 
 #Load libraries
@@ -102,6 +104,6 @@ head(par)
 ```{r,  results="markup", warnings=F}
 par_all = left_join(par, ctmax)
 head(par_all)
-write.csv(par_all, "nca_analysis_stepbystep_results.csv", row.names = F)
+# write.csv(par_all, "nca_analysis_stepbystep_results.csv", row.names = F)
 ```
 

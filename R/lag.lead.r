@@ -10,10 +10,11 @@
 #' @param lagt previous sampling time
 #' @param leadc concentration at next sampling time
 #' @param leadt next sampling time
-#' @export
-lag.lead <- function(
+#' @param ... ignored
+
+lag_lead <- function(
   x,nomtimevar1=NA,depvar1=NA,timevar1=NA,
-  lagc=NA,lagt=NA,leadc=NA,leadt=NA
+  lagc=NA,lagt=NA,leadc=NA,leadt=NA,...
 ){
 original <- x %>%
   mutate(depvar=x[[depvar1]],   # dependent variable   (internal)

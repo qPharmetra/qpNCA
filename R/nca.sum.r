@@ -7,6 +7,7 @@
 #' @param by column names in x indicating grouping variables
 #' @param pdfdir path to directory for pdf ouput
 #' @return used for side effects
+#' @importFrom rmarkdown render
 #' @export
 #' @examples
 #' example(qpNCA)

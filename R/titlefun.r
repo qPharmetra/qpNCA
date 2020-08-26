@@ -2,10 +2,9 @@
 #'
 #' @param df dataset containing concentration-time information of the current curve
 #' @param by by-variable(s), e.g. c("subject","day")
-#'
-#' @return
+#' @return character
 #' @export
-#'
+
 titlefun <- function(df,by) {
   plottitle=""
   for (i in 1:length(by)) {
