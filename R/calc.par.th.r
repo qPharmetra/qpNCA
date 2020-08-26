@@ -14,29 +14,30 @@ globalVariables('par')
 #' @param route column name in x indicating route (EV, IVB, IVI)
 #'
 #'
-#' @return A dataset with estimates for the following parameters, one observation per subject: \cr
-#'   all parameters calculated in th \cr
-#'   all parameters calculated in par \cr
-#'   clast.pred: predicted concentration at tlast \cr
-#'   aucinf.obs: aucinf based on observed concentration at tlast \cr
-#'   aucinf.pred: aucinf based on predicted concentration at tlast \cr
-#'   aumcinf.obs: area under the first moment curve extrapolated to infinity, based on observed concentration at tlast \cr
-#'   aumcinf.pred: area under the first moment curve extrapolated to infinity, based on predicted concentration at tlast \cr
-#'   cl.f.obs: clearance based on aucinf.obs, at steady state based on auctau \cr
-#'   cl.f.pred: clearance based on aucinf.pred \cr
-#'   mrt.obs: Mean residence time based on aumcinf.obs and aucinf.obs \cr
-#'   mrt.pred: Mean residence time based on aumcinf.pred and aucinf.pred \cr
-#'   vz.f.obs: distribution volume based on cl.f.obs, at steady state based on auctau \cr
-#'   vz.f.pred: distribution based on cl.f.pred \cr
-#'   vss.obs: Steady-state volume based on cl.obs and mrt.obs \cr
-#'   vss.pred: Steady-state volume based on cl.pred and mrt.pred \cr
-#'   regimen (reg) \cr
-#'   steady state reached Y/N? (ss) \cr
-#' NOTE: ctmax must be merged separately as those were calculated from uncorrected data.
+#' @return A dataset with estimates for the following parameters,
+#' one observation per subject:
+#' * all parameters calculated in th
+#' * all parameters calculated in par
+#' * **clast.pred** predicted concentration at tlast
+#' * **aucinf.obs** aucinf based on observed concentration at tlast
+#' * **aucinf.pred** aucinf based on predicted concentration at tlast
+#' * **aumcinf.obs** area under the first moment curve extrapolated to infinity, based on observed concentration at tlast
+#' * **aumcinf.pred** area under the first moment curve extrapolated to infinity, based on predicted concentration at tlast
+#' * **cl.f.obs** clearance based on aucinf.obs, at steady state based on auctau
+#' * **cl.f.pred** clearance based on aucinf.pred
+#' * **mrt.obs** Mean residence time based on aumcinf.obs and aucinf.obs
+#' * **mrt.pred** Mean residence time based on aumcinf.pred and aucinf.pred
+#' * **vz.f.obs** distribution volume based on cl.f.obs, at steady state based on auctau
+#' * **vz.f.pred** distribution based on cl.f.pred
+#' * **vss.obs** Steady-state volume based on cl.obs and mrt.obs
+#' * **vss.pred** Steady-state volume based on cl.pred and mrt.pred
+#' * **reg** regimen: SD or MD
+#' * **ss** steady state reached Y/N?
 #'
+#' Note: ctmax must be merged separately as those were calculated from uncorrected data.
 #' @export
 calc.par.th <- function(
-  x=par,
+  x,
   by="subject",
   th=th,
   covfile=covfile,

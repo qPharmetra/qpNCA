@@ -33,6 +33,7 @@ correct.loq(
 A dataset with imputed BLOQ concentrations using the chosen imputation rule
 }
 \description{
-Imputes LOQ values according to the chosen LOQ substitution rule
-Imputations will be applied to the original depvar(no new concentration variable will be created)
+Imputes LOQ values according to the chosen LOQ substitution rule.
+Imputations will be applied to the original depvar(no new concentration
+variable will be created).
 }

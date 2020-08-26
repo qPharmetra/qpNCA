@@ -14,12 +14,13 @@ calc.ctmax(x, timevar = "time", depvar = "dv")
 \item{depvar}{column name in x indicating concentration}
 }
 \value{
-A dataset with estimates for the Cmax (maximum concentration) and Tmax (time of first occurence of cmax) parameters: one observation per subject
+A dataset with estimates for the Cmax (maximum concentration)
+and Tmax (time of first occurence of cmax) parameters: one observation per subject
 }
 \description{
-Input dataset can contain all uncorrected data, including LOQ; estimate first occurence of maximum concentration for each PK curve; if all concentrations are NA, sets Cmax and Tmax also to NA
-}
-\details{
 Calculates Cmax and Tmax from raw data for each PK curve.
 Data subsets must be defined externally, e.g. using group_by().
+Input dataset can contain all uncorrected data, including LOQ;
+estimate first occurence of maximum concentration for each PK curve;
+if all concentrations are NA, sets Cmax and Tmax also to NA.
 }

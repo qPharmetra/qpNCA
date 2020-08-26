@@ -87,24 +87,27 @@ qpNCA(
 3: linear before first Tmax, logarithmic after first Tmax}
 }
 \value{
-covariates : contains covariates selected with the 'cov' argument
-half_life  : contains linear regression parameters
-ctmax      : contains cmax and tmax estimated from uncorrected data
-ct_corr    : contains the time and concentration corrected dataset
-corrections: contains descriptions of the corrections applied
-pkpar      : contains all estimated PK parameters
+(list)
+\itemize{
+\item \strong{covariates} covariates selected with the 'cov' argument
+\item \strong{half_life} linear regression parameters
+\item \strong{ctmax} cmax and tmax estimated from uncorrected data
+\item \strong{ct_corr} the time and concentration corrected dataset
+\item \strong{corrections} descriptions of the corrections applied
+\item \strong{pkpar} all estimated PK parameters
+}
 }
 \description{
 Consecutively executes the following NCA steps:
 \itemize{
-\item \code{\link{correct.loq}} impute LOQ values
-\item \code{\link{est.thalf}} calculate lambda-z and halflife
-\item \code{\link{plot_reg}} plot each curve
-\item \code{\link{calc.ctmax}} calculate Cmax and Tmax
-\item \code{\link{correct.time}} supply records at critical times with correct concentration
-\item \code{\link{correct.conc}} supply correct concentrations at critical times
-\item \code{\link{tab.corr}} tabulate data alterations
-\item \code{\link{calc.par}} calculates profile-specific summary statistics
-\item \code{\link{calc.par.th}} calculates parameters depednent on lambda-z
+\item \link{correct.loq} impute LOQ values
+\item \link{est.thalf} calculate lambda-z and halflife
+\item \link{plot_reg} plot each curve
+\item \link{calc.ctmax} calculate Cmax and Tmax
+\item \link{correct.time} supply records at critical times with correct concentration
+\item \link{correct.conc} supply correct concentrations at critical times
+\item \link{tab.corr} tabulate data alterations
+\item \link{calc.par} calculates profile-specific summary statistics
+\item \link{calc.par.th} calculates parameters depednent on lambda-z
 }
 }

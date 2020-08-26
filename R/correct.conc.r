@@ -1,24 +1,25 @@
 #' Correct Missing Concentration
 #'
 #' Corrects missing concentration at critical time points
-#' (e.g, predose, TAU, start and end of user selected AUC interval)
-#' \itemize{Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration}\cr
-#' \itemize{Use extrapolation if there is NO measurable concentration AFTER the missing concentration}\cr
-#' \itemize{Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)}\cr
-#' \itemize{Set missing concentration at t=TAU to value at t=0 (steady state only)}\cr
-#' \itemize{The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:}
-#' \tabular{llll}{
-#' Rule \tab Regimen \tab Description \tab Applied to \cr
-#' SDC-1  \tab   sd   \tab       Set concentration to 0 (only non-endogenous compounds)      \tab      t=0 \cr
-#' SDC-2   \tab    sd  \tab      impute missing concentration by interpolation   \tab                  t=tau,tstart,tend,teval\cr
-#' SDC-3   \tab    sd    \tab    impute missing concentration by extrapolation   \tab                  t=tau,tend,teval\cr
-#' SDC-4   \tab    sd (IV)  \tab impute missing concentration by back-extrapolation   \tab             t=0\cr
-#' MDC-1   \tab    md  \tab      impute missing concentration by existing conc at t=0 or t=tau*  \tab  t=0,tau\cr
-#' MDC-2   \tab    md    \tab    impute missing concentration by interpolation   \tab                   t=tau,tstart,tend,teval\cr
-#' MDC-3   \tab    md    \tab    impute missing concentration by extrapolation   \tab                  t=tau,tend,teval\cr
-#' MDC-4   \tab    md (IV)  \tab  impute missing concentration by back-extrapolation  \tab              t=0\cr
-#' * only if steady state has been reached\cr
-#' }
+#' (e.g, predose, TAU, start and end of user selected AUC interval).
+#' * Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration
+#' * Use extrapolation if there is NO measurable concentration AFTER the missing concentration
+#' * Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)
+#' * Set missing concentration at t=TAU to value at t=0 (steady state only)
+#'
+#' The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:
+#'
+#' **Rule** | **Regimen** | **Description** | **Applied to**
+#' ---- | ------- | ----------- | ----------
+#' SDC-1  |   sd   |       Set concentration to 0 (only non-endogenous compounds)      |      t=0
+#' SDC-2   |    sd  |      impute missing concentration by interpolation   |                  t=tau,tstart,tend,teval
+#' SDC-3   |    sd    |    impute missing concentration by extrapolation   |                  t=tau,tend,teval
+#' SDC-4   |    sd (IV)  | impute missing concentration by back-extrapolation   |             t=0
+#' MDC-1   |    md  |      impute missing concentration by existing conc at t=0 or t=tau (only if steady state has been reached)  |  t=0,tau
+#' MDC-2   |    md    |    impute missing concentration by interpolation   |                   t=tau,tstart,tend,teval
+#' MDC-3   |    md    |    impute missing concentration by extrapolation   |                  t=tau,tend,teval
+#' MDC-4   |    md (IV)  |  impute missing concentration by back-extrapolation  |              t=0
+#'
 #' @param x input dataset name input dataset name (contains all data, including LOQ (set conc to zero for these))
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param tau dosing interval (for multiple dosing), if single dose, leave empty
@@ -30,17 +31,17 @@
 #' @param ss is steady state reached (y/n)
 #' @param by column names in x indicating grouping variables
 #' @param route route of drug administration ("po","iv")
-#' @param method of interpolation: \cr
-#'             1: linear up - linear down \cr
-#'             2: linear up - logarithmic down \cr
+#' @param method of interpolation:
+#' * 1: linear up - linear down
+#' * 2: linear up - logarithmic down
 #'
 #' @return  a dataset with missing concentrations imputed. The following variables are added:
-#' \tabular{cc}{
-#'  crule.nr     \tab    correction rule number \cr
-#'  crule.txt     \tab   text explaining what was altered \cr
-#'  applies.to.conc  \tab  lists all AUCS to which the concentration correction rule applies \cr
-#' }
 #'
+#' **Variable** | **Description**
+#' -------- | -----------
+#'  crule.nr     |   correction rule number
+#'  crule.txt     |  text explaining what was altered
+#'  applies.to.conc  | lists all AUCS to which the concentration correction rule applies
 #' @export
 #'
 correct.conc <- function(

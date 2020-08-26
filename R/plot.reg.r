@@ -23,7 +23,7 @@
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param timelab X-axis label (default: "timevar")
 #' @param deplab Y-axis label (default: "depvar")
-#' @param exclvar variable name containing information about points to be excluded (these should have <exclvar>=1)
+#' @param exclvar variable name containing information about points to be excluded (these should have exclvar = 1)
 #' @param plotdir folder where individual plot files will be saved
 #' @param ... ignored
 #' @import ggplot2

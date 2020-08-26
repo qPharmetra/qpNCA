@@ -1,7 +1,8 @@
 #' Impute Concentrations Below the Limit of Quantitation
 #'
-#' Imputes LOQ values according to the chosen LOQ substitution rule
-#' Imputations will be applied to the original depvar(no new concentration variable will be created)
+#' Imputes LOQ values according to the chosen LOQ substitution rule.
+#' Imputations will be applied to the original depvar(no new concentration
+#' variable will be created).
 #' @param x input dataset name (if called within dplyr: .) contains all uncorrected data, including LOQ
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param timevar variable name containing the sampling time
@@ -9,7 +10,6 @@
 #' @param bloqvar variable name containing the BLOQ flag (0: no, 1: yes)
 #' @param loqvar variable name containing the LOQ value
 #' @param loqrule rule number to be applied to the LOQ values in the curve. x$loqrule overrides if provided
-#'
 #' @return A dataset with imputed BLOQ concentrations using the chosen imputation rule
 #' @export
 correct.loq <- function(

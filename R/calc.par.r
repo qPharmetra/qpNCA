@@ -11,34 +11,37 @@
 #' @param tend end time of user defined interval, if not requested, leave empty
 #' @param teval user selected AUC interval, if not requested, leave empty
 #' @param route route of drug administration ("EV","IVB","IVI")
-#' @param method method for trapezoidal rule:\cr
-#'          1: linear up - linear down \cr
-#'          2: linear up - logarithmic down \cr
-#'          3: linear before first Tmax, logarithmic after first Tmax \cr
-#' @return A dataset with estimates for the following parameters, one observation per subject:
-#'\tabular{ll}{
-#' t0.ok     \tab flags if t=0 concentration could be corrected/imputes. If not, no AUCs starting at t=0 are calculated \cr
-#' tlast.ok  \tab flags if there is at least one measurable concentration. If not, no AUClast can be calculated\cr
-#' tlast     \tab time of last sample with measurable concentration\cr
-#' clast.obs \tab observed concentration at tlast\cr
-#' aucall    \tab auc calculated over all observations, including values below LOQ (which are set to 0)\cr
-#' auclast   \tab auc calculated using all observations up to and including the last measurable concentration (clast.obs at tlast)\cr
-#' aumcall   \tab aumc calculated over all observations, including values below LOQ (which are set to 0)\cr
-#' aumclast  \tab aumc calculated using all observations up to and including the last measurable concentration (clast.obs at tlast)\cr
-#' tau       \tab the dosing interval (if specified)\cr
-#' calc.tau  \tab flags if AUCtau could be calculated\cr
-#' auctau    \tab auc calculated over the dosing interval, only calculated if tau is specified\cr
-#' aumctau   \tab aumc calculated over the dosing interval, only calculated if tau is specified\cr
-#' teval     \tab user selected AUC interval starting at t=0 (if specified)\cr
-#' calc.teval\tab flags if AUCteval could be calculated\cr
-#' aucxx     \tab auc calculated from t=0 up to/including teval, only calculated if teval is specified (xx is substituted by teval)\cr
-#' calc.part \tab flags if AUCpart could be calculated\cr
-#' tstart    \tab start time of partial AUC (if specified)\cr
-#' tend      \tab end time of partial AUC (if specified)\cr
-#' aucx_y    \tab partial auc from time=x up to/including time=y, where x>0, only calculated if tstart and tend are specified\cr
-#' c0        \tab back-extrapolated concentration at t=0 for IV bolus administration\cr
-#' area.back.extr \tab area back-extrapolated to 0\cr
-#' }
+#' @param method method for trapezoidal rule
+#' * 1: linear up - linear down
+#' * 2: linear up - logarithmic down
+#' * 3: linear before first Tmax, logarithmic after first Tmax
+#' @return A dataset with estimates for the following parameters,
+#' one observation per subject:
+#'
+#' **Parameter** | **Description**
+#' --------- | -----------
+#' t0.ok     | flags if t=0 concentration could be corrected/imputes. If not, no AUCs starting at t=0 are calculated
+#' tlast.ok  | flags if there is at least one measurable concentration. If not, no AUClast can be calculated
+#' tlast     | time of last sample with measurable concentration
+#' clast.obs | observed concentration at tlast
+#' aucall    | auc calculated over all observations, including values below LOQ (which are set to 0)
+#' auclast   | auc calculated using all observations up to and including the last measurable concentration (clast.obs at tlast)
+#' aumcall   | aumc calculated over all observations, including values below LOQ (which are set to 0)
+#' aumclast  | aumc calculated using all observations up to and including the last measurable concentration (clast.obs at tlast)
+#' tau       | the dosing interval (if specified)
+#' calc.tau  | flags if AUCtau could be calculated
+#' auctau    | auc calculated over the dosing interval, only calculated if tau is specified
+#' aumctau   | aumc calculated over the dosing interval, only calculated if tau is specified
+#' teval     | user selected AUC interval starting at t=0 (if specified)
+#' calc.teval| flags if AUCteval could be calculated
+#' aucxx     | auc calculated from t=0 up to/including teval, only calculated if teval is specified (xx is substituted by teval)
+#' calc.part | flags if AUCpart could be calculated
+#' tstart    | start time of partial AUC (if specified)
+#' tend      | end time of partial AUC (if specified)
+#' aucx_y    | partial auc from time=x up to/including time=y, where x>0, only calculated if tstart and tend are specified
+#' c0        | back-extrapolated concentration at t=0 for IV bolus administration
+#' area.back.extr | area back-extrapolated to 0
+#'
 #' @export
 #' @importFrom utils read.csv
 calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="EV",method=1){

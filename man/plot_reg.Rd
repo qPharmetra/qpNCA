@@ -35,7 +35,7 @@ plot_reg(
 
 \item{deplab}{Y-axis label (default: "depvar")}
 
-\item{exclvar}{variable name containing information about points to be excluded (these should have <exclvar>=1)}
+\item{exclvar}{variable name containing information about points to be excluded (these should have exclvar = 1)}
 
 \item{plotdir}{folder where individual plot files will be saved}
 
@@ -53,12 +53,16 @@ If elimination half-life was estimated for that curve,
 the following will be indicated in the plot:
 }
 \details{
-- Cmax (Yellow, even if no half-life was estimated)
-- points used in regression and resulting regression line (green)
-- points excluded from regression (red crossed)
-- estimate of elimination half-life and adjusted R-squared
+\itemize{
+\item Cmax (Yellow, even if no half-life was estimated)
+\item points used in regression and resulting regression line (green)
+\item points excluded from regression (red crossed)
+\item estimate of elimination half-life and adjusted R-squared
+}
 
 Input dataset:
-- uncorrected dataset, used for half-life estimation
-- dataset containing results of the half-life estimation
+\itemize{
+\item uncorrected dataset, used for half-life estimation
+\item dataset containing results of the half-life estimation
+}
 }

@@ -42,36 +42,40 @@ correct.conc(
 
 \item{route}{route of drug administration ("po","iv")}
 
-\item{method}{of interpolation: \cr
-1: linear up - linear down \cr
-2: linear up - logarithmic down \cr}
+\item{method}{of interpolation:
+\itemize{
+\item 1: linear up - linear down
+\item 2: linear up - logarithmic down
+}}
 }
 \value{
-a dataset with missing concentrations imputed. The following variables are added:
-\tabular{cc}{
- crule.nr     \tab    correction rule number \cr
- crule.txt     \tab   text explaining what was altered \cr
- applies.to.conc  \tab  lists all AUCS to which the concentration correction rule applies \cr
+a dataset with missing concentrations imputed. The following variables are added:\tabular{ll}{
+   \strong{Variable} \tab \strong{Description} \cr
+   crule.nr \tab correction rule number \cr
+   crule.txt \tab text explaining what was altered \cr
+   applies.to.conc \tab lists all AUCS to which the concentration correction rule applies \cr
 }
 }
 \description{
 Corrects missing concentration at critical time points
-(e.g, predose, TAU, start and end of user selected AUC interval)
-\itemize{Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration}\cr
-\itemize{Use extrapolation if there is NO measurable concentration AFTER the missing concentration}\cr
-\itemize{Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)}\cr
-\itemize{Set missing concentration at t=TAU to value at t=0 (steady state only)}\cr
-\itemize{The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:}
-\tabular{llll}{
-Rule \tab Regimen \tab Description \tab Applied to \cr
-SDC-1  \tab   sd   \tab       Set concentration to 0 (only non-endogenous compounds)      \tab      t=0 \cr
-SDC-2   \tab    sd  \tab      impute missing concentration by interpolation   \tab                  t=tau,tstart,tend,teval\cr
-SDC-3   \tab    sd    \tab    impute missing concentration by extrapolation   \tab                  t=tau,tend,teval\cr
-SDC-4   \tab    sd (IV)  \tab impute missing concentration by back-extrapolation   \tab             t=0\cr
-MDC-1   \tab    md  \tab      impute missing concentration by existing conc at t=0 or t=tau*  \tab  t=0,tau\cr
-MDC-2   \tab    md    \tab    impute missing concentration by interpolation   \tab                   t=tau,tstart,tend,teval\cr
-MDC-3   \tab    md    \tab    impute missing concentration by extrapolation   \tab                  t=tau,tend,teval\cr
-MDC-4   \tab    md (IV)  \tab  impute missing concentration by back-extrapolation  \tab              t=0\cr
-* only if steady state has been reached\cr
+(e.g, predose, TAU, start and end of user selected AUC interval).
+\itemize{
+\item Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration
+\item Use extrapolation if there is NO measurable concentration AFTER the missing concentration
+\item Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)
+\item Set missing concentration at t=TAU to value at t=0 (steady state only)
+}
+}
+\details{
+The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:\tabular{llll}{
+   \strong{Rule} \tab \strong{Regimen} \tab \strong{Description} \tab \strong{Applied to} \cr
+   SDC-1 \tab sd \tab Set concentration to 0 (only non-endogenous compounds) \tab t=0 \cr
+   SDC-2 \tab sd \tab impute missing concentration by interpolation \tab t=tau,tstart,tend,teval \cr
+   SDC-3 \tab sd \tab impute missing concentration by extrapolation \tab t=tau,tend,teval \cr
+   SDC-4 \tab sd (IV) \tab impute missing concentration by back-extrapolation \tab t=0 \cr
+   MDC-1 \tab md \tab impute missing concentration by existing conc at t=0 or t=tau (only if steady state has been reached) \tab t=0,tau \cr
+   MDC-2 \tab md \tab impute missing concentration by interpolation \tab t=tau,tstart,tend,teval \cr
+   MDC-3 \tab md \tab impute missing concentration by extrapolation \tab t=tau,tend,teval \cr
+   MDC-4 \tab md (IV) \tab impute missing concentration by back-extrapolation \tab t=0 \cr
 }
 }

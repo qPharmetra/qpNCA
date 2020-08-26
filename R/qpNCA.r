@@ -2,15 +2,15 @@ globalVariables('Errors_Warnings')
 #' Perform Non-compartmental Analysis
 #'
 #' Consecutively executes the following NCA steps:
-#' * \code{\link{correct.loq}} impute LOQ values
-#' * \code{\link{est.thalf}} calculate lambda-z and halflife
-#' * \code{\link{plot_reg}} plot each curve
-#' * \code{\link{calc.ctmax}} calculate Cmax and Tmax
-#' * \code{\link{correct.time}} supply records at critical times with correct concentration
-#' * \code{\link{correct.conc}} supply correct concentrations at critical times
-#' * \code{\link{tab.corr}} tabulate data alterations
-#' * \code{\link{calc.par}} calculates profile-specific summary statistics
-#' * \code{\link{calc.par.th}} calculates parameters depednent on lambda-z
+#' * [correct.loq] impute LOQ values
+#' * [est.thalf] calculate lambda-z and halflife
+#' * [plot_reg] plot each curve
+#' * [calc.ctmax] calculate Cmax and Tmax
+#' * [correct.time] supply records at critical times with correct concentration
+#' * [correct.conc] supply correct concentrations at critical times
+#' * [tab.corr] tabulate data alterations
+#' * [calc.par] calculates profile-specific summary statistics
+#' * [calc.par.th] calculates parameters depednent on lambda-z
 #'
 #' @md
 #' @param x input dataset name
@@ -42,13 +42,13 @@ globalVariables('Errors_Warnings')
 #'              2: linear up - logarithmic down
 #'              3: linear before first Tmax, logarithmic after first Tmax
 #'
-#' @return
-#' covariates : contains covariates selected with the 'cov' argument
-#' half_life  : contains linear regression parameters
-#' ctmax      : contains cmax and tmax estimated from uncorrected data
-#' ct_corr    : contains the time and concentration corrected dataset
-#' corrections: contains descriptions of the corrections applied
-#' pkpar      : contains all estimated PK parameters
+#' @return (list)
+#' * **covariates** covariates selected with the 'cov' argument
+#' * **half_life** linear regression parameters
+#' * **ctmax** cmax and tmax estimated from uncorrected data
+#' * **ct_corr** the time and concentration corrected dataset
+#' * **corrections** descriptions of the corrections applied
+#' * **pkpar** all estimated PK parameters
 #' @export
 #' @importFrom utils read.csv
 #' @importFrom knitr kable

@@ -2,11 +2,14 @@
 #'
 #' Calculates Cmax and Tmax from raw data for each PK curve.
 #' Data subsets must be defined externally, e.g. using group_by().
-#' @description Input dataset can contain all uncorrected data, including LOQ; estimate first occurence of maximum concentration for each PK curve; if all concentrations are NA, sets Cmax and Tmax also to NA
+#' Input dataset can contain all uncorrected data, including LOQ;
+#' estimate first occurence of maximum concentration for each PK curve;
+#' if all concentrations are NA, sets Cmax and Tmax also to NA.
 #' @param x data.frame
 #' @param timevar column name in x indicating time
 #' @param depvar column name in x indicating concentration
-#' @return A dataset with estimates for the Cmax (maximum concentration) and Tmax (time of first occurence of cmax) parameters: one observation per subject
+#' @return A dataset with estimates for the Cmax (maximum concentration)
+#' and Tmax (time of first occurence of cmax) parameters: one observation per subject
 #' @import magrittr
 #' @importFrom dplyr arrange mutate summarize filter group_by do
 #' @export
