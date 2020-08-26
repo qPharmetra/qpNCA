@@ -1,5 +1,7 @@
 globalVariables('par')
-#' Calculates PK parameters that need lambda_z
+#' Calculate Lambda-Z Parameters
+#'
+#' Calculates PK parameters that need lambda_z.
 #'
 #' @param x result parameter dataset from calc.par
 #' @param th result dataset from est.thalf

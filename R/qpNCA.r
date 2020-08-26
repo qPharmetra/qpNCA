@@ -2,18 +2,17 @@ globalVariables('Errors_Warnings')
 #' Perform Non-compartmental Analysis
 #'
 #' Consecutively executes the following NCA steps:
-#' \describe{
-#'  \item{\code{link{correct.loq}}}{impute LOQ values}
-#'  \item{\code{link{est.thalf}}}{calculate lambda-z and halflife}
-#'  \item{\code{link{plot.reg}}}{plot each curve}
-#'  \item{\code{link{calc.ctmax}}}{calculate Cmax and Tmax}
-#'  \item{\code{link{correct.time}}}{supply records at critical times with correct concentration}
-#'  \item{\code{link{correct.conc}}}{supply correct concentrations at critical times}
-#'  \item{\code{link{tab.corr}}}{tabulate data alterations}
-#'  \item{\code{link{calc.par}}}{calculates profile-specific summary statistics}
-#'  \item{\code{link{calc.par.th}}}{calculates parameters depednent on lambda-z}
-#'  }
+#' * \code{\link{correct.loq}} impute LOQ values
+#' * \code{\link{est.thalf}} calculate lambda-z and halflife
+#' * \code{\link{plot_reg}} plot each curve
+#' * \code{\link{calc.ctmax}} calculate Cmax and Tmax
+#' * \code{\link{correct.time}} supply records at critical times with correct concentration
+#' * \code{\link{correct.conc}} supply correct concentrations at critical times
+#' * \code{\link{tab.corr}} tabulate data alterations
+#' * \code{\link{calc.par}} calculates profile-specific summary statistics
+#' * \code{\link{calc.par.th}} calculates parameters depednent on lambda-z
 #'
+#' @md
 #' @param x input dataset name
 #' @param by by-variable(s), e.g. c("subject","day")
 #' @param nomtimevar variable name containing the nominal sampling time
@@ -23,7 +22,7 @@ globalVariables('Errors_Warnings')
 #' @param loqvar variable name containing the LOQ value
 #' @param loqrule rule number to be applied to the LOQ values in the curve; x$loqrule overrides if provided
 #' @param includeCmax include results of regression including Cmax in selection? (y/n) x$includeCmax overrides if provided
-#' @param exclvar variable name containing information about points to be excluded (these should have <exclvar>=1)
+#' @param exclvar variable name containing information about points to be excluded (these should have exclvar = 1)
 #' @param plotdir folder where regression plots (.PNG) will be saved; leave empty for standard output
 #' @param pdfdir folder where pdf summaries will be saved; leave empty for standard output
 #' @param tau dosing interval (for multiple dosing), if single dose, leave empty; x$tau overrides if provided
@@ -156,7 +155,11 @@ check.input(
     }else{
       cat(paste("Writing regression plots to folder",plotdir,"...\n"))
     }
-    plot.reg(loqed,by=by,th=th,bloqvar=bloqvar,timevar=timevar,depvar=depvar,exclvar=exclvar,plotdir=plotdir,timelab=timelab,deplab=deplab)
+    plot_reg(
+      loqed, by = by, th = th, bloqvar = bloqvar, timevar = timevar,
+      depvar = depvar, exclvar = exclvar, plotdir = plotdir,
+      timelab = timelab, deplab = deplab
+    )
   }
   cat("\n")
 
@@ -166,7 +169,7 @@ check.input(
 
   ctmax = loqed %>%
     group_by_at(by) %>%
-    do(calc.ctmax(.,timevar=timevar,depvar=depvar)) %>%
+    do(calc.ctmax(., timevar=timevar, depvar=depvar)) %>%
     ungroup
 
   # 4. and 5. create dataset with corrected time deviations

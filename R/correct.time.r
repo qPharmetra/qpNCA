@@ -1,5 +1,8 @@
-#' Corrects concentrations at critical, but deviating time points (e.g, predose, TAU, start and end of user selected AUC interval), and adds missing records at these critical time points.
-#' @description
+#' Correct Concentrations for Time Deviations
+#'
+#' Corrects concentrations at critical, but deviating time points
+#' (e.g, predose, TAU, start and end of user selected AUC interval),
+#' and adds missing records at these critical time points.
 #' \itemize{Records with missing NOMINAL time will be removed and this must be corrected before the function is called.}\cr
 #' \itemize{If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA}\cr
 #' \itemize{Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)}\cr

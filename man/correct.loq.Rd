@@ -2,8 +2,7 @@
 % Please edit documentation in R/correct.loq.r
 \name{correct.loq}
 \alias{correct.loq}
-\title{Imputes LOQ values according to the chosen LOQ substitution rule
-Imputations will be applied to the original depvar(no new concentration variable will be created)}
+\title{Impute Concentrations Below the Limit of Quantitation}
 \usage{
 correct.loq(
   x,

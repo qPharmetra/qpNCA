@@ -2,7 +2,7 @@
 % Please edit documentation in R/correct.conc.r
 \name{correct.conc}
 \alias{correct.conc}
-\title{Corrects missing concentration at critical time points (e.g, predose, TAU, start and end of user selected AUC interval)}
+\title{Correct Missing Concentration}
 \usage{
 correct.conc(
   x,
@@ -55,6 +55,8 @@ a dataset with missing concentrations imputed. The following variables are added
 }
 }
 \description{
+Corrects missing concentration at critical time points
+(e.g, predose, TAU, start and end of user selected AUC interval)
 \itemize{Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration}\cr
 \itemize{Use extrapolation if there is NO measurable concentration AFTER the missing concentration}\cr
 \itemize{Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)}\cr

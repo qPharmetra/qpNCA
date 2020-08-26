@@ -1,6 +1,10 @@
-#' Calculates AUCs, tlast, clast.obs for each PK curve (define using group_by)
-#' @importFrom dplyr arrange "%>%" mutate summarize filter group_by do select
+#' Calculate NCA Parameters
+#'
+#' Calculates AUCs, tlast, clast.obs for each
+#' PK curve (define using group_by).
+#' @importFrom dplyr arrange mutate summarize filter group_by do select
 #' @importFrom tidyr drop_na
+#' @import magrittr
 #' @param x contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc
 #' @param tau  dosing interval (for multiple dosing), if single dose, leave empty
 #' @param tstart starting time of user defined interval, if not requested, leave empty
@@ -78,61 +82,101 @@ calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="EV",method=1){
   {  part.ok=  ifelse(is.na(par$conc.part[par$time.part==tstart]) |
                         is.na(par$conc.part[par$time.part==tend]),0,1) }
 
-  par=par %>%    summarise( route=route,
-                            method=method,
-                            tlast=ifelse(tlast.ok==1,last(time.lastall[!is.na(conc.lastall)&conc.lastall>0&bloqvar1==0]),NA),
-                            clast.obs=ifelse(tlast.ok==1,conc.lastall[time.lastall==tlast],NA),
-                            tlast.ok=tlast.ok,
-                            t0.ok=t0.ok,
+  par=par %>% summarise(
+    route=route,
+    method = method,
+    tlast = ifelse(
+      tlast.ok == 1,
+      last(time.lastall[!is.na(conc.lastall) & conc.lastall > 0 & bloqvar1 == 0]),
+      NA
+    ),
+    clast.obs = ifelse(tlast.ok == 1, conc.lastall[time.lastall ==
+                                                     tlast], NA),
+    tlast.ok = tlast.ok,
+    t0.ok = t0.ok,
 
-                            aucall=ifelse(t0.ok==1,
-                                          trap(x=time.lastall[!is.na(conc.lastall)],
-                                               y=conc.lastall[!is.na(conc.lastall)], method=method),NA),
+    aucall = ifelse(
+      t0.ok == 1,
+      trap(
+        x = time.lastall[!is.na(conc.lastall)],
+        y = conc.lastall[!is.na(conc.lastall)],
+        method = method
+      ),
+      NA
+    ),
 
-                            auclast=ifelse(t0.ok==1&tlast.ok==1,
-                                           trap(x=time.lastall[!is.na(conc.lastall)&time.lastall<=tlast],
-                                                y=conc.lastall[!is.na(conc.lastall)&time.lastall<=tlast], method=method),NA),
+    auclast = ifelse(t0.ok == 1 & tlast.ok == 1,
+                     trap(x = time.lastall[!is.na(conc.lastall) &
+                                             time.lastall <= tlast],
+                          y = conc.lastall[!is.na(conc.lastall) &
+                                             time.lastall <= tlast], method = method),
+                     NA),
 
-                            aumcall=ifelse(t0.ok==1&tlast.ok==1,
-                                           trapm(x=time.lastall[!is.na(conc.lastall)],
-                                                 y=conc.lastall[!is.na(conc.lastall)], method=method),NA),
+    aumcall = ifelse(t0.ok == 1 & tlast.ok == 1,
+                     trapm(x = time.lastall[!is.na(conc.lastall)],
+                           y = conc.lastall[!is.na(conc.lastall)], method =
+                             method),
+                     NA),
 
-                            aumclast=ifelse(t0.ok==1&tlast.ok==1,
-                                            trapm(x=time.lastall[!is.na(conc.lastall)&time.lastall<=tlast],
-                                                  y=conc.lastall[!is.na(conc.lastall)&time.lastall<=tlast], method=method),NA),
+    aumclast = ifelse(t0.ok == 1 &
+                        tlast.ok == 1,
+                      trapm(x = time.lastall[!is.na(conc.lastall) &
+                                               time.lastall <= tlast],
+                            y = conc.lastall[!is.na(conc.lastall) &
+                                               time.lastall <= tlast], method = method),
+                      NA),
 
-                            mrtall= ifelse(t0.ok==1&tlast.ok==1,aumcall/aucall,NA),
-                            mrtlast=ifelse(t0.ok==1&tlast.ok==1,aumclast/auclast,NA),
+    mrtall = ifelse(t0.ok == 1 &
+                      tlast.ok == 1, aumcall / aucall, NA),
+    mrtlast = ifelse(t0.ok == 1 &
+                       tlast.ok == 1, aumclast / auclast, NA),
 
-                            calc.tau=tau.ok,
+    calc.tau = tau.ok,
 
-                            auctau=ifelse(t0.ok==1&tau.ok==1,
-                                          trap(x=time.tau[!is.na(conc.tau)&time.tau<=tau],
-                                               y=conc.tau[!is.na(conc.tau)&time.tau<=tau], method=method),NA),
-                            aumctau=ifelse(t0.ok==1&tau.ok==1,
-                                           trapm(x=time.tau[!is.na(conc.tau)&time.tau<=tau],
-                                                 y=conc.tau[!is.na(conc.tau)&time.tau<=tau], method=method),NA),
-                            tau=ifelse(!is.na(tau),tau,NA),
+    auctau = ifelse(t0.ok == 1 & tau.ok == 1,
+                    trap(x = time.tau[!is.na(conc.tau) &
+                                        time.tau <= tau],
+                         y = conc.tau[!is.na(conc.tau) &
+                                        time.tau <= tau], method = method),
+                    NA),
+    aumctau = ifelse(t0.ok == 1 & tau.ok == 1,
+                     trapm(x = time.tau[!is.na(conc.tau) &
+                                          time.tau <= tau],
+                           y = conc.tau[!is.na(conc.tau) &
+                                          time.tau <= tau], method = method),
+                     NA),
+    tau = ifelse(!is.na(tau), tau, NA),
 
-                            calc.teval=teval.ok,
-                            aucteval=ifelse(t0.ok==1&teval.ok==1,
-                                            trap(x=time.teval[!is.na(conc.teval)&time.teval<=teval],
-                                                 y=conc.teval[!is.na(conc.teval)&time.teval<=teval], method=method),NA),
-                            teval=ifelse(!is.na(teval),teval,NA),
+    calc.teval = teval.ok,
+    aucteval = ifelse(t0.ok == 1 &
+                        teval.ok == 1,
+                      trap(x = time.teval[!is.na(conc.teval) &
+                                            time.teval <= teval],
+                           y = conc.teval[!is.na(conc.teval) &
+                                            time.teval <= teval], method = method),
+                      NA),
+    teval = ifelse(!is.na(teval), teval, NA),
 
-                            calc.part=part.ok,
-                            aucpart=ifelse(part.ok==1,
-                                           trap(x=time.part[!is.na(conc.part)&time.part>=tstart&time.part<=tend],
-                                                y=conc.part[!is.na(conc.part)&time.part>=tstart&time.part<=tend], method=method),NA),
-                            tstart=ifelse(!is.na(tstart),tstart,NA),
-                            tend=ifelse(!is.na(tend),tend,NA),
-                            c0=ifelse(tolower(route)=="ivb",conc.lastall[ptime==0],NA),
+    calc.part = part.ok,
+    aucpart = ifelse(part.ok == 1,
+                     trap(x = time.part[!is.na(conc.part) &
+                                          time.part >= tstart & time.part <= tend],
+                          y = conc.part[!is.na(conc.part) &
+                                          time.part >= tstart & time.part <= tend], method = method),
+                     NA),
+    tstart = ifelse(!is.na(tstart), tstart, NA),
+    tend = ifelse(!is.na(tend), tend, NA),
+    c0 = ifelse(tolower(route) == "ivb", conc.lastall[ptime ==
+                                                        0], NA),
 
 
-                            area.back.extr=ifelse(tolower(route)=="ivb",
-                                                  trap(x=time.lastall[time.lastall<=firstmeast&!is.na(conc.lastall)],
-                                                       y=conc.lastall[time.lastall<=firstmeast&!is.na(conc.lastall)],
-                                                       method=method),NA)
+    area.back.extr = ifelse(tolower(route) == "ivb",
+                            trap(x = time.lastall[time.lastall <=
+                                                    firstmeast & !is.na(conc.lastall)],
+                                 y = conc.lastall[time.lastall <=
+                                                    firstmeast & !is.na(conc.lastall)],
+                                 method = method),
+                            NA)
   )
 
   result=par

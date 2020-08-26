@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc.par.r
 \name{calc.par}
 \alias{calc.par}
-\title{Calculates AUCs, tlast, clast.obs for each PK curve (define using group_by)}
+\title{Calculate NCA Parameters}
 \usage{
 calc.par(
   x,
@@ -59,5 +59,6 @@ area.back.extr \tab area back-extrapolated to 0\cr
 }
 }
 \description{
-Calculates AUCs, tlast, clast.obs for each PK curve (define using group_by)
+Calculates AUCs, tlast, clast.obs for each
+PK curve (define using group_by).
 }

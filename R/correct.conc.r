@@ -1,5 +1,7 @@
-#' Corrects missing concentration at critical time points (e.g, predose, TAU, start and end of user selected AUC interval)
-#' @description
+#' Correct Missing Concentration
+#'
+#' Corrects missing concentration at critical time points
+#' (e.g, predose, TAU, start and end of user selected AUC interval)
 #' \itemize{Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration}\cr
 #' \itemize{Use extrapolation if there is NO measurable concentration AFTER the missing concentration}\cr
 #' \itemize{Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)}\cr

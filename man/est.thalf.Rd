@@ -2,7 +2,7 @@
 % Please edit documentation in R/est.thalf.r
 \name{est.thalf}
 \alias{est.thalf}
-\title{Calculates lambda_z and thalf for each PK curve (defined using group_by)}
+\title{Calculate Lambda-Z and T-half}
 \usage{
 est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y", exclvar = NA)
 }
@@ -15,21 +15,29 @@ est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y", exclvar = NA)
 
 \item{includeCmax}{include results of regression including Cmax in selection? (y/n); x$includeCmax overrides if provided}
 
-\item{exclvar}{a variable name containing information about points to be excluded (these should have <exclvar>=1)}
+\item{exclvar}{a variable name containing information about points to be excluded (these should have exclvar = 1)}
 }
 \value{
-a dataset with estimates for each regression analysis in one observation. The following parameters are available:
-no.points = number of data points used in the regression analysis; \cr
-intercept = estimated intercept;\cr
-lambda_z = -1*estimated slope;\cr
-r.squared = square of the correlation coefficient;\cr
-adj.r.squared = adjusted square of the correlation coefficient;\cr
-thalf = elimination half-life;\cr
-start_th = time of first sample included in the thalf estimation;\cr
-end_th = time of last sample included in the thalf estimation;\cr
-includeCmax = include results of regression including Cmax in selection? (y/n)\cr
-points_excluded = are time points excluded from the half-life estimation? (y/n) \cr
+a dataset with estimates for each regression analysis in one observation.
+The following parameters are available.
+\itemize{
+\item no.points number of data points used in the regression analysis
+\item intercept estimated intercept
+\item lambda_z -1*estimated slope
+\item r.squared square of the correlation coefficient
+\item adj.r.squared adjusted square of the correlation coefficient
+\item thalf elimination half-life
+\item start_th time of first sample included in the thalf estimation
+\item end_th time of last sample included in the thalf estimation
+\item includeCmax include results of regression including Cmax in selection? (y/n)
+\item points_excluded are time points excluded from the half-life estimation? (y/n)
+}
 }
 \description{
-The function starts with the last three sample points and performs log-linear regression on it. It then adds one sampling point at a time (including and ending at tmax) and performs the regression again. Internal variable EST checks whether there are at least 3 timepoints for estimation after removal of LOQs and NAs
+Calculates lambda_z and thalf for each PK curve (defined using group_by).
+The function starts with the last three sample points and performs
+log-linear regression on it. It then adds one sampling point at a time
+(including and ending at tmax) and performs the regression again.
+Internal variable EST checks whether there are at least 3 timepoints
+for estimation after removal of LOQs and NAs.
 }

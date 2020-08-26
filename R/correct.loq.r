@@ -1,3 +1,5 @@
+#' Impute Concentrations Below the Limit of Quantitation
+#'
 #' Imputes LOQ values according to the chosen LOQ substitution rule
 #' Imputations will be applied to the original depvar(no new concentration variable will be created)
 #' @param x input dataset name (if called within dplyr: .) contains all uncorrected data, including LOQ

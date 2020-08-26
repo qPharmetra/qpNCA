@@ -51,7 +51,7 @@ qpNCA(
 
 \item{includeCmax}{include results of regression including Cmax in selection? (y/n) x$includeCmax overrides if provided}
 
-\item{exclvar}{variable name containing information about points to be excluded (these should have <exclvar>=1)}
+\item{exclvar}{variable name containing information about points to be excluded (these should have exclvar = 1)}
 
 \item{plotdir}{folder where regression plots (.PNG) will be saved; leave empty for standard output}
 
@@ -96,15 +96,15 @@ pkpar      : contains all estimated PK parameters
 }
 \description{
 Consecutively executes the following NCA steps:
-\describe{
- \item{\code{link{correct.loq}}}{impute LOQ values}
- \item{\code{link{est.thalf}}}{calculate lambda-z and halflife}
- \item{\code{link{plot.reg}}}{plot each curve}
- \item{\code{link{calc.ctmax}}}{calculate Cmax and Tmax}
- \item{\code{link{correct.time}}}{supply records at critical times with correct concentration}
- \item{\code{link{correct.conc}}}{supply correct concentrations at critical times}
- \item{\code{link{tab.corr}}}{tabulate data alterations}
- \item{\code{link{calc.par}}}{calculates profile-specific summary statistics}
- \item{\code{link{calc.par.th}}}{calculates parameters depednent on lambda-z}
- }
+\itemize{
+\item \code{\link{correct.loq}} impute LOQ values
+\item \code{\link{est.thalf}} calculate lambda-z and halflife
+\item \code{\link{plot_reg}} plot each curve
+\item \code{\link{calc.ctmax}} calculate Cmax and Tmax
+\item \code{\link{correct.time}} supply records at critical times with correct concentration
+\item \code{\link{correct.conc}} supply correct concentrations at critical times
+\item \code{\link{tab.corr}} tabulate data alterations
+\item \code{\link{calc.par}} calculates profile-specific summary statistics
+\item \code{\link{calc.par.th}} calculates parameters depednent on lambda-z
+}
 }

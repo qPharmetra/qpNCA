@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc.par.th.r
 \name{calc.par.th}
 \alias{calc.par.th}
-\title{Calculates PK parameters that need lambda_z}
+\title{Calculate Lambda-Z Parameters}
 \usage{
 calc.par.th(
   x = par,
@@ -57,5 +57,5 @@ A dataset with estimates for the following parameters, one observation per subje
 NOTE: ctmax must be merged separately as those were calculated from uncorrected data.
 }
 \description{
-Calculates PK parameters that need lambda_z
+Calculates PK parameters that need lambda_z.
 }
