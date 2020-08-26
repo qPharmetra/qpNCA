@@ -2,9 +2,7 @@
 % Please edit documentation in R/trapm.r
 \name{trapm}
 \alias{trapm}
-\title{Trapezoidal rules used in AUMC calculations
-trapm(x=, y=, method=)
-remark: if c1 or c2 is 0, always linear interpolation will be performed}
+\title{Calculate Area Under the Moment Curve Using Trapezoids}
 \usage{
 trapm(x = NA, y = NA, method = 1)
 }
@@ -13,12 +11,19 @@ trapm(x = NA, y = NA, method = 1)
 
 \item{y}{variable names of y coordinates}
 
-\item{method}{1: all linear trapedoizal rule\cr
-2: linear trap. rule up / logarithmic trap. rule down\cr
-3: linear trap. rule before first Tmax, logarithmic trap. rule after first Tmax \cr}
+\item{method}{method:
+\itemize{
+\item 1: linear up - linear down
+\item 2: linear up - logarithmic down
+\item 3: linear before Tmax, logarithmic after Tmax
+}}
+}
+\value{
+area (length-one numeric)
 }
 \description{
-Trapezoidal rules used in AUMC calculations
-trapm(x=, y=, method=)
-remark: if c1 or c2 is 0, always linear interpolation will be performed
+Calculates AUMC using the trapezoidal method.
+Assumes data represent a single profile.
+Despite choice of method, only linear interpolation is used
+for areas of intervals beginning or ending with y: 0.
 }

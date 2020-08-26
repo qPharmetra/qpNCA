@@ -1,10 +1,17 @@
-#' Trapezoid function
+#' Calculate Area Under the Curve Using Trapezoids
+#'
+#' Calculates AUC using the trapezoidal method. Assumes data represent a single profile.
+#' Despite choice of method, only linear interpolation is used
+#' for areas of intervals beginning or ending with y: 0.
 #'
 #' @param x x variable, i.e. time
 #' @param y y variable, i.e. concentration
-#' @param method (1) linear up - linear down; (2) linear up - logarithmic down; or (3) linear before Tmax, logarithmic after Tmax
+#' @param method method:
+#' * 1: linear up - linear down
+#' * 2: linear up - logarithmic down
+#' * 3: linear before Tmax, logarithmic after Tmax
+#' @return area (length-one numeric)
 
-#' @export
 trap <- function(x = NA, y = NA, method = 1){
   stopifnot(length(x) == length(y))
   cm <- max(y, na.rm = T )

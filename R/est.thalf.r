@@ -6,26 +6,26 @@
 #' (including and ending at tmax) and performs the regression again.
 #' Internal variable EST checks whether there are at least 3 timepoints
 #' for estimation after removal of LOQs and NAs.
+#'
 #' @param x a dataset (not needed to be corrected time and conc)
 #' @param timevar variable name containing the sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param includeCmax include results of regression including Cmax in selection? (y/n); x$includeCmax overrides if provided
 #' @param exclvar a variable name containing information about points to be excluded (these should have exclvar = 1)
 #' @importFrom stats lm
-#' @md
 #' @return
 #' a dataset with estimates for each regression analysis in one observation.
 #' The following parameters are available.
-#' * no.points number of data points used in the regression analysis
-#' * intercept estimated intercept
-#' * lambda_z -1*estimated slope
-#' * r.squared square of the correlation coefficient
-#' * adj.r.squared adjusted square of the correlation coefficient
-#' * thalf elimination half-life
-#' * start_th time of first sample included in the thalf estimation
-#' * end_th time of last sample included in the thalf estimation
-#' * includeCmax include results of regression including Cmax in selection? (y/n)
-#' * points_excluded are time points excluded from the half-life estimation? (y/n)
+#' * **no.points** number of data points used in the regression analysis
+#' * **intercept** estimated intercept
+#' * **lambda_z** -1*estimated slope
+#' * **r.squared** square of the correlation coefficient
+#' * **adj.r.squared** adjusted square of the correlation coefficient
+#' * **thalf** elimination half-life
+#' * **start_th** time of first sample included in the thalf estimation
+#' * **end_th time** of last sample included in the thalf estimation
+#' * **includeCmax** include results of regression including Cmax in selection? (y/n)
+#' * **points_excluded** are time points excluded from the half-life estimation? (y/n)
 #' @export
 est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",exclvar=NA){
 

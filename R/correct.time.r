@@ -3,16 +3,17 @@
 #' Corrects concentrations at critical, but deviating time points
 #' (e.g, predose, TAU, start and end of user selected AUC interval),
 #' and adds missing records at these critical time points.
-#' * Records with missing NOMINAL time will be removed and this must be corrected before the function is called.
+#' * Records with missing NOMINAL time will be removed and this must be corrected before the function is called
 #' * If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA
 #' * Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)
 #' * Use extrapilation if there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early)
 #' * Set deviating time at predose to 0
 #' * Original time and conc will be kept in original variables.
-#' * The following Time Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:
 #'
-#'   Rule | Regimen | Description | Applied to
-#'   --- | --- | --- | ---
+#' The following Time Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:
+#'
+#'   **Rule** | **Regimen** | **Description** | **Applied to**
+#'   ---- | ------- | ----------- | ----------
 #'   SDT-1 | sd | Set actual time to 0 | t=0
 #'   SDT-2 | sd | Correct concentration at deviating time by interpolation | t=tau,tstart,tend,teval
 #'   SDT-3 | sd | Correct concentration at deviating time by extrapolation | t=tau,tend,teval
@@ -20,7 +21,7 @@
 #'   MDT-2 | md | Correct concentration at deviating time by interpolation (too late) |  t=tau,tstart,tend,teval
 #'   MDT-3 | md | Correct concentration at deviating time by extrapolation (too early) | t=0,tau,tend,teval
 #'   MDT-3a | md | Set actual time to zero if concentration is BLOQ (too early) | t=0
-#' }
+#'
 #' @param x input dataset name (contains all data, including LOQ (set conc to zero for these))
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param timevar variable name containing the actual sampling time
@@ -37,7 +38,8 @@
 #' * 2: linear up - logarithmic down
 #'
 #' @return a dataset with time deviation corrections applied (timevar and depvar adapted). The following variables are added:
-#'   **Variable** | **Description**
+#'
+#'  **Variable** | **Description**
 #'   ---- | -----
 #'   create.nr        |         is a missing record created?
 #'   create.txt       |         explanation of what is created
@@ -56,18 +58,18 @@ correct.time <- function(
   depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",method=1
 ){
   for(arg in c('tau','tstart','tend','teval','reg','method')){
-  if(arg %in% names(x)){
-    if(!eval(substitute(missing(arg)))){
-      warning(arg,' supplied as column overrides like-named argument')
+    if(arg %in% names(x)){
+      if(!eval(substitute(missing(arg)))){
+        warning(arg,' supplied as column overrides like-named argument')
+      }
+      assign(arg,unique(x[[arg]]))
+      x[[arg]] <- NULL
     }
-    assign(arg,unique(x[[arg]]))
-    x[[arg]] <- NULL
+    if(length(get(arg)) > 1) {
+      warning(arg, ' has length > 1; only first value will be used')
+      assign(arg, get(arg)[[1]])
+    }
   }
-  if(length(get(arg)) > 1) {
-    warning(arg, ' has length > 1; only first value will be used')
-    assign(arg, get(arg)[[1]])
-  }
-}
 
   data_in=x
 
@@ -76,19 +78,19 @@ correct.time <- function(
   data_in$includeCmax.y <- NULL
 
   data_in = data_in %>%
-          mutate(depvar=x[[depvar]],                    # dependent variable                      (internal)
-                 timevar=x[[timevar]],                  # actual time variable                    (internal)
-                 ptime=x[[nomtimevar]],                 # nominal time                            (internal)
-                 create.nr="",                          # is missing record created?
-                 create.txt="",                         # explanation of what is created
-                 trule.nr="",                           # correction rule number
-                 trule.txt="",                          # explanation of time correction
-                 applies.to.time="",                    # lists all AUCS to which the rule applies
-                 t0.flag=0,tau.flag=0,tstart.flag=0,tend.flag=0,teval.flag=0, # flags for what timepoint the correction was needed
-                 missflag=0,                            # flag for missing records
-                 misstime=NA,                           # time of missing record
-                 lambda_z=ifelse("lambda_z"%in%names(.),lambda_z,NA)) %>%
-          filter(!is.na(x[[nomtimevar]]))               # remove records with no nominal time (must be corrected before)
+    mutate(depvar=x[[depvar]],                    # dependent variable                      (internal)
+           timevar=x[[timevar]],                  # actual time variable                    (internal)
+           ptime=x[[nomtimevar]],                 # nominal time                            (internal)
+           create.nr="",                          # is missing record created?
+           create.txt="",                         # explanation of what is created
+           trule.nr="",                           # correction rule number
+           trule.txt="",                          # explanation of time correction
+           applies.to.time="",                    # lists all AUCS to which the rule applies
+           t0.flag=0,tau.flag=0,tstart.flag=0,tend.flag=0,teval.flag=0, # flags for what timepoint the correction was needed
+           missflag=0,                            # flag for missing records
+           misstime=NA,                           # time of missing record
+           lambda_z=ifelse("lambda_z"%in%names(.),lambda_z,NA)) %>%
+    filter(!is.na(x[[nomtimevar]]))               # remove records with no nominal time (must be corrected before)
 
   data_in=data_in %>% mutate_cond(condition=is.na(timevar),timevar=ptime,
                                   trule.nr="-",

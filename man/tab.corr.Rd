@@ -2,14 +2,14 @@
 % Please edit documentation in R/tab.corr.r
 \name{tab.corr}
 \alias{tab.corr}
-\title{Tabulates what records were added, time deviations and concentration imputations were applied, for each subject}
+\title{Tabulate Corrections}
 \usage{
 tab.corr(x, nomtimevar = "time", by = "subject")
 }
 \arguments{
 \item{x}{concentration dataset created by the correct.time and correct.conc functions, containing time and conc corrected data}
 
-\item{nomtimevar}{ariable containing the nominal time}
+\item{nomtimevar}{column in x containing the nominal time}
 
 \item{by}{by-variable(s), e.g. c("subject","day")}
 }
@@ -17,5 +17,6 @@ tab.corr(x, nomtimevar = "time", by = "subject")
 dataset with applied corrections (rule number and rule text) listed by by-variable(s) and nominal time
 }
 \description{
-Tabulates what records were added, time deviations and concentration imputations were applied, for each subject
+Tabulates what records were added, time deviations and
+concentration imputations were applied, for each subject.
 }

@@ -1,5 +1,6 @@
 #' Estimate Lagging and Leading Times and Concentrations
 #'
+#' Estimates lagging and leading times and concentrations.
 #' Used by correct.xx functions to estimate lagging and leading timepoints
 #' and concentrations for each timepoint.
 #' @param x data.frame
@@ -11,6 +12,7 @@
 #' @param leadc concentration at next sampling time
 #' @param leadt next sampling time
 #' @param ... ignored
+#' @return data.frame
 
 lag_lead <- function(
   x,nomtimevar1=NA,depvar1=NA,timevar1=NA,

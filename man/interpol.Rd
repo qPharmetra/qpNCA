@@ -2,10 +2,7 @@
 % Please edit documentation in R/interpol.r
 \name{interpol}
 \alias{interpol}
-\title{Interpolate Concentrations.
-Used by correct.xx functions to interpolate concentrations.
-Uses linear interpolation unless method is 2 (log down), c1 > c2,
-and both concentrations are non-zero.}
+\title{Interpolate Concentrations}
 \usage{
 interpol(c1 = NA, c2 = NA, t1 = NA, t2 = NA, t3 = NA, method = 1)
 }
@@ -23,7 +20,7 @@ interpol(c1 = NA, c2 = NA, t1 = NA, t2 = NA, t3 = NA, method = 1)
 \item{method}{calculation method (1, 2, or 3)}
 }
 \description{
-Interpolate Concentrations.
+Interpolates conentrations.
 Used by correct.xx functions to interpolate concentrations.
 Uses linear interpolation unless method is 2 (log down), c1 > c2,
 and both concentrations are non-zero.

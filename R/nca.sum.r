@@ -6,12 +6,11 @@
 #' @param corrfile a correction table like the output of \code{\link{tab.corr}}
 #' @param by column names in x indicating grouping variables
 #' @param pdfdir path to directory for pdf ouput
-#' @return used for side effects
+#' @return (invisible) pdfdir
 #' @importFrom rmarkdown render
 #' @export
 #' @examples
 #' example(qpNCA)
-
 nca.sum <- function(x,corrfile, by=c("subject"),pdfdir=NA) {
 
   if (is.na(pdfdir)) return()
@@ -25,13 +24,16 @@ nca.sum <- function(x,corrfile, by=c("subject"),pdfdir=NA) {
 
   x %>%
     group_by_at(by) %>%
-    do(x=rmarkdown::render(input = "./create.summary.nca.pages.pdf.Rmd",
-                           output_format = "pdf_document",
-                           output_file = paste0(filenamefun(.,by),".pdf"),
-                           output_dir = pdfdir,
-                           quiet=T,
-                           clean=TRUE)
-    ) %>%
-    ungroup
-
+    do(
+      x=rmarkdown::render(
+       input = "./create.summary.nca.pages.pdf.Rmd",
+       output_format = "pdf_document",
+       output_file = paste0(filenamefun(.,by),".pdf"),
+       output_dir = pdfdir,
+       quiet=T,
+       clean=TRUE
+    )
+  ) %>%
+  ungroup
+  invisible(pdfdir)
 }

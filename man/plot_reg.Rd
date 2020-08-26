@@ -42,17 +42,16 @@ plot_reg(
 \item{...}{ignored}
 }
 \value{
-If the attribute 'plotdir'is empty, plots will be generated in standard output, otherwise plots will be saved as
-PNG file in the designated folder
-PLOT.REG: Plot regression curves
+(invisible) plotdir.  If the attribute 'plotdir'is empty, plots will be generated in standard output, otherwise plots will be saved as
+PNG file in the designated folder.
 }
 \description{
 Plots regression curves for each set of records defined using \code{by}.
 A log-linear plot will be made for each curve.
-If elimination half-life was estimated for that curve,
-the following will be indicated in the plot:
 }
 \details{
+If elimination half-life was estimated for that curve,
+the following will be indicated in the plot:
 \itemize{
 \item Cmax (Yellow, even if no half-life was estimated)
 \item points used in regression and resulting regression line (green)

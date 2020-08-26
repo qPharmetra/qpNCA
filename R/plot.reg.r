@@ -2,17 +2,17 @@
 #'
 #' Plots regression curves for each set of records defined using \code{by}.
 #' A log-linear plot will be made for each curve.
+#'
 #' If elimination half-life was estimated for that curve,
 #' the following will be indicated in the plot:
-#'
-#' - Cmax (Yellow, even if no half-life was estimated)
-#' - points used in regression and resulting regression line (green)
-#' - points excluded from regression (red crossed)
-#' - estimate of elimination half-life and adjusted R-squared
+#' * Cmax (Yellow, even if no half-life was estimated)
+#' * points used in regression and resulting regression line (green)
+#' * points excluded from regression (red crossed)
+#' * estimate of elimination half-life and adjusted R-squared
 #'
 #' Input dataset:
-#' - uncorrected dataset, used for half-life estimation
-#' - dataset containing results of the half-life estimation
+#' * uncorrected dataset, used for half-life estimation
+#' * dataset containing results of the half-life estimation
 #'
 #'
 #' @param x input dataset name (if called within dplyr: .)
@@ -28,23 +28,23 @@
 #' @param ... ignored
 #' @import ggplot2
 #'
-#' @return If the attribute 'plotdir'is empty, plots will be generated in standard output, otherwise plots will be saved as
-#' PNG file in the designated folder
-#' PLOT.REG: Plot regression curves
-#'
+#' @return (invisible) plotdir.  If the attribute 'plotdir'is empty, plots will be generated in standard output, otherwise plots will be saved as
+#' PNG file in the designated folder.
 #' @export
 #'
-plot_reg <- function(x,
-                     by = c("id"),
-                     th = NA,
-                     bloqvar = "bloq",
-                     timevar = "tad",
-                     depvar = "dv",
-                     timelab = "timevar",
-                     deplab = "depvar",
-                     exclvar = NA,
-                     plotdir = NA,
-                     ...) {
+plot_reg <- function(
+   x,
+   by = c("id"),
+   th = NA,
+   bloqvar = "bloq",
+   timevar = "tad",
+   depvar = "dv",
+   timelab = "timevar",
+   deplab = "depvar",
+   exclvar = NA,
+   plotdir = NA,
+   ...
+  ){
   data_in = x %>% mutate(
     timevar = x[[timevar]],
     depvar = x[[depvar]],
@@ -249,6 +249,7 @@ plot_reg <- function(x,
   else {
     print(plots$plots)
   }
+  invisible(plotdir)
 }
 
 #' Create Title for Regression Plots

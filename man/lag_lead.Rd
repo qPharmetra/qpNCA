@@ -35,7 +35,11 @@ lag_lead(
 
 \item{...}{ignored}
 }
+\value{
+data.frame
+}
 \description{
+Estimates lagging and leading times and concentrations.
 Used by correct.xx functions to estimate lagging and leading timepoints
 and concentrations for each timepoint.
 }

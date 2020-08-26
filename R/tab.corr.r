@@ -1,6 +1,9 @@
-#'Tabulates what records were added, time deviations and concentration imputations were applied, for each subject
+#' Tabulate Corrections
+#'
+#' Tabulates what records were added, time deviations and
+#' concentration imputations were applied, for each subject.
 #' @param x concentration dataset created by the correct.time and correct.conc functions, containing time and conc corrected data
-#' @param nomtimevar ariable containing the nominal time
+#' @param nomtimevar column in x containing the nominal time
 #' @param by by-variable(s), e.g. c("subject","day")
 #' @return dataset with applied corrections (rule number and rule text) listed by by-variable(s) and nominal time
 #' @export

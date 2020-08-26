@@ -82,14 +82,16 @@ qpNCA(
 \item{route}{route of drug administration ("EV","IVB", "IVI"); x$overrides if provided}
 
 \item{method}{method for trapezoidal rule;  x$method overrides if provided
-1: linear up - linear down
-2: linear up - logarithmic down
-3: linear before first Tmax, logarithmic after first Tmax}
+\itemize{
+\item 1: linear up - linear down
+\item 2: linear up - logarithmic down
+\item 3: linear before first Tmax, logarithmic after first Tmax
+}}
 }
 \value{
 (list)
 \itemize{
-\item \strong{covariates} covariates selected with the 'cov' argument
+\item \strong{covariates} covariates selected with the \code{cov} argument
 \item \strong{half_life} linear regression parameters
 \item \strong{ctmax} cmax and tmax estimated from uncorrected data
 \item \strong{ct_corr} the time and concentration corrected dataset
@@ -108,6 +110,6 @@ Consecutively executes the following NCA steps:
 \item \link{correct.conc} supply correct concentrations at critical times
 \item \link{tab.corr} tabulate data alterations
 \item \link{calc.par} calculates profile-specific summary statistics
-\item \link{calc.par.th} calculates parameters depednent on lambda-z
+\item \link{calc.par.th} calculates parameters dependent on lambda-z
 }
 }

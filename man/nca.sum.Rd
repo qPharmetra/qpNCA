@@ -16,7 +16,7 @@ nca.sum(x, corrfile, by = c("subject"), pdfdir = NA)
 \item{pdfdir}{path to directory for pdf ouput}
 }
 \value{
-used for side effects
+(invisible) pdfdir
 }
 \description{
 Creates a PDF summary for each curve.

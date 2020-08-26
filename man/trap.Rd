@@ -2,7 +2,7 @@
 % Please edit documentation in R/trap.r
 \name{trap}
 \alias{trap}
-\title{Trapezoid function}
+\title{Calculate Area Under the Curve Using Trapezoids}
 \usage{
 trap(x = NA, y = NA, method = 1)
 }
@@ -11,8 +11,18 @@ trap(x = NA, y = NA, method = 1)
 
 \item{y}{y variable, i.e. concentration}
 
-\item{method}{(1) linear up - linear down; (2) linear up - logarithmic down; or (3) linear before Tmax, logarithmic after Tmax}
+\item{method}{method:
+\itemize{
+\item 1: linear up - linear down
+\item 2: linear up - logarithmic down
+\item 3: linear before Tmax, logarithmic after Tmax
+}}
+}
+\value{
+area (length-one numeric)
 }
 \description{
-Trapezoid function
+Calculates AUC using the trapezoidal method. Assumes data represent a single profile.
+Despite choice of method, only linear interpolation is used
+for areas of intervals beginning or ending with y: 0.
 }

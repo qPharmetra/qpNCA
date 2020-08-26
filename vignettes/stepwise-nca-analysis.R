@@ -79,5 +79,6 @@ head(par)
 ## ----  results="markup", warnings=F-------------------------------------------
 par_all = left_join(par, ctmax)
 head(par_all)
-# write.csv(par_all, "nca_analysis_stepbystep_results.csv", row.names = F)
+dir <- tempdir()
+write.csv(par_all,file.path(dir,"nca_analysis_stepbystep_results.csv"), row.names = F)
 

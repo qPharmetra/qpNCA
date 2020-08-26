@@ -10,9 +10,8 @@ globalVariables('Errors_Warnings')
 #' * [correct.conc] supply correct concentrations at critical times
 #' * [tab.corr] tabulate data alterations
 #' * [calc.par] calculates profile-specific summary statistics
-#' * [calc.par.th] calculates parameters depednent on lambda-z
+#' * [calc.par.th] calculates parameters dependent on lambda-z
 #'
-#' @md
 #' @param x input dataset name
 #' @param by by-variable(s), e.g. c("subject","day")
 #' @param nomtimevar variable name containing the nominal sampling time
@@ -38,12 +37,12 @@ globalVariables('Errors_Warnings')
 #' @param timelab label for time axis
 #' @param deplab label for dependent variable axis
 #' @param method method for trapezoidal rule;  x$method overrides if provided
-#'              1: linear up - linear down
-#'              2: linear up - logarithmic down
-#'              3: linear before first Tmax, logarithmic after first Tmax
+#' * 1: linear up - linear down
+#' * 2: linear up - logarithmic down
+#' * 3: linear before first Tmax, logarithmic after first Tmax
 #'
 #' @return (list)
-#' * **covariates** covariates selected with the 'cov' argument
+#' * **covariates** covariates selected with the \code{cov} argument
 #' * **half_life** linear regression parameters
 #' * **ctmax** cmax and tmax estimated from uncorrected data
 #' * **ct_corr** the time and concentration corrected dataset

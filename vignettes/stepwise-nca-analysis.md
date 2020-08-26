@@ -270,6 +270,7 @@ head(par_all)
 ```
 
 ```r
-# write.csv(par_all, "nca_analysis_stepbystep_results.csv", row.names = F)
+dir <- tempdir()
+write.csv(par_all,file.path(dir,"nca_analysis_stepbystep_results.csv"), row.names = F)
 ```
 

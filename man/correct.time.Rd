@@ -49,34 +49,42 @@ correct.time(
 }}
 }
 \value{
-a dataset with time deviation corrections applied (timevar and depvar adapted). The following variables are added:
-\strong{Variable} | \strong{Description}
----- | -----
-create.nr        |         is a missing record created?
-create.txt       |         explanation of what is created
-trule.nr         |         correction rule number
-trule.txt        |         text explaining what was altered
-applies.to.time   |        lists all AUCS to which the time deviation rule applies
-time.tau, conc.tau  |      time and conc, corrected for AUCtau calculation
-time.teval, conc.teval |   time and conc, corrected for AUCteval calculation (AUC0-teval)
-time.part, conc.part   |   time and conc, corrected for partial AUC calculation (AUCstart-end, start>0)
-time.lastall, conc.lastall | time and conc, corrected for AUClast and AUCall calculation
-t0.flag, tau.flag, tstart.flag, tend.flag, teval.flag | flags for what timepoint the correction was needed
+a dataset with time deviation corrections applied (timevar and depvar adapted). The following variables are added:\tabular{ll}{
+   \strong{Variable} \tab \strong{Description} \cr
+   create.nr \tab is a missing record created? \cr
+   create.txt \tab explanation of what is created \cr
+   trule.nr \tab correction rule number \cr
+   trule.txt \tab text explaining what was altered \cr
+   applies.to.time \tab lists all AUCS to which the time deviation rule applies \cr
+   time.tau, conc.tau \tab time and conc, corrected for AUCtau calculation \cr
+   time.teval, conc.teval \tab time and conc, corrected for AUCteval calculation (AUC0-teval) \cr
+   time.part, conc.part \tab time and conc, corrected for partial AUC calculation (AUCstart-end, start>0) \cr
+   time.lastall, conc.lastall \tab time and conc, corrected for AUClast and AUCall calculation \cr
+   t0.flag, tau.flag, tstart.flag, tend.flag, teval.flag \tab flags for what timepoint the correction was needed \cr
+}
 }
 \description{
 Corrects concentrations at critical, but deviating time points
 (e.g, predose, TAU, start and end of user selected AUC interval),
 and adds missing records at these critical time points.
 \itemize{
-\item Records with missing NOMINAL time will be removed and this must be corrected before the function is called.
+\item Records with missing NOMINAL time will be removed and this must be corrected before the function is called
 \item If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA
 \item Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)
 \item Use extrapilation if there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early)
 \item Set deviating time at predose to 0
 \item Original time and conc will be kept in original variables.
-\item The following Time Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:
 }
 }
 \details{
-
+The following Time Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:\tabular{llll}{
+   \strong{Rule} \tab \strong{Regimen} \tab \strong{Description} \tab \strong{Applied to} \cr
+   SDT-1 \tab sd \tab Set actual time to 0 \tab t=0 \cr
+   SDT-2 \tab sd \tab Correct concentration at deviating time by interpolation \tab t=tau,tstart,tend,teval \cr
+   SDT-3 \tab sd \tab Correct concentration at deviating time by extrapolation \tab t=tau,tend,teval \cr
+   MDT-1 \tab md \tab If predose sample taken after dosing, set actual time to 0 and conc to NA \tab t=0 \cr
+   MDT-2 \tab md \tab Correct concentration at deviating time by interpolation (too late) \tab t=tau,tstart,tend,teval \cr
+   MDT-3 \tab md \tab Correct concentration at deviating time by extrapolation (too early) \tab t=0,tau,tend,teval \cr
+   MDT-3a \tab md \tab Set actual time to zero if concentration is BLOQ (too early) \tab t=0 \cr
+}
 }

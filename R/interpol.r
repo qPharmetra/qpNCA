@@ -1,4 +1,6 @@
-#' Interpolate Concentrations.
+#' Interpolate Concentrations
+#'
+#' Interpolates conentrations.
 #' Used by correct.xx functions to interpolate concentrations.
 #' Uses linear interpolation unless method is 2 (log down), c1 > c2,
 #' and both concentrations are non-zero.
@@ -8,7 +10,6 @@
 #' @param t2 time 2
 #' @param t3 time 3
 #' @param method calculation method (1, 2, or 3)
-#' @export
 interpol <- function(c1=NA, c2=NA, t1=NA, t2=NA, t3=NA, method=1) {
   ifelse(
     method == 2 & c1>c2 & c1>0 & c2>0,

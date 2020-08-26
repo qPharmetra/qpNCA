@@ -21,16 +21,16 @@ est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y", exclvar = NA)
 a dataset with estimates for each regression analysis in one observation.
 The following parameters are available.
 \itemize{
-\item no.points number of data points used in the regression analysis
-\item intercept estimated intercept
-\item lambda_z -1*estimated slope
-\item r.squared square of the correlation coefficient
-\item adj.r.squared adjusted square of the correlation coefficient
-\item thalf elimination half-life
-\item start_th time of first sample included in the thalf estimation
-\item end_th time of last sample included in the thalf estimation
-\item includeCmax include results of regression including Cmax in selection? (y/n)
-\item points_excluded are time points excluded from the half-life estimation? (y/n)
+\item \strong{no.points} number of data points used in the regression analysis
+\item \strong{intercept} estimated intercept
+\item \strong{lambda_z} -1*estimated slope
+\item \strong{r.squared} square of the correlation coefficient
+\item \strong{adj.r.squared} adjusted square of the correlation coefficient
+\item \strong{thalf} elimination half-life
+\item \strong{start_th} time of first sample included in the thalf estimation
+\item \strong{end_th time} of last sample included in the thalf estimation
+\item \strong{includeCmax} include results of regression including Cmax in selection? (y/n)
+\item \strong{points_excluded} are time points excluded from the half-life estimation? (y/n)
 }
 }
 \description{
