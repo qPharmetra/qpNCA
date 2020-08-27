@@ -4,7 +4,7 @@
 #' (e.g, predose, TAU, start and end of user selected AUC interval),
 #' and adds missing records at these critical time points.
 #' * Records with missing NOMINAL time will be removed and this must be corrected before the function is called
-#' * If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA
+#' * If a record at the critical time point is missing, add it and set time to nominal time and set dv conc to NA
 #' * Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)
 #' * Use extrapilation if there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early)
 #' * Set deviating time at predose to 0
@@ -26,17 +26,18 @@
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param timevar variable name containing the actual sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
-#' @param tau dosing interval (for multiple dosing), if single dose, leave empty
-#' @param teval user selected AUC interval, if not requested, leave empty
-#' @param th file name of file with lamdba_z information for each curve (can be derived from est.thalf)
-#' @param reg regimen, "sd" or "md"
+#' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
+#' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
+#' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
+#' @param teval user selected AUC interval; NA (default) if not requested; x$teval overrides
+#' @param th lamdba_z information for each curve; like output of \code{\link{est.thalf}}
+#' @param reg regimen, "sd" or "md"; x$reg overrides
 #' @param by column names in x indicating grouping variables
-#' @param tstart column name in x indicating start time
-#' @param tend column name in x indicating end time
-#' @param method method of interpolation:
+#' @param method method for trapezoidal rule;  x$method overrides if provided
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
-#'
+#' * 3: linear before first Tmax, logarithmic after first Tmax
+#' @importFrom dplyr left_join first bind_rows
 #' @return a dataset with time deviation corrections applied (timevar and depvar adapted). The following variables are added:
 #'
 #'  **Variable** | **Description**

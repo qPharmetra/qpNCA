@@ -21,7 +21,7 @@ plot_reg(
 \arguments{
 \item{x}{input dataset name (if called within dplyr: .)}
 
-\item{by}{by-variable(s), e.g. c("subject","day")}
+\item{by}{column names in x indicating grouping variables}
 
 \item{th}{file name of file with half-life estimation information for each curve}
 
@@ -37,13 +37,13 @@ plot_reg(
 
 \item{exclvar}{variable name containing information about points to be excluded (these should have exclvar = 1)}
 
-\item{plotdir}{folder where individual plot files will be saved}
+\item{plotdir}{directory where individual plot files will be saved}
 
 \item{...}{ignored}
 }
 \value{
-(invisible) plotdir.  If the attribute 'plotdir'is empty, plots will be generated in standard output, otherwise plots will be saved as
-PNG file in the designated folder.
+(invisible) plotdir.  If the attribute 'plotdir' is empty, plots will be generated in standard output, otherwise plots will be saved as
+PNG file in the designated directory.
 }
 \description{
 Plots regression curves for each set of records defined using \code{by}.
@@ -64,4 +64,9 @@ Input dataset:
 \item uncorrected dataset, used for half-life estimation
 \item dataset containing results of the half-life estimation
 }
+}
+\examples{
+example(est.thalf)
+x \%>\% plot_reg(th = th)
+
 }

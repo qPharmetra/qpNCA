@@ -7,6 +7,7 @@
 #' @param by by-variable(s), e.g. c("subject","day")
 #' @return dataset with applied corrections (rule number and rule text) listed by by-variable(s) and nominal time
 #' @export
+#' @importFrom dplyr bind_rows one_of arrange_at
 tab.corr <- function(x,nomtimevar="time",by="subject") {
   loqrules=x%>%dplyr::rename(rule.nr=loqrule.nr,rule.txt=loqrule.txt)
   create=x%>%dplyr::rename(rule.nr=create.nr,rule.txt=create.txt)

@@ -9,7 +9,7 @@ titlefun(x, by)
 \arguments{
 \item{x}{dataset containing concentration-time information of the current curve}
 
-\item{by}{by-variable(s), e.g. c("subject","day")}
+\item{by}{column names in x indicating grouping variables}
 }
 \value{
 character

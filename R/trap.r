@@ -11,6 +11,7 @@
 #' * 2: linear up - logarithmic down
 #' * 3: linear before Tmax, logarithmic after Tmax
 #' @return area (length-one numeric)
+#' @importFrom dplyr first lag
 
 trap <- function(x = NA, y = NA, method = 1){
   stopifnot(length(x) == length(y))

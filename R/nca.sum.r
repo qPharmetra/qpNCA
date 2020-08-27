@@ -9,11 +9,12 @@
 #' @return (invisible) pdfdir
 #' @importFrom rmarkdown render
 #' @export
+#' @importFrom dplyr group_by_at ungroup
 #' @examples
 #' example(qpNCA)
 nca.sum <- function(x,corrfile, by=c("subject"),pdfdir=NA) {
 
-  if (is.na(pdfdir)) return()
+  if (is.na(pdfdir)) invisible(pdfdir)
   if (!file.exists(pdfdir)) { dir.create(pdfdir) }
 
   x %>% # this step is needed to remove old pdf files, otherwise it will kind of append the content

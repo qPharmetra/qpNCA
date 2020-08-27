@@ -16,7 +16,7 @@
 #'
 #'
 #' @param x input dataset name (if called within dplyr: .)
-#' @param by by-variable(s), e.g. c("subject","day")
+#' @param by column names in x indicating grouping variables
 #' @param th file name of file with half-life estimation information for each curve
 #' @param bloqvar variable name containing the BLOQ flag (0: no, 1: yes)
 #' @param timevar variable name containing the sampling time
@@ -24,13 +24,17 @@
 #' @param timelab X-axis label (default: "timevar")
 #' @param deplab Y-axis label (default: "depvar")
 #' @param exclvar variable name containing information about points to be excluded (these should have exclvar = 1)
-#' @param plotdir folder where individual plot files will be saved
+#' @param plotdir directory where individual plot files will be saved
 #' @param ... ignored
 #' @import ggplot2
 #'
-#' @return (invisible) plotdir.  If the attribute 'plotdir'is empty, plots will be generated in standard output, otherwise plots will be saved as
-#' PNG file in the designated folder.
+#' @return (invisible) plotdir.  If the attribute 'plotdir' is empty, plots will be generated in standard output, otherwise plots will be saved as
+#' PNG file in the designated directory.
 #' @export
+#' @importFrom dplyr left_join group_by_at first ungroup
+#' @examples
+#' example(est.thalf)
+#' x %>% plot_reg(th = th)
 #'
 plot_reg <- function(
    x,
@@ -51,7 +55,6 @@ plot_reg <- function(
     bloqvar = x[[bloqvar]],
     exclvar = x[[exclvar]]
   )
-
 
   if (!is.na(exclvar) &
       !(exclvar %in% names(x)))
@@ -233,8 +236,7 @@ plot_reg <- function(
         height = 8,
         units = "cm"
       )
-    }
-    else {
+    } else {
       dir.create(plotdir)
       mapply(
         ggsave,
@@ -257,7 +259,7 @@ plot_reg <- function(
 #' Creates title for regression plots in plot_reg() using by-variables.
 #'
 #' @param x dataset containing concentration-time information of the current curve
-#' @param by by-variable(s), e.g. c("subject","day")
+#' @param by column names in x indicating grouping variables
 #' @return character
 titlefun <- function(x,by) {
   plottitle=""
@@ -273,7 +275,7 @@ titlefun <- function(x,by) {
 #' Creates file name for regression plots (*.png) from by-variables in plot_reg function.
 #' Also used by nca.sum().
 #' @param x data.frame
-#' @param by grouping variable
+#' @param by column names in x indicating grouping variables
 #' @return character
 
 filenamefun <- function(x,by) {

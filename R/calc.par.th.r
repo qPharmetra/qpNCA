@@ -12,6 +12,7 @@ globalVariables('par')
 #' @param ss is steady state reached (y/n)
 #' @param by column names in x indicating grouping variables
 #' @param route column name in x indicating route (EV, IVB, IVI)
+#' @importFrom dplyr left_join
 #'
 #'
 #' @return A dataset with estimates for the following parameters,

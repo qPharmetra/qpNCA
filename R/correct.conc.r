@@ -20,20 +20,22 @@
 #' MDC-3   |    md    |    impute missing concentration by extrapolation   |                  t=tau,tend,teval
 #' MDC-4   |    md (IV)  |  impute missing concentration by back-extrapolation  |              t=0
 #'
+#' @importFrom dplyr left_join lead
 #' @param x input dataset name input dataset name (contains all data, including LOQ (set conc to zero for these))
 #' @param nomtimevar variable name containing the nominal sampling time
-#' @param tau dosing interval (for multiple dosing), if single dose, leave empty
-#' @param tstart start time of partial AUC (start>0), if not requested, leave empty
-#' @param tend end time of partial AUC, if not requested, leave empty
-#' @param teval user selected AUC interval, if not requested, leave empty
-#' @param th file name of file with lamdba_z information for each curve (can be derived from est.thalf)
-#' @param reg regimen, "sd" or "md"
-#' @param ss is steady state reached (y/n)
+#' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
+#' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
+#' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
+#' @param teval user selected AUC interval; NA (default) if not requested; x$teval overrides
+#' @param th lamdba_z information for each curve; like output of \code{\link{est.thalf}}
+#' @param reg regimen, "sd" or "md"; x$reg overrides
+#' @param ss is steady state reached (y/n); x$ss overrides
 #' @param by column names in x indicating grouping variables
-#' @param route route of drug administration ("po","iv")
-#' @param method of interpolation:
+#' @param route route of drug administration ("EV","IVB","IVI"); x$route overrides
+#' @param method method for trapezoidal rule;  x$method overrides
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
+#' * 3: linear before first Tmax, logarithmic after first Tmax
 #'
 #' @return  a dataset with missing concentrations imputed. The following variables are added:
 #'
@@ -66,7 +68,13 @@ correct.conc <- function(
 
   data_in=x
 
-  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) }
+  if (!missing(th)) {
+    data_in = left_join(
+      data_in,
+      th %>% select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),
+      by=by
+    )
+  }
 
   data_in=data_in %>%
           mutate(ptime=x[[nomtimevar]],                 # nominal time                            (internal)

@@ -6,7 +6,7 @@
 \usage{
 qpNCA(
   x,
-  by = c("subject"),
+  by = "subject",
   nomtimevar = "ntad",
   timevar = "time",
   depvar = "dv",
@@ -35,7 +35,7 @@ qpNCA(
 \arguments{
 \item{x}{input dataset name}
 
-\item{by}{by-variable(s), e.g. c("subject","day")}
+\item{by}{column names in x indicating grouping variables}
 
 \item{nomtimevar}{variable name containing the nominal sampling time}
 
@@ -53,21 +53,21 @@ qpNCA(
 
 \item{exclvar}{variable name containing information about points to be excluded (these should have exclvar = 1)}
 
-\item{plotdir}{folder where regression plots (.PNG) will be saved; leave empty for standard output}
+\item{plotdir}{directory where regression plots (.PNG) will be saved; NA gives default location, NULL skips regression plots}
 
-\item{pdfdir}{folder where pdf summaries will be saved; leave empty for standard output}
+\item{pdfdir}{directory where pdf summaries will be saved; NA gives default location, NULL skips summary}
 
 \item{timelab}{label for time axis}
 
 \item{deplab}{label for dependent variable axis}
 
-\item{tau}{dosing interval (for multiple dosing), if single dose, leave empty; x$tau overrides if provided}
+\item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
 
-\item{tstart}{start time of partial AUC (start>0), if not requested, leave empty; x$tstart overrides if provided}
+\item{tstart}{start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides}
 
-\item{tend}{end time of partial AUC, if not requested, leave empty; x$tend overrides if provided}
+\item{tend}{end time of partial AUC; NA (default) if not requested; x$tend overrides}
 
-\item{teval}{user selected AUC interval, if not requested, leave empty; x$tend overrides if provided}
+\item{teval}{user selected AUC interval; NA (default) if not requested; x$teval overrides}
 
 \item{covfile}{covariates dataset}
 
@@ -97,6 +97,8 @@ qpNCA(
 \item \strong{ct_corr} the time and concentration corrected dataset
 \item \strong{corrections} descriptions of the corrections applied
 \item \strong{pkpar} all estimated PK parameters
+\item \strong{plotdir} directory for plots
+\item \strong{pdfdir} directory for pdf summaries
 }
 }
 \description{

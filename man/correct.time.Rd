@@ -30,22 +30,23 @@ correct.time(
 
 \item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 
-\item{tau}{dosing interval (for multiple dosing), if single dose, leave empty}
+\item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
 
-\item{tstart}{column name in x indicating start time}
+\item{tstart}{start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides}
 
-\item{tend}{column name in x indicating end time}
+\item{tend}{end time of partial AUC; NA (default) if not requested; x$tend overrides}
 
-\item{teval}{user selected AUC interval, if not requested, leave empty}
+\item{teval}{user selected AUC interval; NA (default) if not requested; x$teval overrides}
 
-\item{th}{file name of file with lamdba_z information for each curve (can be derived from est.thalf)}
+\item{th}{lamdba_z information for each curve; like output of \code{\link{est.thalf}}}
 
-\item{reg}{regimen, "sd" or "md"}
+\item{reg}{regimen, "sd" or "md"; x$reg overrides}
 
-\item{method}{method of interpolation:
+\item{method}{method for trapezoidal rule;  x$method overrides if provided
 \itemize{
 \item 1: linear up - linear down
 \item 2: linear up - logarithmic down
+\item 3: linear before first Tmax, logarithmic after first Tmax
 }}
 }
 \value{
@@ -69,7 +70,7 @@ Corrects concentrations at critical, but deviating time points
 and adds missing records at these critical time points.
 \itemize{
 \item Records with missing NOMINAL time will be removed and this must be corrected before the function is called
-\item If a record at the critical time point is missing and add it and set time to nominal time and set dv conc to NA
+\item If a record at the critical time point is missing, add it and set time to nominal time and set dv conc to NA
 \item Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)
 \item Use extrapilation if there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early)
 \item Set deviating time at predose to 0

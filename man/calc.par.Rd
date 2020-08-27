@@ -17,15 +17,15 @@ calc.par(
 \arguments{
 \item{x}{contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc}
 
-\item{tau}{dosing interval (for multiple dosing), if single dose, leave empty}
+\item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
 
-\item{tstart}{starting time of user defined interval, if not requested, leave empty}
+\item{tstart}{start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides}
 
-\item{tend}{end time of user defined interval, if not requested, leave empty}
+\item{tend}{end time of partial AUC; NA (default) if not requested; x$tend overrides}
 
-\item{teval}{user selected AUC interval, if not requested, leave empty}
+\item{teval}{user selected AUC interval; NA (default) if not requested; x$teval overrides}
 
-\item{route}{route of drug administration ("EV","IVB","IVI")}
+\item{route}{route of drug administration ("EV","IVB","IVI"); x$route overrides}
 
 \item{method}{method for trapezoidal rule
 \itemize{
@@ -64,4 +64,7 @@ one observation per subject:\tabular{ll}{
 \description{
 Calculates AUCs, tlast, clast.obs for each
 PK curve (define using group_by).
+}
+\examples{
+
 }

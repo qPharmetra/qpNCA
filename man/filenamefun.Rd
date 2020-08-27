@@ -11,7 +11,7 @@ filenamefun(x, by)
 \arguments{
 \item{x}{data.frame}
 
-\item{by}{grouping variable}
+\item{by}{column names in x indicating grouping variables}
 }
 \value{
 character

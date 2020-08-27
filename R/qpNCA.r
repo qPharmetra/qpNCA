@@ -13,7 +13,7 @@ globalVariables('Errors_Warnings')
 #' * [calc.par.th] calculates parameters dependent on lambda-z
 #'
 #' @param x input dataset name
-#' @param by by-variable(s), e.g. c("subject","day")
+#' @param by column names in x indicating grouping variables
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param timevar variable name containing the sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
@@ -22,12 +22,12 @@ globalVariables('Errors_Warnings')
 #' @param loqrule rule number to be applied to the LOQ values in the curve; x$loqrule overrides if provided
 #' @param includeCmax include results of regression including Cmax in selection? (y/n) x$includeCmax overrides if provided
 #' @param exclvar variable name containing information about points to be excluded (these should have exclvar = 1)
-#' @param plotdir folder where regression plots (.PNG) will be saved; leave empty for standard output
-#' @param pdfdir folder where pdf summaries will be saved; leave empty for standard output
-#' @param tau dosing interval (for multiple dosing), if single dose, leave empty; x$tau overrides if provided
-#' @param tstart start time of partial AUC (start>0), if not requested, leave empty; x$tstart overrides if provided
-#' @param tend end time of partial AUC, if not requested, leave empty; x$tend overrides if provided
-#' @param teval user selected AUC interval, if not requested, leave empty; x$tend overrides if provided
+#' @param plotdir directory where regression plots (.PNG) will be saved; NA gives default location, NULL skips regression plots
+#' @param pdfdir directory where pdf summaries will be saved; NA gives default location, NULL skips summary
+#' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
+#' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
+#' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
+#' @param teval user selected AUC interval; NA (default) if not requested; x$teval overrides
 #' @param covfile covariates dataset
 #' @param dose variable containing the dose amount
 #' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided
@@ -48,14 +48,18 @@ globalVariables('Errors_Warnings')
 #' * **ct_corr** the time and concentration corrected dataset
 #' * **corrections** descriptions of the corrections applied
 #' * **pkpar** all estimated PK parameters
+#' * **plotdir** directory for plots
+#' * **pdfdir** directory for pdf summaries
+#'
 #' @export
 #' @importFrom utils read.csv
 #' @importFrom knitr kable
+#' @importFrom dplyr group_by_at ungroup left_join
 
 
 qpNCA <- function(
   x,
-  by=c("subject"),
+  by="subject",
   nomtimevar="ntad",
   timevar="time",
   depvar="dv",
@@ -114,20 +118,29 @@ check.input(
 
   cat("Applying LOQ rules...\n")
 
-  loqed = x %>%
-    group_by_at(by) %>%
-    do(
-      correct.loq(
-        .,
-        nomtimevar=nomtimevar,
-        timevar=timevar,
-        depvar=depvar,
-        bloqvar=bloqvar,
-        loqvar=loqvar#,
-       # loqrule=loqrule
-      )
-    ) %>%
-    ungroup
+  # loqed = x %>%
+  #   group_by_at(by) %>%
+  #   do(
+  #     correct.loq(
+  #       .,
+  #       nomtimevar=nomtimevar,
+  #       timevar=timevar,
+  #       depvar=depvar,
+  #       bloqvar=bloqvar,
+  #       loqvar=loqvar#,
+  #      # loqrule=loqrule: has been embedded in the dataset at this point
+  #     )
+  #   ) %>%
+  #   ungroup
+
+  loqed <- x %>% correct.loq(
+    by = by,
+    nomtimevar = nomtimevar,
+    timevar = timevar,
+    depvar = depvar,
+    bloqvar = bloqvar,
+    loqvar = loqvar
+  )
 
    loqed$loqrule <- x$loqrule
 
@@ -135,14 +148,19 @@ check.input(
 
   cat("Performing Thalf estimation...\n")
 
-  th = loqed %>%
-    group_by_at(by) %>%
-    do(est.thalf(
-      .,timevar=timevar,depvar=depvar,
-      #includeCmax=includeCmax,
-      exclvar=exclvar
-    )) %>%
-    ungroup
+  th = loqed %>% est.thalf(
+    by = by,
+    timevar = timevar,
+    depvar = depvar,
+    exclvar = exclvar
+  )
+    # group_by_at(by) %>%
+    # do(est.thalf(
+    #   .,timevar=timevar,depvar=depvar,
+    #   #includeCmax=includeCmax,
+    #   exclvar=exclvar
+    # )) %>%
+    # ungroup
 
   # 2a.
 
@@ -152,9 +170,9 @@ check.input(
     if (is.na(plotdir)){
       cat("Creating regression plots in standard output...\n")
     }else{
-      cat(paste("Writing regression plots to folder",plotdir,"...\n"))
+      cat(paste("Writing regression plots to directory",plotdir,"...\n"))
     }
-    plot_reg(
+    plotdir <- plot_reg(
       loqed, by = by, th = th, bloqvar = bloqvar, timevar = timevar,
       depvar = depvar, exclvar = exclvar, plotdir = plotdir,
       timelab = timelab, deplab = deplab
@@ -218,7 +236,7 @@ check.input(
   par = tc %>%
     group_by_at(by) %>%
     do(calc.par(
-      .#,tau=tau,tstart=tstart,tend=tend,teval=teval,route=route,method=method
+      .,tau=tau,tstart=tstart,tend=tend,teval=teval,route=route,method=method
     )) %>%
     ungroup
 
@@ -243,13 +261,18 @@ check.input(
 
   # 9. create summary PDFs
 
-  if (is.na(pdfdir)){
+  if (is.null(pdfdir)){
     cat("No PDF summaries created\n")
   }else{
-    cat(paste("Writing summary PDF documents to folder",pdfdir,"...\n"))
+    if(is.na(pdfdir)){
+      cat(paste("Writing summary PDF documents to directory",pdfdir,"...\n"))
+    }else{
+      cat('Writing summary PDF documents to standard location ...\n')
+    }
+    pdfdir <- nca.sum(par_all,corrfile=corrtab,by=by,pdfdir=pdfdir)
   }
 
-  nca.sum(par_all,corrfile=corrtab,by=by,pdfdir=pdfdir)
+
 
   cat("\nWriting results...\n")
 
@@ -263,12 +286,14 @@ check.input(
     }
   }
 
-  result=list(
+  result = list(
     covariates=covfile,
     half_life=th,
     ct_corr=tc,
     corrections=corrtab,
-    pkpar=par_all
+    pkpar=par_all,
+    plotdir = plotdir,
+    pdfdir = pdfdir
   )
 
   cat("\nDone!\n")

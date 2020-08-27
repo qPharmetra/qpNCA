@@ -6,11 +6,12 @@
 #' @importFrom tidyr drop_na
 #' @import magrittr
 #' @param x contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc
-#' @param tau  dosing interval (for multiple dosing), if single dose, leave empty
-#' @param tstart starting time of user defined interval, if not requested, leave empty
-#' @param tend end time of user defined interval, if not requested, leave empty
-#' @param teval user selected AUC interval, if not requested, leave empty
-#' @param route route of drug administration ("EV","IVB","IVI")
+#' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
+#' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
+#' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
+#' @param teval user selected AUC interval; NA (default) if not requested; x$teval overrides
+#' @param route route of drug administration ("EV","IVB","IVI"); x$route overrides
+#' @importFrom dplyr summarise last
 #' @param method method for trapezoidal rule
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
@@ -44,6 +45,8 @@
 #'
 #' @export
 #' @importFrom utils read.csv
+#' @examples
+#'
 calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="EV",method=1){
   for(arg in c('tau','tstart','tend','teval','route','method')){
     if(arg %in% names(x)){

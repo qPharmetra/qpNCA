@@ -4,6 +4,7 @@
 #' Imputations will be applied to the original depvar(no new concentration
 #' variable will be created).
 #' @param x input dataset name (if called within dplyr: .) contains all uncorrected data, including LOQ
+#' @param by column names in x indicating grouping variables
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param timevar variable name containing the sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
@@ -12,8 +13,30 @@
 #' @param loqrule rule number to be applied to the LOQ values in the curve. x$loqrule overrides if provided
 #' @return A dataset with imputed BLOQ concentrations using the chosen imputation rule
 #' @export
+#' @importFrom dplyr lag
+#' @examples
+#' library(magrittr)
+#' library(dplyr)
+#' library(qpNCA)
+#' x <- Theoph
+#' ntad <- c(0,0.25,0.5,1,2,4,5,7,9,12,24)
+#' for(i in 1:nrow(x)){
+#'   time  <- x$Time[[i]]
+#'   delta <- abs(ntad - time)
+#'   best  <- min(delta)
+#'   index <- match(best, delta)
+#'   nom   <- ntad[[index]]
+#'   x$ntad[[i]] <- nom
+#' }
+#' x %<>% rename(time = Time, dv = conc, subject = Subject)
+#' x %<>% mutate(bloq = 0, loq = 0.01, tad = time)
+#' x %>% head
+#' x %<>% correct.loq('subject')
+#' x %>%  head
+#'
 correct.loq <- function(
   x,
+  by=character(0),
   nomtimevar="ntad",
   timevar="time",
   depvar="dv",
@@ -21,6 +44,32 @@ correct.loq <- function(
   loqvar="loq",
   loqrule=1
 ){
+  x <- group_by_at(x, vars(by))
+  x <- do(
+    .data = x,
+    .correct.loq(
+      .,
+      nomtimevar = nomtimevar,
+      timevar = timevar,
+      depvar = depvar,
+      bloqvar = bloqvar,
+      loqvar = loqvar,
+      loqrule = loqrule
+    )
+  )
+  x <- ungroup(x)
+  x
+}
+
+.correct.loq <- function(
+    x,
+    nomtimevar="ntad",
+    timevar="time",
+    depvar="dv",
+    bloqvar="bloq",
+    loqvar="loq",
+    loqrule=1
+  ){
 
 if('loqrule' %in% names(x)){
   if(!missing(loqrule)){

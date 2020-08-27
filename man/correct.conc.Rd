@@ -26,26 +26,27 @@ correct.conc(
 
 \item{nomtimevar}{variable name containing the nominal sampling time}
 
-\item{tau}{dosing interval (for multiple dosing), if single dose, leave empty}
+\item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
 
-\item{tstart}{start time of partial AUC (start>0), if not requested, leave empty}
+\item{tstart}{start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides}
 
-\item{tend}{end time of partial AUC, if not requested, leave empty}
+\item{tend}{end time of partial AUC; NA (default) if not requested; x$tend overrides}
 
-\item{teval}{user selected AUC interval, if not requested, leave empty}
+\item{teval}{user selected AUC interval; NA (default) if not requested; x$teval overrides}
 
-\item{th}{file name of file with lamdba_z information for each curve (can be derived from est.thalf)}
+\item{th}{lamdba_z information for each curve; like output of \code{\link{est.thalf}}}
 
-\item{reg}{regimen, "sd" or "md"}
+\item{reg}{regimen, "sd" or "md"; x$reg overrides}
 
-\item{ss}{is steady state reached (y/n)}
+\item{ss}{is steady state reached (y/n); x$ss overrides}
 
-\item{route}{route of drug administration ("po","iv")}
+\item{route}{route of drug administration ("EV","IVB","IVI"); x$route overrides}
 
-\item{method}{of interpolation:
+\item{method}{method for trapezoidal rule;  x$method overrides
 \itemize{
 \item 1: linear up - linear down
 \item 2: linear up - logarithmic down
+\item 3: linear before first Tmax, logarithmic after first Tmax
 }}
 }
 \value{

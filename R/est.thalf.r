@@ -1,6 +1,6 @@
 #' Calculate Lambda-Z and T-half
 #'
-#' Calculates lambda_z and thalf for each PK curve (defined using group_by).
+#' Calculates lambda_z and thalf for each PK curve identified using \code{by}.
 #' The function starts with the last three sample points and performs
 #' log-linear regression on it. It then adds one sampling point at a time
 #' (including and ending at tmax) and performs the regression again.
@@ -8,11 +8,13 @@
 #' for estimation after removal of LOQs and NAs.
 #'
 #' @param x a dataset (not needed to be corrected time and conc)
+#' @param by column names in x indicating grouping variables
 #' @param timevar variable name containing the sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param includeCmax include results of regression including Cmax in selection? (y/n); x$includeCmax overrides if provided
 #' @param exclvar a variable name containing information about points to be excluded (these should have exclvar = 1)
 #' @importFrom stats lm
+#' @importFrom dplyr first last
 #' @return
 #' a dataset with estimates for each regression analysis in one observation.
 #' The following parameters are available.
@@ -27,7 +29,36 @@
 #' * **includeCmax** include results of regression including Cmax in selection? (y/n)
 #' * **points_excluded** are time points excluded from the half-life estimation? (y/n)
 #' @export
-est.thalf <- function(x,timevar="time",depvar="dv",includeCmax="Y",exclvar=NA){
+#' @examples
+#' example(correct.loq)
+#' th <- x %>% est.thalf('subject')
+#' th %>%  head
+
+est.thalf <- function(
+  x,
+  by = character(0),
+  timevar="time",
+  depvar="dv",
+  includeCmax="Y",
+  exclvar=NA){
+  x <- group_by_at(x, vars(by))
+  x <- do(
+    .data = x,
+    .est.thalf(
+      .,
+      timevar = timevar,
+      depvar = depvar,
+      includeCmax = includeCmax,
+      exclvar = exclvar
+    )
+  )
+  x <- ungroup(x)
+  x
+}
+.est.thalf <- function(
+  x,timevar="time",depvar="dv",
+  includeCmax="Y",exclvar=NA
+){
 
   if('includeCmax' %in% names(x)){
     if(!missing(includeCmax)){

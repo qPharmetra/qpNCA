@@ -13,6 +13,7 @@
 #' @param leadt next sampling time
 #' @param ... ignored
 #' @return data.frame
+#' @importFrom dplyr last lead lag left_join
 
 lag_lead <- function(
   x,nomtimevar1=NA,depvar1=NA,timevar1=NA,

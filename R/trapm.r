@@ -7,6 +7,7 @@
 
 #' @param x variable names of x coordinates
 #' @param y variable names of y coordinates
+#' @importFrom dplyr first lag
 #' @param method method:
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down

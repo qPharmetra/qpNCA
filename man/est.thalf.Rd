@@ -4,10 +4,19 @@
 \alias{est.thalf}
 \title{Calculate Lambda-Z and T-half}
 \usage{
-est.thalf(x, timevar = "time", depvar = "dv", includeCmax = "Y", exclvar = NA)
+est.thalf(
+  x,
+  by = character(0),
+  timevar = "time",
+  depvar = "dv",
+  includeCmax = "Y",
+  exclvar = NA
+)
 }
 \arguments{
 \item{x}{a dataset (not needed to be corrected time and conc)}
+
+\item{by}{column names in x indicating grouping variables}
 
 \item{timevar}{variable name containing the sampling time}
 
@@ -34,10 +43,15 @@ The following parameters are available.
 }
 }
 \description{
-Calculates lambda_z and thalf for each PK curve (defined using group_by).
+Calculates lambda_z and thalf for each PK curve identified using \code{by}.
 The function starts with the last three sample points and performs
 log-linear regression on it. It then adds one sampling point at a time
 (including and ending at tmax) and performs the regression again.
 Internal variable EST checks whether there are at least 3 timepoints
 for estimation after removal of LOQs and NAs.
+}
+\examples{
+example(correct.loq)
+th <- x \%>\% est.thalf('subject')
+th \%>\%  head
 }
