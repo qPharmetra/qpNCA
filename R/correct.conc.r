@@ -61,11 +61,15 @@ correct.conc <- function(
   method=1
 ){
   supplied <- character(0)
-  for(arg in c('tau','tstart','tend','teval','reg','method','route','ss')){
-    if(!eval(substitute(missing(arg)))){
-      supplied <- c(supplied, arg)
-    }
-  }
+  if(!missing(tau)) supplied <- c(supplied, 'tau')
+  if(!missing(tstart)) supplied <- c(supplied, 'tstart')
+  if(!missing(tend)) supplied <- c(supplied, 'tend')
+  if(!missing(teval)) supplied <- c(supplied, 'teval')
+  if(!missing(reg)) supplied <- c(supplied, 'reg')
+  if(!missing(method)) supplied <- c(supplied, 'method')
+  if(!missing(route)) supplied <- c(supplied, 'route')
+  if(!missing(ss)) supplied <- c(supplied, 'ss')
+
   x <- group_by_at(x, vars(by))
   x <- do(
     .data = x,
@@ -123,7 +127,7 @@ correct.conc <- function(
 
   data_in=x
 
-  if (!is.na(th)) {
+  if (!identical(NA,th)) {
     data_in = left_join(
       data_in,
       th %>% select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),

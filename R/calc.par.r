@@ -58,11 +58,12 @@ calc.par <- function(
   method = 1
 ){
   supplied <- character(0)
-  for(arg in c('tau','tstart','tend','teval','route','method')){
-    if(!eval(substitute(missing(arg)))){
-      supplied <- c(supplied, arg)
-    }
-  }
+  if(!missing(tau)) supplied <- c(supplied,'tau')
+  if(!missing(tstart)) supplied <- c(supplied,'tstart')
+  if(!missing(tend)) supplied <- c(supplied,'tend')
+  if(!missing(teval)) supplied <- c(supplied,'teval')
+  if(!missing(route)) supplied <- c(supplied,'route')
+  if(!missing(method)) supplied <- c(supplied,'method')
   x <- group_by_at(x, vars(by))
   x <- do(
     .data = x,
@@ -72,6 +73,7 @@ calc.par <- function(
       tstart = tstart,
       tend = tend,
       teval = teval,
+      route = route,
       method = method,
       supplied = supplied
     )

@@ -255,10 +255,7 @@ check.input(
   #   )) %>%
   #   ungroup
 
-  par <- tc %>% calc.par(
-    by = by, tau = tau, tstart = tstart, tend = tend,
-    teval = teval, route = route, method = method
-  )
+  par <- tc %>% calc.par(by = by)
 
   # 8. Calculate PK parameters that need lambda_z
 
