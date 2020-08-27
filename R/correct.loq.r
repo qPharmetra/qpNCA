@@ -44,6 +44,8 @@ correct.loq <- function(
   loqvar="loq",
   loqrule=1
 ){
+  supplied <- character(0)
+  if(!missing(loqrule)) supplied <- 'loqrule'
   x <- group_by_at(x, vars(by))
   x <- do(
     .data = x,
@@ -54,7 +56,8 @@ correct.loq <- function(
       depvar = depvar,
       bloqvar = bloqvar,
       loqvar = loqvar,
-      loqrule = loqrule
+      loqrule = loqrule,
+      supplied = supplied
     )
   )
   x <- ungroup(x)
@@ -63,16 +66,17 @@ correct.loq <- function(
 
 .correct.loq <- function(
     x,
-    nomtimevar="ntad",
-    timevar="time",
-    depvar="dv",
-    bloqvar="bloq",
-    loqvar="loq",
-    loqrule=1
+    nomtimevar,
+    timevar,
+    depvar,
+    bloqvar,
+    loqvar,
+    loqrule,
+    supplied
   ){
 
 if('loqrule' %in% names(x)){
-  if(!missing(loqrule)){
+  if('loqrule' %in% supplied){
     warning('loqrule supplied as column overrides like-named argument')
   }
   loqrule <- unique(x$loqrule)

@@ -4,10 +4,12 @@
 \alias{calc.ctmax}
 \title{Calculate Cmax and Tmax}
 \usage{
-calc.ctmax(x, timevar = "time", depvar = "dv")
+calc.ctmax(x, by = character(0), timevar = "time", depvar = "dv")
 }
 \arguments{
 \item{x}{data.frame}
+
+\item{by}{column names in x indicating grouping variables}
 
 \item{timevar}{column name in x indicating time}
 
@@ -18,8 +20,7 @@ A dataset with estimates for the Cmax (maximum concentration)
 and Tmax (time of first occurence of cmax) parameters: one observation per subject
 }
 \description{
-Calculates Cmax and Tmax from raw data for each PK curve.
-Data subsets must be defined externally, e.g. using group_by().
+Calculates Cmax and Tmax from raw data for each PK curve defined using \code{by}.
 Input dataset can contain all uncorrected data, including LOQ;
 estimate first occurence of maximum concentration for each PK curve;
 if all concentrations are NA, sets Cmax and Tmax also to NA.

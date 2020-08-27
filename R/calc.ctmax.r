@@ -1,11 +1,11 @@
 #' Calculate Cmax and Tmax
 #'
-#' Calculates Cmax and Tmax from raw data for each PK curve.
-#' Data subsets must be defined externally, e.g. using group_by().
+#' Calculates Cmax and Tmax from raw data for each PK curve defined using \code{by}.
 #' Input dataset can contain all uncorrected data, including LOQ;
 #' estimate first occurence of maximum concentration for each PK curve;
 #' if all concentrations are NA, sets Cmax and Tmax also to NA.
 #' @param x data.frame
+#' @param by column names in x indicating grouping variables
 #' @param timevar column name in x indicating time
 #' @param depvar column name in x indicating concentration
 #' @return A dataset with estimates for the Cmax (maximum concentration)
@@ -13,8 +13,22 @@
 #' @import magrittr
 #' @importFrom dplyr arrange mutate summarize filter group_by do summarise first
 #' @export
-calc.ctmax <- function(x,timevar="time",depvar="dv"){
-  result <- x %>% mutate(
+calc.ctmax <- function(x,by = character(0), timevar="time",depvar="dv"){
+  x <- group_by_at(x, vars(by))
+  x <- do(
+    .data = x,
+    .calc.ctmax(
+      .,
+      timevar = timevar,
+      depvar = depvar
+    )
+  )
+  x <- ungroup(x)
+  x
+}
+
+.calc.ctmax <- function(x,timevar,depvar){
+    result <- x %>% mutate(
     depvar = x[[depvar]],        # calculated dependent variable           (internal)
     timevar = x[[timevar]]       # calculated time variable                (internal)
   ) %>%

@@ -4,14 +4,14 @@
 \alias{nca.sum}
 \title{Create Summary for Each Curve}
 \usage{
-nca.sum(x, corrfile, by = c("subject"), pdfdir = NA)
+nca.sum(x, by = character(0), corrfile, pdfdir = NA)
 }
 \arguments{
 \item{x}{data.frame}
 
-\item{corrfile}{a correction table like the output of \code{\link{tab.corr}}}
-
 \item{by}{column names in x indicating grouping variables}
+
+\item{corrfile}{a correction table like the output of \code{\link{tab.corr}}}
 
 \item{pdfdir}{path to directory for pdf ouput}
 }

@@ -6,7 +6,7 @@
 \usage{
 qpNCA(
   x,
-  by = "subject",
+  by = character(0),
   nomtimevar = "ntad",
   timevar = "time",
   depvar = "dv",

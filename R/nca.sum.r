@@ -3,8 +3,8 @@
 #' Creates a PDF summary for each curve.
 #'
 #' @param x data.frame
-#' @param corrfile a correction table like the output of \code{\link{tab.corr}}
 #' @param by column names in x indicating grouping variables
+#' @param corrfile a correction table like the output of \code{\link{tab.corr}}
 #' @param pdfdir path to directory for pdf ouput
 #' @return (invisible) pdfdir
 #' @importFrom rmarkdown render
@@ -12,9 +12,9 @@
 #' @importFrom dplyr group_by_at ungroup
 #' @examples
 #' example(qpNCA)
-nca.sum <- function(x,corrfile, by=c("subject"),pdfdir=NA) {
+nca.sum <- function(x, by = character(0), corrfile, pdfdir=NA){
 
-  if (is.na(pdfdir)) invisible(pdfdir)
+  if (is.na(pdfdir)) return(invisible(pdfdir))
   if (!file.exists(pdfdir)) { dir.create(pdfdir) }
 
   x %>% # this step is needed to remove old pdf files, otherwise it will kind of append the content

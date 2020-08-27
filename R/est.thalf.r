@@ -41,6 +41,8 @@ est.thalf <- function(
   depvar="dv",
   includeCmax="Y",
   exclvar=NA){
+  supplied <- character(0)
+  if(!missing(includeCmax)) supplied <- 'includeCmax'
   x <- group_by_at(x, vars(by))
   x <- do(
     .data = x,
@@ -49,19 +51,24 @@ est.thalf <- function(
       timevar = timevar,
       depvar = depvar,
       includeCmax = includeCmax,
-      exclvar = exclvar
+      exclvar = exclvar,
+      supplied = supplied
     )
   )
   x <- ungroup(x)
   x
 }
 .est.thalf <- function(
-  x,timevar="time",depvar="dv",
-  includeCmax="Y",exclvar=NA
+  x,
+  timevar,
+  depvar,
+  includeCmax,
+  exclvar,
+  supplied
 ){
 
   if('includeCmax' %in% names(x)){
-    if(!missing(includeCmax)){
+    if('includeCmax' %in% supplied){
       warning('includeCmax supplied as column overrides like-named argument')
     }
     includeCmax <- unique(x$includeCmax)

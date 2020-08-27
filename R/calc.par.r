@@ -1,11 +1,11 @@
 #' Calculate NCA Parameters
 #'
-#' Calculates AUCs, tlast, clast.obs for each
-#' PK curve (define using group_by).
+#' Calculates AUCs, tlast, clast.obs for each PK curve defined using \code{by}.
 #' @importFrom dplyr arrange mutate summarize filter group_by do select
 #' @importFrom tidyr drop_na
 #' @import magrittr
 #' @param x contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc
+#' @param by column names in x indicating grouping variables
 #' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
 #' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
 #' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
@@ -47,10 +47,42 @@
 #' @importFrom utils read.csv
 #' @examples
 #'
-calc.par <- function(x,tau=NA,tstart=NA,tend=NA,teval=NA,route="EV",method=1){
+calc.par <- function(
+  x,
+  by = character(0),
+  tau = NA,
+  tstart = NA,
+  tend = NA,
+  teval = NA,
+  route = "EV",
+  method = 1
+){
+  supplied <- character(0)
   for(arg in c('tau','tstart','tend','teval','route','method')){
+    if(!eval(substitute(missing(arg)))){
+      supplied <- c(supplied, arg)
+    }
+  }
+  x <- group_by_at(x, vars(by))
+  x <- do(
+    .data = x,
+    .calc.par(
+      .,
+      tau = tau,
+      tstart = tstart,
+      tend = tend,
+      teval = teval,
+      method = method,
+      supplied = supplied
+    )
+  )
+  x <- ungroup(x)
+  x
+}
+.calc.par <- function(x, tau, tstart, tend, teval , route, method, supplied){
+    for(arg in c('tau','tstart','tend','teval','route','method')){
     if(arg %in% names(x)){
-      if(!eval(substitute(missing(arg)))){
+      if(arg %in% supplied){
         warning(arg,' supplied as column overrides like-named argument')
       }
       assign(arg,unique(x[[arg]]))

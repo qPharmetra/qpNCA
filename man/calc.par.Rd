@@ -6,6 +6,7 @@
 \usage{
 calc.par(
   x,
+  by = character(0),
   tau = NA,
   tstart = NA,
   tend = NA,
@@ -16,6 +17,8 @@ calc.par(
 }
 \arguments{
 \item{x}{contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc}
+
+\item{by}{column names in x indicating grouping variables}
 
 \item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
 
@@ -62,8 +65,7 @@ one observation per subject:\tabular{ll}{
 }
 }
 \description{
-Calculates AUCs, tlast, clast.obs for each
-PK curve (define using group_by).
+Calculates AUCs, tlast, clast.obs for each PK curve defined using \code{by}.
 }
 \examples{
 

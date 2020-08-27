@@ -23,6 +23,7 @@
 #'   MDT-3a | md | Set actual time to zero if concentration is BLOQ (too early) | t=0
 #'
 #' @param x input dataset name (contains all data, including LOQ (set conc to zero for these))
+#' @param by column names in x indicating grouping variables
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param timevar variable name containing the actual sampling time
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
@@ -32,7 +33,6 @@
 #' @param teval user selected AUC interval; NA (default) if not requested; x$teval overrides
 #' @param th lamdba_z information for each curve; like output of \code{\link{est.thalf}}
 #' @param reg regimen, "sd" or "md"; x$reg overrides
-#' @param by column names in x indicating grouping variables
 #' @param method method for trapezoidal rule;  x$method overrides if provided
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
@@ -55,12 +55,65 @@
 #'
 #' @export
 correct.time <- function(
-  x,by="subject",nomtimevar="ntad",timevar="time",
-  depvar="dv",tau=NA,tstart=NA,tend=NA,teval=NA,th=NA,reg="SD",method=1
+  x,
+  by=character(0),
+  nomtimevar="ntad",
+  timevar="time",
+  depvar="dv",
+  tau=NA,
+  tstart=NA,
+  tend=NA,
+  teval=NA,
+  th=NA,
+  reg="SD",
+  method=1
 ){
+  supplied <- character(0)
   for(arg in c('tau','tstart','tend','teval','reg','method')){
+    if(!eval(substitute(missing(arg)))){
+      supplied <- c(supplied, arg)
+    }
+  }
+  x <- group_by_at(x, vars(by))
+  x <- do(
+    .data = x,
+    .correct.time(
+      .,
+      by = by,
+      nomtimevar = nomtimevar,
+      timevar = timevar,
+      depvar = depvar,
+      tau = tau,
+      tstart = tstart,
+      tend = tend,
+      teval = teval,
+      th = th,
+      reg = reg,
+      method = method,
+      supplied = supplied
+    )
+  )
+  x <- ungroup(x)
+  x
+}
+.correct.time <- function(
+    x,
+    by,
+    nomtimevar,
+    timevar,
+    depvar,
+    tau,
+    tstart,
+    tend,
+    teval,
+    th,
+    reg,
+    method,
+    supplied
+  ){
+    for(arg in c('tau','tstart','tend','teval','reg','method')){
     if(arg %in% names(x)){
-      if(!eval(substitute(missing(arg)))){
+      if(arg %in% supplied){
         warning(arg,' supplied as column overrides like-named argument')
       }
       assign(arg,unique(x[[arg]]))
@@ -74,7 +127,7 @@ correct.time <- function(
 
   data_in=x
 
-  if (!missing(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) }
+  if (!is.na(th)) { data_in=left_join(data_in,th%>%select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),by=by) }
   data_in$includeCmax.x <- NULL
   data_in$includeCmax.y <- NULL
 

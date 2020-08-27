@@ -6,7 +6,7 @@
 \usage{
 calc.par.th(
   x,
-  by = "subject",
+  by = character(0),
   th = th,
   covfile = covfile,
   dose = "dose",

@@ -22,6 +22,7 @@
 #'
 #' @importFrom dplyr left_join lead
 #' @param x input dataset name input dataset name (contains all data, including LOQ (set conc to zero for these))
+#' @param by column names in x indicating grouping variables
 #' @param nomtimevar variable name containing the nominal sampling time
 #' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
 #' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
@@ -30,7 +31,6 @@
 #' @param th lamdba_z information for each curve; like output of \code{\link{est.thalf}}
 #' @param reg regimen, "sd" or "md"; x$reg overrides
 #' @param ss is steady state reached (y/n); x$ss overrides
-#' @param by column names in x indicating grouping variables
 #' @param route route of drug administration ("EV","IVB","IVI"); x$route overrides
 #' @param method method for trapezoidal rule;  x$method overrides
 #' * 1: linear up - linear down
@@ -47,14 +47,69 @@
 #' @export
 #'
 correct.conc <- function(
-  x,by="subject",nomtimevar="ntad",tau=NA,tstart=NA,
-  tend=NA,teval=NA,th=NA,reg="SD",ss="N",route="EV",method=1) {
+  x,
+  by=character(0),
+  nomtimevar="ntad",
+  tau=NA,
+  tstart=NA,
+  tend=NA,
+  teval=NA,
+  th=NA,
+  reg="SD",
+  ss="N",
+  route="EV",
+  method=1
+){
+  supplied <- character(0)
+  for(arg in c('tau','tstart','tend','teval','reg','method','route','ss')){
+    if(!eval(substitute(missing(arg)))){
+      supplied <- c(supplied, arg)
+    }
+  }
+  x <- group_by_at(x, vars(by))
+  x <- do(
+    .data = x,
+    .correct.conc(
+      .,
+      by = by,
+      nomtimevar = nomtimevar,
+      tau = tau,
+      tstart = tstart,
+      tend = tend,
+      teval = teval,
+      th = th,
+      reg = reg,
+      ss = ss,
+      route = route,
+      method = method,
+      supplied = supplied
+    )
+  )
+  x <- ungroup(x)
+  x
+}
+
+.correct.conc <- function(
+    x,
+    by,
+    nomtimevar,
+    tau,
+    tstart,
+    tend,
+    teval,
+    th,
+    reg,
+    ss,
+    route,
+    method,
+    supplied
+  ){
 
 #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,ss=ss,route=route,method=method
 
    for(arg in c('tau','tstart','tend','teval','reg','method','route','ss')){
     if(arg %in% names(x)){
-      if(!eval(substitute(missing(arg)))){
+      if(arg %in% supplied){
         warning(arg,' supplied as column overrides like-named argument')
       }
       assign(arg,unique(x[[arg]]))
@@ -68,7 +123,7 @@ correct.conc <- function(
 
   data_in=x
 
-  if (!missing(th)) {
+  if (!is.na(th)) {
     data_in = left_join(
       data_in,
       th %>% select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),

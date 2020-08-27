@@ -6,7 +6,7 @@
 \usage{
 plot_reg(
   x,
-  by = c("id"),
+  by = character(0),
   th = NA,
   bloqvar = "bloq",
   timevar = "tad",
@@ -67,6 +67,6 @@ Input dataset:
 }
 \examples{
 example(est.thalf)
-x \%>\% plot_reg(th = th)
+x \%>\% plot_reg(by = 'subject', th = th)
 
 }

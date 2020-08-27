@@ -6,7 +6,7 @@
 \usage{
 correct.time(
   x,
-  by = "subject",
+  by = character(0),
   nomtimevar = "ntad",
   timevar = "time",
   depvar = "dv",

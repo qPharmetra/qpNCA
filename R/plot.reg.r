@@ -34,11 +34,11 @@
 #' @importFrom dplyr left_join group_by_at first ungroup
 #' @examples
 #' example(est.thalf)
-#' x %>% plot_reg(th = th)
+#' x %>% plot_reg(by = 'subject', th = th)
 #'
 plot_reg <- function(
    x,
-   by = c("id"),
+   by = character(0),
    th = NA,
    bloqvar = "bloq",
    timevar = "tad",

@@ -4,13 +4,13 @@ globalVariables('par')
 #' Calculates PK parameters that need lambda_z.
 #'
 #' @param x result parameter dataset from calc.par
+#' @param by column names in x indicating grouping variables
 #' @param th result dataset from est.thalf
 #' @param covfile covariates dataset (containing at least dose for CL calculation)
 #' @param dose variable containing the dose amount
 #' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)
 #' @param reg regimen, "sd" or "md"
 #' @param ss is steady state reached (y/n)
-#' @param by column names in x indicating grouping variables
 #' @param route column name in x indicating route (EV, IVB, IVI)
 #' @importFrom dplyr left_join
 #'
@@ -39,7 +39,7 @@ globalVariables('par')
 #' @export
 calc.par.th <- function(
   x,
-  by="subject",
+  by=character(0),
   th=th,
   covfile=covfile,
   dose="dose",
@@ -142,7 +142,7 @@ calc.par.th <- function(
 
   result %<>% mutate(cl.f.ss   = ifelse( ssev, cl.f.obs, cl.f.ss ))
   result %<>% mutate(cl.f.obs  = ifelse(!ssev, cl.f.obs, NA      ))
-  result %<>% mutate(cl.f.pred = ifelse(!ssev, cl.f.pred,  NA      ))
+  result %<>% mutate(cl.f.pred = ifelse(!ssev, cl.f.pred,  NA    ))
 
   # if (tolower(ss)=="y") {
   #   if (tolower(route)=="ivb"|tolower(route)=="ivi") {

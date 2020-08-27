@@ -59,7 +59,7 @@ globalVariables('Errors_Warnings')
 
 qpNCA <- function(
   x,
-  by="subject",
+  by=character(0),
   nomtimevar="ntad",
   timevar="time",
   depvar="dv",
@@ -148,7 +148,7 @@ check.input(
 
   cat("Performing Thalf estimation...\n")
 
-  th = loqed %>% est.thalf(
+  th <- loqed %>% est.thalf(
     by = by,
     timevar = timevar,
     depvar = depvar,
@@ -184,21 +184,31 @@ check.input(
 
   cat("Calculating Cmax/Tmax...\n")
 
-  ctmax = loqed %>%
-    group_by_at(by) %>%
-    do(calc.ctmax(., timevar=timevar, depvar=depvar)) %>%
-    ungroup
+  # ctmax = loqed %>%
+  #   group_by_at(by) %>%
+  #   do(calc.ctmax(., timevar=timevar, depvar=depvar)) %>%
+  #   ungroup
+
+  ctmax <- loqed %>% calc.ctmax(by = by, timevar = timevar, depvar = depvar)
 
   # 4. and 5. create dataset with corrected time deviations
 
   cat("Applying time deviation corrections and missing concentration imputations...\n")
 
-  tc = loqed %>%
-    group_by_at(by) %>%
-    do(correct.time(
-      .,by=by,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,th=th#,
-      #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,method=method
-    ))
+  # tc = loqed %>%
+  #   group_by_at(by) %>%
+  #   do(correct.time(
+  #     .,by=by,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,th=th#,
+  #     #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,method=method
+  #   ))
+  #
+  tc <- loqed %>% correct.time(
+    by = by,
+    nomtimevar = nomtimevar,
+    timevar = timevar,
+    depvar = depvar,
+    th = th
+  )
 
   for(arg in c(
     'tau','tstart','tend','teval',
@@ -209,12 +219,17 @@ check.input(
     }
   }
 
-  tc %<>%
-    do(correct.conc(
-      .,by=by,nomtimevar=nomtimevar,th=#,
-      #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,ss=ss,route=route,method=method
-    )) %>%
-    ungroup
+  # tc %<>%
+  #   do(correct.conc(
+  #     .,
+  #     by=by,
+  #     nomtimevar=nomtimevar
+  #     #,th=,
+  #     #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,ss=ss,route=route,method=method
+  #   )) %>%
+  #   ungroup
+
+  tc %<>% correct.conc(by = by, nomtimevar = nomtimevar)
 
   cat("\n")
 
@@ -227,19 +242,23 @@ check.input(
 
   cat("Creating correction tables...\n")
 
-  corrtab = tc %>% tab.corr(.,nomtimevar=nomtimevar,by=by)
+  corrtab = tc %>% tab.corr(., by=by, nomtimevar=nomtimevar)
 
   # 7. Calculate PK parameters NOT based on lambda_z ON CORRECTED DATA
 
   cat("Calculating parameters that do not need lambda_z...\n")
 
-  par = tc %>%
-    group_by_at(by) %>%
-    do(calc.par(
-      .,tau=tau,tstart=tstart,tend=tend,teval=teval,route=route,method=method
-    )) %>%
-    ungroup
+  # par = tc %>%
+  #   group_by_at(by) %>%
+  #   do(calc.par(
+  #     .,tau=tau,tstart=tstart,tend=tend,teval=teval,route=route,method=method
+  #   )) %>%
+  #   ungroup
 
+  par <- tc %>% calc.par(
+    by = by, tau = tau, tstart = tstart, tend = tend,
+    teval = teval, route = route, method = method
+  )
 
   # 8. Calculate PK parameters that need lambda_z
 
@@ -251,7 +270,8 @@ check.input(
     ) %>%
     calc.par.th(
     #x=par,
-    by=by,th=th,covfile=covfile,dose=dose#,
+    by=by,th=th,covfile=covfile,dose=dose
+    #,
     #reg=reg,ss=ss,factor=factor,route=route
   )
 
@@ -264,7 +284,7 @@ check.input(
   if (is.null(pdfdir)){
     cat("No PDF summaries created\n")
   }else{
-    if(is.na(pdfdir)){
+    if(!is.na(pdfdir)){
       cat(paste("Writing summary PDF documents to directory",pdfdir,"...\n"))
     }else{
       cat('Writing summary PDF documents to standard location ...\n')

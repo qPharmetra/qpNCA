@@ -4,14 +4,14 @@
 \alias{tab.corr}
 \title{Tabulate Corrections}
 \usage{
-tab.corr(x, nomtimevar = "time", by = "subject")
+tab.corr(x, by = character(0), nomtimevar = "time")
 }
 \arguments{
 \item{x}{concentration dataset created by the correct.time and correct.conc functions, containing time and conc corrected data}
 
-\item{nomtimevar}{column in x containing the nominal time}
-
 \item{by}{by-variable(s), e.g. c("subject","day")}
+
+\item{nomtimevar}{column in x containing the nominal time}
 }
 \value{
 dataset with applied corrections (rule number and rule text) listed by by-variable(s) and nominal time

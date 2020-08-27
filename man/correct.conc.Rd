@@ -6,7 +6,7 @@
 \usage{
 correct.conc(
   x,
-  by = "subject",
+  by = character(0),
   nomtimevar = "ntad",
   tau = NA,
   tstart = NA,
