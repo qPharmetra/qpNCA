@@ -96,7 +96,9 @@ plot_reg <- function(
     ungroup() %>%
     filter(!is.na(depvar),!is.na(cmax))
 
-  plots = plot %>% group_by_at(by) %>%
+  plots = plot %>%
+    filter(depvar > 0) %>%
+    group_by_at(by) %>%
     do(
       plots = ggplot(data = .) +
 
@@ -251,7 +253,7 @@ plot_reg <- function(
   else {
     print(plots$plots)
   }
-  invisible(plotdir)
+  invisible(plots$plots)
 }
 
 #' Create Title for Regression Plots
