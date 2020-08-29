@@ -6,6 +6,8 @@ vignette: >
   %\VignetteIndexEntry{Stepwise NCA Analysis}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::knitr}
+editor_options: 
+  chunk_output_type: console
 ---
 
 #Load libraries
@@ -120,7 +122,7 @@ head(th)
 ## 4       4         3      8.56   0.0955     1.00          1.00      9.03   24.1
 ## 5       5         3     12.5    0.102      0.999         0.999     9      24.2
 ## 6       6         4     11.1    0.104      0.997         0.996     7.03   24.3
-## # … with 3 more variables: thalf <dbl>, includeCmax <chr>,
+## # ... with 3 more variables: thalf <dbl>, includeCmax <chr>,
 ## #   points_excluded <chr>
 ```
 
@@ -168,7 +170,7 @@ head(tc)
 ## 4       1    80     4     0   0.2  6.44 1.15   1           0     0.2 ""        
 ## 5       1    80     4     0   0.2  6.32 2.03   2           0     0.2 ""        
 ## 6       1    80     4     0   0.2  5.53 3.57   4           0     0.2 ""        
-## # … with 59 more variables: loqrule.txt <chr>, firstmeast <dbl>,
+## # ... with 59 more variables: loqrule.txt <chr>, firstmeast <dbl>,
 ## #   consecutive <dbl>, lambda_z.x <dbl>, start_th.x <dbl>, end_th.x <dbl>,
 ## #   includeCmax.x <chr>, points_excluded.x <chr>, create.nr <chr>,
 ## #   create.txt <chr>, trule.nr <chr>, trule.txt <chr>, applies.to.time <chr>,
@@ -203,7 +205,7 @@ head(par)
 ## 4       4 EV         1  24.1      0.86        1     1   80.1    80.1    617.
 ## 5       5 EV         1  24.2      1.05        1     1   99.3    99.3    803.
 ## 6       6 EV         1  24.3      0.9         1     1   91.5    91.5    707.
-## # … with 16 more variables: aumclast <dbl>, mrtall <dbl>, mrtlast <dbl>,
+## # ... with 16 more variables: aumclast <dbl>, mrtall <dbl>, mrtlast <dbl>,
 ## #   calc.tau <dbl>, auctau <lgl>, aumctau <lgl>, tau <lgl>, calc.teval <dbl>,
 ## #   auc12 <dbl>, teval <dbl>, calc.part <dbl>, aucpart <lgl>, tstart <lgl>,
 ## #   tend <lgl>, c0 <lgl>, area.back.extr <lgl>
@@ -238,7 +240,7 @@ head(par)
 ## 4       4      1  24.1      0.86        1     1   80.1    80.1    617.     617.
 ## 5       5      1  24.2      1.05        1     1   99.3    99.3    803.     803.
 ## 6       6      1  24.3      0.9         1     1   91.5    91.5    707.     707.
-## # … with 53 more variables: mrtall <dbl>, mrtlast <dbl>, calc.tau <dbl>,
+## # ... with 53 more variables: mrtall <dbl>, mrtlast <dbl>, calc.tau <dbl>,
 ## #   auctau <lgl>, aumctau <lgl>, tau <lgl>, calc.teval <dbl>, auc12 <dbl>,
 ## #   teval <dbl>, calc.part <dbl>, aucpart <lgl>, tstart <lgl>, tend <lgl>,
 ## #   c0 <lgl>, area.back.extr <lgl>, no.points <dbl>, intercept <dbl>,
@@ -277,7 +279,7 @@ head(par_all)
 ## 4       4      1  24.1      0.86        1     1   80.1    80.1    617.     617.
 ## 5       5      1  24.2      1.05        1     1   99.3    99.3    803.     803.
 ## 6       6      1  24.3      0.9         1     1   91.5    91.5    707.     707.
-## # … with 55 more variables: mrtall <dbl>, mrtlast <dbl>, calc.tau <dbl>,
+## # ... with 55 more variables: mrtall <dbl>, mrtlast <dbl>, calc.tau <dbl>,
 ## #   auctau <lgl>, aumctau <lgl>, tau <lgl>, calc.teval <dbl>, auc12 <dbl>,
 ## #   teval <dbl>, calc.part <dbl>, aucpart <lgl>, tstart <lgl>, tend <lgl>,
 ## #   c0 <lgl>, area.back.extr <lgl>, no.points <dbl>, intercept <dbl>,
