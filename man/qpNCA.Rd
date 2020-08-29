@@ -24,8 +24,8 @@ qpNCA(
   tend = NA,
   teval = NA,
   covariates = NA,
-  dose = NA,
-  factor = NA,
+  dose = "dose",
+  factor = 1,
   reg = "SD",
   ss = "N",
   route = "EV",
@@ -114,4 +114,27 @@ Consecutively executes the following NCA steps:
 \item \link{calc.par} calculates profile-specific summary statistics
 \item \link{calc.par.th} calculates parameters dependent on lambda-z
 }
+}
+\examples{
+library(magrittr)
+library(dplyr)
+library(qpNCA)
+x <- Theoph
+ntad <- c(0,0.25,0.5,1,2,4,5,7,9,12,24)
+for(i in 1:nrow(x)){
+  time  <- x$Time[[i]]
+  delta <- abs(ntad - time)
+  best  <- min(delta)
+  index <- match(best, delta)
+  nom   <- ntad[[index]]
+  x$ntad[[i]] <- nom
+}
+rm(list = c('time','delta','best','index','nom', 'i','ntad'))
+x \%<>\% rename(time = Time, dv = conc, subject = Subject)
+x \%<>\% mutate(bloq = 0, loq = 0.01, tad = time)
+covs <- Theoph \%>\%
+  select(subject = Subject, Wt, dose = Dose) \%>\%
+  unique \%>\%
+  mutate(dose = dose * Wt) # see ?Theoph
+y <- qpNCA(x, by = 'subject', covariates = covs)
 }

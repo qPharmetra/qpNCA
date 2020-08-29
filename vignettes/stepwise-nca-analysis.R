@@ -29,51 +29,74 @@ Theoph1 <- Theoph %>%
               
 
 ## ---- results="markup", warnings=F--------------------------------------------
-ctmax <- Theoph1 %>%
- group_by(Subject) %>% 
-  #Subject in Theoph are ordered factor, but factors are not in ascending order
- do(calc.ctmax(.,timevar="Time",depvar="conc")) %>%
- ungroup()
+ctmax <- Theoph1 %>% calc.ctmax(
+  by = 'Subject',
+  timevar="Time",
+  depvar="conc"
+)
 head(ctmax)
 
 ## ----  results="markup", warnings=F-------------------------------------------
-th = Theoph1 %>% 
-  group_by(Subject) %>%
-  do(est.thalf(.,timevar="Time",depvar="conc",includeCmax="Y")) %>%
-  ungroup()
+th = Theoph1 %>% est.thalf(
+  by = 'Subject',
+  timevar="Time",
+  depvar="conc",
+  includeCmax="Y"
+)
 head(th)
 
 ## ----  results="markup", warnings=F-------------------------------------------
 
 ## 3. Correct deviations
 tc = Theoph1 %>%
-  group_by(Subject) %>%
-  do(correct.loq(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-                   bloqvar="BLQ",loqvar="LOQ",loqrule=1)) %>%
-  do(correct.time(.,nomtimevar="NTAD",timevar="Time",depvar="conc",
-                 tau=,tstart=,tend=,teval=,th=th,reg="sd",by='Subject')) %>%  
-  do(correct.conc(.,nomtimevar="NTAD",tau=,tstart=,tend=,teval=12,
-                   th=th,reg="sd",ss="n",by='Subject')) %>%
-  ungroup()
+  correct.loq(
+    by='Subject',
+    nomtimevar="NTAD",
+    timevar="Time",
+    depvar="conc",
+    bloqvar="BLQ",
+    loqvar="LOQ",
+    loqrule=1
+  ) %>%
+  correct.time(
+    by='Subject',
+    nomtimevar="NTAD",
+    timevar="Time",
+    depvar="conc",
+    th=th,
+    reg="sd"
+  ) %>%  
+  correct.conc(
+    by ='Subject',
+    nomtimevar="NTAD",
+    teval=12,
+    th=th,
+    reg="sd",
+    ss="n",
+  )
 
 head(tc)
 
 
 ## ----  results="markup", warnings=F-------------------------------------------
-par <- tc %>%
-  group_by(Subject) %>%
-  do(calc.par(.,tau=,tstart=,tend=,teval=12, route="EV")) %>%  
+par <- tc %>% calc.par(by = 'Subject', teval=12, route="EV")  
   #This wil get us both AUC0-12 and AUC0-24 as sampling ends at 24
-  ungroup()
 head(par)
 
 ## ----  results="markup", warnings=F-------------------------------------------
 cov <- data.frame(Subject=as.numeric(Theoph1$Subject), DOSE=Theoph$Dose) %>% 
   distinct(.,.keep_all = T)
 
-par = calc.par.th(x=par,th=th ,cov=cov,
-                  dose="DOSE",factor=1,  
-                  reg="sd",ss="n",by='Subject') 
+par <- par %>% 
+  calc.par.th(
+    th=th ,
+    cov=cov,
+    dose="DOSE",
+    factor=1,  
+    reg="sd",
+    ss="n",
+    by='Subject'
+  )
 head(par)
 
 ## ----  results="markup", warnings=F-------------------------------------------
