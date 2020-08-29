@@ -25,3 +25,8 @@ Input dataset can contain all uncorrected data, including LOQ;
 estimate first occurence of maximum concentration for each PK curve;
 if all concentrations are NA, sets Cmax and Tmax also to NA.
 }
+\examples{
+example(est.thalf)
+ctmax <- x \%>\% calc.ctmax(by = 'subject')
+ctmax \%>\% head
+}

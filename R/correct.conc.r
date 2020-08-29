@@ -45,6 +45,14 @@
 #'  crule.txt     |  text explaining what was altered
 #'  applies.to.conc  | lists all AUCS to which the concentration correction rule applies
 #' @export
+#' @examples
+#' example(correct.time)
+#' x %<>% mutate(ss = 'N', route = 'EV')
+#' # route redefined for completeness
+#' x %<>% correct.conc(by = 'subject') # ignoring th
+#' x %>% head
+#'
+#'
 #'
 correct.conc <- function(
   x,
@@ -117,12 +125,16 @@ correct.conc <- function(
         warning(arg,' supplied as column overrides like-named argument')
       }
       assign(arg,unique(x[[arg]]))
-      x[[arg]] <- NULL
+      # x[[arg]] <- NULL
     }
     if(length(get(arg)) > 1) {
       warning(arg, ' has length > 1; only first value will be used')
       assign(arg, get(arg)[[1]])
     }
+     if(arg %in% names(x)){
+       # assure x preserves value actually used
+       x[[arg]] <- get(arg)
+     }
   }
 
   data_in=x

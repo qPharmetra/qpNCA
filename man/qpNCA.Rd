@@ -23,7 +23,7 @@ qpNCA(
   tstart = NA,
   tend = NA,
   teval = NA,
-  covfile = NA,
+  covariates = NA,
   dose = NA,
   factor = NA,
   reg = "SD",
@@ -69,7 +69,7 @@ qpNCA(
 
 \item{teval}{user selected AUC interval; NA (default) if not requested; x$teval overrides}
 
-\item{covfile}{covariates dataset}
+\item{covariates}{covariates dataset}
 
 \item{dose}{variable containing the dose amount}
 

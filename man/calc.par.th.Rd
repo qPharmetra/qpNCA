@@ -8,7 +8,7 @@ calc.par.th(
   x,
   by = character(0),
   th = th,
-  covfile = covfile,
+  covariates = NA,
   dose = "dose",
   factor = 1,
   reg = "SD",
@@ -23,9 +23,9 @@ calc.par.th(
 
 \item{th}{result dataset from est.thalf}
 
-\item{covfile}{covariates dataset (containing at least dose for CL calculation)}
+\item{covariates}{covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character name of csv file or local object}
 
-\item{dose}{variable containing the dose amount}
+\item{dose}{variable containing the dose amount; default 'dose' set to 1 if not in \code{names(x)}}
 
 \item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)}
 
@@ -62,4 +62,19 @@ Note: ctmax must be merged separately as those were calculated from uncorrected 
 }
 \description{
 Calculates PK parameters that need lambda_z.
+}
+\examples{
+example(calc.par) # creates x, par, th, ctmax, corrtab
+# notice x includes (optional) loqrule, includeCmax, reg, method, route, ss
+covs <- Theoph \%>\%
+  select(subject = Subject, Wt, dose = Dose) \%>\%
+  unique \%>\%
+  mutate(dose = dose * Wt) # see ?Theoph
+y <- x \%>\% select(subject, reg, ss, loqrule) \%>\% unique
+y \%<>\% mutate(factor = 1)
+par \%<>\% left_join(y, by = 'subject')
+par \%<>\% calc.par.th(by = 'subject', th = th, covariates = covs)
+par \%<>\% left_join(ctmax, ., by = 'subject')
+par \%>\% head
+par \%>\% data.frame \%>\% head(2)
 }

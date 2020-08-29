@@ -52,6 +52,7 @@ for estimation after removal of LOQs and NAs.
 }
 \examples{
 example(correct.loq)
+x \%<>\% mutate(includeCmax = 'Y')
 th <- x \%>\% est.thalf('subject')
 th \%>\%  head
 }

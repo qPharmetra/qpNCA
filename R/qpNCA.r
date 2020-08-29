@@ -28,7 +28,7 @@ globalVariables('Errors_Warnings')
 #' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
 #' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
 #' @param teval user selected AUC interval; NA (default) if not requested; x$teval overrides
-#' @param covfile covariates dataset
+#' @param covariates covariates dataset
 #' @param dose variable containing the dose amount
 #' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided
 #' @param reg regimen, "sd" or "md"; can be character column name in x; x$regimen overrides if provided
@@ -76,7 +76,7 @@ qpNCA <- function(
   tstart=NA,
   tend=NA,
   teval=NA,
-  covfile=NA,
+  covariates=NA,
   dose=NA,
   factor=NA,
   reg="SD",
@@ -110,7 +110,7 @@ check.input(
     exclvar=exclvar, plotdir=plotdir, pdfdir=pdfdir, timelab=timelab,
     deplab=deplab,
     #tau=tau, tstart=tstart, tend=tend, teval=teval,
-    covfile=covfile, dose=dose#,
+    covariates=covariates, dose=dose#,
     #factor=factor, reg=reg, ss=ss,route=route, method=method
   )
 
@@ -142,7 +142,7 @@ check.input(
     loqvar = loqvar
   )
 
-   loqed$loqrule <- x$loqrule
+   # loqed$loqrule <- x$loqrule
 
     # 2. estimate thalf ON UNCORRECTED DATA
 
@@ -210,14 +210,15 @@ check.input(
     th = th
   )
 
-  for(arg in c(
-    'tau','tstart','tend','teval',
-    'reg','ss','route','method'
-  )){
-    if(arg %in% names(loqed))if(!arg %in% names(tc)){
-      tc[[arg]] <- loqed[[arg]]
-    }
-  }
+  # now in correct.time()
+  # for(arg in c(
+  #   'tau','tstart','tend','teval',
+  #   'reg','ss','route','method'
+  # )){
+  #   if(arg %in% names(loqed))if(!arg %in% names(tc)){
+  #     tc[[arg]] <- loqed[[arg]]
+  #   }
+  # }
 
   # tc %<>%
   #   do(correct.conc(
@@ -233,9 +234,9 @@ check.input(
 
   cat("\n")
 
-  for(arg in enforce){
-    if(arg %in% names(loqed))if(!arg %in% names(tc))tc[[arg]] <- loqed[[arg]]
-  }
+  # for(arg in enforce){
+  #   if(arg %in% names(loqed))if(!arg %in% names(tc))tc[[arg]] <- loqed[[arg]]
+  # }
 
 
   # 6. create table with corrections
@@ -267,7 +268,7 @@ check.input(
     ) %>%
     calc.par.th(
     #x=par,
-    by=by,th=th,covfile=covfile,dose=dose
+    by=by,th=th,covariates=covariates,dose=dose
     #,
     #reg=reg,ss=ss,factor=factor,route=route
   )
@@ -293,23 +294,23 @@ check.input(
 
   cat("\nWriting results...\n")
 
-  if(!missing(covfile)){
-    if(is.character(covfile)){
-      if(file.exists(covfile)){
-        covfile <- read.csv(covfile)
+  if(!missing(covariates)){
+    if(is.character(covariates)){
+      if(file.exists(covariates)){
+        covariates <- read.csv(covariates)
       }else{
-        covfile=get(covfile) # to convert the covfile string to the real data frame
+        covariates=get(covariates) # to convert the covariates string to the real data frame
       }
     }
   }
 
   result = list(
-    covariates=covfile,
+    covariates=covariates,
     half_life=th,
     ct_corr=tc,
     corrections=corrtab,
     pkpar=par_all,
-    plotdir = plotdir,
+    plots = plotdir,
     pdfdir = pdfdir
   )
 
@@ -323,7 +324,7 @@ check.input <- function(
   x, by=NA, nomtimevar=NA, timevar=NA, depvar=NA,
   bloqvar=NA, loqvar=NA, loqrule=NA,
   includeCmax=NA, exclvar=NA, plotdir=NA, pdfdir=NA, timelab=NA, deplab=NA,
-  tau=NA, tstart=NA, tend=NA, teval=NA, covfile=NA, dose=NA, factor=NA, reg=NA, ss=NA,
+  tau=NA, tstart=NA, tend=NA, teval=NA, covariates=NA, dose=NA, factor=NA, reg=NA, ss=NA,
   route=NA, method=NA
 ) {
 
@@ -384,15 +385,15 @@ check.input <- function(
 
   # 6 check covariate variable
 
-  if (!(missing(covfile))) {
-    if(is.character(covfile)){
-      if (!exists(covfile)) {
-        chkfile=rbind(chkfile,paste("Error: Covariate dataframe",covfile,"does not exist"))
+  if (!(missing(covariates))) {
+    if(is.character(covariates)){
+      if (!exists(covariates)) {
+        chkfile=rbind(chkfile,paste("Error: Covariate dataframe",covariates,"does not exist"))
       } else {
-        covfile=get(covfile)  # to convert the cov string to the real data frame
+        covariates=get(covariates)  # to convert the cov string to the real data frame
       }
     }
-    if (!(dose %in% names(covfile))){
+    if (!(dose %in% names(covariates))){
       chkfile=rbind(chkfile,paste("Error: Dose variable (",dose,") not in covariate dataframe"))
     }
   } else {

@@ -6,8 +6,8 @@ globalVariables('par')
 #' @param x result parameter dataset from calc.par
 #' @param by column names in x indicating grouping variables
 #' @param th result dataset from est.thalf
-#' @param covfile covariates dataset (containing at least dose for CL calculation)
-#' @param dose variable containing the dose amount
+#' @param covariates covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character name of csv file or local object
+#' @param dose variable containing the dose amount; default 'dose' set to 1 if not in \code{names(x)}
 #' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)
 #' @param reg regimen, "sd" or "md"
 #' @param ss is steady state reached (y/n)
@@ -37,17 +37,46 @@ globalVariables('par')
 #'
 #' Note: ctmax must be merged separately as those were calculated from uncorrected data.
 #' @export
+#' @examples
+#' example(calc.par) # creates x, par, th, ctmax, corrtab
+#' # notice x includes (optional) loqrule, includeCmax, reg, method, route, ss
+#' covs <- Theoph %>%
+#'   select(subject = Subject, Wt, dose = Dose) %>%
+#'   unique %>%
+#'   mutate(dose = dose * Wt) # see ?Theoph
+#' y <- x %>% select(subject, reg, ss, loqrule) %>% unique
+#' y %<>% mutate(factor = 1)
+#' par %<>% left_join(y, by = 'subject')
+#' par %<>% calc.par.th(by = 'subject', th = th, covariates = covs)
+#' par %<>% left_join(ctmax, ., by = 'subject')
+#' par %>% head
+#' par %>% data.frame %>% head(2)
 calc.par.th <- function(
   x,
   by=character(0),
   th=th,
-  covfile=covfile,
+  covariates=NA,
   dose="dose",
   factor=1,
   reg="SD",
   ss="N",
   route="EV"
   ){
+  stopifnot(
+    is.character(dose),
+    length(dose) == 1
+  )
+  if(!dose %in% names(x)){
+    x[[dose]] <- 1
+  }
+  if(identical(NA, covariates)){
+    covariates <- unique(x[,c(by, dose),drop=FALSE])
+  }
+  # At this point, utility of having assigned dose on x is ended.
+  # User must have supply dose in covariates using column named in arg 'dose'.
+  # To avoid merge conflicts of covariates and x, we squelch x[[dose]].
+  x[[dose]] <- NULL
+
   for(arg in c('reg','ss','factor','route')){
     if(arg %in% names(x)){
       if(!eval(substitute(missing(arg)))){
@@ -62,17 +91,17 @@ calc.par.th <- function(
     # }
   }
 
-  if(!missing(covfile)){
-    if(is.character(covfile)){
-      if(file.exists(covfile)){
-        covfile <- read.csv(covfile)
+  if(!missing(covariates)){
+    if(is.character(covariates)){
+      if(file.exists(covariates)){
+        covariates <- read.csv(covariates)
       }else{
-        covfile=get(covfile) # to convert the covfile string to the real data frame
+        covariates=get(covariates) # to convert the covariates string to the real data frame
       }
     }
   }
   result=left_join(x,th,by=by) %>%
-  left_join(covfile,by=by)
+  left_join(covariates,by=intersect(names(x), names(covariates)))
   result$dosevar <- result[[dose]]
   result %<>%
   mutate(

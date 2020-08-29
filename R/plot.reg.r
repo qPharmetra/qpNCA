@@ -34,7 +34,7 @@
 #' @importFrom dplyr left_join group_by_at first ungroup
 #' @examples
 #' example(est.thalf)
-#' x %>% plot_reg(by = 'subject', th = th)
+#' x %>% filter(dv > 0) %>% plot_reg(by = 'subject', th = th)
 #'
 plot_reg <- function(
    x,
@@ -97,7 +97,6 @@ plot_reg <- function(
     filter(!is.na(depvar),!is.na(cmax))
 
   plots = plot %>%
-    filter(depvar > 0) %>%
     group_by_at(by) %>%
     do(
       plots = ggplot(data = .) +

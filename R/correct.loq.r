@@ -28,8 +28,9 @@
 #'   nom   <- ntad[[index]]
 #'   x$ntad[[i]] <- nom
 #' }
+#' rm(list = c('time','delta','best','index','nom', 'i','ntad'))
 #' x %<>% rename(time = Time, dv = conc, subject = Subject)
-#' x %<>% mutate(bloq = 0, loq = 0.01, tad = time)
+#' x %<>% mutate(bloq = 0, loq = 0.01, tad = time, loqrule = 1)
 #' x %>% head
 #' x %<>% correct.loq('subject')
 #' x %>%  head
@@ -80,7 +81,7 @@ if('loqrule' %in% names(x)){
     warning('loqrule supplied as column overrides like-named argument')
   }
   loqrule <- unique(x$loqrule)
-  x$loqrule <- NULL
+  # x$loqrule <- NULL
 }
 if(length(loqrule) > 1) {
   warning('loqrule has length > 1; only first value will be used')

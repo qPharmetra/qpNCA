@@ -20,3 +20,8 @@ dataset with applied corrections (rule number and rule text) listed by by-variab
 Tabulates what records were added, time deviations and
 concentration imputations were applied, for each subject.
 }
+\examples{
+example(correct.conc)
+corrtab <- x \%>\% tab.corr(by = 'subject')
+corrtab \%>\% head
+}

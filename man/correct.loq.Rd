@@ -54,8 +54,9 @@ for(i in 1:nrow(x)){
   nom   <- ntad[[index]]
   x$ntad[[i]] <- nom
 }
+rm(list = c('time','delta','best','index','nom', 'i','ntad'))
 x \%<>\% rename(time = Time, dv = conc, subject = Subject)
-x \%<>\% mutate(bloq = 0, loq = 0.01, tad = time)
+x \%<>\% mutate(bloq = 0, loq = 0.01, tad = time, loqrule = 1)
 x \%>\% head
 x \%<>\% correct.loq('subject')
 x \%>\%  head

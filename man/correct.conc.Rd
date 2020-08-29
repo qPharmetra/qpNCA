@@ -80,3 +80,13 @@ The following Concentration Deviation Correction Rules will be applied to critic
    MDC-4 \tab md (IV) \tab impute missing concentration by back-extrapolation \tab t=0 \cr
 }
 }
+\examples{
+example(correct.time)
+x \%<>\% mutate(ss = 'N', route = 'EV')
+# route redefined for completeness
+x \%<>\% correct.conc(by = 'subject') # ignoring th
+x \%>\% head
+
+
+
+}

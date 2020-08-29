@@ -46,6 +46,9 @@
 #' @export
 #' @importFrom utils read.csv
 #' @examples
+#' example(tab.corr)
+#' par <- x %>% calc.par(by = 'subject')
+#' par %>% head
 #'
 calc.par <- function(
   x,

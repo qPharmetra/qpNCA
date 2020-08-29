@@ -9,6 +9,10 @@
 #' @return dataset with applied corrections (rule number and rule text) listed by by-variable(s) and nominal time
 #' @export
 #' @importFrom dplyr bind_rows one_of arrange_at
+#' @examples
+#' example(correct.conc)
+#' corrtab <- x %>% tab.corr(by = 'subject')
+#' corrtab %>% head
 tab.corr <- function(x, by = character(0), nomtimevar = "time") {
   loqrules=x%>%dplyr::rename(rule.nr=loqrule.nr,rule.txt=loqrule.txt)
   create=x%>%dplyr::rename(rule.nr=create.nr,rule.txt=create.txt)

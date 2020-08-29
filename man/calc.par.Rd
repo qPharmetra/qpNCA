@@ -68,5 +68,8 @@ one observation per subject:\tabular{ll}{
 Calculates AUCs, tlast, clast.obs for each PK curve defined using \code{by}.
 }
 \examples{
+example(tab.corr)
+par <- x \%>\% calc.par(by = 'subject')
+par \%>\% head
 
 }
