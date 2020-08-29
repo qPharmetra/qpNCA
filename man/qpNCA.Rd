@@ -132,6 +132,7 @@ for(i in 1:nrow(x)){
 rm(list = c('time','delta','best','index','nom', 'i','ntad'))
 x \%<>\% rename(time = Time, dv = conc, subject = Subject)
 x \%<>\% mutate(bloq = 0, loq = 0.01, tad = time)
+x \%<>\% filter(dv > 0)
 covs <- Theoph \%>\%
   select(subject = Subject, Wt, dose = Dose) \%>\%
   unique \%>\%

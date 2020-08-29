@@ -6,8 +6,6 @@ vignette: >
   %\VignetteIndexEntry{Stepwise NCA Analysis}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::knitr}
-editor_options: 
-  chunk_output_type: console
 ---
 
 #Load libraries
