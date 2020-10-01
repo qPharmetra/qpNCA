@@ -172,7 +172,7 @@ correct.time <- function(
       misstime = NA,                           # time of missing record
       lambda_z = ifelse("lambda_z"%in%names(.),lambda_z,NA)
     )
-  x %>% filter(!is.na(ptime))               # remove records with no nominal time (must be corrected before)
+  x %<>% filter(!is.na(ptime))               # remove records with no nominal time (must be corrected before)
 
   x %<>% mutate_cond(condition = is.na(timevar),timevar = ptime,
                                   trule.nr="-",

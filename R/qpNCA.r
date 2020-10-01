@@ -252,7 +252,7 @@ check.input(
   #   )) %>%
   #   ungroup
 
-  tc %<>% correct.conc(by = by, nomtimevar = nomtimevar)
+  tc %<>% correct.conc(by = by, nomtimevar = nomtimevar, th = th)
 
   cat("\n")
 

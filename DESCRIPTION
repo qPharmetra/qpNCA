@@ -1,7 +1,7 @@
 Package: qpNCA
 Type: Package
 Title: Noncompartmental Pharmacokinetic Analysis by qPharmetra
-Version: 1.1.0
+Version: 1.1.1
 Author: Jan Huisman, Krina Mehta, and Koen Jolling
 Maintainer: Tim Bergsma <tim.bergsma@qpharmetra.com>
 Description: Computes NCA parameters for drug concentration profiles.

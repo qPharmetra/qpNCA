@@ -185,7 +185,7 @@ test_that('IV MD results are stable',{
 })
 
 test_that('all results are stable',{
- # library(wrangle)
+  skip_on_cran()
   test <- as_csv('profiles.csv')
 
   #test %>% itemize(rule, id, desc) %>% data.frame
