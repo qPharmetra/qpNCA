@@ -19,13 +19,21 @@ lag_lead <- function(
   x,nomtimevar1=NA,depvar1=NA,timevar1=NA,
   lagc=NA,lagt=NA,leadc=NA,leadt=NA,...
 ){
-original <- x %>%
-  mutate(depvar=x[[depvar1]],   # dependent variable   (internal)
-  timevar=x[[timevar1]],        # actual time variable (internal)
-  ptime=x[[nomtimevar1]]        # nominal time         (internal)
-  ) %>%
-  mutate(flag=ifelse(!is.na(depvar),0,1)) %>%   # flags type of missing value (in between or at the end)
-  mutate(flag=ifelse(is.na(depvar)&timevar>last(timevar[!is.na(depvar)]),2,flag))
+  # original <- x %>%
+  #   mutate(depvar = !!depvar1,   # dependent variable   (internal)
+  #          timevar = !!timevar1,        # actual time variable (internal)
+  #          ptime = !!nomtimevar1       # nominal time         (internal)
+  #   ) %>%
+  #   mutate(flag=ifelse(!is.na(depvar),0,1)) %>%   # flags type of missing value (in between or at the end)
+  #   mutate(flag=ifelse(is.na(depvar)&timevar>last(timevar[!is.na(depvar)]),2,flag))
+
+  original <- x
+  original$depvar <- original[[depvar1]]
+  original$timevar <- original[[timevar1]]
+  original$ptime <- original[[nomtimevar1]]
+  original %<>%
+    mutate(flag=ifelse(!is.na(depvar),0,1)) %>%   # flags type of missing value (in between or at the end)
+    mutate(flag=ifelse(is.na(depvar)&timevar>last(timevar[!is.na(depvar)]),2,flag))
 
   #1 delete NA's
 
@@ -43,18 +51,21 @@ original <- x %>%
 
   #3 merge with original
 
-  newdata=left_join(original,no.na,by="ptime")
+  # newdata=left_join(original,no.na,by="ptime")
+  newdata=left_join(original,no.na)
 
-  newdata=newdata %>% arrange(ptime) %>%
+  newdata = newdata %>% arrange(ptime) %>%
     mutate(leadc  =ifelse(flag==1,locf(leadc),leadc),
            leadt  =ifelse(flag==1,locf(leadt),leadt),
            lagc   =ifelse(flag==2,last(depvar[!is.na(depvar)]),lagc),
            lagt   =ifelse(flag==2,last(timevar[!is.na(depvar)]),lagt)
-    ) %>%
-    arrange(-ptime) %>%
+    )
+  newdata = newdata %>% arrange(-ptime)
+  newdata = newdata %>%
     mutate(lagc   =ifelse(flag==1,locf(lagc),lagc),
            lagt   =ifelse(flag==1,locf(lagt),lagt)
-    ) %>%
+    )
+  newdata = newdata %>%
     arrange(ptime) %>%
     mutate(leadc  =ifelse(ptime==last(ptime),NA,leadc),
            leadt  =ifelse(ptime==last(ptime),NA,leadt)

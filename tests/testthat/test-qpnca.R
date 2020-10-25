@@ -143,7 +143,7 @@ merged_results <- function(x, y){
 
 test_that('PO SD results are stable',{
   test <- test_results(
-    as_csv('posd.csv'), # %>% filter(id == 5),
+    as_csv('posd.csv') %>% filter(id == 6),
     reg="SD",ss="N",route="EV")
  refr <- reference_results(as_csv('voucher.csv'), id = -1, from = 1, to = 6, route = 'ev')
  # refr <- reference_results(as_csv('voucher.csv'), id = 5, from = 5, to = 5, route = 'ev')

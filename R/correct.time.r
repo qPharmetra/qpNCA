@@ -37,7 +37,7 @@
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
 #' * 3: linear before first Tmax, logarithmic after first Tmax
-#' @importFrom dplyr left_join first bind_rows
+#' @importFrom dplyr left_join first bind_rows across
 #' @return a dataset with time deviation corrections applied (timevar and depvar adapted).
 #' The following variables are added:
 #'
@@ -86,11 +86,8 @@ correct.time <- function(
   if(!missing(reg)) supplied <- c(supplied, 'reg')
   if(!missing(method)) supplied <- c(supplied, 'method')
 
-  x <- group_by_at(x, vars(by))
-  x <- do(
-    .data = x,
-    .correct.time(
-      .,
+  x <- group_by(x, across(!!!by))
+  x %<>% .correct.time(
       by = by,
       nomtimevar = nomtimevar,
       timevar = timevar,
@@ -104,7 +101,6 @@ correct.time <- function(
       method = method,
       supplied = supplied
     )
-  )
   x <- ungroup(x)
   x
 }
@@ -421,9 +417,17 @@ correct.time <- function(
 
 
 
-  names(x)[names(x)=="ptime"]=nomtimevar
-  names(x)[names(x)=="timevar"]=timevar   # to be sure time value of created time points are copied to original time variable
-  names(x)[names(x)=="depvar"]=depvar     # to be sure conc value of created time points are copied to original conc variable
+  # names(x)[names(x)=="ptime"]=nomtimevar
+  # names(x)[names(x)=="timevar"]=timevar   # to be sure time value of created time points are copied to original time variable
+  # names(x)[names(x)=="depvar"]=depvar     # to be sure conc value of created time points are copied to original conc variable
+
+  x[[nomtimevar]] <- x$ptime
+  x$ptime <- NULL
+  x[[timevar]] <- x$timevar
+  x$timevar <- NULL
+  x[[depvar]] <- x$depvar
+  x$depvar <- NULL
+
 
   # for(arg in c(
   #   'tau','tstart','tend','teval',
