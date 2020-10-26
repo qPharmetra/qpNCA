@@ -262,6 +262,8 @@ out <- qpNCA(
   dose = 'dose'
 )
 
+out$pkpar %<>% select(id:loqrule, dose, everything()) # column order change
+
 expect_equal_to_reference(file = '001.rds',out)
 
 })

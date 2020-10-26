@@ -87,8 +87,10 @@ correct.time <- function(
   if(!missing(method)) supplied <- c(supplied, 'method')
 
   x <- group_by(x, across(!!!by))
-  x %<>% .correct.time(
-      by = by,
+  x %<>% do(
+    .correct.time(
+      .,
+      # by = by,
       nomtimevar = nomtimevar,
       timevar = timevar,
       depvar = depvar,
@@ -101,12 +103,13 @@ correct.time <- function(
       method = method,
       supplied = supplied
     )
+  )
   x <- ungroup(x)
   x
 }
 .correct.time <- function(
     x,
-    by,
+  # by,
     nomtimevar,
     timevar,
     depvar,

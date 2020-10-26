@@ -182,6 +182,6 @@ calc.par.th <- function(
   # }else{
   #   result = result %>% mutate(cl.f.ss=NA, cl.ss=NA)
   # }
-
+  # result %<>% select((!!names(.)[[1]]):loqrule, dose, everything()) # to preserve traditional column order
   return(result)
 }

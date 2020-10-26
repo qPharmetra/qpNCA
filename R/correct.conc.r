@@ -137,17 +137,21 @@ correct.conc <- function(
      }
   }
 
-  z <- x
+  o <- x
 
   if (!identical(NA,th)) {
-    z = left_join(
-      z,
-      th %>% select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),
-      by=by
+    x %<>% left_join(
+      th %>% select(
+        -no.points,
+        -intercept,
+        -r.squared,
+        -adj.r.squared,
+        -thalf
+      )
     )
   }
 
-  z %<>% mutate(
+  x %<>% mutate(
     ptime=x[[nomtimevar]],                 # nominal time                            (internal)
     crule.nr="",                           # correction rule number
     crule.txt="",                          # explanation of concentration substitution
@@ -163,8 +167,7 @@ correct.conc <- function(
 
    #TAU
 if (!is.na(tau)) {
-  z <- lag_lead(
-    z,
+  x %<>% lag_lead(
     nomtimevar1="ptime",
     depvar1="conc.tau",
     timevar1="time.tau",
@@ -176,8 +179,7 @@ if (!is.na(tau)) {
 }
   #PARTIAL
 if (!is.na(tstart) & !is.na(tend) ){
-  z <- lag_lead(
-    z,
+  x %<>% lag_lead(
     nomtimevar1="ptime",
     depvar1="conc.part",
     timevar1="time.part",
@@ -189,7 +191,7 @@ if (!is.na(tstart) & !is.na(tend) ){
 }
    #TEVAL
 if (!is.na(teval)) {
-  z %<>% lag_lead(
+  x %<>% lag_lead(
     nomtimevar1="ptime",
     depvar1="conc.teval",
     timevar1="time.teval",
@@ -205,7 +207,7 @@ if (!is.na(teval)) {
 
   # Create some variables
 
-  z %<>% mutate(
+  x %<>% mutate(
     t0val = ifelse(
       is.element(0,ptime),
       conc.tau[ptime==0],
@@ -220,7 +222,7 @@ if (!is.na(teval)) {
 
   #TAU
   if (!is.na(tau)) {
-    z %<>% mutate_cond(
+    x %<>% mutate_cond(
       condition = (
         ptime == tau
         &is.na(conc.tau)
@@ -243,7 +245,7 @@ if (!is.na(teval)) {
       ),
       applies.to.conc=paste(applies.to.conc,"TAU ")
     )
-    z %<>% mutate_cond(
+    x %<>% mutate_cond(
       condition = (
         ptime==tau
         &is.na(conc.tau)
@@ -274,7 +276,7 @@ if (!is.na(teval)) {
       ),
       applies.to.conc=paste(applies.to.conc,"TAU ")
     )
-    z %<>% mutate_cond(
+    x %<>% mutate_cond(
       condition = (
         ptime==tau
         &is.na(conc.tau)
@@ -289,13 +291,13 @@ if (!is.na(teval)) {
       crule.txt=paste("Missing concentration at t=",tau," corrected to ",round(conc.tau,3)," by extrapolation",sep=""),
       applies.to.conc=paste(applies.to.conc,"TAU ")
     )
-    z %<>% mutate(tauval=conc.tau[time.tau==tau])
+    x %<>% mutate(tauval=conc.tau[time.tau==tau])
   }
 
   #TSTART and TEND
   #TSTART
   if (!is.na(tstart) & !is.na(tend)) {
-    z %<>%  mutate_cond(
+    x %<>%  mutate_cond(
       condition = (
         ptime == tstart
         &!is.na(tau)
@@ -320,7 +322,7 @@ if (!is.na(teval)) {
       applies.to.conc=paste(applies.to.conc,"TSTART ")
     )
 
-    z %<>% mutate_cond(
+    x %<>% mutate_cond(
       condition = (
         ptime==tstart
         &is.na(conc.part)
@@ -348,7 +350,7 @@ if (!is.na(teval)) {
       ),
       applies.to.conc=paste(applies.to.conc,"TSTART ")
     )
-    z %<>%
+    x %<>%
       mutate_cond(
         condition = (
           ptime==tstart
@@ -371,7 +373,7 @@ if (!is.na(teval)) {
     }
     #TEND
     if (!is.na(tstart) & !is.na(tend)) {
-      z %<>%  mutate_cond(
+      x %<>%  mutate_cond(
         condition = (
           ptime==tend
           &!is.na(tau)
@@ -392,7 +394,7 @@ if (!is.na(teval)) {
         ),
         applies.to.conc=paste(applies.to.conc,"TEND ")
       )
-    z %<>% mutate_cond(
+    x %<>% mutate_cond(
       condition = (
         ptime==tend
         &is.na(conc.part)
@@ -421,7 +423,7 @@ if (!is.na(teval)) {
       ),
       applies.to.conc=paste(applies.to.conc,"TEND ")
     )
-    z %<>% mutate_cond(
+    x %<>% mutate_cond(
       condition = (
         ptime==tend
         &is.na(conc.part)
@@ -443,7 +445,7 @@ if (!is.na(teval)) {
   }
   #TEVAL
   if (!is.na(teval)) {
-    z %<>%  mutate_cond(
+    x %<>%  mutate_cond(
       condition = (
         ptime==teval
         &!is.na(tau)
@@ -465,7 +467,7 @@ if (!is.na(teval)) {
       ),
       applies.to.conc=paste(applies.to.conc,"TEVAL ")
     )
-    z %<>% mutate_cond(
+    x %<>% mutate_cond(
       condition = (
         ptime==teval
         &is.na(conc.teval)
@@ -485,7 +487,7 @@ if (!is.na(teval)) {
         " by interpolation",sep=""),
         applies.to.conc=paste(applies.to.conc,"TEVAL ")
     )
-    z %<>% mutate_cond(
+    x %<>% mutate_cond(
       condition = (
         ptime==teval
         &is.na(conc.teval)
@@ -507,7 +509,7 @@ if (!is.na(teval)) {
   }
   # correct t=0 conc for all aucs where t=0 is needed (for PARTIAL this is NOT needed as it does not start at t=0)
   # back-extrapolate t=0 concentration for all AUCs if route is IVB
-   z %<>% mutate(
+   x %<>% mutate(
      back_extrap=0,
      lc1=lead(conc.lastall,1),lc2=lead(conc.lastall,2),
      lt1=lead(time.lastall,1),lt2=lead(time.lastall,2),
@@ -515,7 +517,7 @@ if (!is.na(teval)) {
      firstmeast=ptime[which(conc.lastall>0)][1]
    )
    # if there are NAs or LOQs between t=0 and first measurable conc, set these equal to first measurable conc
-   z %<>% mutate_cond(
+   x %<>% mutate_cond(
      condition= (
        tolower(route)=="ivb"
        &ptime>0&ptime<firstmeast
@@ -524,7 +526,7 @@ if (!is.na(teval)) {
       conc.lastall=firstmeasc,
      conc.tau=firstmeasc,conc.teval=firstmeasc
    )
-   z %<>% mutate_cond(
+   x %<>% mutate_cond(
      condition= (
        tolower(route)=="ivb"
        &ptime==0
@@ -550,7 +552,7 @@ if (!is.na(teval)) {
     conc.tau=conc.lastall, conc.teval=conc.lastall
   )
     # ALL and LAST
-  z %<>% mutate_cond(
+  x %<>% mutate_cond(
     condition = (
       ptime==0
       &(is.na(conc.lastall)|conc.lastall>0)
@@ -563,7 +565,7 @@ if (!is.na(teval)) {
     crule.nr="SDC-1",
     crule.txt=paste("Missing or measurable concentration at (SD) PREDOSE set to 0",sep="")
   )
-  z %<>% mutate_cond(
+  x %<>% mutate_cond(
     condition = (
       ptime==0
       &is.na(conc.lastall)
@@ -583,7 +585,7 @@ if (!is.na(teval)) {
     applies.to.conc=paste("PREDOSE")
   )
   #TAU
-  z %<>% mutate_cond(
+  x %<>% mutate_cond(
     condition = (
       ptime==0
       &(is.na(conc.tau)|conc.tau>0)
@@ -599,7 +601,7 @@ if (!is.na(teval)) {
     ),
     applies.to.conc=paste("PREDOSE")
   )
-  z %<>% mutate_cond(
+  x %<>% mutate_cond(
     condition = (
       ptime==0
       &is.na(conc.tau)
@@ -619,7 +621,7 @@ if (!is.na(teval)) {
     applies.to.conc=paste("PREDOSE")
   )
   #TEVAL
-  z %<>% mutate_cond(
+  x %<>% mutate_cond(
     condition = (
       ptime==0
       &(is.na(conc.teval)|conc.teval>0)
@@ -633,7 +635,7 @@ if (!is.na(teval)) {
     crule.txt=paste("Missing or measurable concentration at (SD) PREDOSE set to 0",sep=""),
     applies.to.conc=paste("PREDOSE")
   )
-  z %<>%  mutate_cond(
+  x %<>%  mutate_cond(
     condition = (
       ptime==0
       &is.na(conc.teval)
@@ -658,5 +660,5 @@ if (!is.na(teval)) {
   #                              -lag.cpart,-lag.tpart,-lead.cpart,-lead.tpart,
   #                              -lambda_z,-ptime, -t0val, -tauval)
 
-  return(z)
+  return(x)
 }
