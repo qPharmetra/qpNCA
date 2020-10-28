@@ -168,8 +168,8 @@ correct.time <- function(
       applies.to.time = "",                    # lists all AUCS to which the rule applies
       t0.flag = 0,tau.flag = 0,tstart.flag = 0,tend.flag = 0,teval.flag = 0, # flags for what timepoint the correction was needed
       missflag = 0,                            # flag for missing records
-      misstime = NA,                           # time of missing record
-      lambda_z = ifelse("lambda_z"%in%names(.),lambda_z,NA)
+      misstime = NA_real_,                           # time of missing record
+      lambda_z = ifelse("lambda_z"%in%names(.),lambda_z,NA_real_)
     )
   x %<>% filter(!is.na(ptime))               # remove records with no nominal time (must be corrected before)
 
