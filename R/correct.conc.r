@@ -2,6 +2,7 @@
 #'
 #' Corrects missing concentration at critical time points
 #' (e.g, predose, TAU, start and end of user selected AUC interval).
+#' 
 #' * Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration
 #' * Use extrapolation if there is NO measurable concentration AFTER the missing concentration
 #' * Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)
@@ -14,16 +15,16 @@
 #' SDC-1  |   sd   |       Set concentration to 0 (only non-endogenous compounds)      |      t=0
 #' SDC-2   |    sd  |      impute missing concentration by interpolation   |                  t=tau,tstart,tend,teval
 #' SDC-3   |    sd    |    impute missing concentration by extrapolation   |                  t=tau,tend,teval
-#' SDC-4   |    sd (IV)  | impute missing concentration by back-extrapolation   |             t=0
+#' SDC-4   |    sd (IVB)  | impute missing concentration by back-extrapolation   |             t=0
 #' MDC-1   |    md  |      impute missing concentration by existing conc at t=0 or t=tau (only if steady state has been reached)  |  t=0,tau
 #' MDC-2   |    md    |    impute missing concentration by interpolation   |                   t=tau,tstart,tend,teval
 #' MDC-3   |    md    |    impute missing concentration by extrapolation   |                  t=tau,tend,teval
-#' MDC-4   |    md (IV)  |  impute missing concentration by back-extrapolation  |              t=0
+#' MDC-4   |    md (IVB)  |  impute missing concentration by back-extrapolation  |              t=0
 #'
 #' @importFrom dplyr left_join lead
-#' @param x input dataset name input dataset name (contains all data, including LOQ (set conc to zero for these))
+#' @param x input dataset name (after Time Deviation Correction Rules have been applied by \code{\link{correct.time}})
 #' @param by column names in x indicating grouping variables
-#' @param nomtimevar variable name containing the nominal sampling time
+#' @param nomtimevar variable name containing the nominal sampling time after dose
 #' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
 #' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
 #' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
@@ -43,7 +44,7 @@
 #' -------- | -----------
 #'  crule.nr     |   correction rule number
 #'  crule.txt     |  text explaining what was altered
-#'  applies.to.conc  | lists all AUCS to which the concentration correction rule applies
+#'  applies.to.conc  | lists all critical time points to which the concentration correction rule applies
 #' @export
 #' @examples
 #' example(correct.time)
@@ -217,8 +218,9 @@ if (!is.na(teval)) {
                                   " by extrapolation",sep=""),
                   applies.to.conc=paste(applies.to.conc,"TAU ")
       ) %>%
-      mutate(tauval=conc.tau[time.tau==tau])
+      mutate(tauval=conc.tau[ptime==tau])
   }
+  
   #TSTART and TEND
   #TSTART
   if (!is.na(tstart)&!is.na(tend)) {

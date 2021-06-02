@@ -7,20 +7,20 @@
 interpol(c1 = NA, c2 = NA, t1 = NA, t2 = NA, t3 = NA, method = 1)
 }
 \arguments{
-\item{c1}{concentration 1}
+\item{c1}{concentration 1 lagconc}
 
-\item{c2}{concentration 2}
+\item{c2}{concentration 2 leadconc}
 
-\item{t1}{time 1}
+\item{t1}{time 1 tiem where conc should be calculated}
 
-\item{t2}{time 2}
+\item{t2}{time 2 lagtime}
 
-\item{t3}{time 3}
+\item{t3}{time 3 leadtime}
 
 \item{method}{calculation method (1, 2, or 3)}
 }
 \description{
-Interpolates conentrations.
+Interpolates concentrations.
 Used by correct.xx functions to interpolate concentrations.
 Uses linear interpolation unless method is 2 (log down), c1 > c2,
 and both concentrations are non-zero.

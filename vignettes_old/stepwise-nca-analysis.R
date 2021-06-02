@@ -1,8 +1,8 @@
-## ---- results='hide'----------------------------------------------------------
+## ---- results='hide'-----------------------------------------------------
 library(dplyr)
 library(qpNCA)
 
-## ---- results="markup", warnings=F--------------------------------------------
+## ---- results="markup", warnings=F---------------------------------------
 head(Theoph)
 
 #we need nominal time variable for some tasks.
@@ -28,7 +28,7 @@ Theoph1 <- Theoph %>%
   arrange(Subject, Time)
               
 
-## ---- results="markup", warnings=F--------------------------------------------
+## ---- results="markup", warnings=F---------------------------------------
 ctmax <- Theoph1 %>% calc.ctmax(
   by = 'Subject',
   timevar="Time",
@@ -36,7 +36,7 @@ ctmax <- Theoph1 %>% calc.ctmax(
 )
 head(ctmax)
 
-## ----  results="markup", warnings=F-------------------------------------------
+## ----  results="markup", warnings=F--------------------------------------
 th = Theoph1 %>% est.thalf(
   by = 'Subject',
   timevar="Time",
@@ -45,7 +45,7 @@ th = Theoph1 %>% est.thalf(
 )
 head(th)
 
-## ----  results="markup", warnings=F-------------------------------------------
+## ----  results="markup", warnings=F--------------------------------------
 
 ## 3. Correct deviations
 tc = Theoph1 %>%
@@ -78,12 +78,12 @@ tc = Theoph1 %>%
 head(tc)
 
 
-## ----  results="markup", warnings=F-------------------------------------------
+## ----  results="markup", warnings=F--------------------------------------
 par <- tc %>% calc.par(by = 'Subject', teval=12, route="EV")  
   #This wil get us both AUC0-12 and AUC0-24 as sampling ends at 24
 head(par)
 
-## ----  results="markup", warnings=F-------------------------------------------
+## ----  results="markup", warnings=F--------------------------------------
 cov <- data.frame(Subject=as.numeric(Theoph1$Subject), DOSE=Theoph$Dose) %>% 
   distinct(.,.keep_all = T)
 
@@ -99,7 +99,7 @@ par <- par %>%
   )
 head(par)
 
-## ----  results="markup", warnings=F-------------------------------------------
+## ----  results="markup", warnings=F--------------------------------------
 par_all = left_join(par, ctmax)
 head(par_all)
 dir <- tempdir()

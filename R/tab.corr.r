@@ -4,8 +4,7 @@
 #' concentration imputations were applied, for each subject.
 #' @param x concentration dataset created by the correct.time and correct.conc functions, containing time and conc corrected data
 #' @param by column names in x indicating grouping variables
-#' @param nomtimevar column in x containing the nominal time
-#' @param by by-variable(s), e.g. c("subject","day")
+#' @param nomtimevar column in x containing the nominal time after dose
 #' @return dataset with applied corrections (rule number and rule text) listed by by-variable(s) and nominal time
 #' @export
 #' @importFrom dplyr bind_rows one_of arrange_at

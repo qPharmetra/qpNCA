@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc.par.th.r
 \name{calc.par.th}
 \alias{calc.par.th}
-\title{Calculate Lambda-Z Parameters}
+\title{Calculate Lambda_z Parameters}
 \usage{
 calc.par.th(
   x,
@@ -17,46 +17,48 @@ calc.par.th(
 )
 }
 \arguments{
-\item{x}{result parameter dataset from calc.par}
+\item{x}{result parameter dataset from \code{\link{calc.par}}}
 
 \item{by}{column names in x indicating grouping variables}
 
-\item{th}{result dataset from est.thalf}
+\item{th}{result dataset from \code{\link{est.thalf}}}
 
 \item{covariates}{covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character name of csv file or local object}
 
 \item{dose}{variable containing the dose amount; default 'dose' set to 1 if not in \code{names(x)}}
 
-\item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)}
+\item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides}
 
-\item{reg}{regimen, "sd" or "md"}
+\item{reg}{regimen, "sd" or "md"; x$reg overrides}
 
-\item{ss}{is steady state reached (y/n)}
+\item{ss}{is steady state reached (y/n); x$ss overrides}
 
-\item{route}{column name in x indicating route (EV, IVB, IVI)}
+\item{route}{of drug administration ("EV","IVB","IVI"); x$route overrides}
 }
 \value{
-A dataset with estimates for the following parameters,
-one observation per subject:
-\itemize{
-\item all parameters calculated in th
-\item all parameters calculated in par
-\item \strong{clast.pred} predicted concentration at tlast
-\item \strong{aucinf.obs} aucinf based on observed concentration at tlast
-\item \strong{aucinf.pred} aucinf based on predicted concentration at tlast
-\item \strong{aumcinf.obs} area under the first moment curve extrapolated to infinity, based on observed concentration at tlast
-\item \strong{aumcinf.pred} area under the first moment curve extrapolated to infinity, based on predicted concentration at tlast
-\item \strong{cl.f.obs} clearance based on aucinf.obs, at steady state based on auctau
-\item \strong{cl.f.pred} clearance based on aucinf.pred
-\item \strong{mrt.obs} Mean residence time based on aumcinf.obs and aucinf.obs
-\item \strong{mrt.pred} Mean residence time based on aumcinf.pred and aucinf.pred
-\item \strong{vz.f.obs} distribution volume based on cl.f.obs, at steady state based on auctau
-\item \strong{vz.f.pred} distribution based on cl.f.pred
-\item \strong{vss.obs} Steady-state volume based on cl.obs and mrt.obs
-\item \strong{vss.pred} Steady-state volume based on cl.pred and mrt.pred
-\item \strong{reg} regimen: SD or MD
-\item \strong{ss} steady state reached Y/N?
+A dataset containing all parameters calculated in \code{\link{est.thalf}} and \code{\link{calc.par}} \cr
+with estimates for the following parameters added, one observation per subject:\tabular{ll}{
+   \strong{Parameter} \tab \strong{Description} \cr
+   clast.pred \tab predicted concentration at tlast \cr
+   aucinf.obs \tab aucinf based on observed concentration at tlast \cr
+   aucinf.pred \tab aucinf based on predicted concentration at tlast \cr
+   aumcinf.obs \tab area under the first moment curve extrapolated to infinity, based on observed concentration at tlast \cr
+   aumcinf.pred \tab area under the first moment curve extrapolated to infinity, based on predicted concentration at tlast \cr
+   cl.obs, cl.f.obs \tab clearance based on aucinf.obs, at steady state based on auctau \cr
+   cl.pred, cl.f.pred \tab clearance based on aucinf.pred \cr
+   cl.ss, cl.f.ss \tab clearance at steady state, based on auctau \cr
+   mrt.obs \tab mean residence time based on aumcinf.obs and aucinf.obs \cr
+   mrt.pred \tab mean residence time based on aumcinf.pred and aucinf.pred \cr
+   vz.obs, vz.f.obs \tab distribution volume based on cl.f.obs, at steady state based on auctau \cr
+   vz.pred, vz.f.pred \tab distribution based on cl.pred/cl.f.pred \cr
+   vss.obs \tab steady-state volume based on cl.obs and mrt.obs \cr
+   vss.pred \tab steady-state volume based on cl.pred and mrt.pred \cr
+   pctextr.pred \tab percentage of AUC extrapolated to infinity, based on aucinf.pred \cr
+   pctextr.obs \tab percentage of AUC extrapolated to infinity, based on aucinf.obs \cr
+   pctback.pred \tab percentage of AUC extrapolated back to 0, based on aucinf.pred \cr
+   pctback.obs \tab percentage of AUC extrapolated back to 0, based on aucinf.obs \cr
 }
+
 
 Note: ctmax must be merged separately as those were calculated from uncorrected data.
 }
@@ -69,7 +71,7 @@ example(calc.par) # creates x, par, th, ctmax, corrtab
 covs <- Theoph \%>\%
   select(subject = Subject, Wt, dose = Dose) \%>\%
   unique \%>\%
-  mutate(dose = dose * Wt) # see ?Theoph
+  mutate(dose = dose * Wt, subject=as.numeric(as.character(subject))) # see ?Theoph
 y <- x \%>\% select(subject, reg, ss, loqrule) \%>\% unique
 y \%<>\% mutate(factor = 1)
 par \%<>\% left_join(y, by = 'subject')

@@ -1,15 +1,17 @@
-#' Calculate Lambda-Z and T-half
+#' Calculate Lambda_z and Elimination Half-life
 #'
-#' Calculates lambda_z and thalf for each PK curve identified using \code{by}.
+#' Calculates lambda_z and thalf for each PK curve identified using \code{by}. \cr  
+#' 
 #' The function starts with the last three sample points and performs
 #' log-linear regression on it. It then adds one sampling point at a time
 #' (including and ending at tmax) and performs the regression again.
-#' Internal variable EST checks whether there are at least 3 timepoints
-#' for estimation after removal of LOQs and NAs.
+#' The results of the regression with the highest adjusted R-squared are returned. \cr
+#' \cr
+#' Visual outliers can be excluded from the regression analysis.
 #'
-#' @param x a dataset (not needed to be corrected time and conc)
+#' @param x a dataset
 #' @param by column names in x indicating grouping variables
-#' @param timevar variable name containing the sampling time
+#' @param timevar variable name containing the actual sampling time after dose
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param includeCmax include results of regression including Cmax in selection? (y/n); x$includeCmax overrides if provided
 #' @param exclvar a variable name containing information about points to be excluded (these should have exclvar = 1)
@@ -32,7 +34,7 @@
 #' @examples
 #' example(correct.loq)
 #' x %<>% mutate(includeCmax = 'Y')
-#' th <- x %>% est.thalf('subject')
+#' th <- x %>% est.thalf(by='subject',exclvar=)
 #' th %>%  head
 
 est.thalf <- function(
@@ -80,11 +82,12 @@ est.thalf <- function(
     includeCmax <- includeCmax[[1]]
   }
 
-
   data_in = x %>% mutate(timevar=x[[timevar]],
-                         depvar=x[[depvar]],
-                         exclvar=x[[exclvar]])
-
+                         depvar=x[[depvar]]
+  ) 
+  
+  if(!(is.na(exclvar))&exclvar %in% names(x)) { data_in = data_in %>% mutate(exclvar=x[[exclvar]]) }
+  
   if (!is.na(exclvar) & !(exclvar %in% names(x))) stop(paste("Exclusion variable",exclvar,"does not exist"), call.=F)
 
   if (!is.na(exclvar)) {

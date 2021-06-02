@@ -3,53 +3,50 @@ globalVariables('Errors_Warnings')
 #'
 #' Consecutively executes the following NCA steps:
 #' * [correct.loq] impute LOQ values
-#' * [est.thalf] calculate lambda-z and halflife
-#' * [plot_reg] plot each curve
+#' * [est.thalf] calculate lambda_z and half-life
+#' * [plot_reg] plot each regression curve
 #' * [calc.ctmax] calculate Cmax and Tmax
-#' * [correct.time] supply records at critical times with correct concentration
-#' * [correct.conc] supply correct concentrations at critical times
+#' * [correct.time] correct time deviations at critical time points
+#' * [correct.conc] impute missing concentrations at critical time points
 #' * [tab.corr] tabulate data alterations
-#' * [calc.par] calculates profile-specific summary statistics
-#' * [calc.par.th] calculates parameters dependent on lambda-z
+#' * [calc.par] calculates parameters not dependent on lambda_z
+#' * [calc.par.th] calculates parameters dependent on lambda_z
 #'
 #' @param x input dataset name
 #' @param by column names in x indicating grouping variables
-#' @param nomtimevar variable name containing the nominal sampling time
-#' @param timevar variable name containing the sampling time
+#' @param nomtimevar variable name containing the nominal sampling time after dose
+#' @param timevar variable name containing the actual sampling time after dose
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param bloqvar variable name containing the BLOQ flag (0: no, 1: yes)
 #' @param loqvar variable name containing the LOQ value
 #' @param loqrule rule number to be applied to the LOQ values in the curve; x$loqrule overrides if provided
-#' @param includeCmax include results of regression including Cmax in selection? (y/n) x$includeCmax overrides if provided
-#' @param exclvar variable name containing information about points to be excluded (these should have exclvar = 1)
+#' @param includeCmax include Cmax in half-life estimation? (y/n); x$includeCmax overrides if provided
+#' @param exclvar variable name indicating points to be excluded in half-life estimation (these should have exclvar = 1)
 #' @param plotdir directory where regression plots (.PNG) will be saved; NA gives default location, NULL skips regression plots
-#' @param pdfdir directory where pdf summaries will be saved; NA gives default location, NULL skips summary
-#' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
+#' @param timelab label for time axis in regression plots
+#' @param deplab label for dependent variable axis in regression plots
+#' @param tau dosing interval (for multiple dosing); NA (default) if single dose; x$tau overrides
 #' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
 #' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
-#' @param teval user selected AUC interval; NA (default) if not requested; x$teval overrides
-#' @param covariates covariates dataset
+#' @param teval user selected AUC interval (starting at t=0); NA (default) if not requested; x$teval overrides
+#' @param covariates covariates dataset; Must contain the dose variable
 #' @param dose variable containing the dose amount
 #' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided
-#' @param reg regimen, "sd" or "md"; can be character column name in x; x$regimen overrides if provided
+#' @param reg regimen, "SD" or "MD"; x$reg overrides if provided
 #' @param ss is steady state reached (y/n); x$ss overrides if provided
-#' @param route route of drug administration ("EV","IVB", "IVI"); x$overrides if provided
-#' @param timelab label for time axis
-#' @param deplab label for dependent variable axis
-#' @param method method for trapezoidal rule;  x$method overrides if provided
+#' @param route route of drug administration ("EV","IVB", "IVI"); x$route overrides if provided
+#' @param method method for trapezoidal rule; x$method overrides if provided
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
 #' * 3: linear before first Tmax, logarithmic after first Tmax
 #'
 #' @return (list)
-#' * **covariates** covariates selected with the \code{cov} argument
+#' * **covariates** covariates selected with the \code{covariates} argument
 #' * **half_life** linear regression parameters
-#' * **ctmax** cmax and tmax estimated from uncorrected data
 #' * **ct_corr** the time and concentration corrected dataset
 #' * **corrections** descriptions of the corrections applied
 #' * **pkpar** all estimated PK parameters
-#' * **plotdir** directory for plots
-#' * **pdfdir** directory for pdf summaries
+#' * **plots** generated plots
 #'
 #' @export
 #' @importFrom utils read.csv
@@ -71,13 +68,14 @@ globalVariables('Errors_Warnings')
 #' }
 #' rm(list = c('time','delta','best','index','nom', 'i','ntad'))
 #' x %<>% rename(time = Time, dv = conc, subject = Subject)
-#' x %<>% mutate(bloq = 0, loq = 0.01, tad = time)
+#' x %<>% mutate(bloq = 0, loq = 0.01, tad = time,excl_th=0,
+#'               subject=as.numeric(subject),ntad=as.numeric(ntad))
 #' x %<>% filter(dv > 0)
-#' covs <- Theoph %>%
-#'   select(subject = Subject, Wt, dose = Dose) %>%
-#'   unique %>%
+#' covs <- x %>%
+#'   select(subject, Wt, dose = Dose) %>%
+#'   distinct(subject,.keep_all=TRUE) %>%
 #'   mutate(dose = dose * Wt) # see ?Theoph
-#' y <- qpNCA(x, by = 'subject', covariates = covs)
+#' z <- qpNCA(x, by = 'subject', covariates = covs, exclvar='excl_th')
 
 qpNCA <- function(
   x,
@@ -91,7 +89,6 @@ qpNCA <- function(
   includeCmax="Y",
   exclvar=NA,
   plotdir=NA,
-  pdfdir=NA,
   timelab="timevar",
   deplab="depvar",
   tau=NA,
@@ -120,7 +117,7 @@ qpNCA <- function(
   enforced <- setdiff(enforce, names(x))
 
   for(arg in enforce){
-    if(!arg %in% names(x)) x[[arg]] <- get(arg)
+    if(!arg %in% names(x)) x[[arg]] <- get(arg)  # overrule column values with attribute
   }
 
  rm(list = enforce)
@@ -129,7 +126,7 @@ check.input(
     x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,
     bloqvar=bloqvar, loqvar=loqvar,
     #loqrule=loqrule, includeCmax=includeCmax,
-    exclvar=exclvar, plotdir=plotdir, pdfdir=pdfdir, timelab=timelab,
+    exclvar=exclvar, plotdir=plotdir, timelab=timelab,
     deplab=deplab,
     #tau=tau, tstart=tstart, tend=tend, teval=teval,
     covariates=covariates, dose=dose#,
@@ -140,22 +137,7 @@ check.input(
 
   cat("Applying LOQ rules...\n")
 
-  # loqed = x %>%
-  #   group_by_at(by) %>%
-  #   do(
-  #     correct.loq(
-  #       .,
-  #       nomtimevar=nomtimevar,
-  #       timevar=timevar,
-  #       depvar=depvar,
-  #       bloqvar=bloqvar,
-  #       loqvar=loqvar#,
-  #      # loqrule=loqrule: has been embedded in the dataset at this point
-  #     )
-  #   ) %>%
-  #   ungroup
-
-  loqed <- x %>% correct.loq(
+    loqed <- x %>% correct.loq(
     by = by,
     nomtimevar = nomtimevar,
     timevar = timevar,
@@ -163,8 +145,6 @@ check.input(
     bloqvar = bloqvar,
     loqvar = loqvar
   )
-
-   # loqed$loqrule <- x$loqrule
 
     # 2. estimate thalf ON UNCORRECTED DATA
 
@@ -176,13 +156,6 @@ check.input(
     depvar = depvar,
     exclvar = exclvar
   )
-    # group_by_at(by) %>%
-    # do(est.thalf(
-    #   .,timevar=timevar,depvar=depvar,
-    #   #includeCmax=includeCmax,
-    #   exclvar=exclvar
-    # )) %>%
-    # ungroup
 
   # 2a.
 
@@ -206,24 +179,12 @@ check.input(
 
   cat("Calculating Cmax/Tmax...\n")
 
-  # ctmax = loqed %>%
-  #   group_by_at(by) %>%
-  #   do(calc.ctmax(., timevar=timevar, depvar=depvar)) %>%
-  #   ungroup
-
   ctmax <- loqed %>% calc.ctmax(by = by, timevar = timevar, depvar = depvar)
 
   # 4. and 5. create dataset with corrected time deviations
 
   cat("Applying time deviation corrections and missing concentration imputations...\n")
 
-  # tc = loqed %>%
-  #   group_by_at(by) %>%
-  #   do(correct.time(
-  #     .,by=by,nomtimevar=nomtimevar,timevar=timevar,depvar=depvar,th=th#,
-  #     #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,method=method
-  #   ))
-  #
   tc <- loqed %>% correct.time(
     by = by,
     nomtimevar = nomtimevar,
@@ -232,34 +193,7 @@ check.input(
     th = th
   )
 
-  # now in correct.time()
-  # for(arg in c(
-  #   'tau','tstart','tend','teval',
-  #   'reg','ss','route','method'
-  # )){
-  #   if(arg %in% names(loqed))if(!arg %in% names(tc)){
-  #     tc[[arg]] <- loqed[[arg]]
-  #   }
-  # }
-
-  # tc %<>%
-  #   do(correct.conc(
-  #     .,
-  #     by=by,
-  #     nomtimevar=nomtimevar
-  #     #,th=,
-  #     #tau=tau,tstart=tstart,tend=tend,teval=teval,reg=reg,ss=ss,route=route,method=method
-  #   )) %>%
-  #   ungroup
-
   tc %<>% correct.conc(by = by, nomtimevar = nomtimevar)
-
-  cat("\n")
-
-  # for(arg in enforce){
-  #   if(arg %in% names(loqed))if(!arg %in% names(tc))tc[[arg]] <- loqed[[arg]]
-  # }
-
 
   # 6. create table with corrections
 
@@ -270,13 +204,6 @@ check.input(
   # 7. Calculate PK parameters NOT based on lambda_z ON CORRECTED DATA
 
   cat("Calculating parameters that do not need lambda_z...\n")
-
-  # par = tc %>%
-  #   group_by_at(by) %>%
-  #   do(calc.par(
-  #     .,tau=tau,tstart=tstart,tend=tend,teval=teval,route=route,method=method
-  #   )) %>%
-  #   ungroup
 
   par <- tc %>% calc.par(by = by)
 
@@ -295,26 +222,11 @@ check.input(
     #reg=reg,ss=ss,factor=factor,route=route
   )
 
-  cat("Combining all parameters...\n")
+  cat("Combining all parameters...")
 
   par_all = left_join(ctmax,par_all,by=by)
 
-  # 9. create summary PDFs
-
-  if (is.null(pdfdir)){
-    cat("No PDF summaries created\n")
-  }else{
-    if(!is.na(pdfdir)){
-      cat(paste("Writing summary PDF documents to directory",pdfdir,"...\n"))
-    }else{
-      cat('Writing summary PDF documents to standard location ...\n')
-    }
-    pdfdir <- nca.sum(par_all,corrfile=corrtab,by=by,pdfdir=pdfdir)
-  }
-
-
-
-  cat("\nWriting results...\n")
+   cat("\nWriting results...\n")
 
   if(!missing(covariates)){
     if(is.character(covariates)){
@@ -332,8 +244,7 @@ check.input(
     ct_corr=tc,
     corrections=corrtab,
     pkpar=par_all,
-    plots = plotdir,
-    pdfdir = pdfdir
+    plots = plotdir
   )
 
   cat("\nDone!\n")
@@ -342,10 +253,40 @@ check.input(
 
 }
 
+#' Check qpNCA function arguments for validity
+#'
+#' Checks whether all function arguments are valid and entered column names are present in input data \cr
+#' See \code{\link{qpNCA}} for description of the arguments
+#' 
+#' @param x data.frame
+#' @param by column names in x indicating grouping variables
+#' @param nomtimevar variable name containing the nominal sampling time after dose
+#' @param timevar variable name containing the actual sampling time after dose
+#' @param depvar variable name containing the dependent variable (e.g., concentration)
+#' @param bloqvar variable name containing the BLOQ flag (0: no, 1: yes)
+#' @param loqvar variable name containing the LOQ value
+#' @param loqrule rule number to be applied to the LOQ values in the curve; x$loqrule overrides if provided
+#' @param includeCmax include Cmax in half-life estimation? (y/n); x$includeCmax overrides if provided
+#' @param exclvar variable name indicating points to be excluded in half-life estimation (these should have exclvar = 1)
+#' @param plotdir directory where regression plots (.PNG) will be saved; NA gives default location, NULL skips regression plots
+#' @param timelab label for time axis in regression plots
+#' @param deplab label for dependent variable axis in regression plots
+#' @param tau dosing interval (for multiple dosing); NA (default) if single dose; x$tau overrides
+#' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
+#' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
+#' @param teval user selected AUC interval (starting at t=0); NA (default) if not requested; x$teval overrides
+#' @param covariates covariates dataset; Must contain the dose variable
+#' @param dose variable containing the dose amount
+#' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided
+#' @param reg regimen, "SD" or "MD"; x$reg overrides if provided
+#' @param ss is steady state reached (y/n); x$ss overrides if provided
+#' @param route route of drug administration ("EV","IVB", "IVI"); x$route overrides if provided
+#' @param method method for trapezoidal rule; x$method overrides if provided
+#' @return Check results
 check.input <- function(
   x, by=NA, nomtimevar=NA, timevar=NA, depvar=NA,
   bloqvar=NA, loqvar=NA, loqrule=NA,
-  includeCmax=NA, exclvar=NA, plotdir=NA, pdfdir=NA, timelab=NA, deplab=NA,
+  includeCmax=NA, exclvar=NA, plotdir=NA, timelab=NA, deplab=NA,
   tau=NA, tstart=NA, tend=NA, teval=NA, covariates=NA, dose=NA, factor=NA, reg=NA, ss=NA,
   route=NA, method=NA
 ) {
@@ -442,12 +383,23 @@ check.input <- function(
   if ( any(ss %in% c("y","Y") & is.na(tau)))
     chkfile=rbind(chkfile,"Warning: Tau not defined while at steady state, no clearances or volumes will be calculated")
 
-  # 10 check route argument
+  # 10 check if tstart, tend and teval differ from 0 (use teval instead of start/tend for interval 0-x)
+  
+  if ( any(tstart==0 & !is.na(tstart)))
+    chkfile=rbind(chkfile,"Error: Tstart cannot be 0, use Teval to calculate auc(0-Teval)")
+
+  if ( any(tend==0 & !is.na(tend)))
+    chkfile=rbind(chkfile,"Error: Tend cannot be 0")
+
+  if ( any(teval==0 & !is.na(teval)))
+    chkfile=rbind(chkfile,"Error: Teval cannot be 0")
+  
+  # 11 check route argument
 
   if ( !all((route%in%c("ev","EV","ivb","IVB","ivi","IVI"))))
     chkfile=rbind(chkfile,"Error: Route argument should be EV, IVB or IVI")
 
-  # 11 check method argument
+  # 12 check method argument
 
   if ( !all((method%in%c(1,2,3))))
     chkfile=rbind(chkfile,"Error: Method argument should be 1, 2 or 3")

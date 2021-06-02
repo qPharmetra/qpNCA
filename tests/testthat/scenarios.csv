@@ -1,42 +1,42 @@
-"id","rule","desc","reg","route","loqrule","method"
--1,"START_POSD","Initial PO, SD curve","SD","EV",2,1
--2,"START_IVSD","Initial IV, SD curve","SD","IVB",2,1
--3,"START_INFSD","Initial INF, SD curve","SD","IVI",2,1
--4,"START_POMD","Initial PO, MD curve","MD","EV",2,1
--5,"START_IVMD","Initial IV, MD curve","MD","IVB",2,1
--6,"START_INFMD","Initial INF, MD curve","MD","IVI",2,1
-1,"SDT-1","example rule SDT-1","SD","EV",2,1
-2,"SDT-2","example rule SDT-2","SD","EV",2,1
-3,"SDT-3","example rule SDT-3","SD","EV",2,1
-4,"SDC-1","example rule SDC-1","SD","EV",2,1
-5,"SDC-2","example rule SDC-2","SD","EV",2,1
-6,"SDC-3","example rule SDC-3","SD","EV",2,1
-7,"SDC-4a","example rule SDC-4a","SD","EV",2,1
-8,"SDC-4b","example rule SDC-4b","SD","EV",2,1
-9,"SDC-4c","example rule SDC-4c","SD","EV",2,1
-10,"SDC-4d","example rule SDC-4d","SD","EV",2,1
-11,"MDT-1","example rule MDT-1","MD","EV",2,1
-12,"MDT-2","example rule MDT-2","MD","EV",2,1
-13,"MDT-3","example rule MDT-3","MD","EV",2,1
-14,"MDT-3a","example rule MDT-3a","MD","EV",2,1
-15,"MDC-1-noss","example rule MDC-1","MD","EV",2,1
-16,"MDC-2-noss","example rule MDC-2","MD","EV",2,1
-17,"MDC-3-noss","example rule MDC-3","MD","EV",2,1
-18,"MDC-1-ss","example rule MDC-1","MD","EV",2,1
-19,"MDC-2-ss","example rule MDC-2","MD","EV",2,1
-20,"MDC-3-ss","example rule MDC-3","MD","EV",2,1
-21,"POSDLOQ_1","example rule POSDLOQ_1","SD","EV",1,1
-22,"POSDLOQ_2","example rule POSDLOQ_2","SD","EV",2,1
-23,"POSDLOQ_3","example rule POSDLOQ_3","SD","EV",3,1
-24,"POSDLOQ_4","example rule POSDLOQ_4","SD","EV",4,1
-25,"IVSDLOQ_1","example rule IVSDLOQ_1","SD","IVB",1,1
-26,"IVSDLOQ_2","example rule IVSDLOQ_2","SD","IVB",2,1
-27,"IVSDLOQ_3","example rule IVSDLOQ_3","SD","IVB",3,1
-28,"IVSDLOQ_4","example rule IVSDLOQ_4","SD","IVB",4,1
-29,"POSDEXCL","example rule POSDEXCL","SD","EV",2,1
-30,"POSDTRAP_2","example rule POSDTRAP_2","SD","EV",2,1
-31,"POSDTRAP_3","example rule POSDTRAP_3","SD","EV",2,1
-32,"MDC-4a","example rule MDC-4a","MD","EV",2,1
-33,"MDC-4b","example rule MDC-4b","MD","EV",2,1
-34,"MDC-4c","example rule MDC-4c","MD","EV",2,1
-35,"MDC-4d","example rule MDC-4d","MD","EV",2,1
+id,rule,dose,factor,includeCmax,loqrule,method,reg,route,ss,tau,tend,teval,tstart
+-6,START_INFMD,1,1000,Y,2,1,md,IVI,n,24,12,18,4
+-5,START_IVMD,1,1000,Y,2,1,md,IVB,n,24,12,18,4
+-4,START_POMD,1,1000,Y,2,1,md,EV,n,24,12,18,4
+-3,START_INFSD,1,1000,Y,2,1,sd,IVI,n,24,12,18,4
+-2,START_IVSD,1,1000,Y,2,1,sd,IVB,n,24,12,18,4
+-1,START_POSD,1,1000,Y,2,1,sd,EV,n,24,12,18,4
+1,SDT_1,1,1000,Y,2,1,sd,EV,n,24,12,18,4
+2,SDT_2,1,1000,Y,2,1,sd,EV,n,24,12,18,4
+3,SDT_3,1,1000,Y,2,1,sd,EV,n,24,12,18,4
+4,SDC_1,1,1000,Y,2,1,sd,EV,n,24,12,18,4
+5,SDC_2,1,1000,Y,2,1,sd,EV,n,24,12,18,4
+6,SDC_3,1,1000,Y,2,1,sd,EV,n,24,12,18,4
+7,SDC_4a,1,1000,Y,2,1,sd,IVB,n,24,12,18,4
+8,SDC_4b,1,1000,Y,2,1,sd,IVB,n,24,12,18,4
+9,SDC_4c,1,1000,Y,2,1,sd,IVB,n,24,12,18,4
+10,SDC_4d,1,1000,Y,2,1,sd,IVB,n,24,12,18,4
+11,MDT_1,1,1000,Y,2,1,md,EV,n,24,12,18,4
+12,MDT_2,1,1000,Y,2,1,md,EV,n,24,12,18,4
+13,MDT_3,1,1000,Y,2,1,md,EV,n,24,12,18,4
+14,MDT_3a,1,1000,Y,2,1,md,EV,n,24,12,18,4
+15,MDC_1_noss,1,1000,Y,2,1,md,EV,n,24,12,18,4
+16,MDC_2_noss,1,1000,Y,2,1,md,EV,n,24,12,18,4
+17,MDC_3_noss,1,1000,Y,2,1,md,EV,n,24,12,18,4
+18,MDC_1_ss,1,1000,Y,2,1,md,EV,y,24,12,18,4
+19,MDC_2_ss,1,1000,Y,2,1,md,EV,y,24,12,18,4
+20,MDC_3_ss,1,1000,Y,2,1,md,EV,y,24,12,18,4
+21,POSDLOQ_1,1,1000,Y,1,1,sd,EV,n,24,12,18,4
+22,POSDLOQ_2,1,1000,Y,2,1,sd,EV,n,24,12,18,4
+23,POSDLOQ_3,1,1000,Y,3,1,sd,EV,n,24,12,18,4
+24,POSDLOQ_4,1,1000,Y,4,1,sd,EV,n,24,12,18,4
+25,IVSDLOQ_1,1,1000,Y,1,1,sd,IVB,n,24,12,18,4
+26,IVSDLOQ_2,1,1000,Y,2,1,sd,IVB,n,24,12,18,4
+27,IVSDLOQ_3,1,1000,Y,3,1,sd,IVB,n,24,12,18,4
+28,IVSDLOQ_4,1,1000,Y,4,1,sd,IVB,n,24,12,18,4
+29,POSDEXCL,1,1000,Y,2,1,sd,EV,n,24,12,18,4
+30,POSDTRAP_2,1,1000,Y,2,2,sd,EV,n,24,12,18,4
+31,POSDTRAP_3,1,1000,Y,2,3,sd,EV,n,24,12,18,4
+32,MDC_4a,1,1000,Y,2,1,md,IVB,n,24,12,18,4
+33,MDC_4b,1,1000,Y,2,1,md,IVB,n,24,12,18,4
+34,MDC_4c,1,1000,Y,2,1,md,IVB,n,24,12,18,4
+35,MDC_4d,1,1000,Y,2,1,md,IVB,n,24,12,18,4

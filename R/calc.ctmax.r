@@ -1,13 +1,14 @@
 #' Calculate Cmax and Tmax
 #'
-#' Calculates Cmax and Tmax from raw data for each PK curve defined using \code{by}.
+#' Calculates Cmax and Tmax from raw data for each PK curve defined using \code{by}. \cr
+#' 
 #' Input dataset can contain all uncorrected data, including LOQ;
 #' estimate first occurence of maximum concentration for each PK curve;
 #' if all concentrations are NA, sets Cmax and Tmax also to NA.
 #' @param x data.frame
 #' @param by column names in x indicating grouping variables
-#' @param timevar column name in x indicating time
-#' @param depvar column name in x indicating concentration
+#' @param timevar variable name containing the actual sampling time after dose
+#' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @return A dataset with estimates for the Cmax (maximum concentration)
 #' and Tmax (time of first occurence of cmax) parameters: one observation per subject
 #' @import magrittr

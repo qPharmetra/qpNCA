@@ -16,7 +16,6 @@ qpNCA(
   includeCmax = "Y",
   exclvar = NA,
   plotdir = NA,
-  pdfdir = NA,
   timelab = "timevar",
   deplab = "depvar",
   tau = NA,
@@ -37,9 +36,9 @@ qpNCA(
 
 \item{by}{column names in x indicating grouping variables}
 
-\item{nomtimevar}{variable name containing the nominal sampling time}
+\item{nomtimevar}{variable name containing the nominal sampling time after dose}
 
-\item{timevar}{variable name containing the sampling time}
+\item{timevar}{variable name containing the actual sampling time after dose}
 
 \item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 
@@ -49,39 +48,37 @@ qpNCA(
 
 \item{loqrule}{rule number to be applied to the LOQ values in the curve; x$loqrule overrides if provided}
 
-\item{includeCmax}{include results of regression including Cmax in selection? (y/n) x$includeCmax overrides if provided}
+\item{includeCmax}{include Cmax in half-life estimation? (y/n); x$includeCmax overrides if provided}
 
-\item{exclvar}{variable name containing information about points to be excluded (these should have exclvar = 1)}
+\item{exclvar}{variable name indicating points to be excluded in half-life estimation (these should have exclvar = 1)}
 
 \item{plotdir}{directory where regression plots (.PNG) will be saved; NA gives default location, NULL skips regression plots}
 
-\item{pdfdir}{directory where pdf summaries will be saved; NA gives default location, NULL skips summary}
+\item{timelab}{label for time axis in regression plots}
 
-\item{timelab}{label for time axis}
+\item{deplab}{label for dependent variable axis in regression plots}
 
-\item{deplab}{label for dependent variable axis}
-
-\item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
+\item{tau}{dosing interval (for multiple dosing); NA (default) if single dose; x$tau overrides}
 
 \item{tstart}{start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides}
 
 \item{tend}{end time of partial AUC; NA (default) if not requested; x$tend overrides}
 
-\item{teval}{user selected AUC interval; NA (default) if not requested; x$teval overrides}
+\item{teval}{user selected AUC interval (starting at t=0); NA (default) if not requested; x$teval overrides}
 
-\item{covariates}{covariates dataset}
+\item{covariates}{covariates dataset; Must contain the dose variable}
 
 \item{dose}{variable containing the dose amount}
 
 \item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided}
 
-\item{reg}{regimen, "sd" or "md"; can be character column name in x; x$regimen overrides if provided}
+\item{reg}{regimen, "SD" or "MD"; x$reg overrides if provided}
 
 \item{ss}{is steady state reached (y/n); x$ss overrides if provided}
 
-\item{route}{route of drug administration ("EV","IVB", "IVI"); x$overrides if provided}
+\item{route}{route of drug administration ("EV","IVB", "IVI"); x$route overrides if provided}
 
-\item{method}{method for trapezoidal rule;  x$method overrides if provided
+\item{method}{method for trapezoidal rule; x$method overrides if provided
 \itemize{
 \item 1: linear up - linear down
 \item 2: linear up - logarithmic down
@@ -91,28 +88,26 @@ qpNCA(
 \value{
 (list)
 \itemize{
-\item \strong{covariates} covariates selected with the \code{cov} argument
+\item \strong{covariates} covariates selected with the \code{covariates} argument
 \item \strong{half_life} linear regression parameters
-\item \strong{ctmax} cmax and tmax estimated from uncorrected data
 \item \strong{ct_corr} the time and concentration corrected dataset
 \item \strong{corrections} descriptions of the corrections applied
 \item \strong{pkpar} all estimated PK parameters
-\item \strong{plotdir} directory for plots
-\item \strong{pdfdir} directory for pdf summaries
+\item \strong{plots} generated plots
 }
 }
 \description{
 Consecutively executes the following NCA steps:
 \itemize{
 \item \link{correct.loq} impute LOQ values
-\item \link{est.thalf} calculate lambda-z and halflife
-\item \link{plot_reg} plot each curve
+\item \link{est.thalf} calculate lambda_z and half-life
+\item \link{plot_reg} plot each regression curve
 \item \link{calc.ctmax} calculate Cmax and Tmax
-\item \link{correct.time} supply records at critical times with correct concentration
-\item \link{correct.conc} supply correct concentrations at critical times
+\item \link{correct.time} correct time deviations at critical time points
+\item \link{correct.conc} impute missing concentrations at critical time points
 \item \link{tab.corr} tabulate data alterations
-\item \link{calc.par} calculates profile-specific summary statistics
-\item \link{calc.par.th} calculates parameters dependent on lambda-z
+\item \link{calc.par} calculates parameters not dependent on lambda_z
+\item \link{calc.par.th} calculates parameters dependent on lambda_z
 }
 }
 \examples{
@@ -131,11 +126,12 @@ for(i in 1:nrow(x)){
 }
 rm(list = c('time','delta','best','index','nom', 'i','ntad'))
 x \%<>\% rename(time = Time, dv = conc, subject = Subject)
-x \%<>\% mutate(bloq = 0, loq = 0.01, tad = time)
+x \%<>\% mutate(bloq = 0, loq = 0.01, tad = time,excl_th=0,
+              subject=as.numeric(subject),ntad=as.numeric(ntad))
 x \%<>\% filter(dv > 0)
-covs <- Theoph \%>\%
-  select(subject = Subject, Wt, dose = Dose) \%>\%
-  unique \%>\%
+covs <- x \%>\%
+  select(subject, Wt, dose = Dose) \%>\%
+  distinct(subject,.keep_all=TRUE) \%>\%
   mutate(dose = dose * Wt) # see ?Theoph
-y <- qpNCA(x, by = 'subject', covariates = covs)
+z <- qpNCA(x, by = 'subject', covariates = covs, exclvar='excl_th')
 }

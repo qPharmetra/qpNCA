@@ -9,9 +9,9 @@ tab.corr(x, by = character(0), nomtimevar = "time")
 \arguments{
 \item{x}{concentration dataset created by the correct.time and correct.conc functions, containing time and conc corrected data}
 
-\item{by}{by-variable(s), e.g. c("subject","day")}
+\item{by}{column names in x indicating grouping variables}
 
-\item{nomtimevar}{column in x containing the nominal time}
+\item{nomtimevar}{column in x containing the nominal time after dose}
 }
 \value{
 dataset with applied corrections (rule number and rule text) listed by by-variable(s) and nominal time

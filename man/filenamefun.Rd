@@ -2,9 +2,7 @@
 % Please edit documentation in R/plot.reg.r
 \name{filenamefun}
 \alias{filenamefun}
-\title{Create File Name for Regression Plots.
-Creates file name for regression plots (*.png) from by-variables in plot_reg function.
-Also used by nca.sum().}
+\title{Create File Name for Regression Plots}
 \usage{
 filenamefun(x, by)
 }
@@ -17,7 +15,5 @@ filenamefun(x, by)
 character
 }
 \description{
-Create File Name for Regression Plots.
-Creates file name for regression plots (*.png) from by-variables in plot_reg function.
-Also used by nca.sum().
+Creates file name for regression plots (*.png) from by-variables in plot_reg function
 }

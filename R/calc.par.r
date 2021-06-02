@@ -1,17 +1,17 @@
 #' Calculate NCA Parameters
 #'
-#' Calculates AUCs, tlast, clast.obs for each PK curve defined using \code{by}.
+#' Calculates PK parameters for which half-life is not needed in the calculation for each PK curve defined using \code{by}.
 #' @importFrom dplyr arrange mutate summarize filter group_by do select
 #' @importFrom tidyr drop_na
+#' @importFrom dplyr summarise last
 #' @import magrittr
-#' @param x contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc
+#' @param x contains all data after time/concentration deviation corrections obtained from \code{\link{correct.time}} and \code{\link{correct.conc}}
 #' @param by column names in x indicating grouping variables
 #' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
 #' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
 #' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
 #' @param teval user selected AUC interval; NA (default) if not requested; x$teval overrides
 #' @param route route of drug administration ("EV","IVB","IVI"); x$route overrides
-#' @importFrom dplyr summarise last
 #' @param method method for trapezoidal rule
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down

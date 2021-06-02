@@ -1,4 +1,6 @@
-^docs$
+^vignettes_old$
+^utils$
+^validation$
 ^_pkgdown\.yml$
 ^codecov\.yml$
 ^\.travis\.yml$
