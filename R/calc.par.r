@@ -46,10 +46,11 @@
 #' @export
 #' @importFrom utils read.csv
 #' @examples
-#' example(tab.corr)
+#' \donttest{
+#' example(correct.conc)
 #' par <- x %>% calc.par(by = 'subject')
 #' par %>% head
-#'
+#' }
 calc.par <- function(
   x,
   by = character(0),

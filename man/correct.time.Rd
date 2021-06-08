@@ -95,9 +95,11 @@ The following Time Deviation Correction Rules will be applied to critical time p
 }
 }
 \examples{
+\donttest{
 example(calc.ctmax)
 x \%<>\% mutate(reg = 'SD', method = 1, route = 'EV')
 # route not used yet, but still preserved
 x \%<>\% correct.time(by = 'subject', th = th)
 x \%>\% head
+}
 }

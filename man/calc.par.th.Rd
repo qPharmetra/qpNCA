@@ -66,7 +66,8 @@ Note: ctmax must be merged separately as those were calculated from uncorrected 
 Calculates PK parameters that need lambda_z.
 }
 \examples{
-example(calc.par) # creates x, par, th, ctmax, corrtab
+\donttest{
+example(calc.par) # creates par
 # notice x includes (optional) loqrule, includeCmax, reg, method, route, ss
 covs <- Theoph \%>\%
   select(subject = Subject, Wt, dose = Dose) \%>\%
@@ -79,4 +80,5 @@ par \%<>\% calc.par.th(by = 'subject', th = th, covariates = covs)
 par \%<>\% left_join(ctmax, ., by = 'subject')
 par \%>\% head
 par \%>\% data.frame \%>\% head(2)
+}
 }

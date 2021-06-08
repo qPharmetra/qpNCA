@@ -49,6 +49,7 @@ Imputations will be applied to the original depvar (no new concentration
 variable will be created).
 }
 \examples{
+\donttest{
 library(magrittr)
 library(dplyr)
 library(qpNCA)
@@ -69,5 +70,5 @@ x \%<>\% mutate(bloq = ifelse(dv==0,1,0), loq = 0.01, tad = time, loqrule = 1,
 x \%>\% head
 x \%<>\% correct.loq('subject')
 x \%>\%  head
-
+}
 }

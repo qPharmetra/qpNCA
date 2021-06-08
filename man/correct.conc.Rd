@@ -82,12 +82,11 @@ The following Concentration Deviation Correction Rules will be applied to critic
 }
 }
 \examples{
+\donttest{
 example(correct.time)
 x \%<>\% mutate(ss = 'N', route = 'EV')
 # route redefined for completeness
 x \%<>\% correct.conc(by = 'subject') # ignoring th
 x \%>\% head
-
-
-
+}
 }

@@ -66,7 +66,8 @@ Input dataset:
 }
 }
 \examples{
+\donttest{
 example(est.thalf)
 x \%>\% filter(dv > 0) \%>\% plot_reg(by = 'subject', th = th)
-
+}
 }

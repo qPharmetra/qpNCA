@@ -54,8 +54,10 @@ The results of the regression with the highest adjusted R-squared are returned. 
 Visual outliers can be excluded from the regression analysis.
 }
 \examples{
+\donttest{
 example(correct.loq)
 x \%<>\% mutate(includeCmax = 'Y')
 th <- x \%>\% est.thalf(by='subject',exclvar=)
 th \%>\%  head
+}
 }

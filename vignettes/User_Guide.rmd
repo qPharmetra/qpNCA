@@ -1,0 +1,15 @@
+---
+title: "qpNCA User Guide"
+author: "Jan Huisman"
+date: "v1.1.1, June, 2021"
+output: pdf_document
+vignette: >
+  %\VignetteIndexEntry{A User Guide for qpNCA}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+header-includes:
+  - \usepackage{pdfpages}
+---
+ 
+\includepdf[pages={-}]{qpNCA_UserGuide_v1.1.pdf}
+

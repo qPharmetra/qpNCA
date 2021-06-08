@@ -15,9 +15,11 @@
 #' @importFrom dplyr arrange mutate summarize filter group_by do summarise first
 #' @export
 #' @examples
+#' \donttest{
 #' example(est.thalf)
 #' ctmax <- x %>% calc.ctmax(by = 'subject')
 #' ctmax %>% head
+#' }
 calc.ctmax <- function(x,by = character(0), timevar="time",depvar="dv"){
   x <- group_by_at(x, vars(by))
   x <- do(

@@ -33,9 +33,10 @@
 #' @export
 #' @importFrom dplyr left_join group_by_at first ungroup
 #' @examples
+#' \donttest{
 #' example(est.thalf)
 #' x %>% filter(dv > 0) %>% plot_reg(by = 'subject', th = th)
-#'
+#' }
 plot_reg <- function(
    x,
    by = character(0),

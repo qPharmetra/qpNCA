@@ -32,10 +32,12 @@
 #' * **points_excluded** are time points excluded from the half-life estimation? (y/n)
 #' @export
 #' @examples
+#' \donttest{
 #' example(correct.loq)
 #' x %<>% mutate(includeCmax = 'Y')
 #' th <- x %>% est.thalf(by='subject',exclvar=)
 #' th %>%  head
+#' }
 
 est.thalf <- function(
   x,

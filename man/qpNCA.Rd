@@ -111,6 +111,7 @@ Consecutively executes the following NCA steps:
 }
 }
 \examples{
+\donttest{
 library(magrittr)
 library(dplyr)
 library(qpNCA)
@@ -134,4 +135,5 @@ covs <- x \%>\%
   distinct(subject,.keep_all=TRUE) \%>\%
   mutate(dose = dose * Wt) # see ?Theoph
 z <- qpNCA(x, by = 'subject', covariates = covs, exclvar='excl_th')
+}
 }

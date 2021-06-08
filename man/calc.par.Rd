@@ -68,8 +68,9 @@ one observation per subject:\tabular{ll}{
 Calculates PK parameters for which half-life is not needed in the calculation for each PK curve defined using \code{by}.
 }
 \examples{
-example(tab.corr)
+\donttest{
+example(correct.conc)
 par <- x \%>\% calc.par(by = 'subject')
 par \%>\% head
-
+}
 }

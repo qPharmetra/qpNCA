@@ -20,6 +20,7 @@
 #' @export
 #' @importFrom dplyr lag
 #' @examples
+#' \donttest{
 #' library(magrittr)
 #' library(dplyr)
 #' library(qpNCA)
@@ -40,7 +41,7 @@
 #' x %>% head
 #' x %<>% correct.loq('subject')
 #' x %>%  head
-#'
+#' }
 correct.loq <- function(
   x,
   by=character(0),
@@ -178,3 +179,5 @@ if (any(data_in$anymeas==1)) {
   return(result)
 
 }
+
+

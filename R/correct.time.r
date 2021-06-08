@@ -59,11 +59,13 @@
 #'
 #' @export
 #' @examples
+#' \donttest{
 #' example(calc.ctmax)
 #' x %<>% mutate(reg = 'SD', method = 1, route = 'EV')
 #' # route not used yet, but still preserved
 #' x %<>% correct.time(by = 'subject', th = th)
 #' x %>% head
+#' }
 correct.time <- function(
   x,
   by = character(0),

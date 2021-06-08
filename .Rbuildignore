@@ -1,4 +1,4 @@
-^vignettes_old$
+^inst/docs$
 ^utils$
 ^validation$
 ^_pkgdown\.yml$
@@ -8,3 +8,4 @@
 ^\.Rproj\.user$
 ^.info$
 ^.gitignore$
+^Meta$

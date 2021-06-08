@@ -47,14 +47,13 @@
 #'  applies.to.conc  | lists all critical time points to which the concentration correction rule applies
 #' @export
 #' @examples
+#' \donttest{
 #' example(correct.time)
 #' x %<>% mutate(ss = 'N', route = 'EV')
 #' # route redefined for completeness
 #' x %<>% correct.conc(by = 'subject') # ignoring th
 #' x %>% head
-#'
-#'
-#'
+#' }
 correct.conc <- function(
   x,
   by=character(0),
@@ -140,7 +139,7 @@ correct.conc <- function(
 
   data_in=x
 
-  if (!identical(NA,th)) {
+  if (!identical(NA,th)&!("lambda_z"%in%names(x))) {
     data_in = left_join(
       data_in,
       th %>% select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),
@@ -152,8 +151,8 @@ correct.conc <- function(
           mutate(ptime=x[[nomtimevar]],                 # nominal time                            (internal)
                  crule.nr="",                           # correction rule number
                  crule.txt="",                          # explanation of concentration substitution
-                 applies.to.conc="",                     # lists all AUCS to which the concentration correction rule applies
-                 lambda_z=ifelse("lambda_z"%in%names(.),lambda_z,NA)
+                 applies.to.conc=""#,                     # lists all AUCS to which the concentration correction rule applies
+                 #lambda_z=ifelse("lambda_z"%in%names(.),lambda_z,NA)
                 )
 
 # create lead and lag variables for each AUC

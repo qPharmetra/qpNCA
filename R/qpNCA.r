@@ -53,6 +53,7 @@ globalVariables('Errors_Warnings')
 #' @importFrom knitr kable
 #' @importFrom dplyr group_by_at ungroup left_join
 #' @examples
+#' \donttest{
 #' library(magrittr)
 #' library(dplyr)
 #' library(qpNCA)
@@ -76,6 +77,7 @@ globalVariables('Errors_Warnings')
 #'   distinct(subject,.keep_all=TRUE) %>%
 #'   mutate(dose = dose * Wt) # see ?Theoph
 #' z <- qpNCA(x, by = 'subject', covariates = covs, exclvar='excl_th')
+#' }
 
 qpNCA <- function(
   x,

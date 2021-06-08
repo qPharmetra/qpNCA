@@ -21,7 +21,9 @@ Tabulates what records were added, time deviations and
 concentration imputations were applied, for each subject.
 }
 \examples{
+\donttest{
 example(correct.conc)
 corrtab <- x \%>\% tab.corr(by = 'subject')
 corrtab \%>\% head
+}
 }
