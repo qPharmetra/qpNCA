@@ -20,23 +20,23 @@ correct.time(
 )
 }
 \arguments{
-\item{x}{input dataset name (contains all data, including LOQ (set conc to zero for these))}
+\item{x}{input dataset name (after LOQ values have been imputed by \code{\link{correct.loq}})}
 
 \item{by}{column names in x indicating grouping variables}
 
-\item{nomtimevar}{variable name containing the nominal sampling time}
+\item{nomtimevar}{variable name containing the nominal sampling time after dose}
 
-\item{timevar}{variable name containing the actual sampling time}
+\item{timevar}{variable name containing the actual sampling time after dose}
 
 \item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 
-\item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
+\item{tau}{dosing interval (for multiple dosing); NA (default) if single dose; x$tau overrides}
 
 \item{tstart}{start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides}
 
 \item{tend}{end time of partial AUC; NA (default) if not requested; x$tend overrides}
 
-\item{teval}{user selected AUC interval; NA (default) if not requested; x$teval overrides}
+\item{teval}{user selected AUC interval, starting at t=0; NA (default) if not requested; x$teval overrides}
 
 \item{th}{lamdba_z information for each curve; like output of \code{\link{est.thalf}}}
 
@@ -57,7 +57,7 @@ The following variables are added:\tabular{ll}{
    create.txt \tab explanation of what is created \cr
    trule.nr \tab correction rule number \cr
    trule.txt \tab text explaining what was altered \cr
-   applies.to.time \tab lists all AUCS to which the time deviation rule applies \cr
+   applies.to.time \tab lists all critical time points to which the time deviation rule applies \cr
    time.tau, conc.tau \tab time and conc, corrected for AUCtau calculation \cr
    time.teval, conc.teval \tab time and conc, corrected for AUCteval calculation (AUC0-teval) \cr
    time.part, conc.part \tab time and conc, corrected for partial AUC calculation (AUCstart-end, start>0) \cr
@@ -72,16 +72,17 @@ The following are preserved if present in x: tau, tstart, tend, teval, reg, ss, 
 Corrects concentrations at critical, but deviating time points
 (e.g, predose, TAU, start and end of user selected AUC interval),
 and adds missing records at these critical time points.
+}
+\details{
 \itemize{
 \item Records with missing NOMINAL time will be removed and this must be corrected before the function is called
 \item If a record at the critical time point is missing, add it and set time to nominal time and set dv conc to NA
 \item Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)
 \item Use extrapolation if there is NO measurable concentration AFTER the nominal time point (i.e. sample is taken too early)
-\item Set deviating time at predose to 0
+\item Set deviating time at predose after single dose to 0
 \item Original time and conc will be kept in original variables.
 }
-}
-\details{
+
 The following Time Deviation Correction Rules will be applied to critical time points (t = 0, tau, tstart, tend, teval), if needed:\tabular{llll}{
    \strong{Rule} \tab \strong{Regimen} \tab \strong{Description} \tab \strong{Applied to} \cr
    SDT-1 \tab sd \tab Set actual time to 0 \tab t = 0 \cr
@@ -94,9 +95,11 @@ The following Time Deviation Correction Rules will be applied to critical time p
 }
 }
 \examples{
+\donttest{
 example(calc.ctmax)
 x \%<>\% mutate(reg = 'SD', method = 1, route = 'EV')
 # route not used yet, but still preserved
 x \%<>\% correct.time(by = 'subject', th = th)
 x \%>\% head
+}
 }

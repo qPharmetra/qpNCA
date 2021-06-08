@@ -1,4 +1,6 @@
-^docs$
+^inst/docs$
+^utils$
+^validation$
 ^_pkgdown\.yml$
 ^codecov\.yml$
 ^\.travis\.yml$
@@ -6,3 +8,4 @@
 ^\.Rproj\.user$
 ^.info$
 ^.gitignore$
+^Meta$

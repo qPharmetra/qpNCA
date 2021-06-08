@@ -19,11 +19,11 @@ lag_lead(
 \arguments{
 \item{x}{data.frame}
 
-\item{nomtimevar1}{column name in x indicating nominal time}
+\item{nomtimevar1}{column name in x indicating nominal time after dose}
 
 \item{depvar1}{column name in x indicating concentration}
 
-\item{timevar1}{column name in x indicating time}
+\item{timevar1}{column name in x indicating actual time after dose}
 
 \item{lagc}{concentration at previous sampling time}
 

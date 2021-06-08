@@ -16,7 +16,7 @@ calc.par(
 )
 }
 \arguments{
-\item{x}{contains all data after time/concentration deviation corrections obtained from correct.time and correct.conc}
+\item{x}{contains all data after time/concentration deviation corrections obtained from \code{\link{correct.time}} and \code{\link{correct.conc}}}
 
 \item{by}{column names in x indicating grouping variables}
 
@@ -65,11 +65,12 @@ one observation per subject:\tabular{ll}{
 }
 }
 \description{
-Calculates AUCs, tlast, clast.obs for each PK curve defined using \code{by}.
+Calculates PK parameters for which half-life is not needed in the calculation for each PK curve defined using \code{by}.
 }
 \examples{
-example(tab.corr)
+\donttest{
+example(correct.conc)
 par <- x \%>\% calc.par(by = 'subject')
 par \%>\% head
-
+}
 }

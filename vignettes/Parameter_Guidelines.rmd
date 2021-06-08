@@ -1,0 +1,15 @@
+---
+title: "Parameter Guidelines"
+author: "Koen Jolling, Jan Huisman"
+date: "June, 2021"
+output: pdf_document
+vignette: >
+  %\VignetteIndexEntry{Parameter Guidelines}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+header-includes:
+  - \usepackage{pdfpages}
+---
+ 
+\includepdf[pages={-}]{NCA_Parameter_Guideline_v1.pdf}
+

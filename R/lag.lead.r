@@ -4,9 +4,9 @@
 #' Used by correct.xx functions to estimate lagging and leading timepoints
 #' and concentrations for each timepoint.
 #' @param x data.frame
-#' @param nomtimevar1 column name in x indicating nominal time
+#' @param nomtimevar1 column name in x indicating nominal time after dose
 #' @param depvar1 column name in x indicating concentration
-#' @param timevar1 column name in x indicating time
+#' @param timevar1 column name in x indicating actual time after dose
 #' @param lagc concentration at previous sampling time
 #' @param lagt previous sampling time
 #' @param leadc concentration at next sampling time

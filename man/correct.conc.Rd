@@ -20,11 +20,11 @@ correct.conc(
 )
 }
 \arguments{
-\item{x}{input dataset name input dataset name (contains all data, including LOQ (set conc to zero for these))}
+\item{x}{input dataset name (after Time Deviation Correction Rules have been applied by \code{\link{correct.time}})}
 
 \item{by}{column names in x indicating grouping variables}
 
-\item{nomtimevar}{variable name containing the nominal sampling time}
+\item{nomtimevar}{variable name containing the nominal sampling time after dose}
 
 \item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
 
@@ -54,39 +54,39 @@ a dataset with missing concentrations imputed. The following variables are added
    \strong{Variable} \tab \strong{Description} \cr
    crule.nr \tab correction rule number \cr
    crule.txt \tab text explaining what was altered \cr
-   applies.to.conc \tab lists all AUCS to which the concentration correction rule applies \cr
+   applies.to.conc \tab lists all critical time points to which the concentration correction rule applies \cr
 }
 }
 \description{
 Corrects missing concentration at critical time points
 (e.g, predose, TAU, start and end of user selected AUC interval).
+}
+\details{
 \itemize{
 \item Use interpolation if there is a measurable concentration BEFORE and AFTER the missing concentration
 \item Use extrapolation if there is NO measurable concentration AFTER the missing concentration
 \item Set missing concentration at predose to 0 (SD, non-endogenous) or value at t=TAU (steady state only)
 \item Set missing concentration at t=TAU to value at t=0 (steady state only)
 }
-}
-\details{
+
 The following Concentration Deviation Correction Rules will be applied to critical time points (t=0, tau, tstart, tend, teval), if needed:\tabular{llll}{
    \strong{Rule} \tab \strong{Regimen} \tab \strong{Description} \tab \strong{Applied to} \cr
    SDC-1 \tab sd \tab Set concentration to 0 (only non-endogenous compounds) \tab t=0 \cr
    SDC-2 \tab sd \tab impute missing concentration by interpolation \tab t=tau,tstart,tend,teval \cr
    SDC-3 \tab sd \tab impute missing concentration by extrapolation \tab t=tau,tend,teval \cr
-   SDC-4 \tab sd (IV) \tab impute missing concentration by back-extrapolation \tab t=0 \cr
+   SDC-4 \tab sd (IVB) \tab impute missing concentration by back-extrapolation \tab t=0 \cr
    MDC-1 \tab md \tab impute missing concentration by existing conc at t=0 or t=tau (only if steady state has been reached) \tab t=0,tau \cr
    MDC-2 \tab md \tab impute missing concentration by interpolation \tab t=tau,tstart,tend,teval \cr
    MDC-3 \tab md \tab impute missing concentration by extrapolation \tab t=tau,tend,teval \cr
-   MDC-4 \tab md (IV) \tab impute missing concentration by back-extrapolation \tab t=0 \cr
+   MDC-4 \tab md (IVB) \tab impute missing concentration by back-extrapolation \tab t=0 \cr
 }
 }
 \examples{
+\donttest{
 example(correct.time)
 x \%<>\% mutate(ss = 'N', route = 'EV')
 # route redefined for completeness
 x \%<>\% correct.conc(by = 'subject') # ignoring th
 x \%>\% head
-
-
-
+}
 }

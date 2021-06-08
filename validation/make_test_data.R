@@ -1,6 +1,7 @@
 library(readxl)
 library(dplyr)
 library(magrittr)
+if(!is.element("csv", installed.packages()[,"Package"]))  install.packages("csv")
 library(csv)
 library(tidyr)
 library(wrangle)

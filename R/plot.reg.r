@@ -15,11 +15,11 @@
 #' * dataset containing results of the half-life estimation
 #'
 #'
-#' @param x input dataset name (if called within dplyr: .)
+#' @param x input dataset name 
 #' @param by column names in x indicating grouping variables
 #' @param th file name of file with half-life estimation information for each curve
 #' @param bloqvar variable name containing the BLOQ flag (0: no, 1: yes)
-#' @param timevar variable name containing the sampling time
+#' @param timevar variable name containing the actual sampling time after dose
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param timelab X-axis label (default: "timevar")
 #' @param deplab Y-axis label (default: "depvar")
@@ -33,9 +33,10 @@
 #' @export
 #' @importFrom dplyr left_join group_by_at first ungroup
 #' @examples
+#' \donttest{
 #' example(est.thalf)
 #' x %>% filter(dv > 0) %>% plot_reg(by = 'subject', th = th)
-#'
+#' }
 plot_reg <- function(
    x,
    by = character(0),
@@ -52,10 +53,11 @@ plot_reg <- function(
   data_in = x %>% mutate(
     timevar = x[[timevar]],
     depvar = x[[depvar]],
-    bloqvar = x[[bloqvar]],
-    exclvar = x[[exclvar]]
+    bloqvar = x[[bloqvar]]
   )
 
+  if(!(is.na(exclvar))&exclvar %in% names(x)) { data_in = data_in %>% mutate(exclvar=x[[exclvar]]) }
+  
   if (!is.na(exclvar) &
       !(exclvar %in% names(x)))
     stop(paste("Exclusion variable", exclvar, "does not exist"), call. = F)
@@ -204,7 +206,7 @@ plot_reg <- function(
           labels = (10 ** (seq(
             log10(unique(.$min_conc)), log10(unique(.$max_conc))
           ))),
-          expand = expand_scale(mult = c(0.05, .25))
+          expand = expansion(mult = c(0.05, .25))
         ) +
         xlab(timelab) +
         ylab(deplab) +
@@ -271,14 +273,13 @@ titlefun <- function(x,by) {
   return(plottitle)
 }
 
-#' Create File Name for Regression Plots.
-
-#' Creates file name for regression plots (*.png) from by-variables in plot_reg function.
-#' Also used by nca.sum().
+#' Create File Name for Regression Plots
+#'
+#' Creates file name for regression plots (*.png) from by-variables in plot_reg function
+#' 
 #' @param x data.frame
 #' @param by column names in x indicating grouping variables
 #' @return character
-
 filenamefun <- function(x,by) {
   filename=""
   for (i in 1:length(by)) {

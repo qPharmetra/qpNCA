@@ -2,7 +2,7 @@
 % Please edit documentation in R/est.thalf.r
 \name{est.thalf}
 \alias{est.thalf}
-\title{Calculate Lambda-Z and T-half}
+\title{Calculate Lambda_z and Elimination Half-life}
 \usage{
 est.thalf(
   x,
@@ -14,11 +14,11 @@ est.thalf(
 )
 }
 \arguments{
-\item{x}{a dataset (not needed to be corrected time and conc)}
+\item{x}{a dataset}
 
 \item{by}{column names in x indicating grouping variables}
 
-\item{timevar}{variable name containing the sampling time}
+\item{timevar}{variable name containing the actual sampling time after dose}
 
 \item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 
@@ -43,16 +43,21 @@ The following parameters are available.
 }
 }
 \description{
-Calculates lambda_z and thalf for each PK curve identified using \code{by}.
+Calculates lambda_z and thalf for each PK curve identified using \code{by}. \cr
+}
+\details{
 The function starts with the last three sample points and performs
 log-linear regression on it. It then adds one sampling point at a time
 (including and ending at tmax) and performs the regression again.
-Internal variable EST checks whether there are at least 3 timepoints
-for estimation after removal of LOQs and NAs.
+The results of the regression with the highest adjusted R-squared are returned. \cr
+\cr
+Visual outliers can be excluded from the regression analysis.
 }
 \examples{
+\donttest{
 example(correct.loq)
 x \%<>\% mutate(includeCmax = 'Y')
-th <- x \%>\% est.thalf('subject')
+th <- x \%>\% est.thalf(by='subject',exclvar=)
 th \%>\%  head
+}
 }

@@ -19,7 +19,7 @@ plot_reg(
 )
 }
 \arguments{
-\item{x}{input dataset name (if called within dplyr: .)}
+\item{x}{input dataset name}
 
 \item{by}{column names in x indicating grouping variables}
 
@@ -27,7 +27,7 @@ plot_reg(
 
 \item{bloqvar}{variable name containing the BLOQ flag (0: no, 1: yes)}
 
-\item{timevar}{variable name containing the sampling time}
+\item{timevar}{variable name containing the actual sampling time after dose}
 
 \item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 
@@ -66,7 +66,8 @@ Input dataset:
 }
 }
 \examples{
+\donttest{
 example(est.thalf)
 x \%>\% filter(dv > 0) \%>\% plot_reg(by = 'subject', th = th)
-
+}
 }

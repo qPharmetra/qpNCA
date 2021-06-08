@@ -1,20 +1,26 @@
 #' Impute Concentrations Below the Limit of Quantitation
 #'
 #' Imputes LOQ values according to the chosen LOQ substitution rule.
-#' Imputations will be applied to the original depvar(no new concentration
+#' 
+#' Imputations will be applied to the original depvar (no new concentration
 #' variable will be created).
-#' @param x input dataset name (if called within dplyr: .) contains all uncorrected data, including LOQ
+#' @param x input dataset name contains all uncorrected data, including LOQ
 #' @param by column names in x indicating grouping variables
-#' @param nomtimevar variable name containing the nominal sampling time
-#' @param timevar variable name containing the sampling time
+#' @param nomtimevar variable name containing the nominal sampling time after dose
+#' @param timevar variable name containing the actual sampling time after dose
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param bloqvar variable name containing the BLOQ flag (0: no, 1: yes)
 #' @param loqvar variable name containing the LOQ value
 #' @param loqrule rule number to be applied to the LOQ values in the curve. x$loqrule overrides if provided
+#' * 1: 0 before first measurable concentration (FMC); NA after FMC
+#' * 2: 0 before FMC; 0 after FMC
+#' * 3: 0 before FMC; 0.5xLOQ for first consecutive LOQ after FMC, NA for other LOQ
+#' * 4: 0 before FMC; 0.5xLOQ for first consecutive LOQ after FMC, 0 for other LOQ
 #' @return A dataset with imputed BLOQ concentrations using the chosen imputation rule
 #' @export
 #' @importFrom dplyr lag
 #' @examples
+#' \donttest{
 #' library(magrittr)
 #' library(dplyr)
 #' library(qpNCA)
@@ -29,12 +35,13 @@
 #'   x$ntad[[i]] <- nom
 #' }
 #' rm(list = c('time','delta','best','index','nom', 'i','ntad'))
-#' x %<>% rename(time = Time, dv = conc, subject = Subject)
-#' x %<>% mutate(bloq = 0, loq = 0.01, tad = time, loqrule = 1)
+#' x %<>% rename(time = Time, dv = conc)
+#' x %<>% mutate(bloq = ifelse(dv==0,1,0), loq = 0.01, tad = time, loqrule = 1, 
+#'               subject=as.numeric(Subject), ntad=as.numeric(ntad))
 #' x %>% head
 #' x %<>% correct.loq('subject')
 #' x %>%  head
-#'
+#' }
 correct.loq <- function(
   x,
   by=character(0),
@@ -102,9 +109,11 @@ data_in = x
 
   data_in = data_in %>%
     mutate(firstmeast=timevar1[which(depvar1>0)][1],
-           consecutive=ifelse(bloqvar1==1&lag(bloqvar1)==1,1,0)
+           consecutive=ifelse(bloqvar1==1&lag(bloqvar1)==1,1,0),
+           anymeas=ifelse(any(bloqvar1==0,na.rm=T),1,0)
     )
 
+if (any(data_in$anymeas==1)) {  
   if (loqrule==1) {
 
     data_in = data_in %>%
@@ -137,7 +146,8 @@ data_in = x
     data_in = data_in %>%
       mutate_cond(condition=(bloqvar1==1&timevar1<firstmeast),depvar1=0,loqrule.nr="LOQ3",
                   loqrule.txt="BLOQ values before first measurable concentration set to 0") %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==0),depvar1=loqvar1/2,loqrule.nr="LOQ3",
+      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==0),depvar1=loqvar1/2,bloqvar1=0,
+                  loqrule.nr="LOQ3",
                   loqrule.txt="First BLOQ value after first measurable concentration set to 1/2*LOQ") %>%
       mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==1),depvar1=NA,loqrule.nr="LOQ3",
                   loqrule.txt="Consecutive BLOQ values after first measurable concentration set to missing")
@@ -149,12 +159,15 @@ data_in = x
     data_in = data_in %>%
       mutate_cond(condition=(bloqvar1==1&timevar1<firstmeast),depvar1=0,loqrule.nr="LOQ4",
                   loqrule.txt="BLOQ values before first measurable concentration set to 0") %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==0),depvar1=loqvar1/2,loqrule.nr="LOQ4",
+      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==0),depvar1=loqvar1/2,bloqvar1=0,
+                  loqrule.nr="LOQ4",
                   loqrule.txt="First BLOQ value after first measurable concentration set to 1/2*LOQ") %>%
       mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==1),depvar1=0,loqrule.nr="LOQ4",
                   loqrule.txt="Consecutive BLOQ values after first measurable concentration set to 0")
 
   }
+
+} 
 
   result = data_in %>%
     select(-depvar,-nomtimevar,-timevar)
@@ -166,3 +179,5 @@ data_in = x
   return(result)
 
 }
+
+

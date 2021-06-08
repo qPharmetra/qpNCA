@@ -1,49 +1,54 @@
 globalVariables('par')
-#' Calculate Lambda-Z Parameters
+#' Calculate Lambda_z Parameters
 #'
 #' Calculates PK parameters that need lambda_z.
 #'
-#' @param x result parameter dataset from calc.par
+#' @param x result parameter dataset from \code{\link{calc.par}}
 #' @param by column names in x indicating grouping variables
-#' @param th result dataset from est.thalf
+#' @param th result dataset from \code{\link{est.thalf}}
 #' @param covariates covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character name of csv file or local object
 #' @param dose variable containing the dose amount; default 'dose' set to 1 if not in \code{names(x)}
-#' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000)
-#' @param reg regimen, "sd" or "md"
-#' @param ss is steady state reached (y/n)
-#' @param route column name in x indicating route (EV, IVB, IVI)
+#' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides
+#' @param reg regimen, "sd" or "md"; x$reg overrides
+#' @param ss is steady state reached (y/n); x$ss overrides
+#' @param route of drug administration ("EV","IVB","IVI"); x$route overrides
 #' @importFrom dplyr left_join
 #'
 #'
-#' @return A dataset with estimates for the following parameters,
-#' one observation per subject:
-#' * all parameters calculated in th
-#' * all parameters calculated in par
-#' * **clast.pred** predicted concentration at tlast
-#' * **aucinf.obs** aucinf based on observed concentration at tlast
-#' * **aucinf.pred** aucinf based on predicted concentration at tlast
-#' * **aumcinf.obs** area under the first moment curve extrapolated to infinity, based on observed concentration at tlast
-#' * **aumcinf.pred** area under the first moment curve extrapolated to infinity, based on predicted concentration at tlast
-#' * **cl.f.obs** clearance based on aucinf.obs, at steady state based on auctau
-#' * **cl.f.pred** clearance based on aucinf.pred
-#' * **mrt.obs** Mean residence time based on aumcinf.obs and aucinf.obs
-#' * **mrt.pred** Mean residence time based on aumcinf.pred and aucinf.pred
-#' * **vz.f.obs** distribution volume based on cl.f.obs, at steady state based on auctau
-#' * **vz.f.pred** distribution based on cl.f.pred
-#' * **vss.obs** Steady-state volume based on cl.obs and mrt.obs
-#' * **vss.pred** Steady-state volume based on cl.pred and mrt.pred
-#' * **reg** regimen: SD or MD
-#' * **ss** steady state reached Y/N?
+#' @return A dataset containing all parameters calculated in \code{\link{est.thalf}} and \code{\link{calc.par}} \cr
+#' with estimates for the following parameters added, one observation per subject:
+#' 
+#' **Parameter** | **Description**
+#' ------------ | -----------
+#' clast.pred   | predicted concentration at tlast
+#' aucinf.obs   | aucinf based on observed concentration at tlast
+#' aucinf.pred  | aucinf based on predicted concentration at tlast
+#' aumcinf.obs  | area under the first moment curve extrapolated to infinity, based on observed concentration at tlast
+#' aumcinf.pred | area under the first moment curve extrapolated to infinity, based on predicted concentration at tlast
+#' cl.obs, cl.f.obs     | clearance based on aucinf.obs, at steady state based on auctau
+#' cl.pred, cl.f.pred    | clearance based on aucinf.pred
+#' cl.ss, cl.f.ss     | clearance at steady state, based on auctau
+#' mrt.obs      | mean residence time based on aumcinf.obs and aucinf.obs
+#' mrt.pred     | mean residence time based on aumcinf.pred and aucinf.pred
+#' vz.obs, vz.f.obs     | distribution volume based on cl.f.obs, at steady state based on auctau
+#' vz.pred, vz.f.pred    | distribution based on cl.pred/cl.f.pred
+#' vss.obs      | steady-state volume based on cl.obs and mrt.obs
+#' vss.pred     | steady-state volume based on cl.pred and mrt.pred
+#' pctextr.pred	| percentage of AUC extrapolated to infinity, based on aucinf.pred
+#' pctextr.obs	| percentage of AUC extrapolated to infinity, based on aucinf.obs
+#' pctback.pred	| percentage of AUC extrapolated back to 0, based on aucinf.pred
+#' pctback.obs	| percentage of AUC extrapolated back to 0, based on aucinf.obs
 #'
 #' Note: ctmax must be merged separately as those were calculated from uncorrected data.
 #' @export
 #' @examples
-#' example(calc.par) # creates x, par, th, ctmax, corrtab
+#' \donttest{
+#' example(calc.par) # creates par
 #' # notice x includes (optional) loqrule, includeCmax, reg, method, route, ss
 #' covs <- Theoph %>%
 #'   select(subject = Subject, Wt, dose = Dose) %>%
 #'   unique %>%
-#'   mutate(dose = dose * Wt) # see ?Theoph
+#'   mutate(dose = dose * Wt, subject=as.numeric(as.character(subject))) # see ?Theoph
 #' y <- x %>% select(subject, reg, ss, loqrule) %>% unique
 #' y %<>% mutate(factor = 1)
 #' par %<>% left_join(y, by = 'subject')
@@ -51,6 +56,7 @@ globalVariables('par')
 #' par %<>% left_join(ctmax, ., by = 'subject')
 #' par %>% head
 #' par %>% data.frame %>% head(2)
+#' }
 calc.par.th <- function(
   x,
   by=character(0),

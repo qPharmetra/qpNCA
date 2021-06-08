@@ -16,13 +16,13 @@ correct.loq(
 )
 }
 \arguments{
-\item{x}{input dataset name (if called within dplyr: .) contains all uncorrected data, including LOQ}
+\item{x}{input dataset name contains all uncorrected data, including LOQ}
 
 \item{by}{column names in x indicating grouping variables}
 
-\item{nomtimevar}{variable name containing the nominal sampling time}
+\item{nomtimevar}{variable name containing the nominal sampling time after dose}
 
-\item{timevar}{variable name containing the sampling time}
+\item{timevar}{variable name containing the actual sampling time after dose}
 
 \item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 
@@ -30,17 +30,26 @@ correct.loq(
 
 \item{loqvar}{variable name containing the LOQ value}
 
-\item{loqrule}{rule number to be applied to the LOQ values in the curve. x$loqrule overrides if provided}
+\item{loqrule}{rule number to be applied to the LOQ values in the curve. x$loqrule overrides if provided
+\itemize{
+\item 1: 0 before first measurable concentration (FMC); NA after FMC
+\item 2: 0 before FMC; 0 after FMC
+\item 3: 0 before FMC; 0.5xLOQ for first consecutive LOQ after FMC, NA for other LOQ
+\item 4: 0 before FMC; 0.5xLOQ for first consecutive LOQ after FMC, 0 for other LOQ
+}}
 }
 \value{
 A dataset with imputed BLOQ concentrations using the chosen imputation rule
 }
 \description{
 Imputes LOQ values according to the chosen LOQ substitution rule.
-Imputations will be applied to the original depvar(no new concentration
+}
+\details{
+Imputations will be applied to the original depvar (no new concentration
 variable will be created).
 }
 \examples{
+\donttest{
 library(magrittr)
 library(dplyr)
 library(qpNCA)
@@ -55,10 +64,11 @@ for(i in 1:nrow(x)){
   x$ntad[[i]] <- nom
 }
 rm(list = c('time','delta','best','index','nom', 'i','ntad'))
-x \%<>\% rename(time = Time, dv = conc, subject = Subject)
-x \%<>\% mutate(bloq = 0, loq = 0.01, tad = time, loqrule = 1)
+x \%<>\% rename(time = Time, dv = conc)
+x \%<>\% mutate(bloq = ifelse(dv==0,1,0), loq = 0.01, tad = time, loqrule = 1, 
+              subject=as.numeric(Subject), ntad=as.numeric(ntad))
 x \%>\% head
 x \%<>\% correct.loq('subject')
 x \%>\%  head
-
+}
 }
