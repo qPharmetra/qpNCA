@@ -21,14 +21,20 @@ and reference data in the `tests` directory.
 
 ## Installation
 
-``` r
-# The easiest way to get qpNCA is to install from CRAN:
-install.packages("qpNCA")
-# Alternatively, install from github:
-devtools::install_github('qpharmetra/qpNCA')
+The easiest way to get qpNCA is to install from CRAN:
 
-You can use the issues feature on [github](https://github.com/qPharmetra/qpNCA/issues) to report issues.
+``` r
+install.packages("qpNCA")
 ```
+
+Alternatively, install from github:
+
+``` r
+devtools::install_github('qpharmetra/qpNCA')
+```
+
+You can use the issues feature on
+[github](https://github.com/qPharmetra/qpNCA/issues) to report issues.
 
 ## Usage
 
