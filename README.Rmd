@@ -1,7 +1,20 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# qpNCA
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+options(tibble.print_min = 5, tibble.print_max = 5)
+```
+
+# qpNCA 
 
 <!-- a href='https://dplyr.tidyverse.org'><img src='man/figures/logo.png' align="right" height="139" /></a -->
 
@@ -13,15 +26,15 @@
 
 ## Overview
 
-qpNCA is qPharmetra’s R package for Noncompartmental Analysis. It
-provides regulatory-quality calculations of NCA parameters, using code
-routinely tested against independently-validated output. You can find
-appropriate manuals in the `vignettes` directory, and you can find tests
-and reference data in the `tests` directory.
+qpNCA is qPharmetra's R package for Noncompartmental Analysis.
+It provides regulatory-quality calculations of NCA parameters,
+using code routinely tested against independently-validated output.
+You can find appropriate manuals in the `vignettes` directory,
+and you can find tests and reference data in the `tests` directory.
 
 ## Installation
 
-``` r
+```{r, eval = FALSE}
 # The easiest way to get qpNCA is to install from CRAN:
 install.packages("qpNCA")
 # Alternatively, install from github:
@@ -34,12 +47,10 @@ You can use the issues feature on [github](https://github.com/qPharmetra/qpNCA/i
 
 A good place to start is the help for `qpNCA()`.
 
-``` r
+```{r, message = FALSE, eval = FALSE}
 library(qpnca)
 ?qpNCA
 example(qpNCA)
 ```
 
-Or see the vignettes, like [this
-one](https://github.com/qPharmetra/qpNCA/blob/master/vignettes/stepwise-nca-analysis.html)
-for example.
+Or see the vignettes, like [this one](https://github.com/qPharmetra/qpNCA/blob/master/vignettes/stepwise-nca-analysis.html) for example.
