@@ -47,5 +47,5 @@ example(qpNCA)
 ```
 
 Or see the vignettes, like [this
-one](https://github.com/qPharmetra/qpNCA/blob/master/vignettes/stepwise-nca-analysis.html)
+one](http://htmlpreview.github.io/?https://github.com/qPharmetra/qpNCA/blob/master/vignettes/Example-stepwise-nca-analysis.html)
 for example.
