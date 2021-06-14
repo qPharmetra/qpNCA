@@ -53,7 +53,7 @@ You can use the issues feature on [github](https://github.com/qPharmetra/qpNCA/i
 A good place to start is the help for `qpNCA()`.
 
 ```{r, message = FALSE, eval = FALSE}
-library(qpnca)
+library(qpNCA)
 ?qpNCA
 example(qpNCA)
 ```
