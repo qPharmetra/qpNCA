@@ -108,8 +108,8 @@ qpNCA <- function(
 
   # 0. Check input
 
-  cat("\n")
-  cat("Checking function arguments...")
+  message("\n")
+  message("Checking function arguments...")
 
   enforce <- c(
     'ss','route','reg','method','loqrule','includeCmax',
@@ -137,7 +137,7 @@ check.input(
 
   # 1. Apply LOQ rules
 
-  cat("Applying LOQ rules...\n")
+  message("Applying LOQ rules...\n")
 
     loqed <- x %>% correct.loq(
     by = by,
@@ -150,7 +150,7 @@ check.input(
 
     # 2. estimate thalf ON UNCORRECTED DATA
 
-  cat("Performing Thalf estimation...\n")
+  message("Performing Thalf estimation...\n")
 
   th <- loqed %>% est.thalf(
     by = by,
@@ -162,12 +162,12 @@ check.input(
   # 2a.
 
   if(is.null(plotdir)){
-    cat('Skipping regression plots')
+    message('Skipping regression plots')
   }else{
     if (is.na(plotdir)){
-      cat("Creating regression plots in standard output...\n")
+      message("Creating regression plots in standard output...\n")
     }else{
-      cat(paste("Writing regression plots to directory",plotdir,"...\n"))
+      message(paste("Writing regression plots to directory",plotdir,"...\n"))
     }
     plotdir <- plot_reg(
       loqed, by = by, th = th, bloqvar = bloqvar, timevar = timevar,
@@ -175,17 +175,17 @@ check.input(
       timelab = timelab, deplab = deplab
     )
   }
-  cat("\n")
+  message("\n")
 
   # 3. find Cmax and tmax ON UNCORRECTED DATA
 
-  cat("Calculating Cmax/Tmax...\n")
+  message("Calculating Cmax/Tmax...\n")
 
   ctmax <- loqed %>% calc.ctmax(by = by, timevar = timevar, depvar = depvar)
 
   # 4. and 5. create dataset with corrected time deviations
 
-  cat("Applying time deviation corrections and missing concentration imputations...\n")
+  message("Applying time deviation corrections and missing concentration imputations...\n")
 
   tc <- loqed %>% correct.time(
     by = by,
@@ -199,19 +199,19 @@ check.input(
 
   # 6. create table with corrections
 
-  cat("Creating correction tables...\n")
+  message("Creating correction tables...\n")
 
   corrtab = tc %>% tab.corr(., by=by, nomtimevar=nomtimevar)
 
   # 7. Calculate PK parameters NOT based on lambda_z ON CORRECTED DATA
 
-  cat("Calculating parameters that do not need lambda_z...\n")
+  message("Calculating parameters that do not need lambda_z...\n")
 
   par <- tc %>% calc.par(by = by)
 
   # 8. Calculate PK parameters that need lambda_z
 
-  cat("Calculating parameters that DO need lambda_z...\n")
+  message("Calculating parameters that DO need lambda_z...\n")
 
   par_all = par %>%
     left_join(
@@ -224,11 +224,11 @@ check.input(
     #reg=reg,ss=ss,factor=factor,route=route
   )
 
-  cat("Combining all parameters...")
+  message("Combining all parameters...")
 
   par_all = left_join(ctmax,par_all,by=by)
 
-   cat("\nWriting results...\n")
+   message("\nWriting results...\n")
 
   if(!missing(covariates)){
     if(is.character(covariates)){
@@ -249,7 +249,7 @@ check.input(
     plots = plotdir
   )
 
-  cat("\nDone!\n")
+  message("\nDone!\n")
 
   return(result)
 
@@ -259,7 +259,7 @@ check.input(
 #'
 #' Checks whether all function arguments are valid and entered column names are present in input data \cr
 #' See \code{\link{qpNCA}} for description of the arguments
-#' 
+#'
 #' @param x data.frame
 #' @param by column names in x indicating grouping variables
 #' @param nomtimevar variable name containing the nominal sampling time after dose
@@ -386,7 +386,7 @@ check.input <- function(
     chkfile=rbind(chkfile,"Warning: Tau not defined while at steady state, no clearances or volumes will be calculated")
 
   # 10 check if tstart, tend and teval differ from 0 (use teval instead of start/tend for interval 0-x)
-  
+
   if ( any(tstart==0 & !is.na(tstart)))
     chkfile=rbind(chkfile,"Error: Tstart cannot be 0, use Teval to calculate auc(0-Teval)")
 
@@ -395,7 +395,7 @@ check.input <- function(
 
   if ( any(teval==0 & !is.na(teval)))
     chkfile=rbind(chkfile,"Error: Teval cannot be 0")
-  
+
   # 11 check route argument
 
   if ( !all((route%in%c("ev","EV","ivb","IVB","ivi","IVI"))))
@@ -411,12 +411,12 @@ check.input <- function(
   if (nrow(chkfile)>0) {
 
     print(kable(chkfile))
-    cat("\n")
+    message("\n")
     if (any(grepl("Error",chkfile$Errors_Warnings))) stop("Execution of qPNCA aborted due to errors", call.= F)
 
   }
 
-  else cat("all OK!\n")
+  else message("all OK!\n")
 
 }
 

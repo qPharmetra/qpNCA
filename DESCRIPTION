@@ -1,10 +1,26 @@
 Package: qpNCA
 Type: Package
 Title: Noncompartmental Pharmacokinetic Analysis by qPharmetra
-Version: 1.1.1
-Author: Jan Huisman, Tim Bergsma, Krina Mehta, and Koen Jolling
+Version: 1.1.2
+Authors@R: c(person("Jan", "Huisman", role = c("aut", "cre"),
+                     email = "jan.huisman@qpharmetra.com"),
+              person("Koen", "Jolling", role = "ctb"),
+              person("Krina", "Mehta", role = "ctb"),
+              person("Tim", "Bergsma", role = "ctb"))
+Author: Jan Huisman [aut, cre],
+  Koen Jolling [ctb],
+  Krina Mehta [ctb],
+  Tim Bergsma [ctb]
 Maintainer: Jan Huisman <jan.huisman@qpharmetra.com>
-Description: Computes NCA parameters for drug concentration profiles.
+Description: Computes noncompartmental pharmacokinetic parameters
+ for drug concentration profiles.  For each profile, data
+ imputations and adjustments are made as necessary and
+ basic parameters are estimated. Supports single dose, multi-dose,
+ and multi-subject data.  Supports steady-state calculations
+ and various routes of drug administration. See ?qpNCA and vignettes.
+ Methodology follows Rowland and Tozer (2011, ISBN:978-0-683-07404-8), 
+ Gabrielsson and Weiner (1997, ISBN:978-91-9765-100-4), and
+ Gibaldi and Perrier (1982, ISBN:978-0824710422).
 License: GPL-3
 Encoding: UTF-8
 Suggests: 
