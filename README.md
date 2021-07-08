@@ -4,7 +4,6 @@
 # qpNCA
 
 <!-- a href='https://dplyr.tidyverse.org'><img src='man/figures/logo.png' align="right" height="139" /></a -->
-
 <!-- badges: start 
 [![Travis build status](https://travis-ci.com/qPharmetra/qpNCA.svg?branch=master)](https://travis-ci.com/qPharmetra/qpNCA)
 [![Coverage status](https://codecov.io/gh/qpharmetra/qpNCA/branch/master/graph/badge.svg)](https://codecov.io/github/qpharmetra/qpNCA?branch=master)
@@ -41,7 +40,7 @@ You can use the issues feature on
 A good place to start is the help for `qpNCA()`.
 
 ``` r
-library(qpnca)
+library(qpNCA)
 ?qpNCA
 example(qpNCA)
 ```
