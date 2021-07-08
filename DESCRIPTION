@@ -1,7 +1,7 @@
 Package: qpNCA
 Type: Package
 Title: Noncompartmental Pharmacokinetic Analysis by qPharmetra
-Version: 1.1.2
+Version: 1.1.4
 Authors@R: c(person("Jan", "Huisman", role = c("aut", "cre"),
                      email = "jan.huisman@qpharmetra.com"),
               person("Koen", "Jolling", role = "ctb"),
