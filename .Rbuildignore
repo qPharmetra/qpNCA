@@ -9,3 +9,4 @@
 ^.info$
 ^.gitignore$
 ^Meta$
+^README.Rmd$
