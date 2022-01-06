@@ -377,7 +377,7 @@ correct.time <- function(
                 applies.to.time = paste(applies.to.time,"TEND ")
     ) %>%
     # T = 0            (also needed for AUCpartial since this value may be used for substitution at t = TAU in case TEND = TAU)
-    mutate(conc.lastall = depvar,time.lastall = timevar,newdepvar = NA) %>%
+    mutate(conc.lastall = depvar,time.lastall = timevar,newdepvar = NA_real_) %>%
     mutate_cond(condition = ptime==0&timevar!=ptime&tolower(reg)=="sd",
                 t0.flag = 1,
                 time.tau = 0,time.part = 0,time.teval = 0,time.lastall = 0,                       # set predose time to 0
