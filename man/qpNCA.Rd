@@ -6,7 +6,7 @@
 \usage{
 qpNCA(
   x,
-  by = character(0),
+  by = NULL,
   nomtimevar = "ntad",
   timevar = "time",
   depvar = "dv",
@@ -34,7 +34,7 @@ qpNCA(
 \arguments{
 \item{x}{input dataset name}
 
-\item{by}{column names in x indicating grouping variables}
+\item{by}{character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))}
 
 \item{nomtimevar}{variable name containing the nominal sampling time after dose}
 
@@ -66,9 +66,9 @@ qpNCA(
 
 \item{teval}{user selected AUC interval (starting at t=0); NA (default) if not requested; x$teval overrides}
 
-\item{covariates}{covariates dataset; Must contain the dose variable}
+\item{covariates}{covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character path of csv file or local object}
 
-\item{dose}{variable containing the dose amount}
+\item{dose}{variable containing the dose amount; default 'dose' set to 1 if not in \code{names(x)}}
 
 \item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided}
 

@@ -13,7 +13,7 @@ globalVariables('Errors_Warnings')
 #' * [calc.par.th] calculates parameters dependent on lambda_z
 #'
 #' @param x input dataset name
-#' @param by column names in x indicating grouping variables
+#' @param by character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))
 #' @param nomtimevar variable name containing the nominal sampling time after dose
 #' @param timevar variable name containing the actual sampling time after dose
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
@@ -29,8 +29,8 @@ globalVariables('Errors_Warnings')
 #' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
 #' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
 #' @param teval user selected AUC interval (starting at t=0); NA (default) if not requested; x$teval overrides
-#' @param covariates covariates dataset; Must contain the dose variable
-#' @param dose variable containing the dose amount
+#' @param covariates covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character path of csv file or local object
+#' @param dose variable containing the dose amount; default 'dose' set to 1 if not in \code{names(x)}
 #' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided
 #' @param reg regimen, "SD" or "MD"; x$reg overrides if provided
 #' @param ss is steady state reached (y/n); x$ss overrides if provided
@@ -67,7 +67,7 @@ globalVariables('Errors_Warnings')
 
 qpNCA <- function(
   x,
-  by=character(0),
+  by=NULL,
   nomtimevar="ntad",
   timevar="time",
   depvar="dv",
@@ -109,6 +109,20 @@ qpNCA <- function(
   }
 
  rm(list = enforce)
+
+ if(is.null(by)) by <- as.character(groups(x))
+
+ stopifnot(
+   is.character(dose),
+   length(dose) == 1
+ )
+ if(!dose %in% names(x)){
+   x[[dose]] <- 1
+ }
+
+ if(identical(NA, covariates)){
+   covariates <- unique(x[,c(by, dose),drop=FALSE])
+ }
 
 check.input(
     x, by=by, nomtimevar=nomtimevar, timevar=timevar, depvar=depvar,
