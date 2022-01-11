@@ -147,7 +147,7 @@ cc.ct.data = ct.data %>%
     tstart=4,
     tend=9,
     teval=12,
-    th=th,
+    # th=th,
     reg="sd",
     ss="n",
     route="EV",
@@ -195,7 +195,7 @@ head(par) %>% kable()
 cov = input.data %>%
       distinct(subject,dose)
 
-par <- par %>% 
+par <- cc.ct.data %>% 
   calc.par.th(
     by="subject",
     th=th ,

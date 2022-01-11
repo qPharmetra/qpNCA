@@ -1,23 +1,30 @@
 globalVariables('par')
 #' Calculate Lambda_z Parameters
 #'
-#' Calculates PK parameters that need lambda_z.
+#' Calculates PK parameters, including those that need lambda_z.
 #'
-#' @param x result parameter dataset from \code{\link{calc.par}}
-#' @param by column names in x indicating grouping variables
-#' @param th result dataset from \code{\link{est.thalf}}
+#' @param x output from \code{\link{correct.conc}}
+#' @param by character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))
+#' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
+#' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
+#' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
+#' @param teval user selected AUC interval; NA (default) if not requested; x$teval overrides
+#' @param route route of drug administration ("EV","IVB","IVI"); x$route overrides
+#' @param method method for trapezoidal rule
+#' @param th lamdba_z information for each curve; default is est.thalf(x, by = by, timevar = timevar, depvar = depvar )
 #' @param covariates covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character name of csv file or local object
 #' @param dose variable containing the dose amount; default 'dose' set to 1 if not in \code{names(x)}
 #' @param factor conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides
 #' @param reg regimen, "sd" or "md"; x$reg overrides
 #' @param ss is steady state reached (y/n); x$ss overrides
-#' @param route of drug administration ("EV","IVB","IVI"); x$route overrides
+#' @param timevar variable name containing the actual sampling time after dose
+#' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @importFrom dplyr left_join
 #'
 #'
 #' @return A dataset containing all parameters calculated in \code{\link{est.thalf}} and \code{\link{calc.par}} \cr
-#' with estimates for the following parameters added, one observation per subject:
-#' 
+#' with estimates for the following parameters added, one observation per profile:
+#'
 #' **Parameter** | **Description**
 #' ------------ | -----------
 #' clast.pred   | predicted concentration at tlast
@@ -43,31 +50,70 @@ globalVariables('par')
 #' @export
 #' @examples
 #' \donttest{
-#' example(calc.par) # creates par
-#' # notice x includes (optional) loqrule, includeCmax, reg, method, route, ss
-#' covs <- Theoph %>%
-#'   select(subject = Subject, Wt, dose = Dose) %>%
-#'   unique %>%
-#'   mutate(dose = dose * Wt, subject=as.numeric(as.character(subject))) # see ?Theoph
-#' y <- x %>% select(subject, reg, ss, loqrule) %>% unique
-#' y %<>% mutate(factor = 1)
-#' par %<>% left_join(y, by = 'subject')
-#' par %<>% calc.par.th(by = 'subject', th = th, covariates = covs)
-#' par %<>% left_join(ctmax, ., by = 'subject')
-#' par %>% head
-#' par %>% data.frame %>% head(2)
+#' library(magrittr)
+#' library(dplyr)
+#' data(ncx)
+#' x <- ncx
+#' x %<>% group_by(subject)
+#' x %<>% correct.loq
+#' cm <- calc.ctmax(x)              # using uncorrected data
+#' th <- est.thalf(x)               # possibly expensive!
+#' x %<>% correct.time              # or pass (th = th)
+#' x %<>% correct.conc
+#' x %<>% calc.par.th               # or pass (th = th)
+#' x %<>% left_join(cm)
+#' x %>% data.frame %>% head(2)
 #' }
 calc.par.th <- function(
   x,
-  by=character(0),
-  th=th,
+  by=NULL,
+  tau = NA,
+  tstart = NA,
+  tend = NA,
+  teval = NA,
+  route = "EV",
+  method = 1,
+  th = NULL,
   covariates=NA,
   dose="dose",
   factor=1,
   reg="SD",
   ss="N",
-  route="EV"
+  timevar ="time",
+  depvar="dv"
   ){
+  if(is.null(by)) by <- as.character(groups(x))
+
+  targs <- list(x = x, by = by)
+  if(!missing(timevar)) targs <- c(targs, list(timevar = timevar))
+  if(!missing(depvar)) targs <- c(targs, list(depvar = depvar))
+  if(is.null(th)) th <- do.call(est.thalf, targs)
+
+  pargs <- list(x = x, by = by)
+  if(!missing(tau))    pargs <- c(pargs, list(tau    = tau))
+  if(!missing(tstart)) pargs <- c(pargs, list(tstart = tstart))
+  if(!missing(tend))   pargs <- c(pargs, list(tend   = tend))
+  if(!missing(teval))  pargs <- c(pargs, list(tval   = tval))
+  if(!missing(route))  pargs <- c(pargs, list(route  = route))
+  if(!missing(method)) pargs <- c(pargs, list(method = method))
+
+  # direct call causes nothing to be missing, with spurious warnings
+  #   x %<>% calc.par(
+  #   by = by,
+  #   tau = tau,
+  #   tstart = tstart,
+  #   tend = tend,
+  #   teval = teval,
+  #   route = route,
+  #   method = method
+  # )
+  p <- do.call(calc.par, pargs)
+
+  # retain if available ...
+  nms <- c('reg','ss','factor','route','loqrule')
+  suppressMessages(
+  x <- left_join(p,unique(select(x,!!by,!!intersect(nms, names(x)))))
+  )
   stopifnot(
     is.character(dose),
     length(dose) == 1
@@ -79,7 +125,7 @@ calc.par.th <- function(
     covariates <- unique(x[,c(by, dose),drop=FALSE])
   }
   # At this point, utility of having assigned dose on x is ended.
-  # User must have supply dose in covariates using column named in arg 'dose'.
+  # User must have supplied dose in covariates using column named in arg 'dose'.
   # To avoid merge conflicts of covariates and x, we squelch x[[dose]].
   x[[dose]] <- NULL
 
@@ -88,9 +134,12 @@ calc.par.th <- function(
       if(!eval(substitute(missing(arg)))){
         warning(arg,' supplied as column overrides like-named argument')
       }
-      assign(arg,x[[arg]])
-      x[[arg]] <- NULL
-    }
+      # assign(arg,x[[arg]])
+      # x[[arg]] <- NULL
+    }else{
+        x %<>% mutate(!!arg := get(arg)) # deliberate switch to data priority vs global env
+      }
+
     # if(length(get(arg)) > 1) {
     #   warning(arg, ' has length > 1; only first value will be used')
     #   assign(arg, get(arg)[[1]])
@@ -106,15 +155,16 @@ calc.par.th <- function(
       }
     }
   }
-  result=left_join(x,th,by=by) %>%
+  x %<>% left_join(th,by=by) %>%
   left_join(covariates,by=intersect(names(x), names(covariates)))
-  result$dosevar <- result[[dose]]
-  result %<>%
-  mutate(
+  x$dosevar <- x[[dose]]
+  x %<>% mutate(
     factor=ifelse(is.na(factor),1,factor),
     reg=tolower(reg),
-    ss=tolower(ss),
-    route=tolower(route),
+    ss=tolower(ss)
+  )
+  x %<>% mutate(route=tolower(route))
+  x %<>% mutate(
     clast.pred=exp(log(intercept)-lambda_z*tlast), # intercept was already exponentiated in calc_thalf
     aucinf.obs=auclast+clast.obs/lambda_z,
     aucinf.pred=auclast+clast.pred/lambda_z,
@@ -143,51 +193,56 @@ calc.par.th <- function(
       dosevar*factor/(lambda_z*auctau)
     ),
     #   vss.obs= mrtinf.obs*cl.f.obs,
-    #   vss.pred= mrtinf.pred*cl.f.pred,
-    vss.obs= ifelse(route=="ivb"|route=="ivi",mrtinf.obs*cl.f.obs,NA),
-    vss.pred= ifelse(route=="ivb"|route=="ivi",mrtinf.pred*cl.f.pred,NA),
+    #   vss.pred= mrtinf.pred*cl.f.pred
+  )
+  x %<>% mutate(vss.obs= ifelse(route=="ivb"|route=="ivi",mrtinf.obs*cl.f.obs,NA))
+  x %<>% mutate(vss.pred= ifelse(route=="ivb"|route=="ivi",mrtinf.pred*cl.f.pred,NA))
+  x %<>% mutate(
     pctextr.obs=(clast.obs/lambda_z)/aucinf.obs*100,
     pctextr.pred=(clast.pred/lambda_z)/aucinf.pred*100,
     pctback.obs=area.back.extr/aucinf.obs*100,
     pctback.pred=area.back.extr/aucinf.pred*100
-  ) %>%
-  select(-dosevar)
+  )
+  x %<>% select(-dosevar)
 
   # rename CL and V after IVB/IVI
 
-  qpiv <- tolower(route)=="ivb"|tolower(route)=="ivi"
-  result %<>% mutate( cl.obs =    ifelse( qpiv, cl.f.obs,  NA))
-  result %<>% mutate( cl.pred =   ifelse( qpiv, cl.f.pred, NA))
-  result %<>% mutate( vz.obs =    ifelse( qpiv, vz.f.obs,  NA))
-  result %<>% mutate( vz.pred =   ifelse( qpiv, vz.f.pred, NA))
-  result %<>% mutate( cl.f.obs =  ifelse(!qpiv, cl.f.obs,  NA))
-  result %<>% mutate( cl.f.pred = ifelse(!qpiv, cl.f.pred, NA))
-  result %<>% mutate( vz.f.obs =  ifelse(!qpiv, vz.f.obs,  NA))
-  result %<>% mutate( vz.f.pred = ifelse(!qpiv, vz.f.pred, NA))
+  x %<>% mutate(qpiv = tolower(route)=="ivb"|tolower(route)=="ivi")
+  x %<>% mutate( cl.obs =    ifelse( qpiv, cl.f.obs,  NA))
+  x %<>% mutate( cl.pred =   ifelse( qpiv, cl.f.pred, NA))
+  x %<>% mutate( vz.obs =    ifelse( qpiv, vz.f.obs,  NA))
+  x %<>% mutate( vz.pred =   ifelse( qpiv, vz.f.pred, NA))
+  x %<>% mutate( cl.f.obs =  ifelse(!qpiv, cl.f.obs,  NA))
+  x %<>% mutate( cl.f.pred = ifelse(!qpiv, cl.f.pred, NA))
+  x %<>% mutate( vz.f.obs =  ifelse(!qpiv, vz.f.obs,  NA))
+  x %<>% mutate( vz.f.pred = ifelse(!qpiv, vz.f.pred, NA))
 
 # rename CL at steady state
-  ssiv <- tolower(ss) == 'y' &  qpiv
-  ssev <- tolower(ss) == 'y' & !qpiv
+  x %<>% mutate(ssiv = tolower(ss) == 'y' &  qpiv)
+  x %<>% mutate(ssev = tolower(ss) == 'y' & !qpiv)
 
-  result %<>% mutate(cl.f.ss = NA, cl.ss = NA)
+  x %<>% mutate(cl.f.ss = NA, cl.ss = NA)
 
-  result %<>% mutate(cl.ss     = ifelse( ssiv, cl.obs,   cl.ss   ))
-  result %<>% mutate(cl.obs    = ifelse(!ssiv, cl.obs,   NA      ))
-  result %<>% mutate(cl.pred   = ifelse(!ssiv, cl.pred,  NA      ))
+  x %<>% mutate(cl.ss     = ifelse( ssiv, cl.obs,   cl.ss   ))
+  x %<>% mutate(cl.obs    = ifelse(!ssiv, cl.obs,   NA      ))
+  x %<>% mutate(cl.pred   = ifelse(!ssiv, cl.pred,  NA      ))
 
-  result %<>% mutate(cl.f.ss   = ifelse( ssev, cl.f.obs, cl.f.ss ))
-  result %<>% mutate(cl.f.obs  = ifelse(!ssev, cl.f.obs, NA      ))
-  result %<>% mutate(cl.f.pred = ifelse(!ssev, cl.f.pred,  NA    ))
+  x %<>% mutate(cl.f.ss   = ifelse( ssev, cl.f.obs, cl.f.ss ))
+  x %<>% mutate(cl.f.obs  = ifelse(!ssev, cl.f.obs, NA      ))
+  x %<>% mutate(cl.f.pred = ifelse(!ssev, cl.f.pred,  NA    ))
+
+  # done with these:
+  x %<>% select(-qpiv, -ssiv, -ssev)
 
   # if (tolower(ss)=="y") {
   #   if (tolower(route)=="ivb"|tolower(route)=="ivi") {
-  #     result = result %>% mutate( cl.ss   = cl.obs,   cl.obs   = NA, cl.pred   = NA, cl.f.ss = NA )
+  #     x = x %>% mutate( cl.ss   = cl.obs,   cl.obs   = NA, cl.pred   = NA, cl.f.ss = NA )
   #   }else{
-  #     result = result %>% mutate( cl.f.ss = cl.f.obs, cl.f.obs = NA, cl.f.pred = NA, cl.ss = NA )
+  #     x = x %>% mutate( cl.f.ss = cl.f.obs, cl.f.obs = NA, cl.f.pred = NA, cl.ss = NA )
   #   }
   # }else{
-  #   result = result %>% mutate(cl.f.ss=NA, cl.ss=NA)
+  #   x = x %>% mutate(cl.f.ss=NA, cl.ss=NA)
   # }
-  # result %<>% select((!!names(.)[[1]]):loqrule, dose, everything()) # to preserve traditional column order
-  return(result)
+  # x %<>% select((!!names(.)[[1]]):loqrule, dose, everything()) # to preserve traditional column order
+  x
 }

@@ -6,7 +6,7 @@
 \usage{
 correct.time(
   x,
-  by = character(0),
+  by = NULL,
   nomtimevar = "ntad",
   timevar = "time",
   depvar = "dv",
@@ -14,7 +14,7 @@ correct.time(
   tstart = NA,
   tend = NA,
   teval = NA,
-  th = NA,
+  th = NULL,
   reg = "SD",
   method = 1
 )
@@ -22,7 +22,7 @@ correct.time(
 \arguments{
 \item{x}{input dataset name (after LOQ values have been imputed by \code{\link{correct.loq}})}
 
-\item{by}{column names in x indicating grouping variables}
+\item{by}{character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))}
 
 \item{nomtimevar}{variable name containing the nominal sampling time after dose}
 
@@ -38,7 +38,7 @@ correct.time(
 
 \item{teval}{user selected AUC interval, starting at t=0; NA (default) if not requested; x$teval overrides}
 
-\item{th}{lamdba_z information for each curve; like output of \code{\link{est.thalf}}}
+\item{th}{lamdba_z information for each curve; pass NA to suppress; default is est.thalf(x, by = by, timevar = timevar, depvar = depvar )}
 
 \item{reg}{regimen, "sd" or "md"; x$reg overrides}
 
@@ -96,10 +96,12 @@ The following Time Deviation Correction Rules will be applied to critical time p
 }
 \examples{
 \donttest{
-example(calc.ctmax)
-x \%<>\% mutate(reg = 'SD', method = 1, route = 'EV')
-# route not used yet, but still preserved
-x \%<>\% correct.time(by = 'subject', th = th)
-x \%>\% head
+library(magrittr)
+library(dplyr)
+data(ncx)
+x <- ncx
+x \%<>\% group_by(subject)
+x \%<>\% correct.loq
+x \%>\% correct.time \%>\% head \%>\% data.frame
 }
 }

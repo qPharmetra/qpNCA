@@ -42,6 +42,11 @@ globalVariables(c(
 'cl.ss', # calc.par.th
 'cl.pred', # calc.par.th
 'cl.f.ss', # calc.par.th
+'tval', # calc.par.th
+'qpiv', # calc.par.th
+'ssiv', # calc.par.th
+'ssev', # calc.par.th
+'th', # correct.conc
 'no.points', # correct.conc
 'intercept', # correct.conc
 'r.squared', # correct.conc

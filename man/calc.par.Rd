@@ -6,7 +6,7 @@
 \usage{
 calc.par(
   x,
-  by = character(0),
+  by = NULL,
   tau = NA,
   tstart = NA,
   tend = NA,
@@ -18,7 +18,7 @@ calc.par(
 \arguments{
 \item{x}{contains all data after time/concentration deviation corrections obtained from \code{\link{correct.time}} and \code{\link{correct.conc}}}
 
-\item{by}{column names in x indicating grouping variables}
+\item{by}{character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))}
 
 \item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
 
@@ -69,8 +69,14 @@ Calculates PK parameters for which half-life is not needed in the calculation fo
 }
 \examples{
 \donttest{
-example(correct.conc)
-par <- x \%>\% calc.par(by = 'subject')
-par \%>\% head
+library(magrittr)
+library(dplyr)
+data(ncx)
+x <- ncx
+x \%<>\% group_by(subject)
+x \%<>\% correct.loq
+x \%<>\% correct.time
+x \%<>\% correct.conc
+x \%>\% calc.par \%>\% head
 }
 }

@@ -56,27 +56,13 @@ globalVariables('Errors_Warnings')
 #' \donttest{
 #' library(magrittr)
 #' library(dplyr)
-#' library(qpNCA)
-#' x <- Theoph
-#' ntad <- c(0,0.25,0.5,1,2,4,5,7,9,12,24)
-#' for(i in 1:nrow(x)){
-#'   time  <- x$Time[[i]]
-#'   delta <- abs(ntad - time)
-#'   best  <- min(delta)
-#'   index <- match(best, delta)
-#'   nom   <- ntad[[index]]
-#'   x$ntad[[i]] <- nom
-#' }
-#' rm(list = c('time','delta','best','index','nom', 'i','ntad'))
-#' x %<>% rename(time = Time, dv = conc, subject = Subject)
-#' x %<>% mutate(bloq = 0, loq = 0.01, tad = time,excl_th=0,
-#'               subject=as.numeric(subject),ntad=as.numeric(ntad))
-#' x %<>% filter(dv > 0)
-#' covs <- x %>%
-#'   select(subject, Wt, dose = Dose) %>%
-#'   distinct(subject,.keep_all=TRUE) %>%
-#'   mutate(dose = dose * Wt) # see ?Theoph
+#' data(ncx)
+#' x <- ncx
+#' x %<>% group_by(subject)
+#' x %<>% mutate(excl_th=0)
+#' covs <- x %>% select(subject, wt, dose) %>% unique
 #' z <- qpNCA(x, by = 'subject', covariates = covs, exclvar='excl_th')
+#' z %>% names
 #' }
 
 qpNCA <- function(
@@ -207,18 +193,20 @@ check.input(
 
   message("Calculating parameters that do not need lambda_z...\n")
 
-  par <- tc %>% calc.par(by = by)
+  # par <- tc %>% calc.par(by = by)
 
   # 8. Calculate PK parameters that need lambda_z
+  # @ 1.1.8, tc passed directly to calc.par.th
 
   message("Calculating parameters that DO need lambda_z...\n")
 
-  par_all = par %>%
-    left_join(
-      tc %>% select(!!by, reg, ss, factor, route, loqrule) %>% unique
-    ) %>%
+  # par_all = par %>%
+  #   left_join(
+  #     tc %>% select(!!by, reg, ss, factor, route, loqrule) %>% unique
+  #   ) %>%
+
+  par_all <- tc %>%
     calc.par.th(
-    #x=par,
     by=by,th=th,covariates=covariates,dose=dose
     #,
     #reg=reg,ss=ss,factor=factor,route=route

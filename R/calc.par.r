@@ -6,7 +6,7 @@
 #' @importFrom dplyr summarise last
 #' @import magrittr
 #' @param x contains all data after time/concentration deviation corrections obtained from \code{\link{correct.time}} and \code{\link{correct.conc}}
-#' @param by column names in x indicating grouping variables
+#' @param by character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))
 #' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
 #' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
 #' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
@@ -47,13 +47,19 @@
 #' @importFrom utils read.csv
 #' @examples
 #' \donttest{
-#' example(correct.conc)
-#' par <- x %>% calc.par(by = 'subject')
-#' par %>% head
+#' library(magrittr)
+#' library(dplyr)
+#' data(ncx)
+#' x <- ncx
+#' x %<>% group_by(subject)
+#' x %<>% correct.loq
+#' x %<>% correct.time
+#' x %<>% correct.conc
+#' x %>% calc.par %>% head
 #' }
 calc.par <- function(
   x,
-  by = character(0),
+  by = NULL,
   tau = NA,
   tstart = NA,
   tend = NA,
@@ -61,6 +67,7 @@ calc.par <- function(
   route = "EV",
   method = 1
 ){
+  if(is.null(by)) by <- as.character(groups(x))
   supplied <- character(0)
   if(!missing(tau)) supplied <- c(supplied,'tau')
   if(!missing(tstart)) supplied <- c(supplied,'tstart')
@@ -82,7 +89,7 @@ calc.par <- function(
       supplied = supplied
     )
   )
-  x <- ungroup(x)
+  # x <- ungroup(x)
   x
 }
 .calc.par <- function(x, tau, tstart, tend, teval , route, method, supplied){

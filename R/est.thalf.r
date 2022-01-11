@@ -1,7 +1,7 @@
 #' Calculate Lambda_z and Elimination Half-life
 #'
-#' Calculates lambda_z and thalf for each PK curve identified using \code{by}. \cr  
-#' 
+#' Calculates lambda_z and thalf for each PK curve identified using \code{by}. \cr
+#'
 #' The function starts with the last three sample points and performs
 #' log-linear regression on it. It then adds one sampling point at a time
 #' (including and ending at tmax) and performs the regression again.
@@ -10,7 +10,7 @@
 #' Visual outliers can be excluded from the regression analysis.
 #'
 #' @param x a dataset
-#' @param by column names in x indicating grouping variables
+#' @param by character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))
 #' @param timevar variable name containing the actual sampling time after dose
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @param includeCmax include results of regression including Cmax in selection? (y/n); x$includeCmax overrides if provided
@@ -33,19 +33,23 @@
 #' @export
 #' @examples
 #' \donttest{
-#' example(correct.loq)
-#' x %<>% mutate(includeCmax = 'Y')
-#' th <- x %>% est.thalf(by='subject',exclvar=)
-#' th %>%  head
+#' library(magrittr)
+#' library(dplyr)
+#' data(ncx)
+#' x <- ncx
+#' x %<>% group_by(subject)
+#' x %<>% correct.loq
+#' x %>% est.thalf %>% head
 #' }
 
 est.thalf <- function(
   x,
-  by = character(0),
+  by = NULL,
   timevar="time",
   depvar="dv",
   includeCmax="Y",
   exclvar=NA){
+  if(is.null(by)) by <- as.character(groups(x))
   supplied <- character(0)
   if(!missing(includeCmax)) supplied <- 'includeCmax'
   x <- group_by_at(x, vars(by))
@@ -60,7 +64,7 @@ est.thalf <- function(
       supplied = supplied
     )
   )
-  x <- ungroup(x)
+  # x <- ungroup(x)
   x
 }
 .est.thalf <- function(
@@ -83,35 +87,33 @@ est.thalf <- function(
     warning('includeCmax has length > 1; only first value will be used')
     includeCmax <- includeCmax[[1]]
   }
+  if(!'timevar' %in% names(x))x %<>% rename(timevar = !!timevar)
+  if(!'depvar' %in% names(x))x %<>% rename(depvar = !!depvar)
 
-  data_in = x %>% mutate(timevar=x[[timevar]],
-                         depvar=x[[depvar]]
-  ) 
-  
-  if(!(is.na(exclvar))&exclvar %in% names(x)) { data_in = data_in %>% mutate(exclvar=x[[exclvar]]) }
-  
   if (!is.na(exclvar) & !(exclvar %in% names(x))) stop(paste("Exclusion variable",exclvar,"does not exist"), call.=F)
+
+  if(!(is.na(exclvar))& exclvar %in% names(x)) { x %<>% rename(exclvar = !!exclvar) }
 
   if (!is.na(exclvar)) {
 
     anyexcl=0
-    if (any(data_in$exclvar==1)) {anyexcl=1}
+    if (any(x$exclvar==1)) {anyexcl=1}
 
-    data_in = data_in %>%
+    x %<>%
       filter(exclvar!=1|is.na(exclvar))  # remove samples to be excluded from the regression
 
   }
 
-  data_in = data_in %>%
+  x %<>%
     filter(!is.na(depvar)&depvar>0) %>%
     filter(timevar>=first(timevar[depvar==max(depvar,na.rm=T)]))      # include Cmax
 
   if (tolower(includeCmax)=="n") {
-    data_in=data_in %>% filter(timevar>first(timevar[depvar==max(depvar,na.rm=T)]))   # exclude Cmax
+    x=x %>% filter(timevar>first(timevar[depvar==max(depvar,na.rm=T)]))   # exclude Cmax
   }
 
   est=0
-  i=length(data_in$timevar)-2
+  i=length(x$timevar)-2
   result = data.frame(matrix(ncol=7,nrow = 1))
 
   if (i>=1) {
@@ -121,18 +123,18 @@ est.thalf <- function(
 
   while (i>=1) {
     ## make subset of data frame for each number of data points
-    xx = data_in[i:nrow(data_in), ]
+    xx = x[i:nrow(x), ]
     ## execute loglinear model fit
     lmcall=lm(log(xx$depvar)~xx$timevar)
     lmcall.estimates = as.numeric(summary(lmcall)$coef[,"Estimate"])
     ## save results of loglin lm fit
-    result[i,1]=length(data_in$timevar)-i+1
+    result[i,1]=length(x$timevar)-i+1
     result[i,2]=exp(lmcall.estimates[1])  # exponentiate to see the actual intercept
     result[i,3]=lmcall.estimates[2]*-1
     result[i,4]=summary(lmcall)$r.squared
     result[i,5]=summary(lmcall)$adj.r.squared
-    result[i,6]=data_in$timevar[i]
-    result[i,7]=last(data_in$timevar)
+    result[i,6]=x$timevar[i]
+    result[i,7]=last(x$timevar)
     i=i-1
   }
   names(result) = c('no.points','intercept','lambda_z','r.squared','adj.r.squared','start_th','end_th')

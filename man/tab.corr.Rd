@@ -4,12 +4,12 @@
 \alias{tab.corr}
 \title{Tabulate Corrections}
 \usage{
-tab.corr(x, by = character(0), nomtimevar = "time")
+tab.corr(x, by = NULL, nomtimevar = "time")
 }
 \arguments{
 \item{x}{concentration dataset created by the correct.time and correct.conc functions, containing time and conc corrected data}
 
-\item{by}{column names in x indicating grouping variables}
+\item{by}{character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))}
 
 \item{nomtimevar}{column in x containing the nominal time after dose}
 }
@@ -22,8 +22,14 @@ concentration imputations were applied, for each subject.
 }
 \examples{
 \donttest{
-example(correct.conc)
-corrtab <- x \%>\% tab.corr(by = 'subject')
-corrtab \%>\% head
+library(magrittr)
+library(dplyr)
+data(ncx)
+x <- ncx
+x \%<>\% group_by(subject)
+x \%<>\% correct.loq
+x \%<>\% correct.time
+x \%<>\% correct.conc
+x \%>\% tab.corr \%>\% head
 }
 }

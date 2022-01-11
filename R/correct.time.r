@@ -3,7 +3,7 @@
 #' Corrects concentrations at critical, but deviating time points
 #' (e.g, predose, TAU, start and end of user selected AUC interval),
 #' and adds missing records at these critical time points.
-#' 
+#'
 #' * Records with missing NOMINAL time will be removed and this must be corrected before the function is called
 #' * If a record at the critical time point is missing, add it and set time to nominal time and set dv conc to NA
 #' * Use interpolation if there is a measurable concentration AFTER the nominal time point (i.e. sample is taken too late)
@@ -24,7 +24,7 @@
 #'   MDT-3a | md | Set actual time to zero if concentration is BLOQ (too early) | t = 0
 #'
 #' @param x input dataset name (after LOQ values have been imputed by \code{\link{correct.loq}})
-#' @param by column names in x indicating grouping variables
+#' @param by character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))
 #' @param nomtimevar variable name containing the nominal sampling time after dose
 #' @param timevar variable name containing the actual sampling time after dose
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
@@ -32,13 +32,14 @@
 #' @param tstart start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides
 #' @param tend end time of partial AUC; NA (default) if not requested; x$tend overrides
 #' @param teval user selected AUC interval, starting at t=0; NA (default) if not requested; x$teval overrides
-#' @param th lamdba_z information for each curve; like output of \code{\link{est.thalf}}
+#' @param th lamdba_z information for each curve; pass NA to suppress; default is est.thalf(x, by = by, timevar = timevar, depvar = depvar )
 #' @param reg regimen, "sd" or "md"; x$reg overrides
 #' @param method method for trapezoidal rule;  x$method overrides if provided
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
 #' * 3: linear before first Tmax, logarithmic after first Tmax
 #' @importFrom dplyr left_join first bind_rows
+#' @importFrom rlang :=
 #' @return a dataset with time deviation corrections applied (timevar and depvar adapted).
 #' The following variables are added:
 #'
@@ -60,15 +61,17 @@
 #' @export
 #' @examples
 #' \donttest{
-#' example(calc.ctmax)
-#' x %<>% mutate(reg = 'SD', method = 1, route = 'EV')
-#' # route not used yet, but still preserved
-#' x %<>% correct.time(by = 'subject', th = th)
-#' x %>% head
+#' library(magrittr)
+#' library(dplyr)
+#' data(ncx)
+#' x <- ncx
+#' x %<>% group_by(subject)
+#' x %<>% correct.loq
+#' x %>% correct.time %>% head %>% data.frame
 #' }
 correct.time <- function(
   x,
-  by = character(0),
+  by = NULL,
   nomtimevar = "ntad",
   timevar ="time",
   depvar="dv",
@@ -76,11 +79,13 @@ correct.time <- function(
   tstart = NA,
   tend = NA,
   teval = NA,
-  th = NA,
+  th = NULL,
   reg="SD",
   method = 1
 ){
   o <- x
+  if(is.null(by)) by <- as.character(groups(x))
+  if(is.null(th) & !'lambda_z' %in% names(x)) th <- est.thalf(x, by = by, timevar = timevar, depvar = depvar )
   supplied <- character(0)
   if(!missing(tau)) supplied <- c(supplied, 'tau')
   if(!missing(tstart)) supplied <- c(supplied, 'tstart')
@@ -108,7 +113,7 @@ correct.time <- function(
       supplied = supplied
     )
   )
-  x <- ungroup(x)
+  # x <- ungroup(x)
   x
 }
 .correct.time <- function(
@@ -150,13 +155,18 @@ correct.time <- function(
       by = intersect(names(x), names(th))
     )
   }
-  # x$includeCmax.x <- NULL
-  # x$includeCmax.x <- NULL
-  
-  x$depvar <- x[[depvar]]
-  x$timevar <- x[[timevar]]
-  x$ptime <- x[[nomtimevar]]
-  # x %<>% mutate(
+
+  x %<>% rename(
+    depvar = !!depvar,
+    timevar = !!timevar,
+    ptime = !!nomtimevar
+  )
+
+  # x$depvar <- x[[depvar]]
+  # x$timevar <- x[[timevar]]
+  # x$ptime <- x[[nomtimevar]]
+
+    # x %<>% mutate(
   #     depvar=.[[depvar]],                    # dependent variable                      (internal)
   #     timevar=.[[timevar]],                  # actual time variable                    (internal)
   #     ptime=.[[nomtimevar]],                 # nominal time
@@ -175,23 +185,29 @@ correct.time <- function(
       lambda_z = ifelse("lambda_z"%in%names(.),lambda_z,NA)
     )
   x %<>% filter(!is.na(ptime))               # remove records with no nominal time (must be corrected before)
-  x %<>% mutate_cond(condition = is.na(timevar),timevar = ptime,
-                                  trule.nr="-",
-                                  trule.txt = paste("Concentration (",depvar,
-                                                  ") at missing actual time at t=",ptime,
-                                                  " set to missing",sep=""),
-                                  depvar = NA
+  x %<>% mutate_cond(
+    is.na(timevar),
+    timevar = ptime,
+    trule.nr="-",
+    trule.txt = paste(
+      "Concentration (",
+      depvar,
+      ") at missing actual time at t=",
+      ptime,
+      " set to missing",sep=""
+    ),
+    depvar = NA
   )
-  
+
   # create extra records for missing critical timepoints
 
   do( for(i in c(0,tau,tstart,tend,teval)) {
-    if (!is.na(i)) { 
+    if (!is.na(i)) {
       x %<>% mutate(diff = abs(ptime-i)) %>%   # take closest neighbouring records as base for extra record
 #        mutate_cond(condition=!is.element(i,ptime)&ptime==first(ptime[diff==min(diff)]),
 #                    misstime = i
 #        ) #QCTEST 4.0.5: mutate_cond doesn't work here (misstime turns to logical!)
-   mutate(misstime=ifelse(!is.element(i,ptime)&ptime==first(ptime[diff==min(diff)]),i,misstime))     
+   mutate(misstime=ifelse(!is.element(i,ptime)&ptime==first(ptime[diff==min(diff)]),i,misstime))
 
  misstime = x %>% filter(misstime==i) %>%
         mutate(ptime = i,
@@ -202,14 +218,14 @@ correct.time <- function(
                loqrule.txt="",
                create.nr="-",
                create.txt = paste("Missing record at t=",misstime," added",sep="")
-        ) 
+        )
       x = bind_rows(x,misstime)
     }
   }
   )
-  
-  # Estimate lagging and leading time points and concentrations for each time point
 
+  # Estimate lagging and leading time points and concentrations for each time point
+  suppressMessages(
   x %<>% lag_lead(
     nomtimevar1="ptime",
     depvar1="depvar",
@@ -219,7 +235,8 @@ correct.time <- function(
     leadc="leaddv",
     leadt="leadtime"
   )
-  
+  )
+
   # Start time corrections
 
   x %<>%
@@ -421,28 +438,27 @@ correct.time <- function(
     ) #%>%
   #       select(-lambda_z,-leaddv,-lagdv,-leadtime,-lagtime, -missflag, -misstime, -diff, -newdepvar)
 
-  
+
 # QCTEST 4.0.5: the old code below duplicates column names, causing error messages
-  
+
 #  names(x)[names(x)=="ptime"]=nomtimevar
 #  names(x)[names(x)=="timevar"]=timevar   # to be sure time value of created time points are copied to original time variable
 #  names(x)[names(x)=="depvar"]=depvar     # to be sure conc value of created time points are copied to original conc variable
 
 # QCTEST 4.0.5: the code below corrects this behavior
-  
-x[[nomtimevar]]=x$ptime
-x[[timevar]]=x$timevar
-x[[depvar]]=x$depvar
-  
-  # for(arg in c(
-  #   'tau','tstart','tend','teval',
-  #   'reg','ss','route','method'
-  # )){
-  #   if(arg %in% names(x))if(!arg %in% names(x)){
-  #     x[[arg]] <- x[[arg]]
-  #   }
-  # }
 
+# x[[nomtimevar]]=x$ptime
+# x[[timevar]]=x$timevar
+# x[[depvar]]=x$depvar
+
+# 1.1.7 converting above to standard syntax for safety
+# https://stackoverflow.com/questions/26003574/use-dynamic-variable-names-in-dplyr
+
+x %<>% mutate(
+  !!nomtimevar := ptime,
+  !!timevar := timevar,
+  !!depvar := depvar
+)
   return(x)
 }
 

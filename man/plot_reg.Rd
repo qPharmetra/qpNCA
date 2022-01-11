@@ -6,7 +6,7 @@
 \usage{
 plot_reg(
   x,
-  by = character(0),
+  by = NULL,
   th = NA,
   bloqvar = "bloq",
   timevar = "tad",
@@ -21,9 +21,9 @@ plot_reg(
 \arguments{
 \item{x}{input dataset name}
 
-\item{by}{column names in x indicating grouping variables}
+\item{by}{character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))}
 
-\item{th}{file name of file with half-life estimation information for each curve}
+\item{th}{half-life estimation information for each curve; default is est.thalf(x, by = by, timevar = timevar, depvar = depvar )}
 
 \item{bloqvar}{variable name containing the BLOQ flag (0: no, 1: yes)}
 
@@ -67,7 +67,12 @@ Input dataset:
 }
 \examples{
 \donttest{
-example(est.thalf)
-x \%>\% filter(dv > 0) \%>\% plot_reg(by = 'subject', th = th)
+library(magrittr)
+library(dplyr)
+data(ncx)
+x <- ncx
+x \%<>\% group_by(subject)
+x \%<>\% correct.loq
+x \%>\% filter(dv > 0) \%>\% plot_reg
 }
 }

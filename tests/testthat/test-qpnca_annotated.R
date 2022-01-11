@@ -139,10 +139,23 @@ merged_results <- function(x, y){            # function that merges actual resul
 }
 
 test_that('PO SD results are stable',{       # tests each "testing curves group"
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(-1,1:6)),
-                       reg="SD",ss="N",route="EV",loqrule=2,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(-1,1:6)), route = 'ev') 
-  comp <- merged_results(test,refr) 
+  test <- test_results(
+    'profiles.csv' %>%
+      as_csv %>%
+      filter(id%in%c(-1,1:6)),
+    reg="SD",
+    ss="N",
+    route="EV",
+    loqrule=2,
+    method=1
+  )
+  refr <- reference_results(
+    'reference.csv' %>%
+      as_csv %>%
+      filter(id%in%c(-1,1:6)),
+    route = 'ev'
+  )
+  comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
   ndiff=length(comp$identical[comp$identical==0])
@@ -155,8 +168,15 @@ test_that('PO SD results are stable',{       # tests each "testing curves group"
 })
 
 test_that('IV Bolus SD results are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(-2,7:10)),
-                       reg="SD",ss="N",route="IVB",loqrule=2,method=1 )
+  test <- test_results(
+    as_csv('profiles.csv') %>%
+      filter(id%in%c(-2,7:10)),
+    reg="SD",
+    ss="N",
+    route="IVB",
+    loqrule=2,
+    method=1
+  )
   refr <- reference_results(as_csv('reference.csv')%>% filter(id%in%c(-2,7:10)), route = 'ivb')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))

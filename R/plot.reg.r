@@ -15,9 +15,9 @@
 #' * dataset containing results of the half-life estimation
 #'
 #'
-#' @param x input dataset name 
-#' @param by column names in x indicating grouping variables
-#' @param th file name of file with half-life estimation information for each curve
+#' @param x input dataset name
+#' @param by character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))
+#' @param th half-life estimation information for each curve; default is est.thalf(x, by = by, timevar = timevar, depvar = depvar )
 #' @param bloqvar variable name containing the BLOQ flag (0: no, 1: yes)
 #' @param timevar variable name containing the actual sampling time after dose
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
@@ -34,12 +34,17 @@
 #' @importFrom dplyr left_join group_by_at first ungroup
 #' @examples
 #' \donttest{
-#' example(est.thalf)
-#' x %>% filter(dv > 0) %>% plot_reg(by = 'subject', th = th)
+#' library(magrittr)
+#' library(dplyr)
+#' data(ncx)
+#' x <- ncx
+#' x %<>% group_by(subject)
+#' x %<>% correct.loq
+#' x %>% filter(dv > 0) %>% plot_reg
 #' }
 plot_reg <- function(
    x,
-   by = character(0),
+   by = NULL,
    th = NA,
    bloqvar = "bloq",
    timevar = "tad",
@@ -50,24 +55,25 @@ plot_reg <- function(
    plotdir = NA,
    ...
   ){
-  data_in = x %>% mutate(
-    timevar = x[[timevar]],
-    depvar = x[[depvar]],
-    bloqvar = x[[bloqvar]]
+  if(is.null(by)) by <- as.character(groups(x))
+  if(identical(NA, th) & !'lambda_z' %in% names(x)) th <- est.thalf(x, by = by, timevar = timevar, depvar = depvar )
+   x %<>% rename(
+    timevar = !!timevar,
+    depvar = !!depvar,
+    bloqvar = !!bloqvar
   )
 
-  if(!(is.na(exclvar))&exclvar %in% names(x)) { data_in = data_in %>% mutate(exclvar=x[[exclvar]]) }
-  
-  if (!is.na(exclvar) &
-      !(exclvar %in% names(x)))
+  if (!is.na(exclvar) &!(exclvar %in% names(x)))
     stop(paste("Exclusion variable", exclvar, "does not exist"), call. = F)
 
-  data_in = data_in %>% mutate(excl = 0)
+  if(!(is.na(exclvar)) & exclvar %in% names(x)) { x %<>% rename( exclvar = !!exclvar) }
+
+  x %<>% mutate(excl = 0)
   if (!is.na(exclvar)) {
-    data_in = data_in %>% mutate(excl = exclvar)
+    x %<>% mutate(excl = exclvar)
   }  # if exclvar exists, set excl to exclvar, else set to 0
 
-  plot = left_join(data_in, th, by = by) %>%
+  plot = left_join(x, th, by = by) %>%
     filter(bloqvar == 0) %>%
     mutate(
       start_conc = exp(log(intercept) - lambda_z * start_th),
@@ -276,7 +282,7 @@ titlefun <- function(x,by) {
 #' Create File Name for Regression Plots
 #'
 #' Creates file name for regression plots (*.png) from by-variables in plot_reg function
-#' 
+#'
 #' @param x data.frame
 #' @param by column names in x indicating grouping variables
 #' @return character

@@ -6,13 +6,12 @@
 \usage{
 correct.conc(
   x,
-  by = character(0),
+  by = NULL,
   nomtimevar = "ntad",
   tau = NA,
   tstart = NA,
   tend = NA,
   teval = NA,
-  th = NA,
   reg = "SD",
   ss = "N",
   route = "EV",
@@ -22,7 +21,7 @@ correct.conc(
 \arguments{
 \item{x}{input dataset name (after Time Deviation Correction Rules have been applied by \code{\link{correct.time}})}
 
-\item{by}{column names in x indicating grouping variables}
+\item{by}{character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))}
 
 \item{nomtimevar}{variable name containing the nominal sampling time after dose}
 
@@ -33,8 +32,6 @@ correct.conc(
 \item{tend}{end time of partial AUC; NA (default) if not requested; x$tend overrides}
 
 \item{teval}{user selected AUC interval; NA (default) if not requested; x$teval overrides}
-
-\item{th}{lamdba_z information for each curve; like output of \code{\link{est.thalf}}}
 
 \item{reg}{regimen, "sd" or "md"; x$reg overrides}
 
@@ -83,10 +80,13 @@ The following Concentration Deviation Correction Rules will be applied to critic
 }
 \examples{
 \donttest{
-example(correct.time)
-x \%<>\% mutate(ss = 'N', route = 'EV')
-# route redefined for completeness
-x \%<>\% correct.conc(by = 'subject') # ignoring th
-x \%>\% head
+library(magrittr)
+library(dplyr)
+data(ncx)
+x <- ncx
+x \%<>\% group_by(subject)
+x \%<>\% correct.loq
+x \%<>\% correct.time
+x \%>\% correct.conc \%>\% head
 }
 }

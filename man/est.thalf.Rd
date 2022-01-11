@@ -6,7 +6,7 @@
 \usage{
 est.thalf(
   x,
-  by = character(0),
+  by = NULL,
   timevar = "time",
   depvar = "dv",
   includeCmax = "Y",
@@ -16,7 +16,7 @@ est.thalf(
 \arguments{
 \item{x}{a dataset}
 
-\item{by}{column names in x indicating grouping variables}
+\item{by}{character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))}
 
 \item{timevar}{variable name containing the actual sampling time after dose}
 
@@ -55,9 +55,12 @@ Visual outliers can be excluded from the regression analysis.
 }
 \examples{
 \donttest{
-example(correct.loq)
-x \%<>\% mutate(includeCmax = 'Y')
-th <- x \%>\% est.thalf(by='subject',exclvar=)
-th \%>\%  head
+library(magrittr)
+library(dplyr)
+data(ncx)
+x <- ncx
+x \%<>\% group_by(subject)
+x \%<>\% correct.loq
+x \%>\% est.thalf \%>\% head
 }
 }

@@ -51,8 +51,8 @@ lag_lead <- function(
 
   #3 merge with original
 
-  # newdata=left_join(original,no.na,by="ptime")
-  newdata=left_join(original,no.na)
+  newdata=left_join(original,no.na,by="ptime")
+  # newdata=left_join(original,no.na)
 
   newdata = newdata %>% arrange(ptime) %>%
     mutate(leadc  =ifelse(flag==1,locf(leadc),leadc),

@@ -4,12 +4,12 @@
 \alias{calc.ctmax}
 \title{Calculate Cmax and Tmax}
 \usage{
-calc.ctmax(x, by = character(0), timevar = "time", depvar = "dv")
+calc.ctmax(x, by = NULL, timevar = "time", depvar = "dv")
 }
 \arguments{
 \item{x}{data.frame}
 
-\item{by}{column names in x indicating grouping variables}
+\item{by}{character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))}
 
 \item{timevar}{variable name containing the actual sampling time after dose}
 
@@ -29,8 +29,12 @@ if all concentrations are NA, sets Cmax and Tmax also to NA.
 }
 \examples{
 \donttest{
-example(est.thalf)
-ctmax <- x \%>\% calc.ctmax(by = 'subject')
-ctmax \%>\% head
+library(magrittr)
+library(dplyr)
+data(ncx)
+x <- ncx
+x \%<>\% group_by(subject)
+x \%<>\% correct.loq
+x \%>\% calc.ctmax \%>\% head
 }
 }

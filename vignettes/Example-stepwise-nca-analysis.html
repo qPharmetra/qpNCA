@@ -204,7 +204,23 @@ hr {
 <h2>Load libraries</h2>
 
 <pre><code class="r">library(dplyr)
-library(qpNCA)
+</code></pre>
+
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union
+</code></pre>
+
+<pre><code class="r">library(qpNCA)
 library(knitr)
 </code></pre>
 
@@ -683,23 +699,8 @@ head(ctmax) %&gt;% kable()
     reg=&quot;sd&quot;,
     method=1
   ) 
-</code></pre>
 
-<pre><code>## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-</code></pre>
-
-<pre><code class="r"># Result:
+# Result:
 
 ct.data %&gt;% filter(subject&lt;=5&amp;(trule.nr!=&quot;&quot;|create.nr!=&quot;&quot;)) %&gt;% select(subject,ntad,conc,applies.to.time,trule.nr,trule.txt,create.txt) %&gt;% kable()
 </code></pre>
@@ -889,53 +890,14 @@ ct.data %&gt;% filter(subject&lt;=5&amp;(trule.nr!=&quot;&quot;|create.nr!=&quot
     tstart=4,
     tend=9,
     teval=12,
-    th=th,
+    # th=th,
     reg=&quot;sd&quot;,
     ss=&quot;n&quot;,
     route=&quot;EV&quot;,
     method=1
   )
-</code></pre>
 
-<pre><code>## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-## Joining, by = &quot;ptime&quot;
-</code></pre>
-
-<pre><code class="r"># Result:
+# Result:
 
 cc.ct.data %&gt;% filter(crule.nr!=&quot;&quot;) %&gt;% select(subject,ntad,conc,applies.to.conc,crule.nr,crule.txt) %&gt;% kable()
 </code></pre>
@@ -1675,7 +1637,7 @@ head(par) %&gt;% kable()
 cov = input.data %&gt;%
       distinct(subject,dose)
 
-par &lt;- par %&gt;% 
+par &lt;- cc.ct.data %&gt;% 
   calc.par.th(
     by=&quot;subject&quot;,
     th=th ,
@@ -1694,6 +1656,7 @@ head(par) %&gt;% kable()
 <table><thead>
 <tr>
 <th align="right">subject</th>
+<th align="left">route</th>
 <th align="right">method</th>
 <th align="right">tlast</th>
 <th align="right">clast.obs</th>
@@ -1706,18 +1669,21 @@ head(par) %&gt;% kable()
 <th align="right">mrtall</th>
 <th align="right">mrtlast</th>
 <th align="right">calc.tau</th>
-<th align="right">auctau</th>
-<th align="right">aumctau</th>
-<th align="right">tau</th>
+<th align="left">auctau</th>
+<th align="left">aumctau</th>
+<th align="left">tau</th>
 <th align="right">calc.teval</th>
-<th align="right">auc12</th>
-<th align="right">teval</th>
+<th align="left">aucteval</th>
+<th align="left">teval</th>
 <th align="right">calc.part</th>
-<th align="right">auc4_9</th>
-<th align="right">tstart</th>
-<th align="right">tend</th>
+<th align="left">aucpart</th>
+<th align="left">tstart</th>
+<th align="left">tend</th>
 <th align="left">c0</th>
 <th align="left">area.back.extr</th>
+<th align="left">reg</th>
+<th align="left">ss</th>
+<th align="right">factor</th>
 <th align="right">no.points</th>
 <th align="right">intercept</th>
 <th align="right">lambda_z</th>
@@ -1729,10 +1695,6 @@ head(par) %&gt;% kable()
 <th align="left">includeCmax</th>
 <th align="left">points_excluded</th>
 <th align="right">dose</th>
-<th align="right">factor</th>
-<th align="left">reg</th>
-<th align="left">ss</th>
-<th align="left">route</th>
 <th align="right">clast.pred</th>
 <th align="right">aucinf.obs</th>
 <th align="right">aucinf.pred</th>
@@ -1760,6 +1722,7 @@ head(par) %&gt;% kable()
 </thead><tbody>
 <tr>
 <td align="right">1</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">23.85</td>
 <td align="right">0.92</td>
@@ -1771,19 +1734,22 @@ head(par) %&gt;% kable()
 <td align="right">609.1524</td>
 <td align="right">8.256833</td>
 <td align="right">8.256833</td>
-<td align="right">1</td>
-<td align="right">73.97837</td>
-<td align="right">612.3497</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">51.75887</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">21.64179</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">3</td>
 <td align="right">8.212078</td>
 <td align="right">0.0915758</td>
@@ -1795,10 +1761,6 @@ head(par) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">320.000</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">0.9245229</td>
 <td align="right">83.82187</td>
 <td align="right">83.87126</td>
@@ -1825,6 +1787,7 @@ head(par) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">2</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">12.05</td>
 <td align="right">3.53</td>
@@ -1836,19 +1799,22 @@ head(par) %&gt;% kable()
 <td align="right">354.0998</td>
 <td align="right">5.687724</td>
 <td align="right">5.687724</td>
-<td align="right">1</td>
-<td align="right">91.67850</td>
-<td align="right">808.1730</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">62.08000</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">28.32875</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">3</td>
 <td align="right">8.959057</td>
 <td align="right">0.0777431</td>
@@ -1860,10 +1826,6 @@ head(par) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">319.770</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">3.5108576</td>
 <td align="right">107.66280</td>
 <td align="right">107.41657</td>
@@ -1890,6 +1852,7 @@ head(par) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">3</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">24.12</td>
 <td align="right">1.25</td>
@@ -1901,19 +1864,22 @@ head(par) %&gt;% kable()
 <td align="right">739.5346</td>
 <td align="right">8.350666</td>
 <td align="right">8.350666</td>
-<td align="right">1</td>
-<td align="right">88.40890</td>
-<td align="right">737.1499</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">62.71486</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">26.17989</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">6</td>
 <td align="right">8.688001</td>
 <td align="right">0.0818231</td>
@@ -1925,10 +1891,6 @@ head(par) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">Y</td>
 <td align="right">319.365</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">1.2072785</td>
 <td align="right">103.83680</td>
 <td align="right">103.31468</td>
@@ -1955,6 +1917,7 @@ head(par) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">4</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">24.08</td>
 <td align="right">0.86</td>
@@ -1966,19 +1929,22 @@ head(par) %&gt;% kable()
 <td align="right">614.9855</td>
 <td align="right">7.644705</td>
 <td align="right">7.644705</td>
-<td align="right">1</td>
-<td align="right">80.37666</td>
-<td align="right">614.1894</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">58.89166</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">23.37641</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">3</td>
 <td align="right">8.703249</td>
 <td align="right">0.0962171</td>
@@ -1990,10 +1956,6 @@ head(par) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">319.800</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">0.8579476</td>
 <td align="right">89.38407</td>
 <td align="right">89.36274</td>
@@ -2020,6 +1982,7 @@ head(par) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">5</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">24.17</td>
 <td align="right">1.05</td>
@@ -2031,19 +1994,22 @@ head(par) %&gt;% kable()
 <td align="right">767.2143</td>
 <td align="right">7.497837</td>
 <td align="right">7.497837</td>
-<td align="right">1</td>
-<td align="right">102.14258</td>
-<td align="right">767.7359</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">70.75194</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">28.50079</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">5</td>
 <td align="right">10.568234</td>
 <td align="right">0.0948933</td>
@@ -2055,10 +2021,6 @@ head(par) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">319.365</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">1.0663923</td>
 <td align="right">113.38981</td>
 <td align="right">113.56255</td>
@@ -2085,6 +2047,7 @@ head(par) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">6</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">12.00</td>
 <td align="right">3.01</td>
@@ -2096,19 +2059,22 @@ head(par) %&gt;% kable()
 <td align="right">349.9481</td>
 <td align="right">5.185929</td>
 <td align="right">5.185929</td>
-<td align="right">1</td>
-<td align="right">89.85776</td>
-<td align="right">670.2872</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">67.48030</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">27.80327</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">3</td>
 <td align="right">12.790536</td>
 <td align="right">0.1192526</td>
@@ -2120,10 +2086,6 @@ head(par) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">318.560</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">3.0577347</td>
 <td align="right">92.72084</td>
 <td align="right">93.12112</td>
@@ -2166,6 +2128,7 @@ head(par_all) %&gt;% kable()
 <table><thead>
 <tr>
 <th align="right">subject</th>
+<th align="left">route</th>
 <th align="right">method</th>
 <th align="right">tlast</th>
 <th align="right">clast.obs</th>
@@ -2178,18 +2141,21 @@ head(par_all) %&gt;% kable()
 <th align="right">mrtall</th>
 <th align="right">mrtlast</th>
 <th align="right">calc.tau</th>
-<th align="right">auctau</th>
-<th align="right">aumctau</th>
-<th align="right">tau</th>
+<th align="left">auctau</th>
+<th align="left">aumctau</th>
+<th align="left">tau</th>
 <th align="right">calc.teval</th>
-<th align="right">auc12</th>
-<th align="right">teval</th>
+<th align="left">aucteval</th>
+<th align="left">teval</th>
 <th align="right">calc.part</th>
-<th align="right">auc4_9</th>
-<th align="right">tstart</th>
-<th align="right">tend</th>
+<th align="left">aucpart</th>
+<th align="left">tstart</th>
+<th align="left">tend</th>
 <th align="left">c0</th>
 <th align="left">area.back.extr</th>
+<th align="left">reg</th>
+<th align="left">ss</th>
+<th align="right">factor</th>
 <th align="right">no.points</th>
 <th align="right">intercept</th>
 <th align="right">lambda_z</th>
@@ -2201,10 +2167,6 @@ head(par_all) %&gt;% kable()
 <th align="left">includeCmax</th>
 <th align="left">points_excluded</th>
 <th align="right">dose</th>
-<th align="right">factor</th>
-<th align="left">reg</th>
-<th align="left">ss</th>
-<th align="left">route</th>
 <th align="right">clast.pred</th>
 <th align="right">aucinf.obs</th>
 <th align="right">aucinf.pred</th>
@@ -2234,6 +2196,7 @@ head(par_all) %&gt;% kable()
 </thead><tbody>
 <tr>
 <td align="right">1</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">23.85</td>
 <td align="right">0.92</td>
@@ -2245,19 +2208,22 @@ head(par_all) %&gt;% kable()
 <td align="right">609.1524</td>
 <td align="right">8.256833</td>
 <td align="right">8.256833</td>
-<td align="right">1</td>
-<td align="right">73.97837</td>
-<td align="right">612.3497</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">51.75887</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">21.64179</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">3</td>
 <td align="right">8.212078</td>
 <td align="right">0.0915758</td>
@@ -2269,10 +2235,6 @@ head(par_all) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">320.000</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">0.9245229</td>
 <td align="right">83.82187</td>
 <td align="right">83.87126</td>
@@ -2301,6 +2263,7 @@ head(par_all) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">2</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">12.05</td>
 <td align="right">3.53</td>
@@ -2312,19 +2275,22 @@ head(par_all) %&gt;% kable()
 <td align="right">354.0998</td>
 <td align="right">5.687724</td>
 <td align="right">5.687724</td>
-<td align="right">1</td>
-<td align="right">91.67850</td>
-<td align="right">808.1730</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">62.08000</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">28.32875</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">3</td>
 <td align="right">8.959057</td>
 <td align="right">0.0777431</td>
@@ -2336,10 +2302,6 @@ head(par_all) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">319.770</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">3.5108576</td>
 <td align="right">107.66280</td>
 <td align="right">107.41657</td>
@@ -2368,6 +2330,7 @@ head(par_all) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">3</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">24.12</td>
 <td align="right">1.25</td>
@@ -2379,19 +2342,22 @@ head(par_all) %&gt;% kable()
 <td align="right">739.5346</td>
 <td align="right">8.350666</td>
 <td align="right">8.350666</td>
-<td align="right">1</td>
-<td align="right">88.40890</td>
-<td align="right">737.1499</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">62.71486</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">26.17989</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">6</td>
 <td align="right">8.688001</td>
 <td align="right">0.0818231</td>
@@ -2403,10 +2369,6 @@ head(par_all) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">Y</td>
 <td align="right">319.365</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">1.2072785</td>
 <td align="right">103.83680</td>
 <td align="right">103.31468</td>
@@ -2435,6 +2397,7 @@ head(par_all) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">4</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">24.08</td>
 <td align="right">0.86</td>
@@ -2446,19 +2409,22 @@ head(par_all) %&gt;% kable()
 <td align="right">614.9855</td>
 <td align="right">7.644705</td>
 <td align="right">7.644705</td>
-<td align="right">1</td>
-<td align="right">80.37666</td>
-<td align="right">614.1894</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">58.89166</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">23.37641</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">3</td>
 <td align="right">8.703249</td>
 <td align="right">0.0962171</td>
@@ -2470,10 +2436,6 @@ head(par_all) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">319.800</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">0.8579476</td>
 <td align="right">89.38407</td>
 <td align="right">89.36274</td>
@@ -2502,6 +2464,7 @@ head(par_all) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">5</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">24.17</td>
 <td align="right">1.05</td>
@@ -2513,19 +2476,22 @@ head(par_all) %&gt;% kable()
 <td align="right">767.2143</td>
 <td align="right">7.497837</td>
 <td align="right">7.497837</td>
-<td align="right">1</td>
-<td align="right">102.14258</td>
-<td align="right">767.7359</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">70.75194</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">28.50079</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">5</td>
 <td align="right">10.568234</td>
 <td align="right">0.0948933</td>
@@ -2537,10 +2503,6 @@ head(par_all) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">319.365</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">1.0663923</td>
 <td align="right">113.38981</td>
 <td align="right">113.56255</td>
@@ -2569,6 +2531,7 @@ head(par_all) %&gt;% kable()
 </tr>
 <tr>
 <td align="right">6</td>
+<td align="left">ev</td>
 <td align="right">1</td>
 <td align="right">12.00</td>
 <td align="right">3.01</td>
@@ -2580,19 +2543,22 @@ head(par_all) %&gt;% kable()
 <td align="right">349.9481</td>
 <td align="right">5.185929</td>
 <td align="right">5.185929</td>
-<td align="right">1</td>
-<td align="right">89.85776</td>
-<td align="right">670.2872</td>
-<td align="right">24</td>
-<td align="right">1</td>
-<td align="right">67.48030</td>
-<td align="right">12</td>
-<td align="right">1</td>
-<td align="right">27.80327</td>
-<td align="right">4</td>
-<td align="right">9</td>
+<td align="right">0</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">sd</td>
+<td align="left">n</td>
+<td align="right">1</td>
 <td align="right">3</td>
 <td align="right">12.790536</td>
 <td align="right">0.1192526</td>
@@ -2604,10 +2570,6 @@ head(par_all) %&gt;% kable()
 <td align="left">Y</td>
 <td align="left">N</td>
 <td align="right">318.560</td>
-<td align="right">1</td>
-<td align="left">sd</td>
-<td align="left">n</td>
-<td align="left">ev</td>
 <td align="right">3.0577347</td>
 <td align="right">92.72084</td>
 <td align="right">93.12112</td>

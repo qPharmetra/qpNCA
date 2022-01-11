@@ -1,7 +1,7 @@
 Package: qpNCA
 Type: Package
 Title: Noncompartmental Pharmacokinetic Analysis by qPharmetra
-Version: 1.1.6
+Version: 1.2.0
 Authors@R: c(person("Jan", "Huisman", role = c("aut", "cre"),
                      email = "jan.huisman@qpharmetra.com"),
               person("Koen", "Jolling", role = "ctb"),
@@ -35,7 +35,8 @@ Imports:
     tidyr (>= 0.8.2),
     magrittr,
     ggplot2,
-    knitr
+    knitr,
+    rlang
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

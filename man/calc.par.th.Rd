@@ -6,22 +6,41 @@
 \usage{
 calc.par.th(
   x,
-  by = character(0),
-  th = th,
+  by = NULL,
+  tau = NA,
+  tstart = NA,
+  tend = NA,
+  teval = NA,
+  route = "EV",
+  method = 1,
+  th = NULL,
   covariates = NA,
   dose = "dose",
   factor = 1,
   reg = "SD",
   ss = "N",
-  route = "EV"
+  timevar = "time",
+  depvar = "dv"
 )
 }
 \arguments{
-\item{x}{result parameter dataset from \code{\link{calc.par}}}
+\item{x}{output from \code{\link{correct.conc}}}
 
-\item{by}{column names in x indicating grouping variables}
+\item{by}{character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))}
 
-\item{th}{result dataset from \code{\link{est.thalf}}}
+\item{tau}{dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides}
+
+\item{tstart}{start time of partial AUC (start>0); NA (default) if not requested; x$tstart overrides}
+
+\item{tend}{end time of partial AUC; NA (default) if not requested; x$tend overrides}
+
+\item{teval}{user selected AUC interval; NA (default) if not requested; x$teval overrides}
+
+\item{route}{route of drug administration ("EV","IVB","IVI"); x$route overrides}
+
+\item{method}{method for trapezoidal rule}
+
+\item{th}{lamdba_z information for each curve; default is est.thalf(x, by = by, timevar = timevar, depvar = depvar )}
 
 \item{covariates}{covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character name of csv file or local object}
 
@@ -33,11 +52,13 @@ calc.par.th(
 
 \item{ss}{is steady state reached (y/n); x$ss overrides}
 
-\item{route}{of drug administration ("EV","IVB","IVI"); x$route overrides}
+\item{timevar}{variable name containing the actual sampling time after dose}
+
+\item{depvar}{variable name containing the dependent variable (e.g., concentration)}
 }
 \value{
 A dataset containing all parameters calculated in \code{\link{est.thalf}} and \code{\link{calc.par}} \cr
-with estimates for the following parameters added, one observation per subject:\tabular{ll}{
+with estimates for the following parameters added, one observation per profile:\tabular{ll}{
    \strong{Parameter} \tab \strong{Description} \cr
    clast.pred \tab predicted concentration at tlast \cr
    aucinf.obs \tab aucinf based on observed concentration at tlast \cr
@@ -63,22 +84,22 @@ with estimates for the following parameters added, one observation per subject:\
 Note: ctmax must be merged separately as those were calculated from uncorrected data.
 }
 \description{
-Calculates PK parameters that need lambda_z.
+Calculates PK parameters, including those that need lambda_z.
 }
 \examples{
 \donttest{
-example(calc.par) # creates par
-# notice x includes (optional) loqrule, includeCmax, reg, method, route, ss
-covs <- Theoph \%>\%
-  select(subject = Subject, Wt, dose = Dose) \%>\%
-  unique \%>\%
-  mutate(dose = dose * Wt, subject=as.numeric(as.character(subject))) # see ?Theoph
-y <- x \%>\% select(subject, reg, ss, loqrule) \%>\% unique
-y \%<>\% mutate(factor = 1)
-par \%<>\% left_join(y, by = 'subject')
-par \%<>\% calc.par.th(by = 'subject', th = th, covariates = covs)
-par \%<>\% left_join(ctmax, ., by = 'subject')
-par \%>\% head
-par \%>\% data.frame \%>\% head(2)
+library(magrittr)
+library(dplyr)
+data(ncx)
+x <- ncx
+x \%<>\% group_by(subject)
+x \%<>\% correct.loq
+cm <- calc.ctmax(x)              # using uncorrected data
+th <- est.thalf(x)               # possibly expensive!
+x \%<>\% correct.time              # or pass (th = th)
+x \%<>\% correct.conc
+x \%<>\% calc.par.th               # or pass (th = th)
+x \%<>\% left_join(cm)
+x \%>\% data.frame \%>\% head(2)
 }
 }
