@@ -10,3 +10,4 @@
 ^.gitignore$
 ^Meta$
 ^README.Rmd$
+^\.github$

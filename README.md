@@ -4,11 +4,14 @@
 # qpNCA
 
 <!-- a href='https://dplyr.tidyverse.org'><img src='man/figures/logo.png' align="right" height="139" /></a -->
-<!-- badges: start 
-[![Travis build status](https://travis-ci.com/qPharmetra/qpNCA.svg?branch=master)](https://travis-ci.com/qPharmetra/qpNCA)
-[![Coverage status](https://codecov.io/gh/qpharmetra/qpNCA/branch/master/graph/badge.svg)](https://codecov.io/github/qpharmetra/qpNCA?branch=master)
+<!-- badges: start -->
 
- badges: end -->
+[![CRAN
+status](https://www.r-pkg.org/badges/version/qpNCA)](https://CRAN.R-project.org/package=qpNCA)
+[![R-CMD-check](https://github.com/qPharmetra/qpNCA/workflows/R-CMD-check/badge.svg)](https://github.com/qPharmetra/qpNCA/actions)
+[![Coverage
+status](https://codecov.io/gh/qpharmetra/qpNCA/branch/master/graph/badge.svg)](https://codecov.io/github/qpharmetra/qpNCA?branch=master)
+<!-- badges: end -->
 
 ## Overview
 
