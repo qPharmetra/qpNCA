@@ -27,10 +27,10 @@
 calc.ctmax <- function(
   x,
   by = NULL,
-  timevar="time",
-  depvar="dv"
-){
-  if(is.null(by)) by <- as.character(groups(x))
+  timevar = "time",
+  depvar = "dv"
+) {
+  if (is.null(by)) by <- as.character(groups(x))
   x <- group_by_at(x, vars(by))
   x <- do(
     .data = x,
@@ -40,23 +40,29 @@ calc.ctmax <- function(
       depvar = depvar
     )
   )
- # x <- ungroup(x)
+  # x <- ungroup(x)
   x
 }
 
-.calc.ctmax <- function(x,timevar,depvar){
-    x %<>% rename(
-    depvar = !!depvar,        # calculated dependent variable           (internal)
-    timevar = !!timevar       # calculated time variable                (internal)
-  )
-  x %<>% filter(!is.na(depvar))            # na.rm=T in the max function does not work?
-  if (!nrow(x)) {            # if all concentrations are NA, set Cmax and Tmax to NA
-    x %<>% summarise(cmax = NA, tmax = NA)
-  } else {
-    x %<>% summarise(
-      cmax=max(depvar),
-      tmax=first(timevar[depvar==cmax]) # there might be more than 1 timepoint with Cmax
+.calc.ctmax <- function(x, timevar, depvar) {
+  x %<>%
+    rename(
+      depvar = !!depvar, # calculated dependent variable           (internal)
+      timevar = !!timevar # calculated time variable                (internal)
     )
+  x %<>% filter(!is.na(depvar)) # na.rm=T in the max function does not work?
+  if (!nrow(x)) {
+    # if all concentrations are NA, set Cmax and Tmax to NA
+    x %<>% summarise(cmax = NA, tmax = NA, cmin = NA, tmin = NA)
+  } else {
+    x %<>%
+      summarise(
+        cmax = max(depvar),
+        tmax = first(timevar[depvar == cmax]), # there might be more than 1 timepoint with Cmax
+        cmin = ifelse(tolower(reg) == "sd", NA, min(depvar[timevar > 0])), #do not included predose sample
+        tmin = ifelse(tolower(reg) == "sd", NA, first(timevar[depvar == cmin])) # there might be more than 1 timepoint with Cmin
+      ) %>%
+      distinct()
   }
   x
 }
