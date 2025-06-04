@@ -4,6 +4,7 @@
 
 # Session Data files
 .RData
+.Rdata
 
 # Example code in package build process
 *-Ex.R
@@ -39,3 +40,6 @@ rsconnect/
 .info
 /doc/
 /Meta/
+
+.DS_Store
+.quarto
