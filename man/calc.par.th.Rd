@@ -16,6 +16,7 @@ calc.par.th(
   th = NULL,
   covariates = NA,
   dose = "dose",
+  infdur = "infdur",
   factor = 1,
   reg = "SD",
   ss = "N",
@@ -45,6 +46,8 @@ calc.par.th(
 \item{covariates}{covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character name of csv file or local object}
 
 \item{dose}{variable containing the dose amount; default 'dose' set to 1 if not in \code{names(x)}}
+
+\item{infdur}{variable containing the infusion duration; default 'infdur' set to 1 if not in \code{names(x)}}
 
 \item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides}
 

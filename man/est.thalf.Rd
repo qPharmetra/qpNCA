@@ -10,7 +10,9 @@ est.thalf(
   timevar = "time",
   depvar = "dv",
   includeCmax = "Y",
-  exclvar = NA
+  exclvar = NA,
+  startth = NA,
+  endth = NA
 )
 }
 \arguments{
@@ -25,6 +27,10 @@ est.thalf(
 \item{includeCmax}{include results of regression including Cmax in selection? (y/n); x$includeCmax overrides if provided}
 
 \item{exclvar}{a variable name containing information about points to be excluded (these should have exclvar = 1)}
+
+\item{startth}{user defined start time for regression}
+
+\item{endth}{user defined end time for regression}
 }
 \value{
 a dataset with estimates for each regression analysis in one observation.
@@ -40,6 +46,7 @@ The following parameters are available.
 \item \strong{end_th time} of last sample included in the thalf estimation
 \item \strong{includeCmax} include results of regression including Cmax in selection? (y/n)
 \item \strong{points_excluded} are time points excluded from the half-life estimation? (y/n)
+\item \strong{usrmod} are start and/or end point of regression interval user defined? (y/n)
 }
 }
 \description{

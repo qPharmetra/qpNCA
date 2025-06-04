@@ -24,6 +24,7 @@ check.input(
   teval = NA,
   covariates = NA,
   dose = NA,
+  infdur = NA,
   factor = NA,
   reg = NA,
   ss = NA,
@@ -69,6 +70,8 @@ check.input(
 \item{covariates}{covariates dataset; Must contain the dose variable}
 
 \item{dose}{variable containing the dose amount}
+
+\item{infdur}{variable containing infusion duration}
 
 \item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided}
 

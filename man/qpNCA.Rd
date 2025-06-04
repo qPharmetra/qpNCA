@@ -15,6 +15,8 @@ qpNCA(
   loqrule = 1,
   includeCmax = "Y",
   exclvar = NA,
+  startth = NA,
+  endth = NA,
   plotdir = NA,
   timelab = "timevar",
   deplab = "depvar",
@@ -24,6 +26,7 @@ qpNCA(
   teval = NA,
   covariates = NA,
   dose = "dose",
+  infdur = "infdur",
   factor = 1,
   reg = "SD",
   ss = "N",
@@ -52,6 +55,10 @@ qpNCA(
 
 \item{exclvar}{variable name indicating points to be excluded in half-life estimation (these should have exclvar = 1)}
 
+\item{startth}{user defined start time for regression}
+
+\item{endth}{user defined end time for regression}
+
 \item{plotdir}{directory where regression plots (.PNG) will be saved; NA gives default location, NULL skips regression plots}
 
 \item{timelab}{label for time axis in regression plots}
@@ -69,6 +76,8 @@ qpNCA(
 \item{covariates}{covariates dataset (containing at least dose for CL calculation); defaults to unique combinations of \code{by} and \code{dose} evaluated on \code{x}; can be character path of csv file or local object}
 
 \item{dose}{variable containing the dose amount; default 'dose' set to 1 if not in \code{names(x)}}
+
+\item{infdur}{variable containing the infusion duration; default 'infdur' set to 1 if not in \code{names(x)}}
 
 \item{factor}{conversion factor for CL and V calculation (e.g. dose in mg, conc in ng/mL, factor=1000); x$factor overrides if provided}
 
