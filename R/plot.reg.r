@@ -43,35 +43,39 @@
 #' x %>% filter(dv > 0) %>% plot_reg
 #' }
 plot_reg <- function(
-   x,
-   by = NULL,
-   th = NA,
-   bloqvar = "bloq",
-   timevar = "tad",
-   depvar = "dv",
-   timelab = "timevar",
-   deplab = "depvar",
-   exclvar = NA,
-   plotdir = NA,
-   ...
-  ){
-  if(is.null(by)) by <- as.character(groups(x))
-  if(identical(NA, th) & !'lambda_z' %in% names(x)) th <- est.thalf(x, by = by, timevar = timevar, depvar = depvar )
-   x %<>% rename(
-    timevar = !!timevar,
-    depvar = !!depvar,
-    bloqvar = !!bloqvar
-  )
+  x,
+  by = NULL,
+  th = NA,
+  bloqvar = "bloq",
+  timevar = "tad",
+  depvar = "dv",
+  timelab = "timevar",
+  deplab = "depvar",
+  exclvar = NA,
+  plotdir = NA,
+  ...
+) {
+  if (is.null(by)) by <- as.character(groups(x))
+  if (identical(NA, th) & !'lambda_z' %in% names(x))
+    th <- est.thalf(x, by = by, timevar = timevar, depvar = depvar)
+  x %<>%
+    rename(
+      timevar = !!timevar,
+      depvar = !!depvar,
+      bloqvar = !!bloqvar
+    )
 
-  if (!is.na(exclvar) &!(exclvar %in% names(x)))
+  if (!is.na(exclvar) & !(exclvar %in% names(x)))
     stop(paste("Exclusion variable", exclvar, "does not exist"), call. = F)
 
-  if(!(is.na(exclvar)) & exclvar %in% names(x)) { x %<>% rename( exclvar = !!exclvar) }
+  if (!(is.na(exclvar)) & exclvar %in% names(x)) {
+    x %<>% rename(exclvar = !!exclvar)
+  }
 
   x %<>% mutate(excl = 0)
   if (!is.na(exclvar)) {
     x %<>% mutate(excl = exclvar)
-  }  # if exclvar exists, set excl to exclvar, else set to 0
+  } # if exclvar exists, set excl to exclvar, else set to 0
 
   plot = left_join(x, th, by = by) %>%
     filter(bloqvar == 0) %>%
@@ -85,24 +89,31 @@ plot_reg <- function(
         paste0("Half-life: ", round(thalf, 2), "  "),
         "Half-life not calculated  "
       ),
-      radj_txt = ifelse(!is.na(thalf),
-                        paste0(
-                          "Adj. R-squared: ", round(adj.r.squared, 4), "  "
-                        ), " ")
+      radj_txt = ifelse(
+        !is.na(thalf),
+        paste0(
+          "Adj. R-squared: ",
+          round(adj.r.squared, 4),
+          "  "
+        ),
+        " "
+      )
     ) %>%
     group_by_at(by) %>%
     mutate(
-      max_conc = 10 ** (ceiling(log10(
+      max_conc = 10**(ceiling(log10(
         max(depvar, na.rm = T)
       ))),
-      min_conc = 10 ** (floor(log10(
+      min_conc = 10**(floor(log10(
         min(depvar, na.rm = T)
-      ))),
+      )))
+    ) %>%
+    filter(!is.na(depvar)) %>%
+    mutate(
       cmax = max(depvar, na.rm = T),
       tmax = first(timevar[depvar == cmax])
     ) %>%
-    ungroup() %>%
-    filter(!is.na(depvar),!is.na(cmax))
+    ungroup()
 
   plots = plot %>%
     group_by_at(by) %>%
@@ -121,22 +132,23 @@ plot_reg <- function(
           mapping = aes(x = tmax, y = cmax),
           color = "gold3",
           size = 4
-        ) +        # Cmax
+        ) + # Cmax
 
         geom_point(
-          data = .[.$timevar >= .$start_th & .$timevar <= .$end_th &
-                     .$excl != 1, ],
+          data = .[
+            .$timevar >= .$start_th & .$timevar <= .$end_th & .$excl != 1,
+          ],
           mapping = aes(x = timevar, y = depvar),
           size = 4,
           color = "#4CB54F"
-        ) +          # points used in regression
+        ) + # points used in regression
 
         geom_point(
           data = .,
           mapping = aes(x = timevar, y = depvar),
           color = "#144A90",
           size = 2.5
-        ) +   # curve
+        ) + # curve
 
         geom_segment(
           data = .,
@@ -159,7 +171,7 @@ plot_reg <- function(
           shape = 4,
           size = 4,
           color = "red"
-        ) +    # exclusions
+        ) + # exclusions
 
         annotate(
           geom = "text",
@@ -192,25 +204,28 @@ plot_reg <- function(
           size = 3
         ) +
 
-        annotate(
-          geom = "text",
-          label = "  Green data points were included in the elimination half-life estimation, red-crossed data points were excluded",
-          x = -Inf,
-          y = Inf,
-          hjust = 0,
-          vjust = 1.5,
-          color = "black",
-          size = 2.5
-        )  +
+        annotation_custom(
+          grid::textGrob(
+            label = c(
+              "Green data points were included in the elimination half-life estimation.\nRed-crossed data points were excluded."
+            ),
+            x = unit(0.025, "npc"),
+            y = unit(0.93, "npc"),
+            just = "left",
+            gp = grid::gpar(col = "black", fontsize = 9)
+          )
+        ) +
 
         scale_y_log10(
           limits = c(unique(.$min_conc), unique(.$max_conc)),
 
-          breaks = (10 ** (seq(
-            log10(unique(.$min_conc)), log10(unique(.$max_conc))
+          breaks = (10**(seq(
+            log10(unique(.$min_conc)),
+            log10(unique(.$max_conc))
           ))),
-          labels = (10 ** (seq(
-            log10(unique(.$min_conc)), log10(unique(.$max_conc))
+          labels = (10**(seq(
+            log10(unique(.$min_conc)),
+            log10(unique(.$max_conc))
           ))),
           expand = expansion(mult = c(0.05, .25))
         ) +
@@ -221,8 +236,7 @@ plot_reg <- function(
           #                 legend.direction="horizontal",legend.position="bottom", aspect.ratio=0.4,
           #                 legend.text = element_text(size=15),
           plot.title = element_text(hjust = 0, size = 10),
-          panel.background = element_rect(fill = 'white', colour =
-                                            "black"),
+          panel.background = element_rect(fill = 'white', colour = "black"),
           panel.grid.major = element_line(colour = "grey"),
           panel.grid.minor = element_blank(),
           axis.title.x = element_text(size = 10),
@@ -231,11 +245,12 @@ plot_reg <- function(
           axis.text.y = element_text(colour = "black", size = 8)
         ) +
         ggtitle(titlefun(., by))
-    )   %>% ungroup
+    ) %>%
+    ungroup
 
   plots = plots %>% mutate(filename = paste0(filenamefun(., by), ".png"))
 
-  if (!is.na(plotdir))  {
+  if (!is.na(plotdir)) {
     if (file.exists(plotdir)) {
       mapply(
         ggsave,
@@ -256,8 +271,7 @@ plot_reg <- function(
         units = "cm"
       )
     }
-  }
-  else {
+  } else {
     print(plots$plots)
   }
   invisible(plots$plots)
@@ -270,12 +284,12 @@ plot_reg <- function(
 #' @param x dataset containing concentration-time information of the current curve
 #' @param by column names in x indicating grouping variables
 #' @return character
-titlefun <- function(x,by) {
-  plottitle=""
+titlefun <- function(x, by) {
+  plottitle = ""
   for (i in 1:length(by)) {
-    plottitle <- paste0(plottitle,by[i],": ",unique(x[[by[i]]])," ")
+    plottitle <- paste0(plottitle, by[i], ": ", unique(x[[by[i]]]), " ")
   }
-  plottitle=substr(plottitle,1,(nchar(plottitle)-1))
+  plottitle = substr(plottitle, 1, (nchar(plottitle) - 1))
   return(plottitle)
 }
 
@@ -286,12 +300,11 @@ titlefun <- function(x,by) {
 #' @param x data.frame
 #' @param by column names in x indicating grouping variables
 #' @return character
-filenamefun <- function(x,by) {
-  filename=""
+filenamefun <- function(x, by) {
+  filename = ""
   for (i in 1:length(by)) {
-    filename <- paste0(filename,by[i],"_",x[[by[i]]],"_")
+    filename <- paste0(filename, by[i], "_", x[[by[i]]], "_")
   }
-  filename=substr(filename,1,(nchar(filename)-1))
+  filename = substr(filename, 1, (nchar(filename) - 1))
   return(filename)
 }
-
