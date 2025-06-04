@@ -16,13 +16,12 @@
 #' @export
 #' @examples
 #' \donttest{
-#' library(magrittr)
 #' library(dplyr)
 #' data(ncx)
 #' x <- ncx
-#' x %<>% group_by(subject)
-#' x %<>% correct.loq
-#' x %>% calc.ctmax %>% head
+#' x <- x |> dplyr::group_by(subject)
+#' x <- x |> correct.loq()
+#' x |> calc.ctmax() |> head()
 #' }
 calc.ctmax <- function(
   x,
@@ -30,7 +29,7 @@ calc.ctmax <- function(
   timevar = "time",
   depvar = "dv"
 ) {
-  if (is.null(by)) by <- as.character(groups(x))
+  if (is.null(by)) by <- as.character(dplyr::groups(x))
   x <- group_by_at(x, vars(by))
   x <- do(
     .data = x,
@@ -45,24 +44,28 @@ calc.ctmax <- function(
 }
 
 .calc.ctmax <- function(x, timevar, depvar) {
-  x %<>%
-    rename(
+  x <- x |>
+    dplyr::rename(
       depvar = !!depvar, # calculated dependent variable           (internal)
       timevar = !!timevar # calculated time variable                (internal)
     )
-  x %<>% filter(!is.na(depvar)) # na.rm=T in the max function does not work?
+  x <- x |> dplyr::filter(!is.na(depvar)) # na.rm=T in the max function does not work?
   if (!nrow(x)) {
     # if all concentrations are NA, set Cmax and Tmax to NA
-    x %<>% summarise(cmax = NA, tmax = NA, cmin = NA, tmin = NA)
+    x <- x |> dplyr::summarise(cmax = NA, tmax = NA, cmin = NA, tmin = NA)
   } else {
-    x %<>%
-      summarise(
+    x <- x |>
+      dplyr::summarise(
         cmax = max(depvar),
-        tmax = first(timevar[depvar == cmax]), # there might be more than 1 timepoint with Cmax
+        tmax = dplyr::first(timevar[depvar == cmax]), # there might be more than 1 timepoint with Cmax
         cmin = ifelse(tolower(reg) == "sd", NA, min(depvar[timevar > 0])), #do not included predose sample
-        tmin = ifelse(tolower(reg) == "sd", NA, first(timevar[depvar == cmin])) # there might be more than 1 timepoint with Cmin
-      ) %>%
-      distinct()
+        tmin = ifelse(
+          tolower(reg) == "sd",
+          NA,
+          dplyr::first(timevar[depvar == cmin])
+        ) # there might be more than 1 timepoint with Cmin
+      ) |>
+      dplyr::distinct()
   }
   x
 }
