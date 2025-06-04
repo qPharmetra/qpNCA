@@ -1,4 +1,5 @@
 ^inst/docs$
+^inst/test$
 ^utils$
 ^validation$
 ^_pkgdown\.yml$

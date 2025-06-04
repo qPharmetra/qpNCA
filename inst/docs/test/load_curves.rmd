@@ -1,0 +1,64 @@
+---
+title: "Project: qpNCA"
+subtitle: "Purpose: load PK test curves for NCA package validation"
+author: Jan Huisman
+date: March 2019
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+--- 
+
+```{r include=F, eval=T}
+
+options(stringsAsFactors = FALSE)
+options(yamlet_persistence = FALSE)
+
+library("qpToolkit") # must be run before any other package is installed (here: tidyr)
+
+if (!is.element("tidyr", installed.packages()[, "Package"]))
+  install.packages("tidyr")
+if (!is.element("haven", installed.packages()[, "Package"]))
+  install.packages("haven")
+
+library("haven")
+library("plyr")
+library("dplyr")
+library("foreign")
+library("stringr")
+library("reshape2")
+library("gdata")
+library("tidyr")
+library("tidyverse")
+library("readxl")
+library("hms")
+library("wrangle")
+library("knitr")
+library("lubridate")
+library("yamlet")
+library("magrittr")
+
+```
+
+## import validation curves for testing a specific rule
+
+```{r, cache=F, message=FALSE, warning=FALSE}
+
+InputDir = "~/rstudio/inst/test"
+
+# these dataset contain the time and concentration deviations to be corrected
+
+xlsfile = paste(InputDir, "/input_curves.xlsx", sep = "")
+sheets = excel_sheets(xlsfile)
+
+sheet_list_org = lapply(sheets, function(x) {
+  read_excel(xlsfile, sheet = x)
+})
+names(sheet_list_org) = sheets
+list2env(sheet_list_org, envir = .GlobalEnv)
+
+#lapply(sheet_list_org, function(x) {write.csv(x,file=paste(OutputDir,unique(x$rule),".csv",sep=""))})
+
+```
+
+###### END OF CODE (load_curves)

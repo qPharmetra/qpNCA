@@ -1,0 +1,592 @@
+---
+title: "Project: qpNCA"
+subtitle: "Purpose: run qpNCA on test curves"
+author: "Jan Huisman"
+date: "March, 2020"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+---
+
+# Load the qpNCA version to be validated (1.0.12)
+
+```{r}
+
+files.sources = list.files("./R", pattern = "\\.r$", full.names = T)
+sapply(files.sources, source)
+
+```
+
+## Prepare the data
+
+```{r}
+
+curves_POSD = bind_rows(
+  `START_POSD`,
+  `SDT_1`,
+  `SDT_2`,
+  `SDT_3`,
+  `SDC_1`,
+  `SDC_2`,
+  `SDC_3`
+) %>%
+  mutate(
+    dv = as.numeric(dv),
+    loq = as.numeric(loq),
+    bloq = ifelse(is.na(loq), 0, 1),
+    excl_th = 0
+  )
+cov_POSD = curves_POSD %>%
+  distinct(id) %>%
+  mutate(dose = 1) %>%
+  select(id, dose)
+
+curves_IVSD = bind_rows(
+  `START_IVSD`,
+  `SDC_4a`,
+  `SDC_4b`,
+  `SDC_4c`,
+  `SDC_4d`
+) %>%
+  mutate(
+    dv = as.numeric(dv),
+    loq = as.numeric(loq),
+    bloq = ifelse(is.na(loq), 0, 1),
+    excl_th = 0
+  )
+cov_IVSD = curves_IVSD %>%
+  distinct(id) %>%
+  mutate(dose = 1) %>%
+  select(id, dose)
+
+curves_POMDnoss = bind_rows(
+  `START_POMD`,
+  `MDT_1`,
+  `MDT_2`,
+  `MDT_3`,
+  `MDT_3a`,
+  `MDC_1_noss`,
+  `MDC_2_noss`,
+  `MDC_3_noss`
+) %>%
+  mutate(
+    dv = as.numeric(dv),
+    loq = as.numeric(loq),
+    bloq = ifelse(is.na(loq), 0, 1),
+    excl_th = 0
+  )
+cov_POMDnoss = curves_POMDnoss %>%
+  distinct(id) %>%
+  mutate(dose = 1) %>%
+  select(id, dose)
+
+curves_POMDss = bind_rows(`MDC_1_ss`, `MDC_2_ss`, `MDC_3_ss`) %>%
+  mutate(
+    dv = as.numeric(dv),
+    loq = as.numeric(loq),
+    bloq = ifelse(is.na(loq), 0, 1),
+    excl_th = 0
+  )
+cov_POMDss = curves_POMDss %>%
+  distinct(id) %>%
+  mutate(dose = 1) %>%
+  select(id, dose)
+
+curves_IVMD = bind_rows(`MDC_4a`, `MDC_4b`, `MDC_4c`, `MDC_4d`) %>%
+  mutate(
+    dv = as.numeric(dv),
+    loq = as.numeric(loq),
+    bloq = ifelse(is.na(loq), 0, 1),
+    excl_th = 0
+  )
+cov_IVMD = curves_IVMD %>%
+  distinct(id) %>%
+  mutate(dose = 1) %>%
+  select(id, dose)
+
+
+```
+
+## perform NCA on PO, SD curves (just for a test to see if everything works)
+
+```{r, eval=T}
+
+POSD = qpNCA(
+  curves_POSD,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "Y",
+  exclvar = "excl_th",
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = 24,
+  tstart = 4,
+  tend = 12,
+  teval = 18,
+  covariates = "cov_POSD",
+  dose = "dose",
+  factor = 1000,
+  reg = "SD",
+  ss = "N",
+  route = "EV",
+  method = 1
+)
+
+
+```
+
+## split comment in top of regression plots to prevent overwrite thalf number 
+
+```{r}
+
+test = curves_POSD %>% filter(id == -1)
+
+out = qpNCA(
+  test,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "Y",
+  exclvar = "excl_th",
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = 24,
+  tstart = 4,
+  tend = 12,
+  teval = 18,
+  covariates = "cov_POSD",
+  dose = "dose",
+  factor = 1000,
+  reg = "SD",
+  ss = "N",
+  route = "EV",
+  method = 1
+)
+#OK
+```
+
+## at steady state, if teval==ttau, missing c(tau) is set to 0! (MDC1) 
+
+```{r}
+
+test = curves_POMDss %>% filter(id == 18)
+
+out = qpNCA(
+  test,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "Y",
+  exclvar = "excl_th",
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = 24,
+  tstart = 4,
+  tend = 12,
+  teval = 24,
+  covariates = "cov_POMDss",
+  dose = "dose",
+  factor = 1000,
+  reg = "MD",
+  ss = "Y",
+  route = "EV",
+  method = 1
+)
+#OK, no problem!! Keep original correct.time
+
+```
+
+## duplicate NTAD values in a curve create multiple entries in correction AND in pkpar output datasets: check for duplicates!
+
+```{r, eval=T}
+
+test = curves_POSD %>% filter(id == -1)
+
+extra = test %>% filter(ntad == 12) %>% mutate(tad = 11.8, dv = 3.5)
+
+test = bind_rows(test, extra) %>% arrange(id, ntad)
+
+out = qpNCA(
+  test,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "Y",
+  exclvar = "excl_th",
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = 24,
+  tstart = 4,
+  tend = 12,
+  teval = 18,
+  covariates = "cov_POSD",
+  dose = "dose",
+  factor = 1000,
+  reg = "SD",
+  ss = "N",
+  route = "EV",
+  method = 1
+)
+
+# OK tested
+```
+
+## Modify est.thalf function for more flexibility
+
+```{r, eval=T}
+
+test = curves_POSD %>%
+  filter(id %in% c(-1, 1, 2)) %>%
+  mutate(
+    #startth=ifelse(id==1,18,NA),
+    endth = ifelse(id == 1, 36, NA)
+  ) %>%
+  mutate_cond(condition = id == -1 & ntad %in% c(24, 36), excl_th = 1)
+
+th = est.thalf(
+  test,
+  by = c("id"),
+  timevar = "tad",
+  depvar = "dv",
+  includeCmax = "Y",
+  exclvar = "excl_th",
+  startth = ,
+  endth =
+)
+
+plot_reg(
+  test,
+  by = c("id"),
+  th = th,
+  bloqvar = "bloq",
+  timevar = "tad",
+  depvar = "dv",
+  exclvar = "excl_th",
+  plotdir = NA,
+  timelab = "Time",
+  deplab = "Conc"
+)
+
+# test new est_thalf with qpNCA call
+
+out = qpNCA(
+  test,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "Y",
+  exclvar = "excl_th",
+  startth = 12,
+  endth = 24,
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = 24,
+  tstart = 4,
+  tend = 12,
+  teval = 18,
+  covariates = "cov_POSD",
+  dose = "dose",
+  factor = 1000,
+  reg = "SD",
+  ss = "N",
+  route = "EV",
+  method = 1
+)
+
+# OK!!
+
+```
+
+## Modify est.thalf (InclCmax is set AFTER removal of the excluded samples: in that case id original Cmax is removed, a new one will be chosen. InclCmax=N will delete this newly chosen Cmax also!)
+
+```{r}
+
+test = curves_POSD %>%
+  filter(id %in% c(-1)) %>%
+  filter(ntad >= 18) %>%
+  mutate_cond(condition = ntad %in% c(18), excl_th = 1)
+
+out = qpNCA(
+  test,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "N",
+  exclvar = "excl_th",
+  startth = ,
+  endth = ,
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = 24,
+  tstart = 4,
+  tend = 12,
+  teval = 18,
+  covariates = "cov_POSD",
+  dose = "dose",
+  factor = 1000,
+  reg = "SD",
+  ss = "N",
+  route = "EV",
+  method = 1
+)
+
+#OK, modified and tested
+
+```
+
+## modify rules SDC4 / MDC4 (IVB): search for first two measurables if there are Nas in the beginning of the curve
+
+```{r}
+
+test = curves_IVSD %>%
+  mutate_cond(condition = id == 7 & ntad == 0.5, dv = 0, bloq = 1)
+
+out = qpNCA(
+  test,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "N",
+  exclvar = "excl_th",
+  startth = ,
+  endth = ,
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = ,
+  tstart = ,
+  tend = ,
+  teval = ,
+  covariates = "cov_IVSD",
+  dose = "dose",
+  factor = 1000,
+  reg = "SD",
+  ss = "N",
+  route = "IVB",
+  method = 1
+)
+
+#OK, modified and tested
+
+```
+
+## add steady state parameters Tmin, Cmin, Ctau, Cavg, Swing, Swing_tau, Fluctuation%, Fluctuation%_Tau
+
+```{r}
+
+test = curves_POMDss
+
+out = qpNCA(
+  test,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "N",
+  exclvar = "excl_th",
+  startth = ,
+  endth = ,
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = 48,
+  tstart = ,
+  tend = ,
+  teval = ,
+  covariates = "cov_POMDss",
+  dose = "dose",
+  factor = 1000,
+  reg = "MD",
+  ss = "Y",
+  route = "EV",
+  method = 1
+)
+
+# OK  tested
+
+```
+
+## Correct MRT for IVI with infusion duration
+
+```{r}
+
+test = curves_POSD %>% filter(id == -1) %>% mutate(infdur1 = 0.5)
+
+test_cov = test %>% mutate(dose1 = 1) %>% distinct(id, dose1, infdur1)
+
+
+out = qpNCA(
+  test,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "N",
+  exclvar = "excl_th",
+  startth = ,
+  endth = ,
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = 48,
+  tstart = ,
+  tend = ,
+  teval = ,
+  covariates = "test_cov",
+  dose = "dose1",
+  infdur = "infdur1",
+  factor = 1000,
+  reg = "SD",
+  ss = "N",
+  route = "ivi",
+  method = 1
+)
+
+# OK tested!
+
+```
+
+## If there are more Nas at the end of the curve (e.g. loqrule==1 sets LOQs to NA) then the extrapolation doesn’t start (lag(conc) is also NA)!!
+
+```{r}
+
+test = curves_POSD %>%
+  filter(id == -1) %>%
+  mutate(dose = 1) %>%
+  mutate_cond(condition = ntad >= 24, dv = NA) %>%
+  mutate_cond(condition = ntad == 24, tad = 24.5)
+
+
+test_cov = test %>% mutate(dose1 = 1) %>% distinct(id, dose1)
+
+out = qpNCA(
+  test,
+  by = c("id"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "N",
+  exclvar = "excl_th",
+  startth = ,
+  endth = ,
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = ,
+  tstart = ,
+  tend = ,
+  teval = 24,
+  covariates = "test_cov",
+  dose = "dose1",
+  infdur = ,
+  factor = 1000,
+  reg = "SD",
+  ss = "N",
+  route = "ev",
+  method = 1
+)
+
+# OK, was already solved in lag_lead function
+# Corrected unnecessary  time deviation correction if concentration at critical timepoint is missing (time will set to ptime during concentration inter/extrapolation)
+
+```
+
+## general testing on sorting order of input data
+
+```{r}
+
+test = curves_POSD %>%
+  filter(id == -1 | id == 1) %>%
+  mutate(dose = 1, trt = ifelse(id == -1, "A", "B"), factor = 10)
+#                     mutate_cond(condition=id==-1&ntad==10,ntad=16) %>%
+#                     mutate_cond(condition=id==1&ntad==10,ntad=16)
+
+test %>%
+  group_by(id) %>%
+  mutate(srtd = all(diff(ntad) > 0)) %>%
+  ungroup %>%
+  filter(srtd == F) %>%
+  distinct(id)
+
+
+test_cov = test %>% distinct(id, trt, dose)
+
+out = qpNCA(
+  test,
+  by = c("id", "trt"),
+  nomtimevar = "ntad",
+  timevar = "tad",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 2,
+  includeCmax = "N",
+  exclvar = "excl_th",
+  startth = ,
+  endth = ,
+  plotdir = ,
+  timelab = "Time (h)",
+  deplab = "Concentration (ng/mL)",
+  tau = ,
+  tstart = ,
+  tend = ,
+  teval = 24,
+  covariates = "test_cov",
+  dose = "dose",
+  infdur = ,
+  factor = 1000,
+  reg = "SD",
+  ss = "N",
+  route = "ev",
+  method = 1
+)
+
+```
+
+
+###### END OF CODE (run_qpNCA)
