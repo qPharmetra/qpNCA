@@ -32,16 +32,16 @@
 correct.loq <- function(
   x,
   by = NULL,
-  nomtimevar="ntad",
-  timevar="time",
-  depvar="dv",
-  bloqvar="bloq",
-  loqvar="loq",
-  loqrule=1
-){
-  if(is.null(by)) by <- as.character(groups(x))
+  nomtimevar = "ntad",
+  timevar = "time",
+  depvar = "dv",
+  bloqvar = "bloq",
+  loqvar = "loq",
+  loqrule = 1
+) {
+  if (is.null(by)) by <- as.character(groups(x))
   supplied <- character(0)
-  if(!missing(loqrule)) supplied <- 'loqrule'
+  if (!missing(loqrule)) supplied <- 'loqrule'
   x <- group_by_at(x, vars(by))
   x <- do(
     .data = x,
@@ -61,111 +61,141 @@ correct.loq <- function(
 }
 
 .correct.loq <- function(
-    x,
-    nomtimevar,
-    timevar,
-    depvar,
-    bloqvar,
-    loqvar,
-    loqrule,
-    supplied
-  ){
-
-if('loqrule' %in% names(x)){
-  if('loqrule' %in% supplied){
-    warning('loqrule supplied as column overrides like-named argument')
+  x,
+  nomtimevar,
+  timevar,
+  depvar,
+  bloqvar,
+  loqvar,
+  loqrule,
+  supplied
+) {
+  if ('loqrule' %in% names(x)) {
+    if ('loqrule' %in% supplied) {
+      warning('loqrule supplied as column overrides like-named argument')
+    }
+    loqrule <- unique(x$loqrule)
+    # x$loqrule <- NULL
   }
-  loqrule <- unique(x$loqrule)
-  # x$loqrule <- NULL
-}
-if(length(loqrule) > 1) {
-  warning('loqrule has length > 1; only first value will be used')
-  loqrule <- loqrule[[1]]
-}
+  if (length(loqrule) > 1) {
+    warning('loqrule has length > 1; only first value will be used')
+    loqrule <- loqrule[[1]]
+  }
 
-data_in = x
+  data_in = x
 
   data_in = data_in %>%
-    mutate(depvar1=x[[depvar]],                    # dependent variable                      (internal)
-           timevar1=x[[timevar]],                  # actual time variable                    (internal)
-           ptime1=x[[nomtimevar]],                 # nominal time                            (internal)
-           bloqvar1=x[[bloqvar]],                  # indicated LOQ value (1: yes, 0: no)     (internal)
-           loqvar1=x[[loqvar]],                    # LOQ value (concentration)               (internal)
-           loqrule.nr="",                          # correction rule number
-           loqrule.txt=""                          # explanation of time correction
+    mutate(
+      depvar1 = x[[depvar]], # dependent variable                      (internal)
+      timevar1 = x[[timevar]], # actual time variable                    (internal)
+      ptime1 = x[[nomtimevar]], # nominal time                            (internal)
+      bloqvar1 = x[[bloqvar]], # indicated LOQ value (1: yes, 0: no)     (internal)
+      loqvar1 = x[[loqvar]], # LOQ value (concentration)               (internal)
+      loqrule.nr = "", # correction rule number
+      loqrule.txt = "" # explanation of time correction
     )
 
   data_in = data_in %>%
-    mutate(firstmeast=timevar1[which(depvar1>0)][1],
-           consecutive=ifelse(bloqvar1==1&lag(bloqvar1)==1,1,0),
-           anymeas=ifelse(any(bloqvar1==0,na.rm=T),1,0)
+    mutate(
+      firstmeast = timevar1[which(depvar1 > 0)][1],
+      consecutive = ifelse(bloqvar1 == 1 & lag(bloqvar1) == 1, 1, 0),
+      anymeas = ifelse(any(bloqvar1 == 0, na.rm = T), 1, 0)
     )
 
-if (any(data_in$anymeas==1)) {
-  if (loqrule==1) {
+  if (any(data_in$anymeas == 1)) {
+    if (loqrule == 1) {
+      data_in = data_in %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 & timevar1 < firstmeast),
+          depvar1 = 0,
+          loqrule.nr = "LOQ1",
+          loqrule.txt = "BLOQ values before first measurable concentration set to 0"
+        ) %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 & timevar1 > firstmeast),
+          depvar1 = NA,
+          loqrule.nr = "LOQ1",
+          loqrule.txt = "BLOQ values after first measurable concentration set to missing"
+        )
+    }
 
-    data_in = data_in %>%
-      mutate_cond(
-        condition=(bloqvar1==1&timevar1<firstmeast),
-        depvar1=0,
-        loqrule.nr="LOQ1",
-        loqrule.txt="BLOQ values before first measurable concentration set to 0"
-      ) %>%
-      mutate_cond(
-        condition=(bloqvar1==1&timevar1>firstmeast),
-        depvar1=NA,
-        loqrule.nr="LOQ1",
-        loqrule.txt="BLOQ values after first measurable concentration set to missing"
-      )
+    if (loqrule == 2) {
+      data_in = data_in %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 & timevar1 < firstmeast),
+          depvar1 = 0,
+          loqrule.nr = "LOQ2",
+          loqrule.txt = "BLOQ values before first measurable concentration set to 0"
+        ) %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 & timevar1 > firstmeast),
+          depvar1 = 0,
+          loqrule.nr = "LOQ2",
+          loqrule.txt = "BLOQ values after first measurable concentration set to 0"
+        )
+    }
+
+    if (loqrule == 3) {
+      data_in = data_in %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 & timevar1 < firstmeast),
+          depvar1 = 0,
+          loqrule.nr = "LOQ3",
+          loqrule.txt = "BLOQ values before first measurable concentration set to 0"
+        ) %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 &
+            timevar1 > firstmeast &
+            consecutive == 0),
+          depvar1 = loqvar1 / 2,
+          bloqvar1 = 0,
+          loqrule.nr = "LOQ3",
+          loqrule.txt = "First BLOQ value after first measurable concentration set to 1/2*LOQ"
+        ) %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 &
+            timevar1 > firstmeast &
+            consecutive == 1),
+          depvar1 = NA,
+          loqrule.nr = "LOQ3",
+          loqrule.txt = "Consecutive BLOQ values after first measurable concentration set to missing"
+        )
+    }
+
+    if (loqrule == 4) {
+      data_in = data_in %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 & timevar1 < firstmeast),
+          depvar1 = 0,
+          loqrule.nr = "LOQ4",
+          loqrule.txt = "BLOQ values before first measurable concentration set to 0"
+        ) %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 &
+            timevar1 > firstmeast &
+            consecutive == 0),
+          depvar1 = loqvar1 / 2,
+          bloqvar1 = 0,
+          loqrule.nr = "LOQ4",
+          loqrule.txt = "First BLOQ value after first measurable concentration set to 1/2*LOQ"
+        ) %>%
+        mutate_cond(
+          condition = (bloqvar1 == 1 &
+            timevar1 > firstmeast &
+            consecutive == 1),
+          depvar1 = 0,
+          loqrule.nr = "LOQ4",
+          loqrule.txt = "Consecutive BLOQ values after first measurable concentration set to 0"
+        )
+    }
   }
-
-  if (loqrule==2) {
-
-    data_in = data_in %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1<firstmeast),depvar1=0,loqrule.nr="LOQ2",
-                  loqrule.txt="BLOQ values before first measurable concentration set to 0") %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast),depvar1=0,loqrule.nr="LOQ2",
-                  loqrule.txt="BLOQ values after first measurable concentration set to 0")
-
-  }
-
-  if (loqrule==3) {
-
-    data_in = data_in %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1<firstmeast),depvar1=0,loqrule.nr="LOQ3",
-                  loqrule.txt="BLOQ values before first measurable concentration set to 0") %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==0),depvar1=loqvar1/2,bloqvar1=0,
-                  loqrule.nr="LOQ3",
-                  loqrule.txt="First BLOQ value after first measurable concentration set to 1/2*LOQ") %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==1),depvar1=NA,loqrule.nr="LOQ3",
-                  loqrule.txt="Consecutive BLOQ values after first measurable concentration set to missing")
-
-  }
-
-  if (loqrule==4) {
-
-    data_in = data_in %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1<firstmeast),depvar1=0,loqrule.nr="LOQ4",
-                  loqrule.txt="BLOQ values before first measurable concentration set to 0") %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==0),depvar1=loqvar1/2,bloqvar1=0,
-                  loqrule.nr="LOQ4",
-                  loqrule.txt="First BLOQ value after first measurable concentration set to 1/2*LOQ") %>%
-      mutate_cond(condition=(bloqvar1==1&timevar1>firstmeast&consecutive==1),depvar1=0,loqrule.nr="LOQ4",
-                  loqrule.txt="Consecutive BLOQ values after first measurable concentration set to 0")
-
-  }
-
-}
 
   result = data_in %>%
-    select(-depvar,-nomtimevar,-timevar)
+    select(-depvar, -nomtimevar, -timevar)
 
-  names(result)[names(result)=="ptime1"]=nomtimevar
-  names(result)[names(result)=="timevar1"]=timevar
-  names(result)[names(result)=="depvar1"]=depvar
+  names(result)[names(result) == "ptime1"] = nomtimevar
+  names(result)[names(result) == "timevar1"] = timevar
+  names(result)[names(result) == "depvar1"] = depvar
 
   return(result)
-
 }
-
-
