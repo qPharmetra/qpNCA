@@ -95,7 +95,7 @@ calc.par.th <- function(
   if (!missing(tau)) pargs <- c(pargs, list(tau = tau))
   if (!missing(tstart)) pargs <- c(pargs, list(tstart = tstart))
   if (!missing(tend)) pargs <- c(pargs, list(tend = tend))
-  if (!missing(teval)) pargs <- c(pargs, list(tval = tval))
+  if (!missing(teval)) pargs <- c(pargs, list(teval = teval))
   if (!missing(route)) pargs <- c(pargs, list(route = route))
   if (!missing(method)) pargs <- c(pargs, list(method = method))
 
