@@ -30,16 +30,16 @@ curves_POSD = bind_rows(
   `SDC_1`,
   `SDC_2`,
   `SDC_3`
-) %>%
+) |>
   mutate(
     dv = as.numeric(dv),
     loq = as.numeric(loq),
     bloq = ifelse(is.na(loq), 0, 1),
     excl_th = 0
   )
-cov_POSD = curves_POSD %>%
-  distinct(id) %>%
-  mutate(dose = 1) %>%
+cov_POSD = curves_POSD |>
+  distinct(id) |>
+  mutate(dose = 1) |>
   select(id, dose)
 
 curves_IVSD = bind_rows(
@@ -48,16 +48,16 @@ curves_IVSD = bind_rows(
   `SDC_4b`,
   `SDC_4c`,
   `SDC_4d`
-) %>%
+) |>
   mutate(
     dv = as.numeric(dv),
     loq = as.numeric(loq),
     bloq = ifelse(is.na(loq), 0, 1),
     excl_th = 0
   )
-cov_IVSD = curves_IVSD %>%
-  distinct(id) %>%
-  mutate(dose = 1) %>%
+cov_IVSD = curves_IVSD |>
+  distinct(id) |>
+  mutate(dose = 1) |>
   select(id, dose)
 
 curves_POMDnoss = bind_rows(
@@ -69,40 +69,40 @@ curves_POMDnoss = bind_rows(
   `MDC_1_noss`,
   `MDC_2_noss`,
   `MDC_3_noss`
-) %>%
+) |>
   mutate(
     dv = as.numeric(dv),
     loq = as.numeric(loq),
     bloq = ifelse(is.na(loq), 0, 1),
     excl_th = 0
   )
-cov_POMDnoss = curves_POMDnoss %>%
-  distinct(id) %>%
-  mutate(dose = 1) %>%
+cov_POMDnoss = curves_POMDnoss |>
+  distinct(id) |>
+  mutate(dose = 1) |>
   select(id, dose)
 
-curves_POMDss = bind_rows(`MDC_1_ss`, `MDC_2_ss`, `MDC_3_ss`) %>%
+curves_POMDss = bind_rows(`MDC_1_ss`, `MDC_2_ss`, `MDC_3_ss`) |>
   mutate(
     dv = as.numeric(dv),
     loq = as.numeric(loq),
     bloq = ifelse(is.na(loq), 0, 1),
     excl_th = 0
   )
-cov_POMDss = curves_POMDss %>%
-  distinct(id) %>%
-  mutate(dose = 1) %>%
+cov_POMDss = curves_POMDss |>
+  distinct(id) |>
+  mutate(dose = 1) |>
   select(id, dose)
 
-curves_IVMD = bind_rows(`MDC_4a`, `MDC_4b`, `MDC_4c`, `MDC_4d`) %>%
+curves_IVMD = bind_rows(`MDC_4a`, `MDC_4b`, `MDC_4c`, `MDC_4d`) |>
   mutate(
     dv = as.numeric(dv),
     loq = as.numeric(loq),
     bloq = ifelse(is.na(loq), 0, 1),
     excl_th = 0
   )
-cov_IVMD = curves_IVMD %>%
-  distinct(id) %>%
-  mutate(dose = 1) %>%
+cov_IVMD = curves_IVMD |>
+  distinct(id) |>
+  mutate(dose = 1) |>
   select(id, dose)
 
 
@@ -146,7 +146,7 @@ POSD = qpNCA(
 
 ```{r}
 
-test = curves_POSD %>% filter(id == -1)
+test = curves_POSD |> filter(id == -1)
 
 out = qpNCA(
   test,
@@ -181,7 +181,7 @@ out = qpNCA(
 
 ```{r}
 
-test = curves_POMDss %>% filter(id == 18)
+test = curves_POMDss |> filter(id == 18)
 
 out = qpNCA(
   test,
@@ -217,11 +217,11 @@ out = qpNCA(
 
 ```{r, eval=T}
 
-test = curves_POSD %>% filter(id == -1)
+test = curves_POSD |> filter(id == -1)
 
-extra = test %>% filter(ntad == 12) %>% mutate(tad = 11.8, dv = 3.5)
+extra = test |> filter(ntad == 12) |> mutate(tad = 11.8, dv = 3.5)
 
-test = bind_rows(test, extra) %>% arrange(id, ntad)
+test = bind_rows(test, extra) |> arrange(id, ntad)
 
 out = qpNCA(
   test,
@@ -257,12 +257,12 @@ out = qpNCA(
 
 ```{r, eval=T}
 
-test = curves_POSD %>%
-  filter(id %in% c(-1, 1, 2)) %>%
+test = curves_POSD |>
+  filter(id %in% c(-1, 1, 2)) |>
   mutate(
     #startth=ifelse(id==1,18,NA),
     endth = ifelse(id == 1, 36, NA)
-  ) %>%
+  ) |>
   mutate_cond(condition = id == -1 & ntad %in% c(24, 36), excl_th = 1)
 
 th = est.thalf(
@@ -328,9 +328,9 @@ out = qpNCA(
 
 ```{r}
 
-test = curves_POSD %>%
-  filter(id %in% c(-1)) %>%
-  filter(ntad >= 18) %>%
+test = curves_POSD |>
+  filter(id %in% c(-1)) |>
+  filter(ntad >= 18) |>
   mutate_cond(condition = ntad %in% c(18), excl_th = 1)
 
 out = qpNCA(
@@ -370,7 +370,7 @@ out = qpNCA(
 
 ```{r}
 
-test = curves_IVSD %>%
+test = curves_IVSD |>
   mutate_cond(condition = id == 7 & ntad == 0.5, dv = 0, bloq = 1)
 
 out = qpNCA(
@@ -449,9 +449,9 @@ out = qpNCA(
 
 ```{r}
 
-test = curves_POSD %>% filter(id == -1) %>% mutate(infdur1 = 0.5)
+test = curves_POSD |> filter(id == -1) |> mutate(infdur1 = 0.5)
 
-test_cov = test %>% mutate(dose1 = 1) %>% distinct(id, dose1, infdur1)
+test_cov = test |> mutate(dose1 = 1) |> distinct(id, dose1, infdur1)
 
 
 out = qpNCA(
@@ -492,14 +492,14 @@ out = qpNCA(
 
 ```{r}
 
-test = curves_POSD %>%
-  filter(id == -1) %>%
-  mutate(dose = 1) %>%
-  mutate_cond(condition = ntad >= 24, dv = NA) %>%
+test = curves_POSD |>
+  filter(id == -1) |>
+  mutate(dose = 1) |>
+  mutate_cond(condition = ntad >= 24, dv = NA) |>
   mutate_cond(condition = ntad == 24, tad = 24.5)
 
 
-test_cov = test %>% mutate(dose1 = 1) %>% distinct(id, dose1)
+test_cov = test |> mutate(dose1 = 1) |> distinct(id, dose1)
 
 out = qpNCA(
   test,
@@ -540,21 +540,21 @@ out = qpNCA(
 
 ```{r}
 
-test = curves_POSD %>%
-  filter(id == -1 | id == 1) %>%
+test = curves_POSD |>
+  filter(id == -1 | id == 1) |>
   mutate(dose = 1, trt = ifelse(id == -1, "A", "B"), factor = 10)
-#                     mutate_cond(condition=id==-1&ntad==10,ntad=16) %>%
+#                     mutate_cond(condition=id==-1&ntad==10,ntad=16) |>
 #                     mutate_cond(condition=id==1&ntad==10,ntad=16)
 
-test %>%
-  group_by(id) %>%
-  mutate(srtd = all(diff(ntad) > 0)) %>%
-  ungroup %>%
-  filter(srtd == F) %>%
+test |>
+  group_by(id) |>
+  mutate(srtd = all(diff(ntad) > 0)) |>
+  ungroup |>
+  filter(srtd == F) |>
   distinct(id)
 
 
-test_cov = test %>% distinct(id, trt, dose)
+test_cov = test |> distinct(id, trt, dose)
 
 out = qpNCA(
   test,

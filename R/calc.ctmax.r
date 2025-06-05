@@ -11,7 +11,6 @@
 #' @param depvar variable name containing the dependent variable (e.g., concentration)
 #' @return A dataset with estimates for the Cmax (maximum concentration)
 #' and Tmax (time of first occurence of cmax) parameters: one observation per subject
-#' @import magrittr
 #' @importFrom dplyr arrange mutate summarize filter group_by do summarise first rename
 #' @export
 #' @examples

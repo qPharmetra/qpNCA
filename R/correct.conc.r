@@ -49,14 +49,13 @@
 #' @export
 #' @examples
 #' \donttest{
-#' library(magrittr)
 #' library(dplyr)
 #' data(ncx)
 #' x <- ncx
-#' x %<>% group_by(subject)
-#' x %<>% correct.loq
-#' x %<>% correct.time
-#' x %>% correct.conc %>% head
+#' x <- x |> group_by(subject)
+#' x <- x |> correct.loq
+#' x <- x |> correct.time
+#' x |> correct.conc |> head
 #' }
 correct.conc <- function(
   x,
@@ -157,14 +156,13 @@ correct.conc <- function(
   #   !identical(NA,th) &
   #   !("lambda_z" %in% names(x))
   # ) {
-  #   x %<>% left_join(
-  #     th %>% select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),
+  #   x <- x |> left_join(
+  #     th |> select(-no.points,-intercept,-r.squared,-adj.r.squared,-thalf),
   #     by = by
   #   )
   # }
 
-  x %<>%
-    mutate(
+  x <- x |> mutate(
       ptime = x[[nomtimevar]], # nominal time                            (internal)
       crule.nr = "", # correction rule number
       crule.txt = "", # explanation of concentration substitution
@@ -176,8 +174,7 @@ correct.conc <- function(
 
   #TAU
   if (!is.na(tau)) {
-    x %<>%
-      lag_lead(
+    x <- x |> lag_lead(
         nomtimevar1 = "ptime",
         depvar1 = "conc.tau",
         timevar1 = "time.tau",
@@ -189,8 +186,7 @@ correct.conc <- function(
   }
   #PARTIAL
   if (!is.na(tstart) & !is.na(tend)) {
-    x %<>%
-      lag_lead(
+    x <- x |> lag_lead(
         nomtimevar1 = "ptime",
         depvar1 = "conc.part",
         timevar1 = "time.part",
@@ -202,8 +198,7 @@ correct.conc <- function(
   }
   #TEVAL
   if (!is.na(teval)) {
-    x %<>%
-      lag_lead(
+    x <- x |> lag_lead(
         nomtimevar1 = "ptime",
         depvar1 = "conc.teval",
         timevar1 = "time.teval",
@@ -218,8 +213,7 @@ correct.conc <- function(
 
   # Create some variables
 
-  x %<>%
-    mutate(
+  x <- x |> mutate(
       t0val = ifelse(
         is.element(0, ptime),
         conc.tau[ptime == 0],
@@ -234,8 +228,7 @@ correct.conc <- function(
 
   #TAU
   if (!is.na(tau)) {
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == tau &
           is.na(conc.tau) &
           !is.na(t0val) &
@@ -258,8 +251,7 @@ correct.conc <- function(
         applies.to.conc = paste(applies.to.conc, "TAU ")
       )
 
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == tau &
           is.na(conc.tau) &
           !is.na(lag.ctau) &
@@ -288,8 +280,7 @@ correct.conc <- function(
         ),
         applies.to.conc = paste(applies.to.conc, "TAU ")
       )
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == tau &
           is.na(conc.tau) &
           !is.na(lag.ctau) &
@@ -309,14 +300,13 @@ correct.conc <- function(
         ),
         applies.to.conc = paste(applies.to.conc, "TAU ")
       )
-    x %<>% mutate(tauval = conc.tau[ptime == tau])
+    x <- x |> mutate(tauval = conc.tau[ptime == tau])
   }
 
   #TSTART and TEND
   #TSTART
   if (!is.na(tstart) & !is.na(tend)) {
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == tstart &
           !is.na(tau) &
           tstart == tau &
@@ -339,8 +329,7 @@ correct.conc <- function(
         ),
         applies.to.conc = paste(applies.to.conc, "TSTART ")
       )
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == tstart &
           is.na(conc.part) &
           !is.na(lag.cpart) &
@@ -369,8 +358,7 @@ correct.conc <- function(
         ),
         applies.to.conc = paste(applies.to.conc, "TSTART ")
       )
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == tstart &
           is.na(conc.part) &
           !is.na(lag.cpart) &
@@ -394,8 +382,7 @@ correct.conc <- function(
 
   #TEND
   if (!is.na(tstart) & !is.na(tend)) {
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == tend &
           !is.na(tau) &
           tend == tau &
@@ -418,8 +405,7 @@ correct.conc <- function(
         ),
         applies.to.conc = paste(applies.to.conc, "TEND ")
       )
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == tend &
           is.na(conc.part) &
           !is.na(lag.cpart) &
@@ -448,8 +434,7 @@ correct.conc <- function(
         ),
         applies.to.conc = paste(applies.to.conc, "TEND ")
       )
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == tend &
           is.na(conc.part) &
           !is.na(lag.cpart) &
@@ -472,8 +457,7 @@ correct.conc <- function(
   }
   #TEVAL
   if (!is.na(teval)) {
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == teval &
           !is.na(tau) &
           teval == tau &
@@ -496,8 +480,7 @@ correct.conc <- function(
         ),
         applies.to.conc = paste(applies.to.conc, "TEVAL ")
       )
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == teval &
           is.na(conc.teval) &
           !is.na(lag.cteval) &
@@ -526,8 +509,7 @@ correct.conc <- function(
         ),
         applies.to.conc = paste(applies.to.conc, "TEVAL ")
       )
-    x %<>%
-      mutate_cond(
+    x <- x |> mutate_cond(
         ptime == teval &
           is.na(conc.teval) &
           !is.na(lag.cteval) &
@@ -552,16 +534,14 @@ correct.conc <- function(
   # correct t=0 conc for all aucs where t=0 is needed (for PARTIAL this is NOT needed as it does not start at t=0)
 
   # back-extrapolate t=0 concentration for all AUCs if route is IVB
-  x %<>%
-    mutate(
+  x <- x |> mutate(
       back_extrap = 0,
       firstmeasc = conc.lastall[which(conc.lastall > 0)][1],
       firstmeast = ptime[which(conc.lastall > 0)][1]
     )
 
   # if there are LOQs between t=0 and first measurable conc, set these equal to first measurable conc
-  x %<>%
-    mutate_cond(
+  x <- x |> mutate_cond(
       tolower(route) == "ivb" &
         ptime > 0 &
         ptime < firstmeast &
@@ -570,13 +550,12 @@ correct.conc <- function(
       conc.tau = firstmeasc,
       conc.teval = firstmeasc
     )
-  x %<>%
-    mutate(
+  x <- x |> mutate(
       lc1 = conc.lastall[which(conc.lastall > 0 & ptime > 0)][1],
       lc2 = conc.lastall[which(conc.lastall > 0 & ptime > 0)][2],
       lt1 = ptime[which(conc.lastall > 0 & ptime > 0)][1],
       lt2 = ptime[which(conc.lastall > 0 & ptime > 0)][2],
-    ) %>%
+    ) |>
     mutate_cond(
       tolower(route) == "ivb" &
         ptime == 0,
@@ -609,8 +588,7 @@ correct.conc <- function(
     )
 
   # ALL and LAST
-  x %<>%
-    mutate_cond(
+  x <- x |> mutate_cond(
       ptime == 0 &
         (is.na(conc.lastall) | conc.lastall > 0) &
         tolower(reg) == "sd" &
@@ -624,8 +602,7 @@ correct.conc <- function(
         sep = ""
       )
     )
-  x %<>%
-    mutate_cond(
+  x <- x |> mutate_cond(
       ptime == 0 &
         is.na(conc.lastall) &
         !is.na(tauval) &
@@ -646,8 +623,7 @@ correct.conc <- function(
     )
 
   #TAU
-  x %<>%
-    mutate_cond(
+  x <- x |> mutate_cond(
       ptime == 0 &
         (is.na(conc.tau) | conc.tau > 0) &
         tolower(reg) == "sd" &
@@ -662,8 +638,7 @@ correct.conc <- function(
       ),
       applies.to.conc = paste("PREDOSE")
     )
-  x %<>%
-    mutate_cond(
+  x <- x |> mutate_cond(
       ptime == 0 &
         is.na(conc.tau) &
         !is.na(tauval) &
@@ -684,8 +659,7 @@ correct.conc <- function(
     )
 
   #TEVAL
-  x %<>%
-    mutate_cond(
+  x <- x |> mutate_cond(
       ptime == 0 &
         (is.na(conc.teval) | conc.teval > 0) &
         tolower(reg) == "sd" &
@@ -700,8 +674,7 @@ correct.conc <- function(
       ),
       applies.to.conc = paste("PREDOSE")
     )
-  x %<>%
-    mutate_cond(
+  x <- x |> mutate_cond(
       ptime == 0 &
         is.na(conc.teval) &
         !is.na(tauval) &

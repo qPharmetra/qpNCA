@@ -61,13 +61,12 @@
 #' @export
 #' @examples
 #' \donttest{
-#' library(magrittr)
 #' library(dplyr)
 #' data(ncx)
 #' x <- ncx
-#' x %<>% group_by(subject)
-#' x %<>% correct.loq
-#' x %>% correct.time %>% head %>% data.frame
+#' x <- x |> group_by(subject)
+#' x <- x |> correct.loq
+#' x |> correct.time |> head |> data.frame
 #' }
 correct.time <- function(
   x,
@@ -151,16 +150,14 @@ correct.time <- function(
   }
 
   if (!identical(NA, th)) {
-    x %<>%
-      left_join(
-        th %>%
+    x <- x |> left_join(
+        th |>
           select(-no.points, -intercept, -r.squared, -adj.r.squared, -thalf),
         by = intersect(names(x), names(th))
       )
   }
 
-  x %<>%
-    rename(
+  x <- x |> rename(
       depvar = !!depvar,
       timevar = !!timevar,
       ptime = !!nomtimevar
@@ -170,14 +167,13 @@ correct.time <- function(
   # x$timevar <- x[[timevar]]
   # x$ptime <- x[[nomtimevar]]
 
-  # x %<>% mutate(
+  # x <- x |> mutate(
   #     depvar=.[[depvar]],                    # dependent variable                      (internal)
   #     timevar=.[[timevar]],                  # actual time variable                    (internal)
   #     ptime=.[[nomtimevar]],                 # nominal time
   #   )
 
-  x %<>%
-    mutate(
+  x <- x |> mutate(
       create.nr = "", # is missing record created?
       create.txt = "", # explanation of what is created
       trule.nr = "", # correction rule number
@@ -192,9 +188,8 @@ correct.time <- function(
       misstime = NA, # time of missing record
       lambda_z = ifelse("lambda_z" %in% names(.), lambda_z, NA)
     )
-  x %<>% filter(!is.na(ptime)) # remove records with no nominal time (must be corrected before)
-  x %<>%
-    mutate_cond(
+  x <- x |> filter(!is.na(ptime)) # remove records with no nominal time (must be corrected before)
+  x <- x |> mutate_cond(
       is.na(timevar),
       timevar = ptime,
       trule.nr = "-",
@@ -214,8 +209,7 @@ correct.time <- function(
   do(
     for (i in c(0, tau, tstart, tend, teval)) {
       if (!is.na(i)) {
-        x %<>%
-          mutate(diff = abs(ptime - i)) %>% # take closest neighbouring records as base for extra record
+        x <- x |> mutate(diff = abs(ptime - i)) |> # take closest neighbouring records as base for extra record
           #        mutate_cond(condition=!is.element(i,ptime)&ptime==first(ptime[diff==min(diff)]),
           #                    misstime = i
           #        ) #QCTEST 4.0.5: mutate_cond doesn't work here (misstime turns to logical!)
@@ -227,8 +221,8 @@ correct.time <- function(
             )
           )
 
-        misstime = x %>%
-          filter(misstime == i) %>%
+        misstime = x |>
+          filter(misstime == i) |>
           mutate(
             ptime = i,
             timevar = i,
@@ -251,8 +245,7 @@ correct.time <- function(
 
   # Estimate lagging and leading time points and concentrations for each time point
   suppressMessages(
-    x %<>%
-      lag_lead(
+    x <- x |> lag_lead(
         nomtimevar1 = "ptime",
         depvar1 = "depvar",
         timevar1 = "timevar",
@@ -265,10 +258,8 @@ correct.time <- function(
 
   # Start time corrections
 
-  x %<>%
-
-    # TAU
-    mutate(conc.tau = depvar, time.tau = timevar) %>%
+  x <- x |> # TAU
+    mutate(conc.tau = depvar, time.tau = timevar) |>
     mutate_cond(
       condition = !is.na(tau) &
         ptime == tau &
@@ -302,7 +293,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TAU ")
-    ) %>%
+    ) |>
     mutate_cond(
       condition = !is.na(tau) &
         ptime == tau &
@@ -336,7 +327,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TAU ")
-    ) %>%
+    ) |>
     mutate_cond(
       condition = !is.na(tau) &
         ptime == tau &
@@ -361,9 +352,9 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TAU ")
-    ) %>%
+    ) |>
     # TEVAL
-    mutate(conc.teval = depvar, time.teval = timevar) %>%
+    mutate(conc.teval = depvar, time.teval = timevar) |>
     mutate_cond(
       condition = !is.na(teval) &
         ptime == teval &
@@ -397,7 +388,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TEVAL ")
-    ) %>%
+    ) |>
     mutate_cond(
       condition = !is.na(teval) &
         ptime == teval &
@@ -431,7 +422,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TEVAL ")
-    ) %>%
+    ) |>
     mutate_cond(
       condition = !is.na(teval) &
         ptime == teval &
@@ -456,10 +447,10 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TEVAL ")
-    ) %>%
+    ) |>
     # PARTIAL
     #   TSTART
-    mutate(conc.part = depvar, time.part = timevar) %>%
+    mutate(conc.part = depvar, time.part = timevar) |>
     mutate_cond(
       condition = !is.na(tstart) &
         !is.na(tend) &
@@ -494,7 +485,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TSTART ")
-    ) %>%
+    ) |>
     mutate_cond(
       condition = !is.na(tstart) &
         !is.na(tend) &
@@ -529,7 +520,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TSTART ")
-    ) %>%
+    ) |>
     mutate_cond(
       condition = !is.na(tstart) &
         !is.na(tend) &
@@ -555,7 +546,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TSTART ")
-    ) %>%
+    ) |>
     #   TEND
     mutate_cond(
       condition = !is.na(tstart) &
@@ -591,7 +582,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TEND ")
-    ) %>%
+    ) |>
     mutate_cond(
       condition = !is.na(tstart) &
         !is.na(tend) &
@@ -626,7 +617,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TEND ")
-    ) %>%
+    ) |>
     mutate_cond(
       condition = !is.na(tstart) &
         !is.na(tend) &
@@ -652,13 +643,13 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = paste(applies.to.time, "TEND ")
-    ) %>%
+    ) |>
     # T = 0            (also needed for AUCpartial since this value may be used for substitution at t = TAU in case TEND = TAU)
     mutate(
       conc.lastall = depvar,
       time.lastall = timevar,
       newdepvar = NA_real_
-    ) %>%
+    ) |>
     mutate_cond(
       condition = ptime == 0 & timevar != ptime & tolower(reg) == "sd",
       t0.flag = 1,
@@ -678,7 +669,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = "PREDOSE"
-    ) %>%
+    ) |>
 
     mutate_cond(
       condition = ptime == 0 &
@@ -709,7 +700,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = "PREDOSE"
-    ) %>%
+    ) |>
 
     mutate_cond(
       condition = ptime == 0 &
@@ -729,7 +720,7 @@ correct.time <- function(
       trule.nr = "MDT-3a",
       trule.txt = "Time of LOQ or NA value at predose taken before dosing set to 0",
       applies.to.time = "PREDOSE"
-    ) %>%
+    ) |>
 
     mutate_cond(
       condition = ptime == 0 & timevar > ptime & tolower(reg) == "md",
@@ -752,7 +743,7 @@ correct.time <- function(
         sep = ""
       ),
       applies.to.time = "PREDOSE"
-    ) #%>%
+    ) #|>
   #       select(-lambda_z,-leaddv,-lagdv,-leadtime,-lagtime, -missflag, -misstime, -diff, -newdepvar)
 
   # QCTEST 4.0.5: the old code below duplicates column names, causing error messages
@@ -770,8 +761,7 @@ correct.time <- function(
   # 1.1.7 converting above to standard syntax for safety
   # https://stackoverflow.com/questions/26003574/use-dynamic-variable-names-in-dplyr
 
-  x %<>%
-    mutate(
+  x <- x |> mutate(
       !!nomtimevar := ptime,
       !!timevar := timevar,
       !!depvar := depvar
@@ -782,7 +772,7 @@ correct.time <- function(
 mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
   condition <- eval(substitute(condition), .data, envir)
   if (!any(condition)) return(.data) # do nothing if nothing to do
-  .data[condition, ] <- .data[condition, ] %>% mutate(...)
+  .data[condition, ] <- .data[condition, ] |> mutate(...)
   .data
 }
 locf <- function(x) {

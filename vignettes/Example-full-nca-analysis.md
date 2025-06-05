@@ -45,7 +45,7 @@ library(knitr)
 mutate_cond <- function (.data, condition, ..., envir = parent.frame()){
   condition <- eval(substitute(condition), .data, envir)
   if(!any(condition))return(.data) # do nothing if nothing to do
-  .data[condition, ] <- .data[condition, ] %>% mutate(...)
+  .data[condition, ] <- .data[condition, ] |> mutate(...)
   .data
 }
 locf <- function(x){
@@ -65,7 +65,7 @@ Furthermore, we introduce some missing values, LOQ values and time deviations
 
 
 ```r
-head(Theoph) %>% kable()
+head(Theoph) |> kable()
 ```
 
 
@@ -85,18 +85,17 @@ input.data <- Theoph
 #we need nominal time variable for some tasks.
 ntad <- data.frame(rn=c(1:11),ntad=c(0,0.25,0.5,1,2,4,5,7,9,12,24))
 
-input.data %<>% 
-           group_by(Subject) %>%
+input.data <- input.data |> group_by(Subject) |>
            mutate(subject=as.numeric(Subject),
                   rn=row_number(),
                   dose=Dose*Wt,
                   bloq=ifelse(conc==0,1,0),
                   loq=0.1,
                   excl_th=0
-                  ) %>%
-           left_join(ntad) %>%
-           ungroup %>%
-           arrange(subject,ntad) %>%
+                  ) |>
+           left_join(ntad) |>
+           ungroup |>
+           arrange(subject,ntad) |>
            select(subject,ntad,tad=Time,conc,dose,bloq,loq,excl_th)
 ```
 
@@ -105,11 +104,10 @@ input.data %<>%
 ```
 
 ```r
-input.data %<>%
-           mutate_cond(condition=subject==2&ntad%in%c(24),conc=NA) %>%
-           mutate_cond(condition=subject==4&ntad%in%c(9),conc=NA) %>%
-           mutate_cond(condition=subject==3&ntad==9,excl_th=1) %>%
-           mutate_cond(condition=subject==6&ntad==24,conc=0,bloq=1) %>%
+input.data <- input.data |> mutate_cond(condition=subject==2&ntad%in%c(24),conc=NA) |>
+           mutate_cond(condition=subject==4&ntad%in%c(9),conc=NA) |>
+           mutate_cond(condition=subject==3&ntad==9,excl_th=1) |>
+           mutate_cond(condition=subject==6&ntad==24,conc=0,bloq=1) |>
            filter(!(subject==5&ntad==12))
 ```
 
@@ -119,7 +117,7 @@ input.data %<>%
 ```r
 # Create a covariates file, containing at least the dose given
 
-cov = input.data %>%
+cov = input.data |>
       distinct(subject,dose)
 
 nca = qpNCA(
@@ -265,7 +263,7 @@ nca = qpNCA(
 ```r
 # Covariates:
 
-nca$covariates %>% kable()
+nca$covariates |> kable()
 ```
 
 
@@ -288,7 +286,7 @@ nca$covariates %>% kable()
 ```r
 # Corrections applied:
 
-nca$corrections %>% kable()
+nca$corrections |> kable()
 ```
 
 
@@ -359,7 +357,7 @@ nca$corrections %>% kable()
 ```r
 # half-life estimation:
 
-nca$half_life %>% kable()
+nca$half_life |> kable()
 ```
 
 
@@ -382,7 +380,7 @@ nca$half_life %>% kable()
 ```r
 # PK parameters:
 
-nca$pkpar %>% kable()
+nca$pkpar |> kable()
 ```
 
 
