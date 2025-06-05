@@ -18,8 +18,6 @@
 #' }
 #' @usage data(ncx)
 #' @source
-#' library(magrittr)
-#'
 #' library(dplyr)
 #'
 #' library(qpNCA)
@@ -46,17 +44,17 @@
 #'
 #' rm(list = c('time','delta','best','index','nom', 'i','ntad'))
 #'
-#' x %<>% rename(time = Time, dv = conc)
+#' x <- x |> rename(time = Time, dv = conc)
 #'
-#' x %<>% mutate(bloq = ifelse(dv==0,1,0), loq = 0.01, tad = time, loqrule = 1,
+#' x <- x |> mutate(bloq = ifelse(dv==0,1,0), loq = 0.01, tad = time, loqrule = 1,
 #'               subject=as.numeric(Subject), ntad=as.numeric(ntad))
 #'
-#' x %<>% select(-subject)
+#' x <- x |> select(-subject)
 #'
-#' x %<>% mutate(Dose = signif(digits = 3, Dose * Wt))
+#' x <- x |> mutate(Dose = signif(digits = 3, Dose * Wt))
 #'
-#' names(x) %<>% tolower
+#' names(x) <- names(x) |> tolower()
 #'
-#' x %<>% select(subject, wt, dose, time, tad, ntad, dv, everything())
+#' x <- x |> select(subject, wt, dose, time, tad, ntad, dv, everything())
 #'
 "ncx"

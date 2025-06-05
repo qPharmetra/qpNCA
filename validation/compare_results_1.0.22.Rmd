@@ -17,35 +17,35 @@ InputDir="."
 
 sum_excel=read_excel(paste(InputDir,"validation_qPNCA_1.0.12.xlsx",sep="/"),sheet="summ",guess_max = 100)
 
-sum_excel = sum_excel %>%
-            select(-2) %>% # remove empty column
-            filter(!is.na(Parameter)) %>%
-            gather("rule","value",2:length(.)) %>%
-            spread(Parameter,value) %>%
-            mutate(id=as.numeric(id)) %>%
-            arrange(id) %>%
-            select(id,rule,everything()) %>%
-            gather("parameter","value_excel",-id,-rule,-dose,-factor,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) %>%
-            arrange(id,rule,parameter) %>%
-            mutate_at(vars(dose,factor,method,tau,teval,tstart,tend),as.numeric) %>%
-            mutate_at(vars(reg,ss),tolower) %>%
+sum_excel = sum_excel |>
+            select(-2) |> # remove empty column
+            filter(!is.na(Parameter)) |>
+            gather("rule","value",2:length(.)) |>
+            spread(Parameter,value) |>
+            mutate(id=as.numeric(id)) |>
+            arrange(id) |>
+            select(id,rule,everything()) |>
+            gather("parameter","value_excel",-id,-rule,-dose,-factor,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) |>
+            arrange(id,rule,parameter) |>
+            mutate_at(vars(dose,factor,method,tau,teval,tstart,tend),as.numeric) |>
+            mutate_at(vars(reg,ss),tolower) |>
             mutate(value_excel=ifelse(parameter=="intercept",exp(as.numeric(value_excel)),as.numeric(value_excel)))
             # exponentiate intercept before comparing to qPNCA result
 
 
 # rename some parameters to match v1.0.22 terminology
 
-sum_excel = sum_excel %>%
-            mutate_cond(condition=parameter=="cl.f.obs"&route=="IV"&ss=="n",parameter="cl.obs") %>%
-            mutate_cond(condition=parameter=="cl.f.obs"&route=="IV"&ss=="y",parameter="cl.ss") %>%
-            mutate_cond(condition=parameter=="cl.f.pred"&route=="IV"&ss=="n",parameter="cl.pred") %>%
-            mutate_cond(condition=parameter=="cl.f.pred"&route=="PO"&ss=="y",parameter="cl.f.ss") %>%
-            mutate_cond(condition=parameter=="cl.f.obs"&route=="PO"&ss=="y",value_excel=NA) %>%
-            mutate_cond(condition=parameter=="vz.f.obs"&route=="IV"&ss=="n",parameter="vz.obs") %>%
-            mutate_cond(condition=parameter=="vz.f.obs"&route=="IV"&ss=="y",parameter="vss.obs") %>%
-            mutate_cond(condition=parameter=="vz.f.pred"&route=="IV"&ss=="n",parameter="vz.pred") %>%
-            mutate_cond(condition=parameter=="vz.f.pred"&route=="IV"&ss=="y",parameter="vss.pred") %>%
-            mutate_cond(condition=parameter=="vss.obs"&route=="PO",value_excel=NA) %>%
+sum_excel = sum_excel |>
+            mutate_cond(condition=parameter=="cl.f.obs"&route=="IV"&ss=="n",parameter="cl.obs") |>
+            mutate_cond(condition=parameter=="cl.f.obs"&route=="IV"&ss=="y",parameter="cl.ss") |>
+            mutate_cond(condition=parameter=="cl.f.pred"&route=="IV"&ss=="n",parameter="cl.pred") |>
+            mutate_cond(condition=parameter=="cl.f.pred"&route=="PO"&ss=="y",parameter="cl.f.ss") |>
+            mutate_cond(condition=parameter=="cl.f.obs"&route=="PO"&ss=="y",value_excel=NA) |>
+            mutate_cond(condition=parameter=="vz.f.obs"&route=="IV"&ss=="n",parameter="vz.obs") |>
+            mutate_cond(condition=parameter=="vz.f.obs"&route=="IV"&ss=="y",parameter="vss.obs") |>
+            mutate_cond(condition=parameter=="vz.f.pred"&route=="IV"&ss=="n",parameter="vz.pred") |>
+            mutate_cond(condition=parameter=="vz.f.pred"&route=="IV"&ss=="y",parameter="vss.pred") |>
+            mutate_cond(condition=parameter=="vss.obs"&route=="PO",value_excel=NA) |>
             mutate_cond(condition=parameter=="vss.pred"&route=="PO",value_excel=NA)
 
 
@@ -55,19 +55,19 @@ sum_excel = sum_excel %>%
 
 ```{r}
 
-posd_qp = POSD$pkpar %>%
-          select(-area.back.extr,-r.squared,-calc.part,-calc.teval,-calc.tau,-t0.ok,-tlast.ok) %>%
-          gather("parameter","value_qp",-id,-dose,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) %>%
-          arrange(id,parameter) %>%
+posd_qp = POSD$pkpar |>
+          select(-area.back.extr,-r.squared,-calc.part,-calc.teval,-calc.tau,-t0.ok,-tlast.ok) |>
+          gather("parameter","value_qp",-id,-dose,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) |>
+          arrange(id,parameter) |>
           mutate(id=as.numeric(id))
 
-posd_excel = sum_excel %>%
-             filter(id==-1|between(id,1,6)) %>%
+posd_excel = sum_excel |>
+             filter(id==-1|between(id,1,6)) |>
              mutate(route="ev")
              
 # rounding
 
-posd = left_join(posd_excel,posd_qp) %>%
+posd = left_join(posd_excel,posd_qp) |>
        mutate(value_qp_rounded=round(as.numeric(value_qp),4),
               value_excel_rounded=round(as.numeric(value_excel),4),
               identical=ifelse(value_excel_rounded==value_qp_rounded|
@@ -77,30 +77,30 @@ kable(posd)
 
 ```
 
-### ***Result: There are `r nrow(posd%>%filter(identical==0))` differences found between the qpNCA and Excel-based results.***
+### ***Result: There are `r nrow(posd|>filter(identical==0))` differences found between the qpNCA and Excel-based results.***
 
 ```{r echo=FALSE}
 
-if (any(posd$identical==0,na.rm=TRUE)) { posd%>%filter(identical==0)%>%kable }
+if (any(posd$identical==0,na.rm=TRUE)) { posd|>filter(identical==0)|>kable }
 
 ```
 
 ## Compare IV, SD results
 
 ```{r}
-ivsd_qp = IVSD$pkpar %>%
-          select(-area.back.extr,-r.squared,-calc.part,-calc.teval,-calc.tau,-t0.ok,-tlast.ok) %>%
-          gather("parameter","value_qp",-id,-dose,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) %>%
-          arrange(id,parameter) %>%
+ivsd_qp = IVSD$pkpar |>
+          select(-area.back.extr,-r.squared,-calc.part,-calc.teval,-calc.tau,-t0.ok,-tlast.ok) |>
+          gather("parameter","value_qp",-id,-dose,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) |>
+          arrange(id,parameter) |>
           mutate(id=as.numeric(id))
 
-ivsd_excel = sum_excel %>%
-             filter(id==-2|between(id,7,10)) %>%
+ivsd_excel = sum_excel |>
+             filter(id==-2|between(id,7,10)) |>
              mutate(route="ivb")
              
 # rounding
 
-ivsd = left_join(ivsd_excel,ivsd_qp %>% select(id,parameter,value_qp)) %>%
+ivsd = left_join(ivsd_excel,ivsd_qp |> select(id,parameter,value_qp)) |>
        mutate(value_qp_rounded=round(as.numeric(value_qp),4),
               value_excel_rounded=round(as.numeric(value_excel),4),
                 identical=ifelse(value_excel_rounded==value_qp_rounded|
@@ -110,29 +110,29 @@ kable(ivsd)
 
 ```
 
-### ***Result: There are `r nrow(ivsd%>%filter(identical==0))` differences found between the qpNCA and Excel-based results.***
+### ***Result: There are `r nrow(ivsd|>filter(identical==0))` differences found between the qpNCA and Excel-based results.***
 
 ```{r echo=FALSE}
 
-if (any(ivsd$identical==0,na.rm=TRUE)) { ivsd%>%filter(identical==0)%>%kable }
+if (any(ivsd$identical==0,na.rm=TRUE)) { ivsd|>filter(identical==0)|>kable }
 
 ```
 
 ## Compare PO, MD no  steady state results
 
 ```{r}
-pomdnoss_qp = POMDnoss$pkpar %>%
-              select(-area.back.extr,-r.squared,-calc.part,-calc.teval,-calc.tau,-t0.ok,-tlast.ok) %>%
-              gather("parameter","value_qp",-id,-dose,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) %>%
-              arrange(id,parameter) %>%
+pomdnoss_qp = POMDnoss$pkpar |>
+              select(-area.back.extr,-r.squared,-calc.part,-calc.teval,-calc.tau,-t0.ok,-tlast.ok) |>
+              gather("parameter","value_qp",-id,-dose,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) |>
+              arrange(id,parameter) |>
               mutate(id=as.numeric(id))
 
-pomdnoss_excel = sum_excel %>%
+pomdnoss_excel = sum_excel |>
                  filter(id==-3|between(id,11,17))
              
 # rounding
 
-pomdnoss = left_join(pomdnoss_excel,pomdnoss_qp%>%select(id,parameter,value_qp)) %>%
+pomdnoss = left_join(pomdnoss_excel,pomdnoss_qp|>select(id,parameter,value_qp)) |>
            mutate(value_qp_rounded=round(as.numeric(value_qp),4),
                   value_excel_rounded=round(as.numeric(value_excel),4),
                   identical=ifelse(value_excel_rounded==value_qp_rounded|
@@ -142,29 +142,29 @@ kable(pomdnoss)
 
 ```
 
-### ***Result: There are `r nrow(pomdnoss%>%filter(identical==0))` differences found between the qpNCA and Excel-based results.***
+### ***Result: There are `r nrow(pomdnoss|>filter(identical==0))` differences found between the qpNCA and Excel-based results.***
 
 ```{r echo=FALSE}
 
-if (any(pomdnoss$identical==0, na.rm=TRUE)) { pomdnoss%>%filter(identical==0)%>%kable }
+if (any(pomdnoss$identical==0, na.rm=TRUE)) { pomdnoss|>filter(identical==0)|>kable }
 
 ```
 
 ## Compare PO, MD, steady state results
 
 ```{r}
-pomdss_qp = POMDss$pkpar %>%
-            select(-area.back.extr,-r.squared,-calc.part,-calc.teval,-calc.tau,-t0.ok,-tlast.ok) %>%
-            gather("parameter","value_qp",-id,-dose,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) %>%
-            arrange(id,parameter) %>%
+pomdss_qp = POMDss$pkpar |>
+            select(-area.back.extr,-r.squared,-calc.part,-calc.teval,-calc.tau,-t0.ok,-tlast.ok) |>
+            gather("parameter","value_qp",-id,-dose,-includeCmax,-method,-reg,-route,-ss,-tau,-teval,-tstart,-tend) |>
+            arrange(id,parameter) |>
             mutate(id=as.numeric(id))
 
-pomdss_excel = sum_excel %>%
+pomdss_excel = sum_excel |>
                filter(between(id,18,20))
              
 # rounding
 
-pomdss = left_join(pomdss_excel,pomdss_qp%>%select(id,parameter,value_qp)) %>%
+pomdss = left_join(pomdss_excel,pomdss_qp|>select(id,parameter,value_qp)) |>
          mutate(value_qp_rounded=round(as.numeric(value_qp),4),
                 value_excel_rounded=round(as.numeric(value_excel),4),
                 identical=ifelse(value_excel_rounded==value_qp_rounded|
@@ -174,11 +174,11 @@ kable(pomdss)
 
 ```
 
-### ***Result: There are `r nrow(pomdss%>%filter(identical==0))` differences found between the qpNCA and Excel-based results.***
+### ***Result: There are `r nrow(pomdss|>filter(identical==0))` differences found between the qpNCA and Excel-based results.***
 
 ```{r echo=FALSE}
 
-if (any(pomdss$identical==0, na.rm=TRUE)) { pomdss%>%filter(identical==0)%>%kable }
+if (any(pomdss$identical==0, na.rm=TRUE)) { pomdss|>filter(identical==0)|>kable }
 
 ```
 

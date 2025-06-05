@@ -36,13 +36,12 @@
 #' @export
 #' @examples
 #' \donttest{
-#' library(magrittr)
 #' library(dplyr)
 #' data(ncx)
 #' x <- ncx
-#' x %<>% group_by(subject)
-#' x %<>% correct.loq
-#' x %>% est.thalf %>% head
+#' x <- x |> group_by(subject)
+#' x <- x |> correct.loq
+#' x |> est.thalf |> head
 #' }
 
 est.thalf <- function(
@@ -129,14 +128,14 @@ est.thalf <- function(
     endth <- endth[[1]]
   }
 
-  if (!'timevar' %in% names(x)) x %<>% rename(timevar = !!timevar)
-  if (!'depvar' %in% names(x)) x %<>% rename(depvar = !!depvar)
+  if (!'timevar' %in% names(x)) x <- x |> rename(timevar = !!timevar)
+  if (!'depvar' %in% names(x)) x <- x |> rename(depvar = !!depvar)
 
   if (!is.na(exclvar) & !(exclvar %in% names(x)))
     stop(paste("Exclusion variable", exclvar, "does not exist"), call. = F)
 
   if (!(is.na(exclvar)) & exclvar %in% names(x)) {
-    x %<>% rename(exclvar = !!exclvar)
+    x <- x |> rename(exclvar = !!exclvar)
   }
 
   if (!is.na(exclvar)) {
@@ -146,25 +145,22 @@ est.thalf <- function(
       anyexcl = 1
     }
 
-    x %<>%
-      #      mutate(tmax=first(timevar[depvar==max(depvar,na.rm=T)])) %>%
+    x <- x |> #      mutate(tmax=first(timevar[depvar==max(depvar,na.rm=T)])) |>
       filter(exclvar != 1 | is.na(exclvar)) # remove samples to be excluded from the regression
   }
 
-  x %<>%
-    filter(!is.na(depvar) & depvar > 0) %>%
-    mutate(tmax = first(timevar[depvar == max(depvar)])) %>%
+  x <- x |> filter(!is.na(depvar) & depvar > 0) |>
+    mutate(tmax = first(timevar[depvar == max(depvar)])) |>
     filter(timevar >= tmax) # greater or equal than ORIGINAL tmax (before possible exclusions)
 
   if (tolower(includeCmax) == "n") {
-    x = x %>% filter(timevar > tmax) # greater than ORIGINAL tmax (before possible exclusions)
+    x = x |> filter(timevar > tmax) # greater than ORIGINAL tmax (before possible exclusions)
   }
 
   # 1 both start and end: use these two, no optimalisation
 
   if (!is.na(startth) & !is.na(endth)) {
-    x %<>%
-      filter(timevar >= startth & timevar <= endth) # keep only samples between startth and endth
+    x <- x |> filter(timevar >= startth & timevar <= endth) # keep only samples between startth and endth
 
     usrmod = 1
     est = 1
@@ -184,16 +180,14 @@ est.thalf <- function(
   else {
     if (!is.na(startth) & is.na(endth)) {
       usrmod = 1
-      x %<>%
-        filter(timevar >= startth) # keep only samples from startth to the end
+      x <- x |> filter(timevar >= startth) # keep only samples from startth to the end
     }
 
     # 3 only end: remove all after that end time, then start optimalisation
 
     if (is.na(startth) & !is.na(endth)) {
       usrmod = 1
-      x %<>%
-        filter(timevar <= endth) # keep only samples from start to endth
+      x <- x |> filter(timevar <= endth) # keep only samples from start to endth
     }
 
     est = 0
@@ -232,16 +226,16 @@ est.thalf <- function(
     'end_th'
   )
   if (est == 1) {
-    result = result %>%
+    result = result |>
       mutate(
         sel = no.points[adj.r.squared == max(adj.r.squared)],
         thalf = log(2) / lambda_z,
         includeCmax = includeCmax
-      ) %>%
-      filter(sel == no.points) %>%
+      ) |>
+      filter(sel == no.points) |>
       select(-sel)
   } else {
-    result = result %>%
+    result = result |>
       mutate(
         no.points = NA,
         intercept = NA,
@@ -256,18 +250,18 @@ est.thalf <- function(
 
   if (!is.na(exclvar)) {
     if (anyexcl == 1) {
-      result = result %>%
+      result = result |>
         mutate(points_excluded = "Y")
     } else {
-      result = result %>%
+      result = result |>
         mutate(points_excluded = "N")
     }
   } else {
-    result = result %>%
+    result = result |>
       mutate(points_excluded = "N")
   }
 
-  result = result %>%
+  result = result |>
     mutate(usrmod = ifelse(usrmod == 1, "Y", "N"))
 
   return(result)

@@ -45,7 +45,7 @@ library(knitr)
 mutate_cond <- function (.data, condition, ..., envir = parent.frame()){
   condition <- eval(substitute(condition), .data, envir)
   if(!any(condition))return(.data) # do nothing if nothing to do
-  .data[condition, ] <- .data[condition, ] %>% mutate(...)
+  .data[condition, ] <- .data[condition, ] |> mutate(...)
   .data
 }
 locf <- function(x){
@@ -65,7 +65,7 @@ Furthermore, we introduce some missing values, LOQ values and time deviations
 
 
 ```r
-head(Theoph) %>% kable()
+head(Theoph) |> kable()
 ```
 
 
@@ -85,18 +85,17 @@ input.data <- Theoph
 #we need nominal time variable for some tasks.
 ntad <- data.frame(rn=c(1:11),ntad=c(0,0.25,0.5,1,2,4,5,7,9,12,24))
 
-input.data %<>% 
-           group_by(Subject) %>%
+input.data <- input.data |> group_by(Subject) |>
            mutate(subject=as.numeric(Subject),
                   rn=row_number(),
                   dose=Dose*Wt,
                   bloq=ifelse(conc==0,1,0),
                   loq=0.1,
                   excl_th=0
-                  ) %>%
-           left_join(ntad) %>%
-           ungroup %>%
-           arrange(subject,ntad) %>%
+                  ) |>
+           left_join(ntad) |>
+           ungroup |>
+           arrange(subject,ntad) |>
            select(subject,ntad,tad=Time,conc,dose,bloq,loq,excl_th)
 ```
 
@@ -105,11 +104,10 @@ input.data %<>%
 ```
 
 ```r
-input.data %<>%
-           mutate_cond(condition=subject==2&ntad%in%c(24),conc=NA) %>%
-           mutate_cond(condition=subject==4&ntad%in%c(9),conc=NA) %>%
-           mutate_cond(condition=subject==3&ntad==9,excl_th=1) %>%
-           mutate_cond(condition=subject==6&ntad==24,conc=0,bloq=1) %>%
+input.data <- input.data |> mutate_cond(condition=subject==2&ntad%in%c(24),conc=NA) |>
+           mutate_cond(condition=subject==4&ntad%in%c(9),conc=NA) |>
+           mutate_cond(condition=subject==3&ntad==9,excl_th=1) |>
+           mutate_cond(condition=subject==6&ntad==24,conc=0,bloq=1) |>
            filter(!(subject==5&ntad==12))
 ```
 
@@ -117,7 +115,7 @@ input.data %<>%
 
 
 ```r
-loqed.data = input.data %>%
+loqed.data = input.data |>
   correct.loq(
   by = "subject",
   nomtimevar = "ntad",
@@ -130,7 +128,7 @@ loqed.data = input.data %>%
 
 # Result:
 
-loqed.data %>% filter(loqrule.nr!="") %>% select(subject,ntad,conc,loqrule.nr,loqrule.txt) %>% kable()
+loqed.data |> filter(loqrule.nr!="") |> select(subject,ntad,conc,loqrule.nr,loqrule.txt) |> kable()
 ```
 
 
@@ -152,7 +150,7 @@ loqed.data %>% filter(loqrule.nr!="") %>% select(subject,ntad,conc,loqrule.nr,lo
 
 
 ```r
-th = loqed.data %>% 
+th = loqed.data |> 
      est.thalf(
      by = "subject",
      timevar = "tad",
@@ -163,7 +161,7 @@ th = loqed.data %>%
 
 # Result:
 
-head(th) %>% kable()
+head(th) |> kable()
 ```
 
 
@@ -282,7 +280,7 @@ plot_reg(
 
 
 ```r
-ctmax = input.data %>% calc.ctmax(
+ctmax = input.data |> calc.ctmax(
   by = "subject",
   timevar="tad",
   depvar="conc"
@@ -290,7 +288,7 @@ ctmax = input.data %>% calc.ctmax(
 
 # Result:
 
-head(ctmax) %>% kable()
+head(ctmax) |> kable()
 ```
 
 
@@ -308,7 +306,7 @@ head(ctmax) %>% kable()
 
 
 ```r
-ct.data= loqed.data %>%
+ct.data= loqed.data |>
     correct.time(
     by="subject",
     nomtimevar="ntad",
@@ -325,7 +323,7 @@ ct.data= loqed.data %>%
 
 # Result:
 
-ct.data %>% filter(subject<=5&(trule.nr!=""|create.nr!="")) %>% select(subject,ntad,conc,applies.to.time,trule.nr,trule.txt,create.txt) %>% kable()
+ct.data |> filter(subject<=5&(trule.nr!=""|create.nr!="")) |> select(subject,ntad,conc,applies.to.time,trule.nr,trule.txt,create.txt) |> kable()
 ```
 
 
@@ -355,7 +353,7 @@ ct.data %>% filter(subject<=5&(trule.nr!=""|create.nr!="")) %>% select(subject,n
 
 
 ```r
-cc.ct.data = ct.data %>%
+cc.ct.data = ct.data |>
     correct.conc(
     by ="subject",
     nomtimevar="ntad",
@@ -372,7 +370,7 @@ cc.ct.data = ct.data %>%
 
 # Result:
 
-cc.ct.data %>% filter(crule.nr!="") %>% select(subject,ntad,conc,applies.to.conc,crule.nr,crule.txt) %>% kable()
+cc.ct.data |> filter(crule.nr!="") |> select(subject,ntad,conc,applies.to.conc,crule.nr,crule.txt) |> kable()
 ```
 
 
@@ -391,7 +389,7 @@ cc.ct.data %>% filter(crule.nr!="") %>% select(subject,ntad,conc,applies.to.conc
 
 
 ```r
-tab_corr = cc.ct.data %>% 
+tab_corr = cc.ct.data |> 
      tab.corr(
        by="subject",
        nomtimevar="ntad"
@@ -399,7 +397,7 @@ tab_corr = cc.ct.data %>%
 
 # Result:
 
-tab_corr %>% kable()
+tab_corr |> kable()
 ```
 
 
@@ -471,7 +469,7 @@ tab_corr %>% kable()
 
 
 ```r
-par = cc.ct.data %>%
+par = cc.ct.data |>
       calc.par(by = 'subject',
                tau=24,
                teval=12,
@@ -482,7 +480,7 @@ par = cc.ct.data %>%
 
 # Result:
 
-head(par) %>% kable()
+head(par) |> kable()
 ```
 
 
@@ -502,10 +500,10 @@ head(par) %>% kable()
 ```r
 # Create a covariates file, containing at least the dose given
 
-cov = input.data %>%
+cov = input.data |>
       distinct(subject,dose)
 
-par <- cc.ct.data %>% 
+par <- cc.ct.data |> 
   calc.par.th(
     by="subject",
     th=th ,
@@ -518,7 +516,7 @@ par <- cc.ct.data %>%
 
 # Result:
 
-head(par) %>% kable()
+head(par) |> kable()
 ```
 
 
@@ -546,7 +544,7 @@ par_all = left_join(par, ctmax)
 ```r
 # Result:
 
-head(par_all) %>% kable()
+head(par_all) |> kable()
 ```
 
 

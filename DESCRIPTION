@@ -29,11 +29,10 @@ Suggests:
     covr,
     testthat (>= 2.1.0)
 Depends:
-    R (>= 3.3.0)
+    R (>= 4.1.0)
 Imports:
-    dplyr(>= 0.7.0),  
+    dplyr(>= 0.7.0),
     tidyr (>= 0.8.2),
-    magrittr,
     ggplot2,
     knitr,
     rlang

@@ -45,7 +45,7 @@ my_qpNCA <- function(     # create function with constant arguments filled in
   tstart = 4,
   tend = 12,
   teval = 18,
-  covariates = x %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose),
+  covariates = x |> distinct(id) |> mutate(dose=1) |> select(id,dose),
   dose = 'dose',
   factor = 1000,
   reg = reg,
@@ -80,7 +80,7 @@ my_qpNCA <- function(     # create function with constant arguments filled in
 )
 
 test_results <- function(x, reg, ss, route, method, loqrule){      # function that actually runs my_qpNCA
-  y <- x %>% distinct(id) %>% mutate(dose=1) %>% select(id,dose)
+  y <- x |> distinct(id) |> mutate(dose=1) |> select(id,dose)
   z <- my_qpNCA(
     x,
     by = 'id',
@@ -107,41 +107,40 @@ test_results <- function(x, reg, ss, route, method, loqrule){      # function th
     route = route,
     method = method
   ) %$% pkpar
-  z %<>%
-    select(
+  z <- z |> select(
     -area.back.extr,-r.squared,-calc.part,
     -calc.teval,-calc.tau,-t0.ok,-tlast.ok,
     -factor, -loqrule
-  ) %>%
+  ) |>
   gather(
     "parameter","value_test",-id,-dose,-includeCmax,
     -method,-reg,-route,-ss,-tau,-teval,-tstart,-tend
-  ) %>%
-  arrange(id,parameter) %>%
+  ) |>
+  arrange(id,parameter) |>
   mutate(id=as.numeric(id))
-  suppressWarnings(z$value_test %<>% as.numeric %>% round(4))
+  suppressWarnings(z$value_test <- z$value_test |> as.numeric |> round(4))
   z
 }
 
 reference_results <- function(x, route){   # function that loads the reference results (Excel)
-  y <- x %>% mutate(route = route)
-  y %<>% select(id,parameter,value_reference)
-  suppressWarnings(y$value_reference %<>% as.numeric %>% round(4))
+  y <- x |> mutate(route = route)
+  y <- y |> select(id,parameter,value_reference)
+  suppressWarnings(y$value_reference <- y$value_reference |> as.numeric |> round(4))
   y
 }
 
 merged_results <- function(x, y){            # function that merges actual results and (Excel) reference results
-  x %<>% left_join(y)
-  x %<>% mutate(identical = as.integer(value_test == value_reference))
-  x %<>% mutate(identical = ifelse(is.na(value_reference) & is.na(value_test),1,identical))
-  x %<>% mutate(identical = ifelse(is.na(identical),0,identical))
+  x <- x |> left_join(y)
+  x <- x |> mutate(identical = as.integer(value_test == value_reference))
+  x <- x |> mutate(identical = ifelse(is.na(value_reference) & is.na(value_test),1,identical))
+  x <- x |> mutate(identical = ifelse(is.na(identical),0,identical))
   x
 }
 
 test_that('PO SD results are stable',{       # tests each "testing curves group"
   test <- test_results(
-    'profiles.csv' %>%
-      as_csv %>%
+    'profiles.csv' |>
+      as_csv |>
       filter(id%in%c(-1,1:6)),
     reg="SD",
     ss="N",
@@ -150,8 +149,8 @@ test_that('PO SD results are stable',{       # tests each "testing curves group"
     method=1
   )
   refr <- reference_results(
-    'reference.csv' %>%
-      as_csv %>%
+    'reference.csv' |>
+      as_csv |>
       filter(id%in%c(-1,1:6)),
     route = 'ev'
   )
@@ -169,7 +168,7 @@ test_that('PO SD results are stable',{       # tests each "testing curves group"
 
 test_that('IV Bolus SD results are stable',{
   test <- test_results(
-    as_csv('profiles.csv') %>%
+    as_csv('profiles.csv') |>
       filter(id%in%c(-2,7:10)),
     reg="SD",
     ss="N",
@@ -177,7 +176,7 @@ test_that('IV Bolus SD results are stable',{
     loqrule=2,
     method=1
   )
-  refr <- reference_results(as_csv('reference.csv')%>% filter(id%in%c(-2,7:10)), route = 'ivb')
+  refr <- reference_results(as_csv('reference.csv')|> filter(id%in%c(-2,7:10)), route = 'ivb')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -191,9 +190,9 @@ test_that('IV Bolus SD results are stable',{
 })
 
 test_that('IV Infusion SD results are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(-3)),
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(-3)),
                        reg="SD",ss="N",route="IVI",loqrule=2,method=1 )
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(-3)), route = 'ivi')
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(-3)), route = 'ivi')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -207,9 +206,9 @@ test_that('IV Infusion SD results are stable',{
 })
 
 test_that('PO MD non-steady state results are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(-4,11:17)),
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(-4,11:17)),
                        reg="MD",ss="N",route="EV",loqrule=2,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(-4,11:17)), route = 'ev')
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(-4,11:17)), route = 'ev')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -223,9 +222,9 @@ test_that('PO MD non-steady state results are stable',{
 })
 
 test_that('PO MD steady state results are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(18:20)),
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(18:20)),
                        reg="MD",ss="Y",route="EV",loqrule=2,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(18:20)), route = 'ev')
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(18:20)), route = 'ev')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -239,9 +238,9 @@ test_that('PO MD steady state results are stable',{
 })
 
 test_that('IV Bolus MD results are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(-5,32:35)),
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(-5,32:35)),
                        reg="MD",ss="N",route="IVB",loqrule=2,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(-5,32:35)), route = 'ivb')
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(-5,32:35)), route = 'ivb')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -255,8 +254,8 @@ test_that('IV Bolus MD results are stable',{
 })
 
 test_that('IV Infusion MD results are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(-6)) ,reg="MD",ss="N",route="IVI",loqrule=2,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(-6)), route = 'ivi')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(-6)) ,reg="MD",ss="N",route="IVI",loqrule=2,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(-6)), route = 'ivi')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -270,8 +269,8 @@ test_that('IV Infusion MD results are stable',{
 })
 
 test_that('LOQ Rule 1 results after EV adm. are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(21)) ,reg="SD",ss="N",route="EV",loqrule=1,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(21)), route = 'ev')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(21)) ,reg="SD",ss="N",route="EV",loqrule=1,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(21)), route = 'ev')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -285,8 +284,8 @@ test_that('LOQ Rule 1 results after EV adm. are stable',{
 })
 
 test_that('LOQ Rule 2 results after EV adm. are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(22)) ,reg="SD",ss="N",route="EV",loqrule=2,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(22)), route = 'ev')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(22)) ,reg="SD",ss="N",route="EV",loqrule=2,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(22)), route = 'ev')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -300,8 +299,8 @@ test_that('LOQ Rule 2 results after EV adm. are stable',{
 })
 
 test_that('LOQ Rule 3 results after EV adm. are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(23)) ,reg="SD",ss="N",route="EV",loqrule=3,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(23)), route = 'ev')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(23)) ,reg="SD",ss="N",route="EV",loqrule=3,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(23)), route = 'ev')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -315,8 +314,8 @@ test_that('LOQ Rule 3 results after EV adm. are stable',{
 })
 
 test_that('LOQ Rule 4 results after EV adm. are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(24)) ,reg="SD",ss="N",route="EV",loqrule=4,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(24)), route = 'ev')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(24)) ,reg="SD",ss="N",route="EV",loqrule=4,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(24)), route = 'ev')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -330,8 +329,8 @@ test_that('LOQ Rule 4 results after EV adm. are stable',{
 })
 
 test_that('LOQ Rule 1 results after IVB adm. are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(25)) ,reg="SD",ss="N",route="IVB",loqrule=1,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(25)), route = 'ivb')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(25)) ,reg="SD",ss="N",route="IVB",loqrule=1,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(25)), route = 'ivb')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -345,8 +344,8 @@ test_that('LOQ Rule 1 results after IVB adm. are stable',{
 })
 
 test_that('LOQ Rule 2 results after IVB adm. are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(26)) ,reg="SD",ss="N",route="IVB",loqrule=2,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(26)), route = 'ivb')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(26)) ,reg="SD",ss="N",route="IVB",loqrule=2,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(26)), route = 'ivb')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -360,8 +359,8 @@ test_that('LOQ Rule 2 results after IVB adm. are stable',{
 })
 
 test_that('LOQ Rule 3 results after IVB adm. are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(27)) ,reg="SD",ss="N",route="IVB",loqrule=3,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(27)), route = 'ivb')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(27)) ,reg="SD",ss="N",route="IVB",loqrule=3,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(27)), route = 'ivb')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -375,8 +374,8 @@ test_that('LOQ Rule 3 results after IVB adm. are stable',{
 })
 
 test_that('LOQ Rule 4 results after IVB adm. are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(28)) ,reg="SD",ss="N",route="IVB",loqrule=4,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(28)), route = 'ivb')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(28)) ,reg="SD",ss="N",route="IVB",loqrule=4,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(28)), route = 'ivb')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -390,8 +389,8 @@ test_that('LOQ Rule 4 results after IVB adm. are stable',{
 })
 
 test_that('Exclude datapoints from lamba_z calculation results are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(29)) ,reg="SD",ss="N",route="EV",loqrule=2,method=1)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(29)), route = 'ev')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(29)) ,reg="SD",ss="N",route="EV",loqrule=2,method=1)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(29)), route = 'ev')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -405,8 +404,8 @@ test_that('Exclude datapoints from lamba_z calculation results are stable',{
 })
 
 test_that('Trapezoidal rule 2 results are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(30)) ,reg="SD",ss="N",route="EV",loqrule=2,method=2)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(30)), route = 'ev')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(30)) ,reg="SD",ss="N",route="EV",loqrule=2,method=2)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(30)), route = 'ev')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))
@@ -420,8 +419,8 @@ test_that('Trapezoidal rule 2 results are stable',{
 })
 
 test_that('Trapezoidal rule 3 results are stable',{
-  test <- test_results(as_csv('profiles.csv') %>% filter(id%in%c(31)) ,reg="SD",ss="N",route="EV",loqrule=2,method=3)
-  refr <- reference_results(as_csv('reference.csv') %>% filter(id%in%c(31)), route = 'ev')
+  test <- test_results(as_csv('profiles.csv') |> filter(id%in%c(31)) ,reg="SD",ss="N",route="EV",loqrule=2,method=3)
+  refr <- reference_results(as_csv('reference.csv') |> filter(id%in%c(31)), route = 'ev')
   comp <- merged_results(test,refr)
   ncurve=length(unique(comp$id))
   npar=length(unique(comp$parameter))

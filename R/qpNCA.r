@@ -57,15 +57,14 @@ globalVariables('Errors_Warnings')
 #' @importFrom dplyr group_by_at ungroup left_join
 #' @examples
 #' \donttest{
-#' library(magrittr)
 #' library(dplyr)
 #' data(ncx)
 #' x <- ncx
-#' x %<>% group_by(subject)
-#' x %<>% mutate(excl_th=0)
-#' covs <- x %>% select(subject, wt, dose) %>% unique
+#' x <- x |> group_by(subject)
+#' x <- x |> mutate(excl_th=0)
+#' covs <- x |> select(subject, wt, dose) |> unique
 #' z <- qpNCA(x, by = 'subject', covariates = covs, exclvar='excl_th')
-#' z %>% names
+#' z |> names
 #' }
 
 qpNCA <- function(
@@ -170,7 +169,7 @@ qpNCA <- function(
 
   message("Applying LOQ rules...\n")
 
-  loqed <- x %>%
+  loqed <- x |>
     correct.loq(
       by = by,
       nomtimevar = nomtimevar,
@@ -184,7 +183,7 @@ qpNCA <- function(
 
   message("Performing Thalf estimation...\n")
 
-  th <- loqed %>%
+  th <- loqed |>
     est.thalf(
       by = by,
       timevar = timevar,
@@ -223,7 +222,7 @@ qpNCA <- function(
 
   message("Calculating Cmax/Tmax...\n")
 
-  ctmax <- loqed %>% calc.ctmax(by = by, timevar = timevar, depvar = depvar)
+  ctmax <- loqed |> calc.ctmax(by = by, timevar = timevar, depvar = depvar)
 
   # 4. and 5. create dataset with corrected time deviations
 
@@ -231,7 +230,7 @@ qpNCA <- function(
     "Applying time deviation corrections and missing concentration imputations...\n"
   )
 
-  tc <- loqed %>%
+  tc <- loqed |>
     correct.time(
       by = by,
       nomtimevar = nomtimevar,
@@ -240,31 +239,31 @@ qpNCA <- function(
       th = th
     )
 
-  tc %<>% correct.conc(by = by, nomtimevar = nomtimevar)
+  tc <- tc |> correct.conc(by = by, nomtimevar = nomtimevar)
 
   # 6. create table with corrections
 
   message("Creating correction tables...\n")
 
-  corrtab = tc %>% tab.corr(., by = by, nomtimevar = nomtimevar)
+  corrtab = tc |> tab.corr(., by = by, nomtimevar = nomtimevar)
 
   # 7. Calculate PK parameters NOT based on lambda_z ON CORRECTED DATA
 
   message("Calculating parameters that do not need lambda_z...\n")
 
-  # par <- tc %>% calc.par(by = by)
+  # par <- tc |> calc.par(by = by)
 
   # 8. Calculate PK parameters that need lambda_z
   # @ 1.1.8, tc passed directly to calc.par.th
 
   message("Calculating parameters that DO need lambda_z...\n")
 
-  # par_all = par %>%
+  # par_all = par |>
   #   left_join(
-  #     tc %>% select(!!by, reg, ss, factor, route, loqrule) %>% unique
-  #   ) %>%
+  #     tc |> select(!!by, reg, ss, factor, route, loqrule) |> unique
+  #   ) |>
 
-  par_all <- tc %>%
+  par_all <- tc |>
     calc.par.th(
       by = by,
       th = th,
@@ -277,7 +276,7 @@ qpNCA <- function(
 
   message("Combining and calculate additional parameters...")
 
-  par_all = left_join(ctmax, par_all, by = by) %>%
+  par_all = left_join(ctmax, par_all, by = by) |>
     mutate(
       cavg = ifelse(tolower(reg) == "sd", NA, auctau / tau),
       pctptf = ifelse(tolower(reg) == "sd", NA, 100 * (cmax - cmin) / cavg),
@@ -564,12 +563,12 @@ check.input <- function(
   # 14 check if each curve is sorted by nominal time
 
   if (stop_by != 1) {
-    tst = x %>%
-      group_by_at(vars(by)) %>%
-      mutate(srtd = all(diff(ntad) > 0)) %>%
-      filter(srtd == FALSE) %>%
-      distinct(.[by]) %>%
-      select(by) %>%
+    tst = x |>
+      group_by_at(vars(by)) |>
+      mutate(srtd = all(diff(ntad) > 0)) |>
+      filter(srtd == FALSE) |>
+      distinct(.[by]) |>
+      select(by) |>
       as.data.frame()
     if (nrow(tst) > 0) {
       chkfile = rbind(
@@ -579,7 +578,7 @@ check.input <- function(
     }
   }
 
-  chkfile = chkfile %>% filter(Errors_Warnings != "delete")
+  chkfile = chkfile |> filter(Errors_Warnings != "delete")
 
   if (nrow(chkfile) > 0) {
     print(kable(chkfile))

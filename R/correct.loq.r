@@ -21,13 +21,12 @@
 #' @importFrom dplyr lag groups
 #' @examples
 #' \donttest{
-#' library(magrittr)
 #' library(dplyr)
 #' data(ncx)
 #' x <- ncx
-#' x %>% head
-#' x %<>% group_by(subject)
-#' x %>% correct.loq %>%  head %>% data.frame
+#' x |> head
+#' x <- x |> group_by(subject)
+#' x |> correct.loq |>  head |> data.frame
 #' }
 correct.loq <- function(
   x,
@@ -84,7 +83,7 @@ correct.loq <- function(
 
   data_in = x
 
-  data_in = data_in %>%
+  data_in = data_in |>
     mutate(
       depvar1 = x[[depvar]], # dependent variable                      (internal)
       timevar1 = x[[timevar]], # actual time variable                    (internal)
@@ -95,7 +94,7 @@ correct.loq <- function(
       loqrule.txt = "" # explanation of time correction
     )
 
-  data_in = data_in %>%
+  data_in = data_in |>
     mutate(
       firstmeast = timevar1[which(depvar1 > 0)][1],
       consecutive = ifelse(bloqvar1 == 1 & lag(bloqvar1) == 1, 1, 0),
@@ -104,13 +103,13 @@ correct.loq <- function(
 
   if (any(data_in$anymeas == 1)) {
     if (loqrule == 1) {
-      data_in = data_in %>%
+      data_in = data_in |>
         mutate_cond(
           condition = (bloqvar1 == 1 & timevar1 < firstmeast),
           depvar1 = 0,
           loqrule.nr = "LOQ1",
           loqrule.txt = "BLOQ values before first measurable concentration set to 0"
-        ) %>%
+        ) |>
         mutate_cond(
           condition = (bloqvar1 == 1 & timevar1 > firstmeast),
           depvar1 = NA,
@@ -120,13 +119,13 @@ correct.loq <- function(
     }
 
     if (loqrule == 2) {
-      data_in = data_in %>%
+      data_in = data_in |>
         mutate_cond(
           condition = (bloqvar1 == 1 & timevar1 < firstmeast),
           depvar1 = 0,
           loqrule.nr = "LOQ2",
           loqrule.txt = "BLOQ values before first measurable concentration set to 0"
-        ) %>%
+        ) |>
         mutate_cond(
           condition = (bloqvar1 == 1 & timevar1 > firstmeast),
           depvar1 = 0,
@@ -136,13 +135,13 @@ correct.loq <- function(
     }
 
     if (loqrule == 3) {
-      data_in = data_in %>%
+      data_in = data_in |>
         mutate_cond(
           condition = (bloqvar1 == 1 & timevar1 < firstmeast),
           depvar1 = 0,
           loqrule.nr = "LOQ3",
           loqrule.txt = "BLOQ values before first measurable concentration set to 0"
-        ) %>%
+        ) |>
         mutate_cond(
           condition = (bloqvar1 == 1 &
             timevar1 > firstmeast &
@@ -151,7 +150,7 @@ correct.loq <- function(
           bloqvar1 = 0,
           loqrule.nr = "LOQ3",
           loqrule.txt = "First BLOQ value after first measurable concentration set to 1/2*LOQ"
-        ) %>%
+        ) |>
         mutate_cond(
           condition = (bloqvar1 == 1 &
             timevar1 > firstmeast &
@@ -163,13 +162,13 @@ correct.loq <- function(
     }
 
     if (loqrule == 4) {
-      data_in = data_in %>%
+      data_in = data_in |>
         mutate_cond(
           condition = (bloqvar1 == 1 & timevar1 < firstmeast),
           depvar1 = 0,
           loqrule.nr = "LOQ4",
           loqrule.txt = "BLOQ values before first measurable concentration set to 0"
-        ) %>%
+        ) |>
         mutate_cond(
           condition = (bloqvar1 == 1 &
             timevar1 > firstmeast &
@@ -178,7 +177,7 @@ correct.loq <- function(
           bloqvar1 = 0,
           loqrule.nr = "LOQ4",
           loqrule.txt = "First BLOQ value after first measurable concentration set to 1/2*LOQ"
-        ) %>%
+        ) |>
         mutate_cond(
           condition = (bloqvar1 == 1 &
             timevar1 > firstmeast &
@@ -190,7 +189,7 @@ correct.loq <- function(
     }
   }
 
-  result = data_in %>%
+  result = data_in |>
     select(-depvar, -nomtimevar, -timevar)
 
   names(result)[names(result) == "ptime1"] = nomtimevar

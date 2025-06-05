@@ -51,19 +51,18 @@ globalVariables('par')
 #' @export
 #' @examples
 #' \donttest{
-#' library(magrittr)
 #' library(dplyr)
 #' data(ncx)
 #' x <- ncx
-#' x %<>% group_by(subject)
-#' x %<>% correct.loq
+#' x <- x |> group_by(subject)
+#' x <- x |> correct.loq()
 #' cm <- calc.ctmax(x)              # using uncorrected data
 #' th <- est.thalf(x)               # possibly expensive!
-#' x %<>% correct.time              # or pass (th = th)
-#' x %<>% correct.conc
-#' x %<>% calc.par.th               # or pass (th = th)
-#' x %<>% left_join(cm)
-#' x %>% data.frame %>% head(2)
+#' x <- x |> correct.time()              # or pass (th = th)
+#' x <- x |> correct.conc()
+#' x <- x |> calc.par.th()               # or pass (th = th)
+#' x <- x |> left_join(cm)
+#' x |> data.frame() |> head(2)
 #' }
 calc.par.th <- function(
   x,
@@ -100,7 +99,7 @@ calc.par.th <- function(
   if (!missing(method)) pargs <- c(pargs, list(method = method))
 
   # direct call causes nothing to be missing, with spurious warnings
-  #   x %<>% calc.par(
+  #   x <- x |> calc.par(
   #   by = by,
   #   tau = tau,
   #   tstart = tstart,
@@ -148,7 +147,7 @@ calc.par.th <- function(
       # assign(arg,x[[arg]])
       # x[[arg]] <- NULL
     } else {
-      x %<>% mutate(!!arg := get(arg)) # deliberate switch to data priority vs global env
+      x <- x |> mutate(!!arg := get(arg)) # deliberate switch to data priority vs global env
     }
 
     # if(length(get(arg)) > 1) {
@@ -166,20 +165,20 @@ calc.par.th <- function(
       }
     }
   }
-  x %<>%
-    left_join(th, by = by) %>%
+  x <- x |>
+    left_join(th, by = by) |>
     left_join(covariates, by = intersect(names(x), names(covariates)))
   x$dosevar <- x[[dose]]
   x$infdurvar <- x[[infdur]]
-  x %<>%
+  x <- x |>
     mutate(
       factor = ifelse(is.na(factor), 1, factor),
       reg = tolower(reg),
       ss = tolower(ss)
     )
 
-  x %<>% mutate(route = tolower(route))
-  x %<>%
+  x <- x |> mutate(route = tolower(route))
+  x <- x |>
     mutate(
       clast.pred = exp(log(intercept) - lambda_z * tlast), # intercept was already exponentiated in calc_thalf
       aucinf.obs = auclast + clast.obs / lambda_z,
@@ -226,7 +225,7 @@ calc.par.th <- function(
       #   vss.obs= mrtinf.obs*cl.f.obs,
       #   vss.pred= mrtinf.pred*cl.f.pred
     )
-  x %<>%
+  x <- x |>
     mutate(
       vss.obs = ifelse(
         route == "ivb" | route == "ivi",
@@ -234,7 +233,7 @@ calc.par.th <- function(
         NA
       )
     ) #cannot be calculated after EV
-  x %<>%
+  x <- x |>
     mutate(
       vss.pred = ifelse(
         route == "ivb" | route == "ivi",
@@ -242,53 +241,53 @@ calc.par.th <- function(
         NA
       )
     ) #cannot be calculated after EV
-  x %<>%
+  x <- x |>
     mutate(
       pctextr.obs = (clast.obs / lambda_z) / aucinf.obs * 100,
       pctextr.pred = (clast.pred / lambda_z) / aucinf.pred * 100,
       pctback.obs = area.back.extr / aucinf.obs * 100,
       pctback.pred = area.back.extr / aucinf.pred * 100
     )
-  x %<>% select(-dosevar)
+  x <- x |> select(-dosevar)
 
   # rename CL and V after IVB/IVI
 
-  x %<>% mutate(qpiv = tolower(route) == "ivb" | tolower(route) == "ivi")
-  x %<>% mutate(cl.obs = ifelse(qpiv, cl.f.obs, NA))
-  x %<>% mutate(cl.pred = ifelse(qpiv, cl.f.pred, NA))
-  x %<>% mutate(vz.obs = ifelse(qpiv, vz.f.obs, NA))
-  x %<>% mutate(vz.pred = ifelse(qpiv, vz.f.pred, NA))
-  x %<>% mutate(cl.f.obs = ifelse(!qpiv, cl.f.obs, NA))
-  x %<>% mutate(cl.f.pred = ifelse(!qpiv, cl.f.pred, NA))
-  x %<>% mutate(vz.f.obs = ifelse(!qpiv, vz.f.obs, NA))
-  x %<>% mutate(vz.f.pred = ifelse(!qpiv, vz.f.pred, NA))
+  x <- x |> mutate(qpiv = tolower(route) == "ivb" | tolower(route) == "ivi")
+  x <- x |> mutate(cl.obs = ifelse(qpiv, cl.f.obs, NA))
+  x <- x |> mutate(cl.pred = ifelse(qpiv, cl.f.pred, NA))
+  x <- x |> mutate(vz.obs = ifelse(qpiv, vz.f.obs, NA))
+  x <- x |> mutate(vz.pred = ifelse(qpiv, vz.f.pred, NA))
+  x <- x |> mutate(cl.f.obs = ifelse(!qpiv, cl.f.obs, NA))
+  x <- x |> mutate(cl.f.pred = ifelse(!qpiv, cl.f.pred, NA))
+  x <- x |> mutate(vz.f.obs = ifelse(!qpiv, vz.f.obs, NA))
+  x <- x |> mutate(vz.f.pred = ifelse(!qpiv, vz.f.pred, NA))
 
   # rename CL at steady state
-  x %<>% mutate(ssiv = tolower(ss) == 'y' & qpiv)
-  x %<>% mutate(ssev = tolower(ss) == 'y' & !qpiv)
+  x <- x |> mutate(ssiv = tolower(ss) == 'y' & qpiv)
+  x <- x |> mutate(ssev = tolower(ss) == 'y' & !qpiv)
 
-  x %<>% mutate(cl.f.ss = NA, cl.ss = NA)
+  x <- x |> mutate(cl.f.ss = NA, cl.ss = NA)
 
-  x %<>% mutate(cl.ss = ifelse(ssiv, cl.obs, cl.ss)) #cl.obs and cl.pred are equal at steady state (AUCtau used)
-  x %<>% mutate(cl.obs = ifelse(!ssiv, cl.obs, NA))
-  x %<>% mutate(cl.pred = ifelse(!ssiv, cl.pred, NA))
+  x <- x |> mutate(cl.ss = ifelse(ssiv, cl.obs, cl.ss)) #cl.obs and cl.pred are equal at steady state (AUCtau used)
+  x <- x |> mutate(cl.obs = ifelse(!ssiv, cl.obs, NA))
+  x <- x |> mutate(cl.pred = ifelse(!ssiv, cl.pred, NA))
 
-  x %<>% mutate(cl.f.ss = ifelse(ssev, cl.f.obs, cl.f.ss)) #cl.f.obs and cl.f.pred are equal at steady state (AUCtau used)
-  x %<>% mutate(cl.f.obs = ifelse(!ssev, cl.f.obs, NA))
-  x %<>% mutate(cl.f.pred = ifelse(!ssev, cl.f.pred, NA))
+  x <- x |> mutate(cl.f.ss = ifelse(ssev, cl.f.obs, cl.f.ss)) #cl.f.obs and cl.f.pred are equal at steady state (AUCtau used)
+  x <- x |> mutate(cl.f.obs = ifelse(!ssev, cl.f.obs, NA))
+  x <- x |> mutate(cl.f.pred = ifelse(!ssev, cl.f.pred, NA))
 
   # done with these:
-  x %<>% select(-qpiv, -ssiv, -ssev)
+  x <- x |> select(-qpiv, -ssiv, -ssev)
 
   # if (tolower(ss)=="y") {
   #   if (tolower(route)=="ivb"|tolower(route)=="ivi") {
-  #     x = x %>% mutate( cl.ss   = cl.obs,   cl.obs   = NA, cl.pred   = NA, cl.f.ss = NA )
+  #     x = x |> mutate( cl.ss   = cl.obs,   cl.obs   = NA, cl.pred   = NA, cl.f.ss = NA )
   #   }else{
-  #     x = x %>% mutate( cl.f.ss = cl.f.obs, cl.f.obs = NA, cl.f.pred = NA, cl.ss = NA )
+  #     x = x |> mutate( cl.f.ss = cl.f.obs, cl.f.obs = NA, cl.f.pred = NA, cl.ss = NA )
   #   }
   # }else{
-  #   x = x %>% mutate(cl.f.ss=NA, cl.ss=NA)
+  #   x = x |> mutate(cl.f.ss=NA, cl.ss=NA)
   # }
-  # x %<>% select((!!names(.)[[1]]):loqrule, dose, everything()) # to preserve traditional column order
+  # x <- x |> select((!!names(.)[[1]]):loqrule, dose, everything()) # to preserve traditional column order
   x
 }

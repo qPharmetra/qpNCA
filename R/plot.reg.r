@@ -34,13 +34,12 @@
 #' @importFrom dplyr left_join group_by_at first ungroup
 #' @examples
 #' \donttest{
-#' library(magrittr)
 #' library(dplyr)
 #' data(ncx)
 #' x <- ncx
-#' x %<>% group_by(subject)
-#' x %<>% correct.loq
-#' x %>% filter(dv > 0) %>% plot_reg
+#' x <- x |> group_by(subject)
+#' x <- x |> correct.loq
+#' x |> filter(dv > 0) |> plot_reg
 #' }
 plot_reg <- function(
   x,
@@ -58,8 +57,7 @@ plot_reg <- function(
   if (is.null(by)) by <- as.character(groups(x))
   if (identical(NA, th) & !'lambda_z' %in% names(x))
     th <- est.thalf(x, by = by, timevar = timevar, depvar = depvar)
-  x %<>%
-    rename(
+  x <- x |> rename(
       timevar = !!timevar,
       depvar = !!depvar,
       bloqvar = !!bloqvar
@@ -69,16 +67,16 @@ plot_reg <- function(
     stop(paste("Exclusion variable", exclvar, "does not exist"), call. = F)
 
   if (!(is.na(exclvar)) & exclvar %in% names(x)) {
-    x %<>% rename(exclvar = !!exclvar)
+    x <- x |> rename(exclvar = !!exclvar)
   }
 
-  x %<>% mutate(excl = 0)
+  x <- x |> mutate(excl = 0)
   if (!is.na(exclvar)) {
-    x %<>% mutate(excl = exclvar)
+    x <- x |> mutate(excl = exclvar)
   } # if exclvar exists, set excl to exclvar, else set to 0
 
-  plot = left_join(x, th, by = by) %>%
-    filter(bloqvar == 0) %>%
+  plot = left_join(x, th, by = by) |>
+    filter(bloqvar == 0) |>
     mutate(
       start_conc = exp(log(intercept) - lambda_z * start_th),
       # intercept was already exponentiated in calc_thalf
@@ -98,8 +96,8 @@ plot_reg <- function(
         ),
         " "
       )
-    ) %>%
-    group_by_at(by) %>%
+    ) |>
+    group_by_at(by) |>
     mutate(
       max_conc = 10**(ceiling(log10(
         max(depvar, na.rm = T)
@@ -107,16 +105,16 @@ plot_reg <- function(
       min_conc = 10**(floor(log10(
         min(depvar, na.rm = T)
       )))
-    ) %>%
-    filter(!is.na(depvar)) %>%
+    ) |>
+    filter(!is.na(depvar)) |>
     mutate(
       cmax = max(depvar, na.rm = T),
       tmax = first(timevar[depvar == cmax])
-    ) %>%
+    ) |>
     ungroup()
 
-  plots = plot %>%
-    group_by_at(by) %>%
+  plots = plot |>
+    group_by_at(by) |>
     do(
       plots = ggplot(data = .) +
 
@@ -245,10 +243,10 @@ plot_reg <- function(
           axis.text.y = element_text(colour = "black", size = 8)
         ) +
         ggtitle(titlefun(., by))
-    ) %>%
+    ) |>
     ungroup
 
-  plots = plots %>% mutate(filename = paste0(filenamefun(., by), ".png"))
+  plots = plots |> mutate(filename = paste0(filenamefun(., by), ".png"))
 
   if (!is.na(plotdir)) {
     if (file.exists(plotdir)) {

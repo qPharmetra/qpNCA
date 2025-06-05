@@ -4,7 +4,6 @@
 #' @importFrom dplyr arrange mutate summarize filter group_by do select
 #' @importFrom tidyr drop_na
 #' @importFrom dplyr summarise last
-#' @import magrittr
 #' @param x contains all data after time/concentration deviation corrections obtained from \code{\link{correct.time}} and \code{\link{correct.conc}}
 #' @param by character: column names in x indicating grouping variables; default is as.character(dplyr::groups(x))
 #' @param tau dosing interval (for multiple dosing); NA (default) for if single dose; x$tau overrides
@@ -47,15 +46,14 @@
 #' @importFrom utils read.csv
 #' @examples
 #' \donttest{
-#' library(magrittr)
 #' library(dplyr)
 #' data(ncx)
 #' x <- ncx
-#' x %<>% group_by(subject)
-#' x %<>% correct.loq
-#' x %<>% correct.time
-#' x %<>% correct.conc
-#' x %>% calc.par %>% head
+#' x <- x |> group_by(subject)
+#' x <- x |> correct.loq()
+#' x <- x |> correct.time()
+#' x <- x |> correct.conc()
+#' x |> calc.par() |> head()
 #' }
 calc.par <- function(
   x,
@@ -117,7 +115,7 @@ calc.par <- function(
   teval.ok = 0 # internal variable
   part.ok = 0 # internal variable
 
-  par = x %>% filter(!is.na(time.lastall)) # if critical time point, it's not NA anymore, so all time=NA are deleted
+  par = x |> filter(!is.na(time.lastall)) # if critical time point, it's not NA anymore, so all time=NA are deleted
 
   if (max(par$conc.lastall, na.rm = T) > 0) {
     tlast.ok = 1
@@ -163,7 +161,7 @@ calc.par <- function(
     )
   }
 
-  par = par %>%
+  par = par |>
     summarise(
       route = route,
       method = method,
